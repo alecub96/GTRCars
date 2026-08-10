@@ -22,6 +22,8 @@ export async function POST(request: Request) {
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || '';
     if (webhookSecret) {
       event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
+    } else if (process.env.NODE_ENV === 'production') {
+      return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 503 });
     } else {
       event = JSON.parse(body);
     }
@@ -50,6 +52,16 @@ export async function POST(request: Request) {
         }),
       ]);
     }
+  }
+
+  if (event.type === 'account.updated') {
+    const account = event.data.object as Stripe.Account;
+    await prisma.user.updateMany({ where: { stripeAccountId: account.id }, data: { stripeAccountId: account.id } });
+  }
+
+  if (event.type === 'payment_intent.canceled') {
+    const paymentIntent = event.data.object as Stripe.PaymentIntent;
+    await prisma.payment.updateMany({ where: { stripeId: paymentIntent.id }, data: { status: 'CANCELLED' } });
   }
 
   return NextResponse.json({ received: true });

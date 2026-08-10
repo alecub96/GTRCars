@@ -11,6 +11,8 @@ export default function OwnerDashboardPage() {
   const [vipLoading, setVipLoading] = useState<string | null>(null);
   const [msg, setMsg] = useState('');
   const [authorized, setAuthorized] = useState<boolean | null>(null);
+  const [bookings, setBookings] = useState<any[]>([]);
+  const [stripeMessage, setStripeMessage] = useState('');
 
   useEffect(() => {
     fetch('/api/auth/me')
@@ -29,6 +31,7 @@ export default function OwnerDashboardPage() {
         setVehicles(data.vehicles || []);
         setLoading(false);
       });
+    fetch('/api/bookings').then((res) => res.json()).then((data) => setBookings(data.bookings || []));
   }, [authorized]);
 
   if (authorized !== true) {
@@ -63,6 +66,14 @@ export default function OwnerDashboardPage() {
     }
   };
 
+  const handleStripeConnect = async () => {
+    setStripeMessage('');
+    const response = await fetch('/api/stripe/connect', { method: 'POST' });
+    const data = await response.json();
+    if (data.url) window.location.href = data.url;
+    else setStripeMessage(data.error || 'No se pudo iniciar la configuración de cobros');
+  };
+
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-[#0F172A]">
       <Navbar />
@@ -93,6 +104,11 @@ export default function OwnerDashboardPage() {
             <span>{msg}</span>
           </div>
         )}
+        <div className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#E2E8F0] bg-white p-5">
+          <div><strong className="block text-sm">Cobra tus reservas de forma segura</strong><span className="text-xs text-[#64748B]">Configura tu cuenta Stripe Connect para recibir liquidaciones.</span></div>
+          <button onClick={handleStripeConnect} className="rounded-full bg-[#172725] px-5 py-3 text-xs font-bold uppercase tracking-wider text-white">Configurar cobros</button>
+          {stripeMessage && <p className="w-full text-xs font-bold text-amber-700">{stripeMessage}</p>}
+        </div>
 
         {/* TARJETA INFORMATIVA PLAN VIP DE 2,99€/MES */}
         <div className="bg-gradient-to-r from-[#0F172A] to-[#1E293B] rounded-3xl p-8 text-white mb-12 shadow-xl relative overflow-hidden">
@@ -111,6 +127,16 @@ export default function OwnerDashboardPage() {
         </div>
 
         {/* LISTADO DE MIS CAMPERS */}
+        <section className="mb-12 space-y-4">
+          <h3 className="font-serif text-2xl font-bold text-[#0F172A]">Solicitudes de reserva</h3>
+          {bookings.length === 0 ? <p className="text-sm text-[#64748B]">No tienes solicitudes pendientes.</p> : bookings.map((booking) => (
+            <div key={booking.id} className="bg-white rounded-2xl p-4 border border-[#E2E8F0] flex flex-wrap items-center justify-between gap-3">
+              <div><strong>{booking.code}</strong><p className="text-xs text-[#64748B]">{booking.vehicle.title} · {booking.traveler.firstName} · {booking.status}</p></div>
+              {booking.status === 'REQUESTED' && <div className="flex gap-2"><button onClick={async () => { await fetch(`/api/bookings/${booking.id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'accept' }) }); setBookings(bookings.map((b) => b.id === booking.id ? { ...b, status: 'OWNER_ACCEPTED' } : b)); }} className="px-4 py-2 rounded-full bg-[#14B8A6] text-white text-xs font-bold">Aceptar</button><button onClick={async () => { await fetch(`/api/bookings/${booking.id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'reject' }) }); setBookings(bookings.map((b) => b.id === booking.id ? { ...b, status: 'OWNER_REJECTED' } : b)); }} className="px-4 py-2 rounded-full bg-red-50 text-red-700 text-xs font-bold">Rechazar</button></div>}
+            </div>
+          ))}
+        </section>
+
         <div className="space-y-6">
           <h3 className="font-serif text-2xl font-bold text-[#0F172A]">Mis Anuncios Publicados</h3>
 

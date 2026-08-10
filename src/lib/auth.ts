@@ -21,6 +21,7 @@ export async function getCurrentUser() {
       avatarUrl: true,
       verification: true,
       phone: true,
+      stripeAccountId: true,
       createdAt: true,
     },
   });

@@ -2,6 +2,7 @@ import React from 'react';
 import { notFound } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import BookingWidget from '@/components/BookingWidget';
+import FavoriteButton from '@/components/FavoriteButton';
 import { prisma } from '@/lib/prisma';
 import { Star, MapPin, Users, Bed, ShieldCheck, Check, Fuel, Settings2, Compass } from 'lucide-react';
 
@@ -39,7 +40,8 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
         {/* TITULO Y CABECERA */}
-        <div className="mb-6">
+        <div className="mb-6 relative">
+          <div className="absolute right-0 top-0"><FavoriteButton vehicleId={vehicle.id} /></div>
           <div className="flex items-center space-x-2 text-xs text-[#7A7571] font-medium mb-2">
             <span>{vehicle.island}</span>
             <span>•</span>

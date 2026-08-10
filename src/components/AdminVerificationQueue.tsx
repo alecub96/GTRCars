@@ -1,0 +1,8 @@
+'use client';
+import { useEffect, useState } from 'react';
+export default function AdminVerificationQueue() {
+  const [documents, setDocuments] = useState<any[]>([]);
+  useEffect(() => { fetch('/api/admin/verification').then((r) => r.ok ? r.json() : null).then((d) => setDocuments(d?.documents || [])).catch(() => {}); }, []);
+  async function review(documentId: string, status: 'VERIFIED' | 'REJECTED') { const response = await fetch('/api/admin/verification', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ documentId, status }) }); if (response.ok) setDocuments(documents.filter((d) => d.id !== documentId)); }
+  return <section className="mt-10 bg-white rounded-3xl border border-[#E2E8F0] shadow-sm p-6"><h2 className="font-serif text-2xl font-bold mb-4">Documentos pendientes de revisión</h2>{documents.length === 0 ? <p className="text-sm text-[#64748B]">No hay verificaciones pendientes.</p> : <div className="space-y-3">{documents.map((doc) => <div key={doc.id} className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3"><div><strong>{doc.user.firstName} {doc.user.lastName}</strong><p className="text-xs text-slate-500">{doc.user.email} · {doc.type}</p></div><div className="flex gap-2"><button onClick={() => review(doc.id, 'VERIFIED')} className="px-3 py-2 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold">Aprobar</button><button onClick={() => review(doc.id, 'REJECTED')} className="px-3 py-2 rounded-full bg-red-100 text-red-800 text-xs font-bold">Rechazar</button></div></div>)}</div>}</section>;
+}

@@ -20,6 +20,7 @@ export default async function TravelerAccountPage() {
     },
     orderBy: { createdAt: 'desc' },
   });
+  const favorites = await prisma.favorite.findMany({ where: { userId: user.id }, include: { vehicle: { include: { photos: { take: 1 } } } }, orderBy: { createdAt: 'desc' } });
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-[#1C2826]">
@@ -79,6 +80,11 @@ export default async function TravelerAccountPage() {
                 </div>
               ))
             )}
+          </div>
+
+          <div className="lg:col-span-2 space-y-4">
+            <h3 className="font-serif text-2xl font-normal border-b border-[#E6E1DA] pb-3">Mis favoritos</h3>
+            {favorites.length === 0 ? <p className="text-sm text-[#7A7571]">Aún no has guardado ninguna camper.</p> : <div className="grid sm:grid-cols-2 gap-4">{favorites.map((favorite: any) => <Link key={favorite.id} href={`/camper/${favorite.vehicle.slug}`} className="bg-white rounded-2xl p-3 border border-[#E6E1DA] flex gap-3"><img src={favorite.vehicle.photos[0]?.url} alt={favorite.vehicle.title} className="w-20 h-16 rounded-xl object-cover" /><span className="text-sm font-semibold">{favorite.vehicle.title}</span></Link>)}</div>}
           </div>
 
           {/* PERFIL Y OPCIONES */}

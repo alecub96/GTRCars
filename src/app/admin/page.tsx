@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import { DollarSign, ArrowUpRight, ShieldCheck, Wallet, RefreshCw, Layers } from 'lucide-react';
+import AdminVerificationQueue from '@/components/AdminVerificationQueue';
 
 export default function AdminPage() {
   const [data, setData] = useState<any>(null);
@@ -78,6 +79,8 @@ export default function AdminPage() {
             <p className="text-[11px] text-[#64748B] mt-2">Para transferir a cuentas bancarias de propietarios</p>
           </div>
         </div>
+
+        <AdminVerificationQueue />
 
         {/* TABLA DE RESERVAS Y LIQUIDACIÓN POR PROPIETARIO */}
         <div className="bg-white rounded-3xl border border-[#E2E8F0] shadow-sm overflow-hidden">
