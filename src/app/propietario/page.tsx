@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
 import { Crown, Sparkles, Check, Truck, Calendar, Plus, ShieldCheck } from 'lucide-react';
+import OwnerAvailabilityCalendar from '@/components/OwnerAvailabilityCalendar';
 
 export default function OwnerDashboardPage() {
   const [vehicles, setVehicles] = useState<any[]>([]);
@@ -136,6 +137,8 @@ export default function OwnerDashboardPage() {
             </div>
           ))}
         </section>
+
+        <OwnerAvailabilityCalendar vehicles={vehicles} />
 
         <div className="space-y-6">
           <h3 className="font-serif text-2xl font-bold text-[#0F172A]">Mis Anuncios Publicados</h3>
