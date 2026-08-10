@@ -8,14 +8,14 @@ import { CANARY_ISLANDS } from '@/lib/pricing';
 import { Star, ChevronRight, MapPin, ShieldCheck, HeartHandshake, KeyRound } from 'lucide-react';
 
 const ISLAND_HERO_IMAGES: Record<string, string> = {
-  'Gran Canaria': 'https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=1920',
-  'Tenerife': 'https://images.unsplash.com/photo-1506015391300-4802dc74de2e?w=1920',
-  'Lanzarote': 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1920',
-  'Fuerteventura': 'https://images.unsplash.com/photo-1510312305653-8ed496efae75?w=1920',
-  'La Palma': 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=1920',
-  'La Gomera': 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1920',
-  'El Hierro': 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920',
-  'La Graciosa': 'https://images.unsplash.com/photo-1513311968627-2aa4f0f038a4?w=1920',
+  'Gran Canaria': '/Islas/gran%20canaria.png',
+  'Tenerife': '/Islas/Tenerife.png',
+  'Lanzarote': '/Islas/lanzarote.png',
+  'Fuerteventura': '/Islas/fuerteventura.png',
+  'La Palma': '/Islas/la%20palma.png',
+  'La Gomera': '/Islas/la%20gomera.png',
+  'El Hierro': '/Islas/el%20hierro.png',
+  'La Graciosa': '/Islas/la%20graciosa.png',
 };
 
 interface HeroSectionProps {
@@ -154,7 +154,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                 }`}
               >
                 <img
-                  src={ISLAND_HERO_IMAGES[isla.name] || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800'}
+                  src={ISLAND_HERO_IMAGES[isla.name] || ISLAND_HERO_IMAGES['Gran Canaria']}
                   alt={`Alquiler camper en ${isla.name}`}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 filter brightness-[0.85]"
                 />

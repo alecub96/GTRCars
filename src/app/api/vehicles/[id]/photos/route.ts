@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
+import { saveUpload } from '@/lib/uploads';
 
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
   const user = await getCurrentUser();
@@ -12,7 +13,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
   const form = await request.formData();
   const file = form.get('file');
   if (!(file instanceof File) || file.size > 5 * 1024 * 1024 || !['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) return NextResponse.json({ error: 'Adjunta una imagen JPG, PNG o WEBP de menos de 5 MB' }, { status: 400 });
-  const url = `data:${file.type};base64,${Buffer.from(await file.arrayBuffer()).toString('base64')}`;
+  const url = await saveUpload(file, 'vehicles');
   const photo = await prisma.vehiclePhoto.create({ data: { vehicleId: id, url, orderIndex: vehicle.photos.length } });
   return NextResponse.json({ success: true, photo });
 }

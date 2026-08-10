@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
+import { saveUpload } from '@/lib/uploads';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
@@ -19,10 +20,13 @@ export async function POST(request: Request) {
     if (front.size > MAX_FILE_SIZE || back.size > MAX_FILE_SIZE) return NextResponse.json({ error: 'Cada archivo debe pesar menos de 5 MB' }, { status: 400 });
     const allowed = ['image/jpeg', 'image/png', 'application/pdf'];
     if (!allowed.includes(front.type) || !allowed.includes(back.type)) return NextResponse.json({ error: 'Solo se admiten JPG, PNG o PDF' }, { status: 400 });
-    const toDataUrl = async (file: File) => `data:${file.type};base64,${Buffer.from(await file.arrayBuffer()).toString('base64')}`;
+    const [frontUrl, backUrl] = await Promise.all([
+      saveUpload(front, 'documents'),
+      saveUpload(back, 'documents'),
+    ]);
     await prisma.$transaction([
-      prisma.document.create({ data: { userId: user.id, type: `${documentType}_FRONT`, fileUrl: await toDataUrl(front), status: 'PENDING', notes: `DNI: ${documentNumber}; permiso: ${drivingLicense}; caducidad: ${licenseExpDate}` } }),
-      prisma.document.create({ data: { userId: user.id, type: `${documentType}_BACK`, fileUrl: await toDataUrl(back), status: 'PENDING' } }),
+      prisma.document.create({ data: { userId: user.id, type: `${documentType}_FRONT`, fileUrl: frontUrl, status: 'PENDING', notes: `DNI: ${documentNumber}; permiso: ${drivingLicense}; caducidad: ${licenseExpDate}` } }),
+      prisma.document.create({ data: { userId: user.id, type: `${documentType}_BACK`, fileUrl: backUrl, status: 'PENDING' } }),
       prisma.user.update({ where: { id: user.id }, data: { verification: 'PENDING' } }),
     ]);
     return NextResponse.json({ success: true });
