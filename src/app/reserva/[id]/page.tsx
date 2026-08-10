@@ -1,15 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import { CheckCircle2, CreditCard, Lock, ShieldCheck, Download, AlertCircle } from 'lucide-react';
 
-interface BookingCheckoutProps {
-  params: Promise<{ id: string }>;
-}
-
-export default function BookingCheckoutClient({ id }: { id: string }) {
+export default function BookingCheckoutClient() {
+  const params = useParams<{ id: string }>();
+  const id = params.id;
   const [loading, setLoading] = useState(false);
   const [paid, setPaid] = useState(false);
   const [signed, setSigned] = useState(false);
