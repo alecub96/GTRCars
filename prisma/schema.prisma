@@ -1,0 +1,540 @@
+// Prisma Schema - Plataforma Alquiler Camper Canarias
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  TRAVELER
+  OWNER
+  ADMIN
+  SUPPORT
+}
+
+enum VerificationStatus {
+  UNVERIFIED
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum VehicleStatus {
+  DRAFT
+  PENDING_REVIEW
+  ACTIVE
+  PAUSED
+  REJECTED
+  ARCHIVED
+}
+
+enum OwnershipType {
+  PLATFORM
+  THIRD_PARTY
+}
+
+enum Transmission {
+  MANUAL
+  AUTOMATIC
+}
+
+enum FuelType {
+  DIESEL
+  GASOLINE
+  HYBRID
+  ELECTRIC
+}
+
+enum BookingStatus {
+  DRAFT
+  REQUESTED
+  OWNER_ACCEPTED
+  OWNER_REJECTED
+  PAYMENT_PENDING
+  CONFIRMED
+  CHECKIN_PENDING
+  ACTIVE
+  CHECKOUT_PENDING
+  COMPLETED
+  CANCELLED
+  DISPUTED
+  REFUNDED
+}
+
+enum BookingType {
+  INSTANT_BOOKING
+  REQUEST_TO_BOOK
+}
+
+enum DepositStatus {
+  NOT_REQUIRED
+  PENDING
+  HELD
+  RELEASED
+  PARTIALLY_CHARGED
+  CHARGED
+  DISPUTED
+}
+
+enum IncidentStatus {
+  OPEN
+  UNDER_REVIEW
+  AWAITING_TRAVELER
+  AWAITING_OWNER
+  RESOLVED
+  REJECTED
+}
+
+enum IncidentType {
+  DAMAGE
+  DELAY
+  FUEL
+  CLEANING
+  MILEAGE
+  ACCIDENT
+  CANCELLATION
+  DOCUMENTATION
+  OTHER
+}
+
+model User {
+  id               String             @id @default(uuid())
+  email            String             @unique
+  passwordHash     String
+  firstName        String
+  lastName         String
+  phone            String?
+  avatarUrl        String?
+  role             Role               @default(TRAVELER)
+  language         String             @default("es")
+  birthDate        DateTime?
+  address          String?
+  country          String             @default("ES")
+  verification     VerificationStatus @default(UNVERIFIED)
+  stripeCustomerId String?
+  stripeAccountId  String?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  vehicles              Vehicle[]
+  bookingsAsTraveler    Booking[]              @relation("TravelerBookings")
+  bookingsAsOwner       Booking[]              @relation("OwnerBookings")
+  reviewsGiven          Review[]               @relation("AuthorReviews")
+  reviewsReceived       Review[]               @relation("SubjectReviews")
+  favorites             Favorite[]
+  conversationTraveler  Conversation[]         @relation("TravelerConversations")
+  conversationOwner     Conversation[]         @relation("OwnerConversations")
+  sentMessages          Message[]
+  documents             Document[]
+  blogPosts             BlogPost[]
+  auditLogs             AuditLog[]
+  subscriptions         VipSubscription[]
+}
+
+model Document {
+  id           String             @id @default(uuid())
+  userId       String
+  user         User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type         String             // IDENTITY, DRIVING_LICENSE, TAX, VEHICLE_REG
+  fileUrl      String
+  status       VerificationStatus @default(PENDING)
+  notes        String?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+}
+
+model Vehicle {
+  id                 String         @id @default(uuid())
+  ownerId            String
+  owner              User           @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  title              String
+  slug               String         @unique
+  brand              String
+  model              String
+  year               Int
+  licensePlateHidden String?
+  ownershipType      OwnershipType  @default(THIRD_PARTY)
+  bookingType        BookingType    @default(REQUEST_TO_BOOK)
+  status             VehicleStatus  @default(DRAFT)
+  island             String         // Gran Canaria, Tenerife, Lanzarote, Fuerteventura, La Palma, La Gomera, El Hierro, La Graciosa
+  municipality       String
+  addressApprox      String?
+  latitude           Float?
+  longitude          Float?
+  
+  // VIP Membership Status
+  isVip              Boolean        @default(false)
+  vipExpiresAt       DateTime?
+
+  // Specifications
+  passengers         Int            @default(2)
+  beds               Int            @default(2)
+  doors              Int            @default(4)
+  transmission       Transmission   @default(MANUAL)
+  fuelType           FuelType       @default(DIESEL)
+  fuelConsumption    String?
+
+  // Pricing & Limits
+  basePricePerDay    Float
+  includedKmPerDay   Int            @default(150)
+  extraKmPrice       Float          @default(0.20)
+  unlimitedMileage   Boolean        @default(false)
+  securityDeposit    Float          @default(600)
+  cleaningFee        Float          @default(30)
+  minDays            Int            @default(2)
+  maxDays            Int            @default(30)
+  
+  // Description & Rules
+  description        String         @db.Text
+  rules              String?        @db.Text
+  cancellationPolicy String         @default("FLEXIBLE")
+
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+
+  photos             VehiclePhoto[]
+  features           VehicleFeature[]
+  availabilityBlocks AvailabilityBlock[]
+  pricingRules       PricingRule[]
+  extras             VehicleExtra[]
+  bookings           Booking[]
+  reviews            Review[]
+  favorites          Favorite[]
+  conversations      Conversation[]
+
+  @@index([island, status])
+  @@index([basePricePerDay])
+  @@index([isVip])
+}
+
+model VipSubscription {
+  id                  String   @id @default(uuid())
+  userId              String
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vehicleId           String
+  stripeSubscriptionId String?
+  status              String   @default("ACTIVE") // ACTIVE, CANCELLED, EXPIRED
+  amount              Float    @default(2.99)
+  currency            String   @default("EUR")
+  currentPeriodEnd    DateTime
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+model VehiclePhoto {
+  id         String   @id @default(uuid())
+  vehicleId  String
+  vehicle    Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  url        String
+  caption    String?
+  orderIndex  Int     @default(0)
+}
+
+model VehicleFeature {
+  id        String   @id @default(uuid())
+  vehicleId String
+  vehicle   Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  name      String
+}
+
+model AvailabilityBlock {
+  id        String   @id @default(uuid())
+  vehicleId String
+  vehicle   Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  startDate DateTime
+  endDate   DateTime
+  reason    String?
+}
+
+model PricingRule {
+  id          String   @id @default(uuid())
+  vehicleId   String
+  vehicle     Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  name        String
+  startDate   DateTime
+  endDate     DateTime
+  pricePerDay Float
+}
+
+model Extra {
+  id            String         @id @default(uuid())
+  name          String
+  description   String?
+  price         Float
+  priceType     String         @default("PER_RENTAL")
+  icon          String?
+  isGlobal      Boolean        @default(true)
+  vehicleExtras VehicleExtra[]
+}
+
+model VehicleExtra {
+  id        String   @id @default(uuid())
+  vehicleId String
+  vehicle   Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  extraId   String
+  extra     Extra    @relation(fields: [extraId], references: [id], onDelete: Cascade)
+  price     Float
+  enabled   Boolean  @default(true)
+  bookingExtras BookingExtra[]
+}
+
+model Booking {
+  id                 String        @id @default(uuid())
+  code               String        @unique
+  travelerId         String
+  traveler           User          @relation("TravelerBookings", fields: [travelerId], references: [id])
+  ownerId            String
+  owner              User          @relation("OwnerBookings", fields: [ownerId], references: [id])
+  vehicleId          String
+  vehicle            Vehicle       @relation(fields: [vehicleId], references: [id])
+  
+  pickupDate         DateTime
+  returnDate         DateTime
+  pickupTime         String        @default("10:00")
+  returnTime         String        @default("18:00")
+  totalDays          Int
+  
+  // Amounts
+  basePrice          Float
+  extrasTotal        Float         @default(0)
+  cleaningFee        Float         @default(0)
+  travelerFee        Float         @default(0)
+  ownerFee           Float         @default(0)
+  ownerPayout        Float         @default(0)
+  depositAmount      Float         @default(0)
+  totalAmount        Float
+  currency           String        @default("EUR")
+  
+  pricingSnapshot    String        @db.Text
+  
+  status             BookingStatus @default(REQUESTED)
+  depositStatus      DepositStatus @default(PENDING)
+  
+  stripePaymentIntentId String?
+  stripeTransferId      String?
+
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  extras             BookingExtra[]
+  payments           Payment[]
+  contract           Contract?
+  checkIn            CheckIn?
+  checkOut           CheckOut?
+  incidents          Incident[]
+  review             Review?
+  conversations      Conversation[]
+
+  @@index([travelerId])
+  @@index([ownerId])
+  @@index([vehicleId])
+  @@index([status])
+}
+
+model BookingExtra {
+  id             String       @id @default(uuid())
+  bookingId      String
+  booking        Booking      @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  vehicleExtraId String
+  vehicleExtra   VehicleExtra @relation(fields: [vehicleExtraId], references: [id])
+  name           String
+  price          Float
+}
+
+model Payment {
+  id             String   @id @default(uuid())
+  bookingId      String
+  booking        Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  stripeId       String   @unique
+  amount         Float
+  currency       String   @default("EUR")
+  status         String
+  type           String
+  createdAt      DateTime @default(now())
+}
+
+model Contract {
+  id                String   @id @default(uuid())
+  bookingId         String   @unique
+  booking           Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  pdfUrl            String?
+  signedByTraveler  Boolean  @default(false)
+  signedByOwner     Boolean  @default(false)
+  travelerSignature String?  @db.Text
+  ownerSignature    String?  @db.Text
+  signedAt          DateTime?
+  termsSnapshot     String   @db.Text
+  createdAt         DateTime @default(now())
+}
+
+model CheckIn {
+  id           String         @id @default(uuid())
+  bookingId    String         @unique
+  booking      Booking        @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  odometer     Int
+  fuelLevel    String
+  waterLevel   String
+  cleanliness  String
+  notes        String?        @db.Text
+  photos       CheckInPhoto[]
+  signed       Boolean        @default(false)
+  createdAt    DateTime       @default(now())
+}
+
+model CheckInPhoto {
+  id        String   @id @default(uuid())
+  checkInId String
+  checkIn   CheckIn  @relation(fields: [checkInId], references: [id], onDelete: Cascade)
+  url       String
+  tag       String
+}
+
+model CheckOut {
+  id           String          @id @default(uuid())
+  bookingId    String          @unique
+  booking      Booking         @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  odometer     Int
+  fuelLevel    String
+  waterLevel   String
+  cleanliness  String
+  extraKm      Int             @default(0)
+  extraKmFee   Float           @default(0)
+  notes        String?         @db.Text
+  photos       CheckOutPhoto[]
+  signed       Boolean         @default(false)
+  createdAt    DateTime        @default(now())
+}
+
+model CheckOutPhoto {
+  id         String   @id @default(uuid())
+  checkOutId String
+  checkOut   CheckOut @relation(fields: [checkOutId], references: [id], onDelete: Cascade)
+  url        String
+  tag        String
+}
+
+model Incident {
+  id            String         @id @default(uuid())
+  bookingId     String
+  booking       Booking        @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  type          IncidentType
+  status        IncidentStatus @default(OPEN)
+  title         String
+  description   String         @db.Text
+  claimedAmount Float          @default(0)
+  resolution    String?        @db.Text
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Review {
+  id            String   @id @default(uuid())
+  bookingId     String   @unique
+  booking       Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  vehicleId     String
+  vehicle       Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  authorId      String
+  author        User     @relation("AuthorReviews", fields: [authorId], references: [id])
+  subjectId     String
+  subject       User     @relation("SubjectReviews", fields: [subjectId], references: [id])
+  
+  rating        Int
+  cleanliness   Int      @default(5)
+  communication Int      @default(5)
+  accuracy      Int      @default(5)
+  condition     Int      @default(5)
+  comment       String   @db.Text
+  createdAt     DateTime @default(now())
+}
+
+model Conversation {
+  id         String    @id @default(uuid())
+  travelerId String
+  traveler   User      @relation("TravelerConversations", fields: [travelerId], references: [id])
+  ownerId    String
+  owner      User      @relation("OwnerConversations", fields: [ownerId], references: [id])
+  vehicleId  String
+  vehicle    Vehicle   @relation(fields: [vehicleId], references: [id])
+  bookingId  String?
+  booking    Booking?  @relation(fields: [bookingId], references: [id])
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  messages   Message[]
+}
+
+model Message {
+  id             String       @id @default(uuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId       String
+  sender         User         @relation(fields: [senderId], references: [id])
+  content        String       @db.Text
+  read           Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+}
+
+model Favorite {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vehicleId String
+  vehicle   Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, vehicleId])
+}
+
+model SeoLocation {
+  id           String   @id @default(uuid())
+  slug         String   @unique
+  name         String
+  island       String
+  municipality String?
+  title        String
+  description  String
+  heroImage    String?
+  content      String   @db.Text
+  faq          String   @db.Text
+  published    Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model BlogPost {
+  id            String   @id @default(uuid())
+  slug          String   @unique
+  title         String
+  excerpt       String   @db.Text
+  content       String   @db.Text
+  featuredImage String?
+  authorId      String
+  author        User     @relation(fields: [authorId], references: [id])
+  category      String
+  metaTitle     String?
+  metaDescription String?
+  published     Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model SystemSetting {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String   @db.Text
+  updatedAt DateTime @updatedAt
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  action    String
+  details   String?  @db.Text
+  ip        String?
+  createdAt DateTime @default(now())
+}

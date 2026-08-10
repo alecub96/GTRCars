@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Nomad Canarias - Plataforma Full-Stack de Alquiler de Campers en Canarias
 
-## Getting Started
+Plataforma marketplace en producción especializada en el alquiler de campervans, furgonetas camperizadas y autocaravanas entre particulares y profesionales en **todas las Islas Canarias** (Gran Canaria, Tenerife, Lanzarote, Fuerteventura, La Palma, La Gomera, El Hierro y La Graciosa).
 
-First, run the development server:
+Diseñada con un lenguaje visual inspirador **estilo Alisios Picnic** (tonos tierra, crema, arena, negro suave y azul océano).
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🚀 Características Principales
+
+- **Frontend & Backend Integrado:** Next.js 14+ App Router, TypeScript, React 19, Tailwind CSS.
+- **Base de Datos Relacional:** PostgreSQL + Prisma ORM con un esquema completo (`User`, `Vehicle`, `Booking`, `Payment`, `Contract`, `Review`, `Conversation`, `Message`, `SeoLocation`, etc.).
+- **Motor de Precios Backend:** Cálculo autoritativo de tarifas por día, estancias mínimas, descuentos automáticos semanales/mensuales, comisiones marketplace y tarifas de servicio.
+- **Prevención de Double-Booking:** Transacciones de base de datos atómicas para bloquear calendarios e impedir solapamientos.
+- **Pagos Marketplace:** Integración de Stripe & Stripe Connect para cobros, payout de propietarios y depósitos de fianza.
+- **Contratos & Firma Digital:** Generación de contrato de alquiler de vehículos sin conductor en España con firma digital en pantalla.
+- **SEO Canarias Especializado:** Rutas indexables por isla (`/alquiler-camper/gran-canaria`, `/tenerife`, etc.), metadatos OG, `sitemap.xml` dinámico y `robots.txt`.
+- **Dashboards por Rol:** Paneles para Viajeros, Propietarios (ingresos, ocupación, lista de campers) y Administradores (KPIs globales, transacciones GMV).
+
+---
+
+## 🛠️ Instalación y Desarrollo Local
+
+### 1. Requisitos Previos
+- Node.js 20+
+- PostgreSQL (o Docker instalado)
+
+### 2. Variables de Entorno
+Crea un archivo `.env` en la raíz con el siguiente contenido:
+
+```env
+DATABASE_URL="postgresql://nomad:canarias2026@localhost:5432/nomadcanarias?schema=public"
+JWT_SECRET="secret-jwt-key-canarias-2026"
+STRIPE_SECRET_KEY="sk_test_mock_canarias_key"
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_test_mock_canarias_key"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Instalación de Dependencias
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4. Migraciones y Seed de Datos
+Poblar la base de datos con campers y ubicaciones reales en las 8 Islas Canarias:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npx prisma db push
+npx tsx prisma/seed.ts
+```
 
-## Learn More
+### 5. Iniciar Servidor de Desarrollo
+```bash
+npm run dev
+```
+Accede a [http://localhost:3000](http://localhost:3000).
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🔑 Cuentas Demo de Prueba (Sembradas en el Seed)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Administrador:** `admin@canariascampers.es` (Password: `Password123!`)
+- **Propietario Gran Canaria:** `propietario.grancanaria@canariascampers.es` (Password: `Password123!`)
+- **Propietario Tenerife:** `propietario.tenerife@canariascampers.es` (Password: `Password123!`)
+- **Viajero:** `viajero@canariascampers.es` (Password: `Password123!`)
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🐳 Despliegue con Docker
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Para levantar la infraestructura completa (Next.js + PostgreSQL) en producción:
+
+```bash
+docker-compose up --build -d
+```

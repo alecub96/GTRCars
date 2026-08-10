@@ -1,0 +1,33 @@
+import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { getCurrentUser } from '@/lib/auth';
+
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
+
+export async function POST(request: Request) {
+  const user = await getCurrentUser();
+  if (!user) return NextResponse.json({ error: 'Debes iniciar sesión' }, { status: 401 });
+  try {
+    const form = await request.formData();
+    const documentType = String(form.get('documentType') || 'DNI_NIE');
+    const documentNumber = String(form.get('documentNumber') || '').trim();
+    const drivingLicense = String(form.get('drivingLicense') || '').trim();
+    const licenseExpDate = String(form.get('licenseExpDate') || '').trim();
+    const front = form.get('fileFront');
+    const back = form.get('fileBack');
+    if (!documentNumber || !drivingLicense || !licenseExpDate || !(front instanceof File) || !(back instanceof File)) return NextResponse.json({ error: 'Completa todos los campos y adjunta ambos documentos' }, { status: 400 });
+    if (front.size > MAX_FILE_SIZE || back.size > MAX_FILE_SIZE) return NextResponse.json({ error: 'Cada archivo debe pesar menos de 5 MB' }, { status: 400 });
+    const allowed = ['image/jpeg', 'image/png', 'application/pdf'];
+    if (!allowed.includes(front.type) || !allowed.includes(back.type)) return NextResponse.json({ error: 'Solo se admiten JPG, PNG o PDF' }, { status: 400 });
+    const toDataUrl = async (file: File) => `data:${file.type};base64,${Buffer.from(await file.arrayBuffer()).toString('base64')}`;
+    await prisma.$transaction([
+      prisma.document.create({ data: { userId: user.id, type: `${documentType}_FRONT`, fileUrl: await toDataUrl(front), status: 'PENDING', notes: `DNI: ${documentNumber}; permiso: ${drivingLicense}; caducidad: ${licenseExpDate}` } }),
+      prisma.document.create({ data: { userId: user.id, type: `${documentType}_BACK`, fileUrl: await toDataUrl(back), status: 'PENDING' } }),
+      prisma.user.update({ where: { id: user.id }, data: { verification: 'PENDING' } }),
+    ]);
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Verification upload error:', error);
+    return NextResponse.json({ error: 'No se pudieron guardar los documentos' }, { status: 500 });
+  }
+}
