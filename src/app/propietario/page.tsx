@@ -14,6 +14,7 @@ export default function OwnerDashboardPage() {
   const [authorized, setAuthorized] = useState<boolean | null>(null);
   const [bookings, setBookings] = useState<any[]>([]);
   const [stripeMessage, setStripeMessage] = useState('');
+  const [stripeSetupUrl, setStripeSetupUrl] = useState('');
   const [bookingTab, setBookingTab] = useState<'requests' | 'confirmed' | 'completed'>('requests');
 
   useEffect(() => {
@@ -77,10 +78,14 @@ export default function OwnerDashboardPage() {
 
   const handleStripeConnect = async () => {
     setStripeMessage('');
+    setStripeSetupUrl('');
     const response = await fetch('/api/stripe/connect', { method: 'POST' });
     const data = await response.json();
     if (data.url) window.location.href = data.url;
-    else setStripeMessage(data.error || 'No se pudo iniciar la configuración de cobros');
+    else {
+      setStripeMessage(data.error || 'No se pudo iniciar la configuración de cobros');
+      if (data.setupRequired && data.dashboardUrl) setStripeSetupUrl(data.dashboardUrl);
+    }
   };
 
   return (
@@ -121,7 +126,7 @@ export default function OwnerDashboardPage() {
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#E9E1D2] bg-white p-5">
           <div><strong className="block text-sm">Cobra tus reservas de forma segura</strong><span className="text-xs text-[#6B726E]">Configura tu cuenta Stripe Connect para recibir liquidaciones.</span></div>
           <button onClick={handleStripeConnect} className="rounded-full bg-[#13322E] px-5 py-3 text-xs font-bold uppercase tracking-wider text-white">Configurar cobros</button>
-          {stripeMessage && <p className="w-full text-xs font-bold text-amber-700">{stripeMessage}</p>}
+          {stripeMessage && <div className="w-full rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs font-bold text-amber-800"><p>{stripeMessage}</p>{stripeSetupUrl && <a href={stripeSetupUrl} target="_blank" rel="noreferrer" className="mt-3 inline-flex rounded-full bg-[#13322E] px-4 py-2 text-white">Completar perfil de Stripe Connect</a>}</div>}
         </div>
 
         {/* TARJETA INFORMATIVA PLAN VIP DE 2,99€/MES */}
