@@ -40,17 +40,17 @@ export default function MainSearchWidget({ selectedIsland, onIslandChange }: Mai
   return (
     <form
       onSubmit={handleSearch}
-      className="bg-white/95 backdrop-blur-md rounded-3xl p-4 sm:p-5 shadow-xl border border-[#E2E8F0] max-w-4xl w-full grid grid-cols-1 md:grid-cols-4 gap-3 text-[#0F172A]"
+      className="bg-white/95 backdrop-blur-md rounded-3xl p-4 sm:p-5 shadow-xl border border-[#E9E1D2] max-w-4xl w-full grid grid-cols-1 md:grid-cols-4 gap-3 text-[#13322E]"
     >
       {/* SELECCIONAR ISLA */}
-      <div className="p-3 rounded-2xl hover:bg-[#F8FAFC] transition-colors flex items-center space-x-3 border border-transparent hover:border-[#E2E8F0]">
-        <MapPin className="w-5 h-5 text-[#14B8A6] shrink-0" />
+      <div className="p-3 rounded-2xl hover:bg-[#F8FAFC] transition-colors flex items-center space-x-3 border border-transparent hover:border-[#E9E1D2]">
+        <MapPin className="w-5 h-5 text-[#16B8AA] shrink-0" />
         <div className="w-full">
           <label className="block text-[10px] font-black tracking-wider uppercase text-[#94A3B8]">¿DÓNDE RECOGER TU CAMPER?</label>
           <select
             value={activeIsland}
             onChange={(e) => handleIslandSelect(e.target.value)}
-            className="w-full bg-transparent font-extrabold text-sm focus:outline-none cursor-pointer text-[#0F172A]"
+            className="w-full bg-transparent font-extrabold text-sm focus:outline-none cursor-pointer text-[#13322E]"
           >
             {CANARY_ISLANDS.map((is) => (
               <option key={is.id} value={is.name}>
@@ -62,8 +62,8 @@ export default function MainSearchWidget({ selectedIsland, onIslandChange }: Mai
       </div>
 
       {/* FECHAS */}
-      <div className="p-3 rounded-2xl hover:bg-[#F8FAFC] transition-colors flex items-center space-x-3 border border-transparent hover:border-[#E2E8F0]">
-        <Calendar className="w-5 h-5 text-[#14B8A6] shrink-0" />
+      <div className="p-3 rounded-2xl hover:bg-[#F8FAFC] transition-colors flex items-center space-x-3 border border-transparent hover:border-[#E9E1D2]">
+        <Calendar className="w-5 h-5 text-[#16B8AA] shrink-0" />
         <div className="w-full grid grid-cols-2 gap-1">
           <div>
             <label className="block text-[10px] font-black tracking-wider uppercase text-[#94A3B8]">FECHA SALIDA</label>
@@ -71,7 +71,7 @@ export default function MainSearchWidget({ selectedIsland, onIslandChange }: Mai
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="w-full bg-transparent font-bold text-xs focus:outline-none text-[#0F172A]"
+              className="w-full bg-transparent font-bold text-xs focus:outline-none text-[#13322E]"
             />
           </div>
           <div>
@@ -80,21 +80,21 @@ export default function MainSearchWidget({ selectedIsland, onIslandChange }: Mai
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="w-full bg-transparent font-bold text-xs focus:outline-none text-[#0F172A]"
+              className="w-full bg-transparent font-bold text-xs focus:outline-none text-[#13322E]"
             />
           </div>
         </div>
       </div>
 
       {/* VIAJEROS */}
-      <div className="p-3 rounded-2xl hover:bg-[#F8FAFC] transition-colors flex items-center space-x-3 border border-transparent hover:border-[#E2E8F0]">
-        <Users className="w-5 h-5 text-[#14B8A6] shrink-0" />
+      <div className="p-3 rounded-2xl hover:bg-[#F8FAFC] transition-colors flex items-center space-x-3 border border-transparent hover:border-[#E9E1D2]">
+        <Users className="w-5 h-5 text-[#16B8AA] shrink-0" />
         <div className="w-full">
           <label className="block text-[10px] font-black tracking-wider uppercase text-[#94A3B8]">VIAJEROS</label>
           <select
             value={passengers}
             onChange={(e) => setPassengers(Number(e.target.value))}
-            className="w-full bg-transparent font-extrabold text-sm focus:outline-none cursor-pointer text-[#0F172A]"
+            className="w-full bg-transparent font-extrabold text-sm focus:outline-none cursor-pointer text-[#13322E]"
           >
             <option value={1}>1 Viajero</option>
             <option value={2}>2 Viajeros</option>
@@ -108,7 +108,7 @@ export default function MainSearchWidget({ selectedIsland, onIslandChange }: Mai
       {/* BOTÓN BUSCAR */}
       <button
         type="submit"
-        className="h-full py-4 px-6 rounded-2xl bg-[#14B8A6] text-white hover:bg-[#0F766E] transition-all font-black text-xs uppercase tracking-widest flex items-center justify-center space-x-2 shadow-lg group"
+        className="h-full py-4 px-6 rounded-2xl bg-[#16B8AA] text-white hover:bg-[#0F766E] transition-all font-black text-xs uppercase tracking-widest flex items-center justify-center space-x-2 shadow-lg group"
       >
         <Search className="w-4 h-4 text-white group-hover:scale-110 transition-transform" />
         <span>BUSCAR CAMPER</span>

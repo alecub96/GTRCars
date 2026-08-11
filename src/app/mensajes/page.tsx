@@ -105,29 +105,29 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] text-[#0F172A]">
+    <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]">
       <Navbar />
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
         {/* BANNER INFORMATIVO DE TIEMPO REAL Y BLINDAJE DE MENSAJERÍA */}
-        <div className="bg-[#0F172A] text-white p-4 rounded-3xl mb-6 flex items-center justify-between shadow-md">
+        <div className="bg-[#13322E] text-white p-4 rounded-3xl mb-6 flex items-center justify-between shadow-md">
           <div className="flex items-center space-x-3 text-xs font-medium">
-            <Lock className="w-5 h-5 text-[#14B8A6] shrink-0" />
+            <Lock className="w-5 h-5 text-[#16B8AA] shrink-0" />
             <span>
               <strong>Chat en Directo Protegido:</strong> Los mensajes se reciben en tiempo real. Por tu seguridad, no está permitido compartir datos de contacto externos (teléfonos, emails o webs de terceros).
             </span>
           </div>
-          <div className="hidden sm:flex items-center space-x-1.5 text-[10px] font-black uppercase tracking-widest bg-[#14B8A6]/20 text-[#14B8A6] px-3 py-1 rounded-full border border-[#14B8A6]/30">
-            <span className="w-2 h-2 rounded-full bg-[#14B8A6] animate-pulse" />
+          <div className="hidden sm:flex items-center space-x-1.5 text-[10px] font-black uppercase tracking-widest bg-[#16B8AA]/20 text-[#16B8AA] px-3 py-1 rounded-full border border-[#16B8AA]/30">
+            <span className="w-2 h-2 rounded-full bg-[#16B8AA] animate-pulse" />
             <span>En directo 2s</span>
           </div>
         </div>
 
-        <div className="bg-white rounded-3xl border border-[#E2E8F0] shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-3 h-[650px]">
+        <div className="bg-white rounded-3xl border border-[#E9E1D2] shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-3 h-[650px]">
           
           {/* LISTA DE CONVERSACIONES */}
-          <div className="border-r border-[#E2E8F0] bg-[#F8FAFC] p-4 overflow-y-auto">
+          <div className="border-r border-[#E9E1D2] bg-[#F8FAFC] p-4 overflow-y-auto">
             <h2 className="font-serif text-xl font-bold mb-4 px-2">Conversaciones</h2>
             {conversations.length > 0 ? (
               <div className="space-y-2">
@@ -140,18 +140,18 @@ export default function ChatPage() {
                       onClick={() => setActiveConvId(c.id)}
                       className={`w-full p-3 rounded-2xl text-left transition-all flex items-start space-x-3 border ${
                         isActive
-                          ? 'bg-white border-[#14B8A6] shadow-sm ring-1 ring-[#14B8A6]'
+                          ? 'bg-white border-[#16B8AA] shadow-sm ring-1 ring-[#16B8AA]'
                           : 'bg-transparent border-transparent hover:bg-white'
                       }`}
                     >
-                      <div className="w-10 h-10 rounded-full bg-[#14B8A6]/10 text-[#14B8A6] flex items-center justify-center font-bold text-xs shrink-0">
+                      <div className="w-10 h-10 rounded-full bg-[#16B8AA]/10 text-[#16B8AA] flex items-center justify-center font-bold text-xs shrink-0">
                         {c.vehicle?.title ? c.vehicle.title[0] : 'C'}
                       </div>
                       <div className="overflow-hidden">
-                        <h4 className="font-serif text-sm font-bold text-[#0F172A] truncate">
+                        <h4 className="font-serif text-sm font-bold text-[#13322E] truncate">
                           {c.vehicle?.title || 'Consulta Camper'}
                         </h4>
-                        <p className="text-[11px] text-[#64748B] truncate font-medium mt-0.5">
+                        <p className="text-[11px] text-[#6B726E] truncate font-medium mt-0.5">
                           {lastMsg}
                         </p>
                       </div>
@@ -160,7 +160,7 @@ export default function ChatPage() {
                 })}
               </div>
             ) : (
-              <div className="p-8 text-center text-xs text-[#64748B]">
+              <div className="p-8 text-center text-xs text-[#6B726E]">
                 No tienes conversaciones activas aún.
               </div>
             )}
@@ -171,9 +171,9 @@ export default function ChatPage() {
             {activeConvId ? (
               <>
                 {/* CABECERA CHAT CON INDICADOR PULSANTE DE TIEMPO REAL */}
-                <div className="p-4 border-b border-[#E2E8F0] bg-[#F8FAFC] flex items-center justify-between">
-                  <div className="flex items-center space-x-2 text-xs font-bold text-[#0F172A]">
-                    <MessageSquare className="w-4 h-4 text-[#14B8A6]" />
+                <div className="p-4 border-b border-[#E9E1D2] bg-[#F8FAFC] flex items-center justify-between">
+                  <div className="flex items-center space-x-2 text-xs font-bold text-[#13322E]">
+                    <MessageSquare className="w-4 h-4 text-[#16B8AA]" />
                     <span>Chat Protegido Canarias</span>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -186,12 +186,12 @@ export default function ChatPage() {
                 <div className="p-6 overflow-y-auto space-y-4 flex-1">
                   {messages.map((m) => (
                     <div key={m.id} className="flex flex-col space-y-1">
-                      <div className="flex items-center space-x-2 text-[10px] font-bold text-[#64748B]">
+                      <div className="flex items-center space-x-2 text-[10px] font-bold text-[#6B726E]">
                         <span>{m.sender.firstName} {m.sender.lastName}</span>
                         <span>•</span>
                         <span>{new Date(m.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                       </div>
-                      <div className="p-3.5 rounded-2xl bg-[#F4F9F8] border border-[#E2E8F0] text-xs text-[#0F172A] max-w-md font-medium leading-relaxed shadow-sm">
+                      <div className="p-3.5 rounded-2xl bg-[#F4F9F8] border border-[#E9E1D2] text-xs text-[#13322E] max-w-md font-medium leading-relaxed shadow-sm">
                         {m.content}
                       </div>
                     </div>
@@ -207,26 +207,26 @@ export default function ChatPage() {
                 )}
 
                 {/* CAMPO DE ENTRADA DE MENSAJES */}
-                <form onSubmit={handleSendMessage} className="p-4 border-t border-[#E2E8F0] flex items-center space-x-2">
+                <form onSubmit={handleSendMessage} className="p-4 border-t border-[#E9E1D2] flex items-center space-x-2">
                   <input
                     type="text"
                     required
                     placeholder="Escribe tu mensaje en directo sobre la camper..."
                     value={inputContent}
                     onChange={(e) => setInputContent(e.target.value)}
-                    className="flex-1 p-3 rounded-xl border border-[#E2E8F0] text-sm focus:outline-none focus:ring-2 focus:ring-[#14B8A6]"
+                    className="flex-1 p-3 rounded-xl border border-[#E9E1D2] text-sm focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
                   />
                   <button
                     type="submit"
                     disabled={sending}
-                    className="p-3 rounded-xl bg-[#14B8A6] text-white hover:bg-[#0F766E] transition-all font-bold"
+                    className="p-3 rounded-xl bg-[#16B8AA] text-white hover:bg-[#0F766E] transition-all font-bold"
                   >
                     <Send className="w-4 h-4" />
                   </button>
                 </form>
               </>
             ) : (
-              <div className="flex items-center justify-center h-full text-xs text-[#64748B]">
+              <div className="flex items-center justify-center h-full text-xs text-[#6B726E]">
                 Selecciona una conversación para chatear en directo.
               </div>
             )}

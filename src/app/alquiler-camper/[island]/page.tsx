@@ -30,7 +30,7 @@ export default async function SeoIslandPage({ params }: SeoIslandPageProps) {
   const faqs = locationData?.faq ? JSON.parse(locationData.faq) : [];
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-[#1C2826]">
+    <div className="min-h-screen bg-[#F7F6F2] text-[#1C2826]">
       <Navbar />
 
       {/* HERO SEO ISLA */}
@@ -59,7 +59,7 @@ export default async function SeoIslandPage({ params }: SeoIslandPageProps) {
             <Link
               key={v.id}
               href={`/camper/${v.slug}`}
-              className="group bg-white rounded-3xl overflow-hidden border border-[#E6E1DA] shadow-sm hover:shadow-xl transition-all duration-300"
+              className="group bg-white rounded-3xl overflow-hidden border border-[#E9E1D2] shadow-sm hover:shadow-xl transition-all duration-300"
             >
               <div className="relative h-60">
                 <img
@@ -70,9 +70,9 @@ export default async function SeoIslandPage({ params }: SeoIslandPageProps) {
               </div>
               <div className="p-6">
                 <h3 className="font-serif text-xl font-medium mb-2 group-hover:text-[#E07A5F] transition-colors">{v.title}</h3>
-                <p className="text-xs text-[#7A7571] mb-4">{v.municipality} • {v.passengers} personas</p>
-                <div className="pt-4 border-t border-[#E6E1DA] flex justify-between items-center">
-                  <span className="font-serif text-xl font-semibold">{v.basePricePerDay}€ <span className="text-xs font-sans text-[#7A7571]">/día</span></span>
+                <p className="text-xs text-[#6B726E] mb-4">{v.municipality} • {v.passengers} personas</p>
+                <div className="pt-4 border-t border-[#E9E1D2] flex justify-between items-center">
+                  <span className="font-serif text-xl font-semibold">{v.basePricePerDay}€ <span className="text-xs font-sans text-[#6B726E]">/día</span></span>
                   <span className="text-xs font-semibold text-[#1C2826] uppercase">Ver Camper →</span>
                 </div>
               </div>
@@ -83,13 +83,13 @@ export default async function SeoIslandPage({ params }: SeoIslandPageProps) {
 
       {/* FAQS SEO */}
       {faqs.length > 0 && (
-        <section className="bg-[#F3EFEA] py-16 border-t border-[#E6E1DA]">
+        <section className="bg-[#F3EFEA] py-16 border-t border-[#E9E1D2]">
           <div className="max-w-4xl mx-auto px-4 space-y-6">
             <h3 className="font-serif text-2xl text-center mb-8">Preguntas Frecuentes en {locationData?.name || island}</h3>
             {faqs.map((faq: any, i: number) => (
-              <div key={i} className="bg-white p-6 rounded-2xl border border-[#E6E1DA]">
+              <div key={i} className="bg-white p-6 rounded-2xl border border-[#E9E1D2]">
                 <h4 className="font-serif text-lg font-medium text-[#1C2826] mb-2">{faq.q}</h4>
-                <p className="text-xs text-[#7A7571] leading-relaxed font-light">{faq.a}</p>
+                <p className="text-xs text-[#6B726E] leading-relaxed font-light">{faq.a}</p>
               </div>
             ))}
           </div>

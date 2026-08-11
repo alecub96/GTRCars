@@ -131,6 +131,8 @@ model User {
   conversationTraveler  Conversation[]         @relation("TravelerConversations")
   conversationOwner     Conversation[]         @relation("OwnerConversations")
   sentMessages          Message[]
+  supportConversations  SupportConversation[]
+  supportMessages       SupportMessage[]
   documents             Document[]
   blogPosts             BlogPost[]
   auditLogs             AuditLog[]
@@ -478,6 +480,30 @@ model Message {
   content        String       @db.Text
   read           Boolean      @default(false)
   createdAt      DateTime     @default(now())
+}
+
+model SupportConversation {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status    String   @default("OPEN")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  messages SupportMessage[]
+}
+
+model SupportMessage {
+  id             String              @id @default(uuid())
+  conversationId String
+  conversation   SupportConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId       String
+  sender         User                @relation(fields: [senderId], references: [id])
+  content        String              @db.Text
+  read           Boolean             @default(false)
+  createdAt      DateTime            @default(now())
+
+  @@index([conversationId, createdAt])
 }
 
 model Favorite {

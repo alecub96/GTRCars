@@ -34,7 +34,7 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
       : 5.0;
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-[#1C2826]">
+    <div className="min-h-screen bg-[#F7F6F2] text-[#1C2826]">
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -42,7 +42,7 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
         {/* TITULO Y CABECERA */}
         <div className="mb-6 relative">
           <div className="absolute right-0 top-0"><FavoriteButton vehicleId={vehicle.id} /></div>
-          <div className="flex items-center space-x-2 text-xs text-[#7A7571] font-medium mb-2">
+          <div className="flex items-center space-x-2 text-xs text-[#6B726E] font-medium mb-2">
             <span>{vehicle.island}</span>
             <span>•</span>
             <span>{vehicle.municipality}</span>
@@ -91,32 +91,32 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
           <div className="lg:col-span-2 space-y-10">
             
             {/* CARACTERÍSTICAS PRINCIPALES */}
-            <div className="grid grid-cols-4 gap-4 p-6 bg-white rounded-3xl border border-[#E6E1DA] text-center">
+            <div className="grid grid-cols-4 gap-4 p-6 bg-white rounded-3xl border border-[#E9E1D2] text-center">
               <div>
                 <Users className="w-6 h-6 mx-auto text-[#E07A5F] mb-1" />
-                <span className="block text-xs text-[#7A7571]">Capacidad</span>
+                <span className="block text-xs text-[#6B726E]">Capacidad</span>
                 <span className="font-serif text-lg font-semibold">{vehicle.passengers} plazas</span>
               </div>
               <div>
                 <Bed className="w-6 h-6 mx-auto text-[#E07A5F] mb-1" />
-                <span className="block text-xs text-[#7A7571]">Camas</span>
+                <span className="block text-xs text-[#6B726E]">Camas</span>
                 <span className="font-serif text-lg font-semibold">{vehicle.beds} camas</span>
               </div>
               <div>
                 <Settings2 className="w-6 h-6 mx-auto text-[#E07A5F] mb-1" />
-                <span className="block text-xs text-[#7A7571]">Cambio</span>
+                <span className="block text-xs text-[#6B726E]">Cambio</span>
                 <span className="font-serif text-lg font-semibold">{vehicle.transmission}</span>
               </div>
               <div>
                 <Fuel className="w-6 h-6 mx-auto text-[#E07A5F] mb-1" />
-                <span className="block text-xs text-[#7A7571]">Combustible</span>
+                <span className="block text-xs text-[#6B726E]">Combustible</span>
                 <span className="font-serif text-lg font-semibold">{vehicle.fuelType}</span>
               </div>
             </div>
 
             {/* DESCRIPCIÓN */}
             <div className="space-y-4">
-              <h3 className="font-serif text-2xl font-normal border-b border-[#E6E1DA] pb-3">Sobre este vehículo</h3>
+              <h3 className="font-serif text-2xl font-normal border-b border-[#E9E1D2] pb-3">Sobre este vehículo</h3>
               <p className="text-sm text-[#4A4643] leading-relaxed font-light whitespace-pre-line">
                 {vehicle.description}
               </p>
@@ -124,10 +124,10 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
 
             {/* EQUIPAMIENTO */}
             <div className="space-y-4">
-              <h3 className="font-serif text-2xl font-normal border-b border-[#E6E1DA] pb-3">Equipamiento Incluido</h3>
+              <h3 className="font-serif text-2xl font-normal border-b border-[#E9E1D2] pb-3">Equipamiento Incluido</h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {vehicle.features.map((f: any) => (
-                  <div key={f.id} className="flex items-center space-x-2 p-3 bg-white rounded-2xl border border-[#E6E1DA]">
+                  <div key={f.id} className="flex items-center space-x-2 p-3 bg-white rounded-2xl border border-[#E9E1D2]">
                     <Check className="w-4 h-4 text-[#E07A5F]" />
                     <span className="text-xs capitalize font-medium">{f.name}</span>
                   </div>
@@ -136,7 +136,7 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
             </div>
 
             {/* PROPIETARIO */}
-            <div className="p-6 bg-[#F3EFEA] rounded-3xl border border-[#E6E1DA] flex items-center space-x-4">
+            <div className="p-6 bg-[#F3EFEA] rounded-3xl border border-[#E9E1D2] flex items-center space-x-4">
               <img
                 src={vehicle.owner.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400'}
                 alt={vehicle.owner.firstName}
@@ -145,19 +145,19 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
               <div>
                 <span className="text-xs uppercase tracking-wider font-semibold text-[#E07A5F]">Propietario Anfitrión</span>
                 <h4 className="font-serif text-xl font-medium">{vehicle.owner.firstName} {vehicle.owner.lastName}</h4>
-                <p className="text-xs text-[#7A7571] mt-0.5">Propietario verificado en Canarias desde 2024</p>
+                <p className="text-xs text-[#6B726E] mt-0.5">Propietario verificado en Canarias desde 2024</p>
               </div>
             </div>
 
             {/* RESEÑAS */}
             {vehicle.reviews.length > 0 && (
               <div className="space-y-6 pt-6">
-                <h3 className="font-serif text-2xl font-normal border-b border-[#E6E1DA] pb-3">
+                <h3 className="font-serif text-2xl font-normal border-b border-[#E9E1D2] pb-3">
                   Opiniones de Viajeros ({vehicle.reviews.length})
                 </h3>
                 <div className="space-y-4">
                   {vehicle.reviews.map((rev: any) => (
-                    <div key={rev.id} className="p-6 bg-white rounded-3xl border border-[#E6E1DA]">
+                    <div key={rev.id} className="p-6 bg-white rounded-3xl border border-[#E9E1D2]">
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center space-x-3">
                           <img
@@ -167,7 +167,7 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
                           />
                           <div>
                             <span className="font-medium text-sm block">{rev.author.firstName}</span>
-                            <span className="text-[10px] text-[#7A7571]">{new Date(rev.createdAt).toLocaleDateString()}</span>
+                            <span className="text-[10px] text-[#6B726E]">{new Date(rev.createdAt).toLocaleDateString()}</span>
                           </div>
                         </div>
                         <div className="flex items-center space-x-1">

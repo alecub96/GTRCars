@@ -22,7 +22,12 @@ export async function PATCH(request: Request) {
   const { documentId, status, notes } = await request.json();
   if (!documentId || !['VERIFIED', 'REJECTED'].includes(status)) return NextResponse.json({ error: 'Datos de revisión inválidos' }, { status: 400 });
   const document = await prisma.document.update({ where: { id: documentId }, data: { status, notes } });
-  const pending = await prisma.document.count({ where: { userId: document.userId, status: 'PENDING' } });
-  await prisma.user.update({ where: { id: document.userId }, data: { verification: pending ? 'PENDING' : status } });
+  const statuses = await prisma.document.findMany({ where: { userId: document.userId }, select: { status: true } });
+  const verification = statuses.some((item) => item.status === 'PENDING')
+    ? 'PENDING'
+    : statuses.some((item) => item.status === 'REJECTED')
+      ? 'REJECTED'
+      : 'VERIFIED';
+  await prisma.user.update({ where: { id: document.userId }, data: { verification } });
   return NextResponse.json({ success: true, document });
 }

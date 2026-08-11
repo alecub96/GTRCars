@@ -83,11 +83,11 @@ export default function BookingWidget({ vehicle }: BookingWidgetProps) {
   };
 
   return (
-    <div className="bg-white rounded-3xl p-6 border border-[#E6E1DA] shadow-xl sticky top-28 space-y-6">
-      <div className="flex items-baseline justify-between pb-4 border-b border-[#E6E1DA]">
+    <div className="bg-white rounded-3xl p-6 border border-[#E9E1D2] shadow-xl sticky top-28 space-y-6">
+      <div className="flex items-baseline justify-between pb-4 border-b border-[#E9E1D2]">
         <div>
           <span className="font-serif text-3xl font-semibold text-[#1C2826]">{vehicle.basePricePerDay}€</span>
-          <span className="text-xs text-[#7A7571]"> /día</span>
+          <span className="text-xs text-[#6B726E]"> /día</span>
         </div>
         <span className="text-xs font-semibold text-[#E07A5F] uppercase tracking-wider">Fianza {vehicle.securityDeposit}€</span>
       </div>
@@ -100,10 +100,10 @@ export default function BookingWidget({ vehicle }: BookingWidgetProps) {
 
       {/* SELECCIÓN DE FECHAS */}
       <div className="space-y-2">
-        <label className="block text-xs font-semibold uppercase tracking-wider text-[#7A7571]">Fechas de Viaje</label>
-        <div className="grid grid-cols-2 gap-2 p-2 rounded-2xl bg-[#FAF8F5] border border-[#E6E1DA]">
+        <label className="block text-xs font-semibold uppercase tracking-wider text-[#6B726E]">Fechas de Viaje</label>
+        <div className="grid grid-cols-2 gap-2 p-2 rounded-2xl bg-[#F7F6F2] border border-[#E9E1D2]">
           <div>
-            <span className="block text-[10px] text-[#7A7571] uppercase font-semibold">Entrega</span>
+            <span className="block text-[10px] text-[#6B726E] uppercase font-semibold">Entrega</span>
             <input
               type="date"
               value={startDate}
@@ -112,7 +112,7 @@ export default function BookingWidget({ vehicle }: BookingWidgetProps) {
             />
           </div>
           <div>
-            <span className="block text-[10px] text-[#7A7571] uppercase font-semibold">Devolución</span>
+            <span className="block text-[10px] text-[#6B726E] uppercase font-semibold">Devolución</span>
             <input
               type="date"
               value={endDate}
@@ -126,7 +126,7 @@ export default function BookingWidget({ vehicle }: BookingWidgetProps) {
       {/* EXTRAS */}
       {vehicle.extras.length > 0 && (
         <div className="space-y-2">
-          <label className="block text-xs font-semibold uppercase tracking-wider text-[#7A7571]">Extras Opcionales</label>
+          <label className="block text-xs font-semibold uppercase tracking-wider text-[#6B726E]">Extras Opcionales</label>
           <div className="space-y-2 max-h-36 overflow-y-auto">
             {vehicle.extras.map((ve) => (
               <label
@@ -135,7 +135,7 @@ export default function BookingWidget({ vehicle }: BookingWidgetProps) {
                 className={`flex items-center justify-between p-2.5 rounded-xl border text-xs cursor-pointer transition-all ${
                   selectedExtraIds.includes(ve.extra.id)
                     ? 'bg-[#1C2826] text-white border-[#1C2826]'
-                    : 'bg-[#FAF8F5] border-[#E6E1DA] text-[#1C2826]'
+                    : 'bg-[#F7F6F2] border-[#E9E1D2] text-[#1C2826]'
                 }`}
               >
                 <span>{ve.extra.name}</span>
@@ -148,7 +148,7 @@ export default function BookingWidget({ vehicle }: BookingWidgetProps) {
 
       {/* DESGLOSE AUTORITATIVO DE PRECIOS */}
       {pricing && (
-        <div className="pt-4 border-t border-[#E6E1DA] space-y-2 text-xs text-[#4A4643]">
+        <div className="pt-4 border-t border-[#E9E1D2] space-y-2 text-xs text-[#4A4643]">
           <div className="flex justify-between">
             <span>{vehicle.basePricePerDay}€ x {pricing.totalDays} días</span>
             <span>{pricing.basePriceTotal}€</span>
@@ -174,7 +174,7 @@ export default function BookingWidget({ vehicle }: BookingWidgetProps) {
             <span>+{pricing.travelerFee}€</span>
           </div>
 
-          <div className="pt-3 border-t border-[#E6E1DA] flex justify-between text-base font-serif font-semibold text-[#1C2826]">
+          <div className="pt-3 border-t border-[#E9E1D2] flex justify-between text-base font-serif font-semibold text-[#1C2826]">
             <span>Total Reserva</span>
             <span>{pricing.totalAmount}€</span>
           </div>
@@ -190,7 +190,7 @@ export default function BookingWidget({ vehicle }: BookingWidgetProps) {
         {loading ? 'Procesando...' : 'SOLICITAR RESERVA'}
       </button>
 
-      <p className="text-[11px] text-center text-[#7A7571] font-light">
+      <p className="text-[11px] text-center text-[#6B726E] font-light">
         No se realizará ningún cargo hasta que confirmes la reserva.
       </p>
     </div>

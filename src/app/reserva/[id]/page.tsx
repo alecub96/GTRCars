@@ -38,13 +38,13 @@ export default function BookingCheckoutClient() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-[#1C2826]">
+    <div className="min-h-screen bg-[#F7F6F2] text-[#1C2826]">
       <Navbar />
 
       <main className="max-w-4xl mx-auto px-4 py-12">
-        <div className="bg-white rounded-3xl p-8 border border-[#E6E1DA] shadow-xl space-y-8">
+        <div className="bg-white rounded-3xl p-8 border border-[#E9E1D2] shadow-xl space-y-8">
           
-          <div className="border-b border-[#E6E1DA] pb-6 text-center">
+          <div className="border-b border-[#E9E1D2] pb-6 text-center">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E07A5F]">
               Confirmación y Firma de Contrato
             </span>
@@ -60,11 +60,11 @@ export default function BookingCheckoutClient() {
           {/* PASO 1: FIRMA DE CONTRATO DE ALQUILER */}
           <div className="space-y-4">
             <h3 className="font-serif text-xl font-semibold flex items-center space-x-2">
-              <CheckCircle2 className={`w-5 h-5 ${signed ? 'text-green-600' : 'text-[#7A7571]'}`} />
+              <CheckCircle2 className={`w-5 h-5 ${signed ? 'text-green-600' : 'text-[#6B726E]'}`} />
               <span>1. Contrato de Alquiler de Vehículo sin Conductor en España</span>
             </h3>
 
-            <div className="p-4 bg-[#FAF8F5] rounded-2xl border border-[#E6E1DA] text-xs text-[#4A4643] h-32 overflow-y-auto font-light leading-relaxed">
+            <div className="p-4 bg-[#F7F6F2] rounded-2xl border border-[#E9E1D2] text-xs text-[#4A4643] h-32 overflow-y-auto font-light leading-relaxed">
               El arrendatario acepta las condiciones generales de alquiler de camper vans en las Islas Canarias. El vehículo entregado debe devolverse con los mismos niveles de combustible y en idénticas condiciones de limpieza. La fianza retenida cubrirá posibles desperfectos o excesos de kilometraje según contrato.
             </div>
 
@@ -77,7 +77,7 @@ export default function BookingCheckoutClient() {
                     value={signatureText}
                     onChange={(e) => setSignatureText(e.target.value)}
                     placeholder="Ej. Marc García López"
-                    className="w-full px-4 py-2.5 rounded-xl border border-[#E6E1DA] bg-white text-sm"
+                    className="w-full px-4 py-2.5 rounded-xl border border-[#E9E1D2] bg-white text-sm"
                   />
                   <button
                     onClick={() => {
@@ -97,15 +97,15 @@ export default function BookingCheckoutClient() {
           </div>
 
           {/* PASO 2: PAGO SEGURO STRIPE */}
-          <div className="space-y-4 border-t border-[#E6E1DA] pt-6">
+          <div className="space-y-4 border-t border-[#E9E1D2] pt-6">
             <h3 className="font-serif text-xl font-semibold flex items-center space-x-2">
-              <CreditCard className={`w-5 h-5 ${paid ? 'text-green-600' : 'text-[#7A7571]'}`} />
+              <CreditCard className={`w-5 h-5 ${paid ? 'text-green-600' : 'text-[#6B726E]'}`} />
               <span>2. Pago Seguro y Confirmación</span>
             </h3>
 
             {!paid ? (
               <div className="space-y-4">
-                <div className="p-4 bg-[#F3EFEA] rounded-2xl border border-[#E6E1DA] flex items-center justify-between text-xs">
+                <div className="p-4 bg-[#F3EFEA] rounded-2xl border border-[#E9E1D2] flex items-center justify-between text-xs">
                   <span className="font-medium">Total a Pagar ahora:</span>
                   <span className="font-serif text-xl font-semibold text-[#1C2826]">Confirmar en el siguiente paso</span>
                 </div>

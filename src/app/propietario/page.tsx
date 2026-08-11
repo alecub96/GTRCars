@@ -36,7 +36,7 @@ export default function OwnerDashboardPage() {
   }, [authorized]);
 
   if (authorized !== true) {
-    return <div className="min-h-screen bg-[#FDFBF7]" />;
+    return <div className="min-h-screen bg-[#F7F6F2]" />;
   }
 
   const handleActivateVip = async (vehicleId: string) => {
@@ -76,11 +76,11 @@ export default function OwnerDashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] text-[#0F172A]">
+    <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]">
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 pb-6 border-b border-[#E2E8F0]">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 pb-6 border-b border-[#E9E1D2]">
           <div>
             <span className="text-[11px] font-black uppercase tracking-[0.25em] text-[#D97706]">
               PANEL DE PROPIETARIOS
@@ -92,7 +92,7 @@ export default function OwnerDashboardPage() {
 
           <Link
             href="/publicar-camper"
-            className="mt-4 md:mt-0 inline-flex items-center space-x-2 bg-[#14B8A6] text-white px-6 py-3 rounded-full font-black text-xs uppercase tracking-widest hover:bg-[#0F766E] transition-all shadow-md"
+            className="mt-4 md:mt-0 inline-flex items-center space-x-2 bg-[#16B8AA] text-white px-6 py-3 rounded-full font-black text-xs uppercase tracking-widest hover:bg-[#0F766E] transition-all shadow-md"
           >
             <Plus className="w-4 h-4" />
             <span>Publicar Nueva Camper</span>
@@ -105,14 +105,14 @@ export default function OwnerDashboardPage() {
             <span>{msg}</span>
           </div>
         )}
-        <div className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#E2E8F0] bg-white p-5">
-          <div><strong className="block text-sm">Cobra tus reservas de forma segura</strong><span className="text-xs text-[#64748B]">Configura tu cuenta Stripe Connect para recibir liquidaciones.</span></div>
-          <button onClick={handleStripeConnect} className="rounded-full bg-[#172725] px-5 py-3 text-xs font-bold uppercase tracking-wider text-white">Configurar cobros</button>
+        <div className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#E9E1D2] bg-white p-5">
+          <div><strong className="block text-sm">Cobra tus reservas de forma segura</strong><span className="text-xs text-[#6B726E]">Configura tu cuenta Stripe Connect para recibir liquidaciones.</span></div>
+          <button onClick={handleStripeConnect} className="rounded-full bg-[#13322E] px-5 py-3 text-xs font-bold uppercase tracking-wider text-white">Configurar cobros</button>
           {stripeMessage && <p className="w-full text-xs font-bold text-amber-700">{stripeMessage}</p>}
         </div>
 
         {/* TARJETA INFORMATIVA PLAN VIP DE 2,99€/MES */}
-        <div className="bg-gradient-to-r from-[#0F172A] to-[#1E293B] rounded-3xl p-8 text-white mb-12 shadow-xl relative overflow-hidden">
+        <div className="bg-gradient-to-r from-[#13322E] to-[#254842] rounded-3xl p-8 text-white mb-12 shadow-xl relative overflow-hidden">
           <div className="max-w-2xl relative z-10">
             <div className="inline-flex items-center space-x-2 bg-[#D97706] text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full mb-4">
               <Crown className="w-3.5 h-3.5" />
@@ -129,11 +129,11 @@ export default function OwnerDashboardPage() {
 
         {/* LISTADO DE MIS CAMPERS */}
         <section className="mb-12 space-y-4">
-          <h3 className="font-serif text-2xl font-bold text-[#0F172A]">Solicitudes de reserva</h3>
-          {bookings.length === 0 ? <p className="text-sm text-[#64748B]">No tienes solicitudes pendientes.</p> : bookings.map((booking) => (
-            <div key={booking.id} className="bg-white rounded-2xl p-4 border border-[#E2E8F0] flex flex-wrap items-center justify-between gap-3">
-              <div><strong>{booking.code}</strong><p className="text-xs text-[#64748B]">{booking.vehicle.title} · {booking.traveler.firstName} · {booking.status}</p></div>
-              {booking.status === 'REQUESTED' && <div className="flex gap-2"><button onClick={async () => { await fetch(`/api/bookings/${booking.id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'accept' }) }); setBookings(bookings.map((b) => b.id === booking.id ? { ...b, status: 'OWNER_ACCEPTED' } : b)); }} className="px-4 py-2 rounded-full bg-[#14B8A6] text-white text-xs font-bold">Aceptar</button><button onClick={async () => { await fetch(`/api/bookings/${booking.id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'reject' }) }); setBookings(bookings.map((b) => b.id === booking.id ? { ...b, status: 'OWNER_REJECTED' } : b)); }} className="px-4 py-2 rounded-full bg-red-50 text-red-700 text-xs font-bold">Rechazar</button></div>}
+          <h3 className="font-serif text-2xl font-bold text-[#13322E]">Solicitudes de reserva</h3>
+          {bookings.length === 0 ? <p className="text-sm text-[#6B726E]">No tienes solicitudes pendientes.</p> : bookings.map((booking) => (
+            <div key={booking.id} className="bg-white rounded-2xl p-4 border border-[#E9E1D2] flex flex-wrap items-center justify-between gap-3">
+              <div><strong>{booking.code}</strong><p className="text-xs text-[#6B726E]">{booking.vehicle.title} · {booking.traveler.firstName} · {booking.status}</p></div>
+              {booking.status === 'REQUESTED' && <div className="flex gap-2"><button onClick={async () => { await fetch(`/api/bookings/${booking.id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'accept' }) }); setBookings(bookings.map((b) => b.id === booking.id ? { ...b, status: 'OWNER_ACCEPTED' } : b)); }} className="px-4 py-2 rounded-full bg-[#16B8AA] text-white text-xs font-bold">Aceptar</button><button onClick={async () => { await fetch(`/api/bookings/${booking.id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'reject' }) }); setBookings(bookings.map((b) => b.id === booking.id ? { ...b, status: 'OWNER_REJECTED' } : b)); }} className="px-4 py-2 rounded-full bg-red-50 text-red-700 text-xs font-bold">Rechazar</button></div>}
             </div>
           ))}
         </section>
@@ -141,11 +141,11 @@ export default function OwnerDashboardPage() {
         <OwnerAvailabilityCalendar vehicles={vehicles} />
 
         <div className="space-y-6">
-          <h3 className="font-serif text-2xl font-bold text-[#0F172A]">Mis Anuncios Publicados</h3>
+          <h3 className="font-serif text-2xl font-bold text-[#13322E]">Mis Anuncios Publicados</h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {vehicles.map((v) => (
-              <div key={v.id} className="bg-white rounded-3xl p-6 border border-[#E2E8F0] shadow-sm flex flex-col justify-between relative overflow-hidden">
+              <div key={v.id} className="bg-white rounded-3xl p-6 border border-[#E9E1D2] shadow-sm flex flex-col justify-between relative overflow-hidden">
                 {v.isVip && (
                   <div className="absolute top-4 right-4 bg-[#D97706] text-white text-[9px] font-black uppercase tracking-wider px-3 py-1 rounded-full flex items-center space-x-1 shadow-sm">
                     <Crown className="w-3 h-3" />
@@ -159,14 +159,14 @@ export default function OwnerDashboardPage() {
                     alt={v.title}
                     className="w-full h-44 object-cover rounded-2xl mb-4"
                   />
-                  <span className="text-[10px] font-black uppercase text-[#14B8A6] tracking-wider block mb-1">
+                  <span className="text-[10px] font-black uppercase text-[#16B8AA] tracking-wider block mb-1">
                     {v.island} • {v.municipality}
                   </span>
-                  <h4 className="font-serif text-xl font-bold text-[#0F172A] mb-2 line-clamp-1">{v.title}</h4>
-                  <p className="text-xs text-[#64748B] font-medium mb-4">{v.basePricePerDay}€ / día</p>
+                  <h4 className="font-serif text-xl font-bold text-[#13322E] mb-2 line-clamp-1">{v.title}</h4>
+                  <p className="text-xs text-[#6B726E] font-medium mb-4">{v.basePricePerDay}€ / día</p>
                 </div>
 
-                <div className="pt-4 border-t border-[#E2E8F0] space-y-3">
+                <div className="pt-4 border-t border-[#E9E1D2] space-y-3">
                   {!v.isVip ? (
                     <button
                       onClick={() => handleActivateVip(v.id)}

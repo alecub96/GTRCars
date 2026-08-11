@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
-import { saveUpload } from '@/lib/uploads';
+import { saveUpload, UploadConfigurationError } from '@/lib/uploads';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
@@ -32,6 +32,20 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Verification upload error:', error);
+    if (error instanceof UploadConfigurationError) {
+      return NextResponse.json({ error: 'El almacenamiento seguro de documentos aún no está configurado' }, { status: 503 });
+    }
     return NextResponse.json({ error: 'No se pudieron guardar los documentos' }, { status: 500 });
   }
+}
+
+export async function GET() {
+  const user = await getCurrentUser();
+  if (!user) return NextResponse.json({ error: 'Debes iniciar sesión' }, { status: 401 });
+  const documents = await prisma.document.findMany({
+    where: { userId: user.id },
+    select: { id: true, type: true, status: true, createdAt: true, updatedAt: true },
+    orderBy: { createdAt: 'desc' },
+  });
+  return NextResponse.json({ success: true, verification: user.verification, documents });
 }

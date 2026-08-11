@@ -116,24 +116,24 @@ export default function AuthModal() {
         <div className="relative">
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full bg-[#F4F9F8] text-[#0F172A] border border-[#E2E8F0] hover:bg-[#E2E8F0] transition-all shadow-sm"
+            className="inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full bg-[#F4F9F8] text-[#13322E] border border-[#E9E1D2] hover:bg-[#E9E1D2] transition-all shadow-sm"
           >
-            <div className="w-6 h-6 rounded-full bg-[#14B8A6] text-white flex items-center justify-center text-[10px] font-black uppercase">
+            <div className="w-6 h-6 rounded-full bg-[#16B8AA] text-white flex items-center justify-center text-[10px] font-black uppercase">
               {user.firstName ? user.firstName[0] : 'U'}
             </div>
             <span>{user.firstName}</span>
-            <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-[#14B8A6]/10 text-[#14B8A6]">
+            <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-[#16B8AA]/10 text-[#16B8AA]">
               {user.role === 'OWNER' ? 'Modo Propietario' : 'Modo Viajero'}
             </span>
           </button>
 
           {isOpen && (
-            <div className="absolute right-0 mt-2 w-72 bg-white border border-slate-200 rounded-3xl shadow-2xl p-5 z-[9999] text-[#0F172A] animate-fade-in">
+            <div className="absolute right-0 mt-2 w-72 bg-white border border-slate-200 rounded-3xl shadow-2xl p-5 z-[9999] text-[#13322E] animate-fade-in">
               <div className="border-b border-slate-100 pb-3 mb-3 px-1">
-                <span className="text-[10px] font-black uppercase tracking-wider text-[#14B8A6]">
+                <span className="text-[10px] font-black uppercase tracking-wider text-[#16B8AA]">
                   {user.role === 'ADMIN' ? 'Administrador' : user.role === 'OWNER' ? 'Modo Propietario Activo' : 'Modo Viajero Activo'}
                 </span>
-                <p className="font-bold text-sm text-[#0F172A] truncate">{user.firstName} {user.lastName}</p>
+                <p className="font-bold text-sm text-[#13322E] truncate">{user.firstName} {user.lastName}</p>
                 <p className="text-xs text-slate-400 truncate">{user.email}</p>
               </div>
 
@@ -142,10 +142,10 @@ export default function AuthModal() {
                 <button
                   onClick={handleSwitchRole}
                   disabled={switching}
-                  className="w-full mb-3 p-3 rounded-2xl bg-gradient-to-r from-[#0F172A] to-[#1E293B] text-white font-black text-xs uppercase tracking-wider flex items-center justify-between shadow-md hover:opacity-95 transition-opacity"
+                  className="w-full mb-3 p-3 rounded-2xl bg-gradient-to-r from-[#13322E] to-[#254842] text-white font-black text-xs uppercase tracking-wider flex items-center justify-between shadow-md hover:opacity-95 transition-opacity"
                 >
                   <div className="flex items-center space-x-2">
-                    <RefreshCw className={`w-4 h-4 text-[#14B8A6] ${switching ? 'animate-spin' : ''}`} />
+                    <RefreshCw className={`w-4 h-4 text-[#16B8AA] ${switching ? 'animate-spin' : ''}`} />
                     <span>{user.role === 'OWNER' ? 'Pasar a Modo Alquiler (Viajero)' : 'Pasar a Modo Propietario'}</span>
                   </div>
                 </button>
@@ -153,20 +153,29 @@ export default function AuthModal() {
 
               <div className="space-y-1 text-xs font-bold text-slate-700">
                 <Link
+                  href="/soporte"
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center space-x-2.5 p-2.5 rounded-2xl hover:bg-slate-50 transition-colors"
+                >
+                  <MessageSquare className="w-4 h-4 text-[#16B8AA]" />
+                  <span>{user.role === 'ADMIN' ? 'Chat con usuarios' : 'Contactar con soporte'}</span>
+                </Link>
+
+                {user.role !== 'ADMIN' && <Link
                   href="/mensajes"
                   onClick={() => setIsOpen(false)}
                   className="flex items-center space-x-2.5 p-2.5 rounded-2xl hover:bg-slate-50 transition-colors"
                 >
-                  <MessageSquare className="w-4 h-4 text-[#14B8A6]" />
-                  <span>Chat y Mensajes</span>
-                </Link>
+                  <MessageSquare className="w-4 h-4 text-[#16B8AA]" />
+                  <span>Mensajes de reservas</span>
+                </Link>}
 
                 {user.role !== 'ADMIN' && <Link
                   href="/cuenta"
                   onClick={() => setIsOpen(false)}
                   className="flex items-center space-x-2.5 p-2.5 rounded-2xl hover:bg-slate-50 transition-colors"
                 >
-                  <Compass className="w-4 h-4 text-[#14B8A6]" />
+                  <Compass className="w-4 h-4 text-[#16B8AA]" />
                   <span>Mi Perfil y Mis Reservas</span>
                 </Link>}
 
@@ -175,7 +184,7 @@ export default function AuthModal() {
                   onClick={() => setIsOpen(false)}
                   className="flex items-center space-x-2.5 p-2.5 rounded-2xl hover:bg-slate-50 transition-colors"
                 >
-                  <Truck className="w-4 h-4 text-[#14B8A6]" />
+                  <Truck className="w-4 h-4 text-[#16B8AA]" />
                   <span>Panel de mis Campers</span>
                 </Link>}
 
@@ -195,7 +204,7 @@ export default function AuthModal() {
                   onClick={() => setIsOpen(false)}
                   className="flex items-center space-x-2.5 p-2.5 rounded-2xl hover:bg-slate-50 transition-colors"
                 >
-                  <ShieldCheck className="w-4 h-4 text-[#14B8A6]" />
+                  <ShieldCheck className="w-4 h-4 text-[#16B8AA]" />
                   <span>Verificación de Licencia</span>
                 </Link>}
 
@@ -215,7 +224,7 @@ export default function AuthModal() {
         <>
           <button
             onClick={() => setIsOpen(true)}
-            className="inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full bg-[#14B8A6] text-white hover:bg-[#0F766E] transition-all shadow-sm"
+            className="inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full bg-[#16B8AA] text-white hover:bg-[#0F766E] transition-all shadow-sm"
           >
             <User className="w-4 h-4" />
             <span>Acceder</span>
@@ -232,10 +241,10 @@ export default function AuthModal() {
                 </button>
 
                 <div className="text-center mb-6">
-                  <span className="text-[10px] font-black uppercase tracking-[0.25em] text-[#14B8A6]">
+                  <span className="text-[10px] font-black uppercase tracking-[0.25em] text-[#16B8AA]">
                     NOMAD CANARIAS
                   </span>
-                  <h3 className="font-serif text-3xl font-bold text-[#0F172A] mt-1">
+                  <h3 className="font-serif text-3xl font-bold text-[#13322E] mt-1">
                     {mode === 'login' ? 'Iniciar Sesión' : mode === 'register' ? 'Crear Cuenta' : 'Recuperar Contraseña'}
                   </h3>
                 </div>
@@ -261,7 +270,7 @@ export default function AuthModal() {
                           onClick={() => setRole('TRAVELER')}
                           className={`py-2 rounded-xl text-xs font-black uppercase tracking-wider border transition-all ${
                             role === 'TRAVELER'
-                              ? 'bg-[#14B8A6] text-white border-[#14B8A6]'
+                              ? 'bg-[#16B8AA] text-white border-[#16B8AA]'
                               : 'bg-slate-50 text-slate-600 border-slate-200'
                           }`}
                         >
@@ -272,7 +281,7 @@ export default function AuthModal() {
                           onClick={() => setRole('OWNER')}
                           className={`py-2 rounded-xl text-xs font-black uppercase tracking-wider border transition-all ${
                             role === 'OWNER'
-                              ? 'bg-[#14B8A6] text-white border-[#14B8A6]'
+                              ? 'bg-[#16B8AA] text-white border-[#16B8AA]'
                               : 'bg-slate-50 text-slate-600 border-slate-200'
                           }`}
                         >
@@ -288,7 +297,7 @@ export default function AuthModal() {
                             required
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
-                            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#14B8A6]"
+                            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
                           />
                         </div>
                         <div>
@@ -298,7 +307,7 @@ export default function AuthModal() {
                             required
                             value={lastName}
                             onChange={(e) => setLastName(e.target.value)}
-                            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#14B8A6]"
+                            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
                           />
                         </div>
                       </div>
@@ -313,7 +322,7 @@ export default function AuthModal() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="ejemplo@canariascampers.es"
-                      className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#14B8A6]"
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
                     />
                   </div>
 
@@ -325,7 +334,7 @@ export default function AuthModal() {
                         required
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#14B8A6]"
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
                       />
                     </div>
                   )}
@@ -333,7 +342,7 @@ export default function AuthModal() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-3.5 rounded-full bg-[#0F172A] text-white font-black text-xs uppercase tracking-widest hover:bg-[#1E293B] transition-colors shadow-md mt-2 flex items-center justify-center space-x-2"
+                    className="w-full py-3.5 rounded-full bg-[#13322E] text-white font-black text-xs uppercase tracking-widest hover:bg-[#254842] transition-colors shadow-md mt-2 flex items-center justify-center space-x-2"
                   >
                     {mode === 'login' ? <LogIn className="w-4 h-4" /> : <UserPlus className="w-4 h-4" />}
                     <span>{loading ? 'Procesando...' : mode === 'login' ? 'INICIAR SESIÓN' : mode === 'register' ? 'CREAR CUENTA' : 'ENVIAR ENLACE'}</span>
@@ -345,23 +354,23 @@ export default function AuthModal() {
                     <div className="space-y-2">
                       <p>
                         ¿No tienes cuenta aún?{' '}
-                        <button onClick={() => setMode('register')} className="font-bold text-[#14B8A6] hover:underline">
+                        <button onClick={() => setMode('register')} className="font-bold text-[#16B8AA] hover:underline">
                           Regístrate aquí
                         </button>
                       </p>
-                      <button onClick={() => { setMode('forgot'); setError(''); setSuccessMessage(''); }} className="font-bold text-[#14B8A6] hover:underline">
+                      <button onClick={() => { setMode('forgot'); setError(''); setSuccessMessage(''); }} className="font-bold text-[#16B8AA] hover:underline">
                         ¿Has olvidado tu contraseña?
                       </button>
                     </div>
                   ) : mode === 'register' ? (
                     <p>
                       ¿Ya tienes cuenta?{' '}
-                      <button onClick={() => setMode('login')} className="font-bold text-[#14B8A6] hover:underline">
+                      <button onClick={() => setMode('login')} className="font-bold text-[#16B8AA] hover:underline">
                         Inicia sesión aquí
                       </button>
                     </p>
                   ) : (
-                    <button onClick={() => { setMode('login'); setError(''); setSuccessMessage(''); }} className="font-bold text-[#14B8A6] hover:underline">
+                    <button onClick={() => { setMode('login'); setError(''); setSuccessMessage(''); }} className="font-bold text-[#16B8AA] hover:underline">
                       Volver a iniciar sesión
                     </button>
                   )}

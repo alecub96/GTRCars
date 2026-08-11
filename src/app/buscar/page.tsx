@@ -48,12 +48,12 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   });
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-[#1C2826]">
+    <div className="min-h-screen bg-[#F7F6F2] text-[#1C2826]">
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* CABECERA BUSCADOR */}
-        <div className="mb-8 border-b border-[#E6E1DA] pb-6 flex flex-col md:flex-row md:items-end justify-between">
+        <div className="mb-8 border-b border-[#E9E1D2] pb-6 flex flex-col md:flex-row md:items-end justify-between">
           <div>
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E07A5F]">
               {selectedIsland ? selectedIsland : 'Todas las Islas Canarias'}
@@ -68,8 +68,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           
           {/* PANEL DE FILTROS LATERAL */}
-          <aside className="bg-white rounded-3xl p-6 border border-[#E6E1DA] shadow-sm h-fit space-y-6">
-            <div className="flex items-center justify-between border-b border-[#E6E1DA] pb-4">
+          <aside className="bg-white rounded-3xl p-6 border border-[#E9E1D2] shadow-sm h-fit space-y-6">
+            <div className="flex items-center justify-between border-b border-[#E9E1D2] pb-4">
               <h3 className="font-serif text-lg font-semibold flex items-center space-x-2">
                 <SlidersHorizontal className="w-4 h-4 text-[#E07A5F]" />
                 <span>Filtros de Búsqueda</span>
@@ -79,11 +79,11 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             <form action="/buscar" method="GET" className="space-y-6 text-sm">
               {/* FILTRO ISLA */}
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-[#7A7571] mb-2">Isla</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-[#6B726E] mb-2">Isla</label>
                 <select
                   name="island"
                   defaultValue={selectedIsland}
-                  className="w-full p-3 rounded-xl border border-[#E6E1DA] bg-[#FAF8F5] font-medium"
+                  className="w-full p-3 rounded-xl border border-[#E9E1D2] bg-[#F7F6F2] font-medium"
                 >
                   <option value="">Todas las Islas</option>
                   {CANARY_ISLANDS.map((is) => (
@@ -94,11 +94,11 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
               {/* FILTRO VIAJEROS */}
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-[#7A7571] mb-2">Nº Mínimo de Viajeros</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-[#6B726E] mb-2">Nº Mínimo de Viajeros</label>
                 <select
                   name="passengers"
                   defaultValue={passengers || ''}
-                  className="w-full p-3 rounded-xl border border-[#E6E1DA] bg-[#FAF8F5] font-medium"
+                  className="w-full p-3 rounded-xl border border-[#E9E1D2] bg-[#F7F6F2] font-medium"
                 >
                   <option value="">Cualquiera</option>
                   <option value="2">2+ personas</option>
@@ -109,21 +109,21 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
               {/* FILTRO PRECIO */}
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-[#7A7571] mb-2">Precio por Día (€)</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-[#6B726E] mb-2">Precio por Día (€)</label>
                 <div className="grid grid-cols-2 gap-2">
                   <input
                     type="number"
                     name="minPrice"
                     placeholder="Mín"
                     defaultValue={minPrice || ''}
-                    className="p-2.5 rounded-xl border border-[#E6E1DA] bg-[#FAF8F5]"
+                    className="p-2.5 rounded-xl border border-[#E9E1D2] bg-[#F7F6F2]"
                   />
                   <input
                     type="number"
                     name="maxPrice"
                     placeholder="Máx"
                     defaultValue={maxPrice || ''}
-                    className="p-2.5 rounded-xl border border-[#E6E1DA] bg-[#FAF8F5]"
+                    className="p-2.5 rounded-xl border border-[#E9E1D2] bg-[#F7F6F2]"
                   />
                 </div>
               </div>
@@ -141,9 +141,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           {/* LISTA DE RESULTADOS */}
           <div className="lg:col-span-3 space-y-6">
             {vehicles.length === 0 ? (
-              <div className="bg-white rounded-3xl p-12 text-center border border-[#E6E1DA]">
+              <div className="bg-white rounded-3xl p-12 text-center border border-[#E9E1D2]">
                 <h3 className="font-serif text-2xl mb-2">No encontramos campers con esos filtros</h3>
-                <p className="text-sm text-[#7A7571]">Prueba a cambiar la isla o reducir las restricciones de precio y viajeros.</p>
+                <p className="text-sm text-[#6B726E]">Prueba a cambiar la isla o reducir las restricciones de precio y viajeros.</p>
               </div>
             ) : (
               vehicles.map((v: any) => {
@@ -155,7 +155,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 return (
                   <div
                     key={v.id}
-                    className="bg-white rounded-3xl overflow-hidden border border-[#E6E1DA] shadow-sm hover:shadow-xl transition-all duration-300 grid grid-cols-1 md:grid-cols-3"
+                    className="bg-white rounded-3xl overflow-hidden border border-[#E9E1D2] shadow-sm hover:shadow-xl transition-all duration-300 grid grid-cols-1 md:grid-cols-3"
                   >
                     <div className="relative h-64 md:h-full">
                       <img
@@ -170,7 +170,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
                     <div className="md:col-span-2 p-6 flex flex-col justify-between">
                       <div>
-                        <div className="flex items-center justify-between text-xs text-[#7A7571] mb-2">
+                        <div className="flex items-center justify-between text-xs text-[#6B726E] mb-2">
                           <span className="flex items-center space-x-1">
                             <MapPin className="w-3.5 h-3.5 text-[#E07A5F]" />
                             <span>{v.municipality}, {v.island}</span>
@@ -185,28 +185,28 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                           {v.title}
                         </h3>
 
-                        <p className="text-xs text-[#7A7571] line-clamp-2 mb-4 font-light leading-relaxed">
+                        <p className="text-xs text-[#6B726E] line-clamp-2 mb-4 font-light leading-relaxed">
                           {v.description}
                         </p>
 
                         <div className="flex flex-wrap gap-2 mb-4">
-                          <span className="px-2.5 py-1 rounded-md bg-[#FAF8F5] border border-[#E6E1DA] text-[11px] font-medium text-[#4A4643]">
+                          <span className="px-2.5 py-1 rounded-md bg-[#F7F6F2] border border-[#E9E1D2] text-[11px] font-medium text-[#4A4643]">
                             {v.passengers} Viajeros
                           </span>
-                          <span className="px-2.5 py-1 rounded-md bg-[#FAF8F5] border border-[#E6E1DA] text-[11px] font-medium text-[#4A4643]">
+                          <span className="px-2.5 py-1 rounded-md bg-[#F7F6F2] border border-[#E9E1D2] text-[11px] font-medium text-[#4A4643]">
                             {v.beds} Camas
                           </span>
-                          <span className="px-2.5 py-1 rounded-md bg-[#FAF8F5] border border-[#E6E1DA] text-[11px] font-medium text-[#4A4643]">
+                          <span className="px-2.5 py-1 rounded-md bg-[#F7F6F2] border border-[#E9E1D2] text-[11px] font-medium text-[#4A4643]">
                             {v.transmission}
                           </span>
                         </div>
                       </div>
 
-                      <div className="pt-4 border-t border-[#E6E1DA] flex items-center justify-between">
+                      <div className="pt-4 border-t border-[#E9E1D2] flex items-center justify-between">
                         <div>
-                          <span className="text-xs text-[#7A7571]">Desde </span>
+                          <span className="text-xs text-[#6B726E]">Desde </span>
                           <span className="font-serif text-2xl font-semibold text-[#1C2826]">{v.basePricePerDay}€</span>
-                          <span className="text-xs text-[#7A7571]"> /día</span>
+                          <span className="text-xs text-[#6B726E]"> /día</span>
                         </div>
 
                         <Link

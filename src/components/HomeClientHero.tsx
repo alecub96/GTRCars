@@ -28,7 +28,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
   const currentHeroImage = ISLAND_HERO_IMAGES[selectedIsland] || ISLAND_HERO_IMAGES['Gran Canaria'];
 
   return (
-    <div className="min-h-screen bg-[#F4EFE7] text-[#172725] font-sans antialiased selection:bg-[#b88a55] selection:text-white">
+    <div className="min-h-screen bg-[#F4EFE7] text-[#13322E] font-sans antialiased selection:bg-[#b88a55] selection:text-white">
       <Navbar />
 
       {/* 1. HERO CON CAMBIO DINÁMICO DE IMAGEN DE FONDO SEGÚN LA ISLA */}
@@ -40,7 +40,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
             alt={`Camper viajando por ${selectedIsland}`}
             className="w-full h-full object-cover object-center filter brightness-[0.75] transition-opacity duration-1000"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#FDFBF7] via-black/20 to-black/50" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#F7F6F2] via-black/20 to-black/50" />
         </div>
 
         <div className="relative z-10 max-w-5xl mx-auto text-center px-4">
@@ -69,11 +69,11 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
           <div>
             <span className="text-[11px] font-black uppercase tracking-widest text-[#D97706]">VEHÍCULOS VERIFICADOS</span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#0F172A] mt-1">Campers y Autocaravanas Destacadas</h2>
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#13322E] mt-1">Campers y Autocaravanas Destacadas</h2>
           </div>
           <Link
             href="/buscar"
-            className="hidden sm:flex items-center space-x-2 text-xs font-black uppercase tracking-widest text-[#14B8A6] hover:text-[#0F766E] transition-colors"
+            className="hidden sm:flex items-center space-x-2 text-xs font-black uppercase tracking-widest text-[#16B8AA] hover:text-[#0F766E] transition-colors"
           >
             <span>Ver todas las campers</span>
             <ChevronRight className="w-4 h-4" />
@@ -91,7 +91,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
               <Link
                 key={vehicle.id}
                 href={`/camper/${vehicle.slug}`}
-                className="group bg-[#F4F9F8] rounded-3xl overflow-hidden border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+                className="group bg-[#F4F9F8] rounded-3xl overflow-hidden border border-[#E9E1D2] shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
               >
                 <div className="p-5">
                   <div className="relative h-60 rounded-2xl overflow-hidden mb-4">
@@ -100,34 +100,34 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                       alt={vehicle.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                    <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black uppercase text-[#14B8A6] tracking-wider">
+                    <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black uppercase text-[#16B8AA] tracking-wider">
                       {vehicle.island}
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between text-xs text-[#64748B] mb-2 font-bold">
+                  <div className="flex items-center justify-between text-xs text-[#6B726E] mb-2 font-bold">
                     <span>{vehicle.brand} {vehicle.model}</span>
-                    <div className="flex items-center space-x-1 text-[#0F172A]">
+                    <div className="flex items-center space-x-1 text-[#13322E]">
                       <Star className="w-3.5 h-3.5 fill-[#D97706] text-[#D97706]" />
                       <span>{avgRating.toFixed(1)}</span>
                     </div>
                   </div>
 
-                  <h3 className="font-serif text-xl font-bold text-[#0F172A] group-hover:text-[#14B8A6] transition-colors line-clamp-1 mb-2">
+                  <h3 className="font-serif text-xl font-bold text-[#13322E] group-hover:text-[#16B8AA] transition-colors line-clamp-1 mb-2">
                     {vehicle.title}
                   </h3>
 
-                  <p className="text-xs text-[#64748B] line-clamp-2 font-medium leading-relaxed mb-4">
+                  <p className="text-xs text-[#6B726E] line-clamp-2 font-medium leading-relaxed mb-4">
                     {vehicle.description}
                   </p>
                 </div>
 
-                <div className="p-5 pt-0 border-t border-[#E2E8F0]/80 flex items-center justify-between mt-2">
-                  <span className="text-xs font-bold text-[#64748B]">Hasta {vehicle.passengers} personas</span>
+                <div className="p-5 pt-0 border-t border-[#E9E1D2]/80 flex items-center justify-between mt-2">
+                  <span className="text-xs font-bold text-[#6B726E]">Hasta {vehicle.passengers} personas</span>
                   <div className="text-right">
-                    <span className="text-xs text-[#64748B] font-medium">Desde </span>
-                    <span className="font-serif text-xl font-bold text-[#14B8A6]">{vehicle.basePricePerDay}€</span>
-                    <span className="text-xs text-[#64748B] font-medium"> /día</span>
+                    <span className="text-xs text-[#6B726E] font-medium">Desde </span>
+                    <span className="font-serif text-xl font-bold text-[#16B8AA]">{vehicle.basePricePerDay}€</span>
+                    <span className="text-xs text-[#6B726E] font-medium"> /día</span>
                   </div>
                 </div>
               </Link>
@@ -137,11 +137,11 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
       </section>
 
       {/* 3. EXPLORAR POR ISLA */}
-      <section className="py-16 bg-white border-t border-[#E2E8F0]">
+      <section className="py-16 bg-white border-t border-[#E9E1D2]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <span className="text-[11px] font-black tracking-[0.2em] uppercase text-[#D97706]">DESTINOS AUTÉNTICOS</span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#0F172A] mt-1">Explora las 8 Islas Canarias</h2>
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#13322E] mt-1">Explora las 8 Islas Canarias</h2>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
@@ -150,7 +150,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                 key={isla.id}
                 onClick={() => setSelectedIsland(isla.name)}
                 className={`group relative h-48 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border text-left ${
-                  selectedIsland === isla.name ? 'ring-4 ring-[#14B8A6] border-transparent' : 'border-[#E2E8F0]'
+                  selectedIsland === isla.name ? 'ring-4 ring-[#16B8AA] border-transparent' : 'border-[#E9E1D2]'
                 }`}
               >
                 <img
@@ -174,9 +174,9 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
 
       {/* 4. SECCIÓN PROPIETARIOS */}
       <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-[#0F172A] rounded-3xl p-8 sm:p-16 text-white relative overflow-hidden flex flex-col md:flex-row items-center justify-between">
+        <div className="bg-[#13322E] rounded-3xl p-8 sm:p-16 text-white relative overflow-hidden flex flex-col md:flex-row items-center justify-between">
           <div className="max-w-xl z-10">
-            <span className="text-xs font-black uppercase tracking-[0.25em] text-[#14B8A6]">Propietarios en Canarias</span>
+            <span className="text-xs font-black uppercase tracking-[0.25em] text-[#16B8AA]">Propietarios en Canarias</span>
             <h2 className="font-serif text-3xl sm:text-5xl font-bold leading-tight mt-2 mb-6">
               ¿Tienes una camper en las islas?
             </h2>
@@ -185,7 +185,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
             </p>
             <Link
               href="/publicar-camper"
-              className="inline-flex items-center space-x-3 bg-[#14B8A6] text-white px-8 py-4 rounded-full font-black text-xs uppercase tracking-widest hover:bg-[#0F766E] transition-all shadow-lg"
+              className="inline-flex items-center space-x-3 bg-[#16B8AA] text-white px-8 py-4 rounded-full font-black text-xs uppercase tracking-widest hover:bg-[#0F766E] transition-all shadow-lg"
             >
               <span>PUBLICAR MI CAMPER</span>
               <ChevronRight className="w-4 h-4" />
@@ -203,11 +203,11 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
       </section>
 
       {/* FOOTER */}
-      <footer className="bg-[#0F172A] text-white pt-16 pb-12 border-t border-white/10">
+      <footer className="bg-[#13322E] text-white pt-16 pb-12 border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-10">
           <div>
             <span className="font-serif text-3xl font-medium tracking-tight text-white block">vaneando<span className="text-[#b88a55]">.</span></span>
-            <span className="text-[9px] font-sans tracking-[0.25em] uppercase text-[#14B8A6] block font-black mt-0.5 mb-4">
+            <span className="text-[9px] font-sans tracking-[0.25em] uppercase text-[#16B8AA] block font-black mt-0.5 mb-4">
               Canarias
             </span>
             <p className="text-xs text-white/60 font-medium leading-relaxed">
@@ -216,7 +216,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
           </div>
 
           <div>
-            <h4 className="text-xs font-black uppercase tracking-widest text-[#14B8A6] mb-4">Ubicaciones</h4>
+            <h4 className="text-xs font-black uppercase tracking-widest text-[#16B8AA] mb-4">Ubicaciones</h4>
             <ul className="space-y-2 text-xs text-white/70 font-medium">
               <li><Link href="/alquiler-camper/gran-canaria" className="hover:text-white">Gran Canaria</Link></li>
               <li><Link href="/alquiler-camper/tenerife" className="hover:text-white">Tenerife</Link></li>
@@ -226,7 +226,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
           </div>
 
           <div>
-            <h4 className="text-xs font-black uppercase tracking-widest text-[#14B8A6] mb-4">Información</h4>
+            <h4 className="text-xs font-black uppercase tracking-widest text-[#16B8AA] mb-4">Información</h4>
             <ul className="space-y-2 text-xs text-white/70 font-medium">
               <li><Link href="/terminos" className="hover:text-white">Términos y Condiciones</Link></li>
               <li><Link href="/privacidad" className="hover:text-white">Política de Privacidad</Link></li>
@@ -235,7 +235,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
           </div>
 
           <div>
-            <h4 className="text-xs font-black uppercase tracking-widest text-[#14B8A6] mb-4">Contacto</h4>
+            <h4 className="text-xs font-black uppercase tracking-widest text-[#16B8AA] mb-4">Contacto</h4>
             <p className="text-xs text-white/70 font-medium mb-2">Atención 24/7 en Canarias</p>
             <p className="text-sm font-serif font-bold text-white">soporte@nomadcanarias.com</p>
           </div>

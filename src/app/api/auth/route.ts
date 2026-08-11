@@ -3,27 +3,29 @@ import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
 import { signToken } from '@/lib/jwt';
 import { sendWelcomeEmail } from '@/lib/email';
+import { isConfiguredAdmin } from '@/lib/admin';
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { action, email, password, firstName, lastName, role } = body;
+    const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
 
     if (action === 'register') {
       if (!email || !password || !firstName || !lastName) {
         return NextResponse.json({ error: 'Faltan campos obligatorios' }, { status: 400 });
       }
 
-      const existingUser = await prisma.user.findUnique({ where: { email } });
+      const existingUser = await prisma.user.findUnique({ where: { email: normalizedEmail } });
       if (existingUser) {
         return NextResponse.json({ error: 'El correo electrónico ya está registrado' }, { status: 400 });
       }
 
       const passwordHash = await bcrypt.hash(password, 10);
-      const userRole = role === 'OWNER' ? 'OWNER' : 'TRAVELER';
+      const userRole = isConfiguredAdmin(normalizedEmail) ? 'ADMIN' : role === 'OWNER' ? 'OWNER' : 'TRAVELER';
       const user = await prisma.user.create({
         data: {
-          email,
+          email: normalizedEmail,
           passwordHash,
           firstName,
           lastName,
@@ -58,7 +60,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Email y contraseña requeridos' }, { status: 400 });
       }
 
-      const user = await prisma.user.findUnique({ where: { email } });
+      let user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
       if (!user) {
         return NextResponse.json({ error: 'Credenciales inválidas' }, { status: 401 });
       }
@@ -66,6 +68,10 @@ export async function POST(request: Request) {
       const isValid = await bcrypt.compare(password, user.passwordHash);
       if (!isValid) {
         return NextResponse.json({ error: 'Credenciales inválidas' }, { status: 401 });
+      }
+
+      if (isConfiguredAdmin(user.email) && user.role !== 'ADMIN') {
+        user = await prisma.user.update({ where: { id: user.id }, data: { role: 'ADMIN' } });
       }
 
       const token = signToken({ userId: user.id, email: user.email, role: user.role as any });

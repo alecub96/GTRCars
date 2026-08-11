@@ -45,7 +45,7 @@ export default function ResetPasswordForm({ token }: { token: string }) {
       <div className="text-center space-y-4">
         <h1 className="font-serif text-3xl font-bold">Contraseña actualizada</h1>
         <p className="text-slate-600">Ya puedes iniciar sesión con tu nueva contraseña.</p>
-        <Link href="/" className="inline-block rounded-full bg-[#0F172A] px-6 py-3 text-xs font-black uppercase tracking-widest text-white">Volver a vaneando.</Link>
+        <Link href="/" className="inline-block rounded-full bg-[#13322E] px-6 py-3 text-xs font-black uppercase tracking-widest text-white">Volver a vaneando.</Link>
       </div>
     );
   }
@@ -56,7 +56,7 @@ export default function ResetPasswordForm({ token }: { token: string }) {
       {error && <p className="rounded-2xl border border-red-200 bg-red-50 p-3 text-center text-xs font-bold text-red-700">{error}</p>}
       <input type="password" required value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Nueva contraseña" className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3" />
       <input type="password" required value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} placeholder="Repite la contraseña" className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3" />
-      <button disabled={loading || !token} className="w-full rounded-full bg-[#0F172A] py-3.5 text-xs font-black uppercase tracking-widest text-white disabled:opacity-50">
+      <button disabled={loading || !token} className="w-full rounded-full bg-[#13322E] py-3.5 text-xs font-black uppercase tracking-widest text-white disabled:opacity-50">
         {loading ? 'Guardando...' : 'Guardar contraseña'}
       </button>
     </form>

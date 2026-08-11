@@ -44,3 +44,25 @@ export async function sendPasswordResetEmail(to: string, firstName: string, rese
     html: `<p>Hola ${firstName},</p><p>Usa el siguiente enlace para crear una contraseña nueva. Caduca en una hora:</p><p><a href="${resetUrl}">Restablecer contraseña</a></p><p>Si no solicitaste el cambio, ignora este correo.</p>`,
   });
 }
+
+export function getEmailConfiguration() {
+  return {
+    configured: Boolean(transporter),
+    host: process.env.SMTP_HOST || 'smtp.hostinger.com',
+    port: Number(process.env.SMTP_PORT || 465),
+    user: process.env.SMTP_USER || 'contacto@vaneando.com',
+    from,
+  };
+}
+
+export async function sendEmailTest(to: string) {
+  if (!transporter) throw new Error('SMTP_PASSWORD no está configurada');
+  await transporter.verify();
+  await transporter.sendMail({
+    from,
+    to,
+    subject: 'Prueba de correo de vaneando.',
+    text: 'La configuración de correo de vaneando. funciona correctamente.',
+    html: '<p>La configuración de correo de <strong>vaneando.</strong> funciona correctamente.</p>',
+  });
+}
