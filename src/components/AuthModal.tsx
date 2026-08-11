@@ -7,13 +7,14 @@ import Link from 'next/link';
 
 export default function AuthModal() {
   const [isOpen, setIsOpen] = useState(false);
-  const [mode, setMode] = useState<'login' | 'register'>('login');
+  const [mode, setMode] = useState<'login' | 'register' | 'forgot'>('login');
   const [role, setRole] = useState<'TRAVELER' | 'OWNER'>('TRAVELER');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [switching, setSwitching] = useState(false);
   const [user, setUser] = useState<any>(null);
@@ -33,25 +34,27 @@ export default function AuthModal() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setSuccessMessage('');
     setLoading(true);
 
     try {
-      const res = await fetch('/api/auth', {
+      const isForgotPassword = mode === 'forgot';
+      const res = await fetch(isForgotPassword ? '/api/auth/password-reset/request' : '/api/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: mode,
-          email,
-          password,
-          firstName,
-          lastName,
-          role,
-        }),
+        body: JSON.stringify(isForgotPassword
+          ? { email }
+          : { action: mode, email, password, firstName, lastName, role }),
       });
 
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || 'Ocurrió un error');
+      }
+
+      if (isForgotPassword) {
+        setSuccessMessage(data.message);
+        return;
       }
 
       setUser(data.user);
@@ -233,13 +236,19 @@ export default function AuthModal() {
                     NOMAD CANARIAS
                   </span>
                   <h3 className="font-serif text-3xl font-bold text-[#0F172A] mt-1">
-                    {mode === 'login' ? 'Iniciar Sesión' : 'Crear Cuenta'}
+                    {mode === 'login' ? 'Iniciar Sesión' : mode === 'register' ? 'Crear Cuenta' : 'Recuperar Contraseña'}
                   </h3>
                 </div>
 
                 {error && (
                   <div className="mb-4 p-3 rounded-2xl bg-red-50 border border-red-200 text-red-700 text-xs font-bold text-center">
                     {error}
+                  </div>
+                )}
+
+                {successMessage && (
+                  <div className="mb-4 p-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold text-center">
+                    {successMessage}
                   </div>
                 )}
 
@@ -308,16 +317,18 @@ export default function AuthModal() {
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1">Contraseña</label>
-                    <input
-                      type="password"
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#14B8A6]"
-                    />
-                  </div>
+                  {mode !== 'forgot' && (
+                    <div>
+                      <label className="block text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1">Contraseña</label>
+                      <input
+                        type="password"
+                        required
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#14B8A6]"
+                      />
+                    </div>
+                  )}
 
                   <button
                     type="submit"
@@ -325,25 +336,34 @@ export default function AuthModal() {
                     className="w-full py-3.5 rounded-full bg-[#0F172A] text-white font-black text-xs uppercase tracking-widest hover:bg-[#1E293B] transition-colors shadow-md mt-2 flex items-center justify-center space-x-2"
                   >
                     {mode === 'login' ? <LogIn className="w-4 h-4" /> : <UserPlus className="w-4 h-4" />}
-                    <span>{loading ? 'Procesando...' : mode === 'login' ? 'INICIAR SESIÓN' : 'CREAR CUENTA'}</span>
+                    <span>{loading ? 'Procesando...' : mode === 'login' ? 'INICIAR SESIÓN' : mode === 'register' ? 'CREAR CUENTA' : 'ENVIAR ENLACE'}</span>
                   </button>
                 </form>
 
                 <div className="mt-6 text-center text-xs text-slate-500 font-medium">
                   {mode === 'login' ? (
-                    <p>
-                      ¿No tienes cuenta aún?{' '}
-                      <button onClick={() => setMode('register')} className="font-bold text-[#14B8A6] hover:underline">
-                        Regístrate aquí
+                    <div className="space-y-2">
+                      <p>
+                        ¿No tienes cuenta aún?{' '}
+                        <button onClick={() => setMode('register')} className="font-bold text-[#14B8A6] hover:underline">
+                          Regístrate aquí
+                        </button>
+                      </p>
+                      <button onClick={() => { setMode('forgot'); setError(''); setSuccessMessage(''); }} className="font-bold text-[#14B8A6] hover:underline">
+                        ¿Has olvidado tu contraseña?
                       </button>
-                    </p>
-                  ) : (
+                    </div>
+                  ) : mode === 'register' ? (
                     <p>
                       ¿Ya tienes cuenta?{' '}
                       <button onClick={() => setMode('login')} className="font-bold text-[#14B8A6] hover:underline">
                         Inicia sesión aquí
                       </button>
                     </p>
+                  ) : (
+                    <button onClick={() => { setMode('login'); setError(''); setSuccessMessage(''); }} className="font-bold text-[#14B8A6] hover:underline">
+                      Volver a iniciar sesión
+                    </button>
                   )}
                 </div>
               </div>

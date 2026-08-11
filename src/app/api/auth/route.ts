@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
 import { signToken } from '@/lib/jwt';
+import { sendWelcomeEmail } from '@/lib/email';
 
 export async function POST(request: Request) {
   try {
@@ -43,6 +44,10 @@ export async function POST(request: Request) {
         sameSite: 'lax',
         maxAge: 60 * 60 * 24 * 7,
         path: '/',
+      });
+
+      await sendWelcomeEmail(user.email, user.firstName).catch((error) => {
+        console.error('Welcome Email Error:', error);
       });
 
       return response;

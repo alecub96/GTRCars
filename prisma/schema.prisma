@@ -105,6 +105,8 @@ model User {
   id               String             @id @default(uuid())
   email            String             @unique
   passwordHash     String
+  resetTokenHash   String?
+  resetTokenExpiresAt DateTime?
   firstName        String
   lastName         String
   phone            String?
