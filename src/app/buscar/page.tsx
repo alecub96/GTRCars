@@ -42,16 +42,23 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   if (sort === 'price_asc') orderBy = { basePricePerDay: 'asc' };
   if (sort === 'price_desc') orderBy = { basePricePerDay: 'desc' };
 
-  const vehicles = await prisma.vehicle.findMany({
-    where: whereClause,
-    select: {
-      id: true, slug: true, title: true, island: true, municipality: true, passengers: true, beds: true,
-      transmission: true, basePricePerDay: true, description: true,
-      photos: { orderBy: { orderIndex: 'asc' } },
-      reviews: { select: { rating: true } },
-    },
-    orderBy,
-  });
+  let vehicles: any[] = [];
+  let databaseUnavailable = false;
+  try {
+    vehicles = await prisma.vehicle.findMany({
+      where: whereClause,
+      select: {
+        id: true, slug: true, title: true, island: true, municipality: true, passengers: true, beds: true,
+        transmission: true, basePricePerDay: true, description: true,
+        photos: { orderBy: { orderIndex: 'asc' } },
+        reviews: { select: { rating: true } },
+      },
+      orderBy,
+    });
+  } catch (error) {
+    databaseUnavailable = true;
+    console.error('Search vehicles unavailable:', error);
+  }
 
   return (
     <div className="min-h-screen bg-[#F7F6F2] text-[#1C2826]">
@@ -146,7 +153,13 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
           {/* LISTA DE RESULTADOS */}
           <div className="lg:col-span-3 space-y-6">
-            {vehicles.length === 0 ? (
+            {databaseUnavailable ? (
+              <div className="bg-white rounded-3xl p-12 text-center border border-[#E9E1D2]">
+                <h3 className="font-serif text-2xl mb-2">Estamos actualizando la disponibilidad</h3>
+                <p className="text-sm text-[#6B726E]">No hemos podido cargar los vehículos ahora mismo. Vuelve a intentarlo en unos instantes.</p>
+                <a href="/buscar" className="inline-flex mt-6 px-6 py-3 rounded-full bg-[#1C2826] text-white text-xs font-semibold">Reintentar</a>
+              </div>
+            ) : vehicles.length === 0 ? (
               <div className="bg-white rounded-3xl p-12 text-center border border-[#E9E1D2]">
                 <h3 className="font-serif text-2xl mb-2">No encontramos campers con esos filtros</h3>
                 <p className="text-sm text-[#6B726E]">Prueba a cambiar la isla o reducir las restricciones de precio y viajeros.</p>
