@@ -81,9 +81,9 @@ export default function SupportPage() {
             <div className="flex-1 space-y-3 overflow-y-auto p-6">
               {messages.length === 0 && <p className="text-center text-sm text-slate-500">{isAdmin && !activeId ? 'Selecciona una conversación.' : 'Escribe tu primer mensaje y el equipo administrador podrá responderte.'}</p>}
               {messages.map((message) => (
-                <div key={message.id} className={`flex ${message.sender.id === currentUser?.id ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`max-w-[75%] rounded-2xl p-3 text-sm ${message.sender.id === currentUser?.id ? 'bg-[#13322E] text-white' : 'bg-[#F4F9F8] text-[#13322E]'}`}>
-                    <strong className="mb-1 block text-[10px] uppercase tracking-wider opacity-70">{message.sender.role === 'ADMIN' ? 'Equipo vaneando.' : `${message.sender.firstName} ${message.sender.lastName}`}</strong>
+                <div key={message.id} className={`flex ${message.system ? 'justify-center' : message.sender?.id === currentUser?.id ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-[75%] rounded-2xl p-3 text-sm ${message.system ? 'border border-[#16B8AA]/30 bg-[#F4F9F8] text-center text-[#13322E]' : message.sender?.id === currentUser?.id ? 'bg-[#13322E] text-white' : 'bg-[#F4F9F8] text-[#13322E]'}`}>
+                    <strong className="mb-1 block text-[10px] uppercase tracking-wider opacity-70">{message.system ? 'Mensaje automático' : message.sender?.role === 'ADMIN' ? 'Equipo vaneando.' : `${message.sender?.firstName || ''} ${message.sender?.lastName || ''}`}</strong>
                     {message.content}
                   </div>
                 </div>

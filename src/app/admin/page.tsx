@@ -6,6 +6,7 @@ import { DollarSign, ArrowUpRight, ShieldCheck, Wallet, RefreshCw, Layers } from
 import AdminVerificationQueue from '@/components/AdminVerificationQueue';
 import AdminEmailDiagnostics from '@/components/AdminEmailDiagnostics';
 import Link from 'next/link';
+import AdminVehicleQueue from '@/components/AdminVehicleQueue';
 
 export default function AdminPage() {
   const [data, setData] = useState<any>(null);
@@ -91,6 +92,7 @@ export default function AdminPage() {
           </div>
         </div>
 
+        <AdminVehicleQueue />
         <AdminVerificationQueue />
         <AdminEmailDiagnostics />
 

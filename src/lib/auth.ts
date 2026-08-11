@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers';
 import { prisma } from './prisma';
 import { verifyToken } from './jwt';
+import { isConfiguredAdmin } from './admin';
 
 export async function getCurrentUser() {
   const cookieStore = await cookies();
@@ -10,7 +11,7 @@ export async function getCurrentUser() {
   const payload = verifyToken(token);
   if (!payload) return null;
 
-  const user = await prisma.user.findUnique({
+  let user = await prisma.user.findUnique({
     where: { id: payload.userId },
     select: {
       id: true,
@@ -25,6 +26,17 @@ export async function getCurrentUser() {
       createdAt: true,
     },
   });
+
+  if (user && user.role !== 'ADMIN' && isConfiguredAdmin(user.email)) {
+    user = await prisma.user.update({
+      where: { id: user.id },
+      data: { role: 'ADMIN' },
+      select: {
+        id: true, email: true, firstName: true, lastName: true, role: true,
+        avatarUrl: true, verification: true, phone: true, stripeAccountId: true, createdAt: true,
+      },
+    });
+  }
 
   return user;
 }

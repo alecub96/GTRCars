@@ -54,6 +54,18 @@ export async function POST(request: Request) {
     }
   }
 
+  if (event.type === 'checkout.session.completed' || event.type === 'checkout.session.async_payment_succeeded') {
+    const session = event.data.object as Stripe.Checkout.Session;
+    const bookingId = session.metadata?.bookingId;
+    if (bookingId && session.payment_status !== 'unpaid') {
+      const paymentIntentId = typeof session.payment_intent === 'string' ? session.payment_intent : session.payment_intent?.id;
+      await prisma.$transaction([
+        prisma.booking.update({ where: { id: bookingId }, data: { status: 'CONFIRMED', stripePaymentIntentId: paymentIntentId || null } }),
+        prisma.payment.updateMany({ where: { stripeId: session.id }, data: { status: 'SUCCEEDED' } }),
+      ]);
+    }
+  }
+
   if (event.type === 'account.updated') {
     const account = event.data.object as Stripe.Account;
     await prisma.user.updateMany({ where: { stripeAccountId: account.id }, data: { stripeAccountId: account.id } });

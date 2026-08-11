@@ -123,7 +123,7 @@ export default function AuthModal() {
             </div>
             <span>{user.firstName}</span>
             <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-[#16B8AA]/10 text-[#16B8AA]">
-              {user.role === 'OWNER' ? 'Modo Propietario' : 'Modo Viajero'}
+              {user.role === 'ADMIN' ? 'Administrador' : user.role === 'OWNER' ? 'Modo Propietario' : 'Modo Viajero'}
             </span>
           </button>
 

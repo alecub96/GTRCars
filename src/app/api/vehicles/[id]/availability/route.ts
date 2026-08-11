@@ -3,7 +3,11 @@ import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
 
 export async function GET(_: Request, context: { params: Promise<{ id: string }> }) {
+  const user = await getCurrentUser();
   const { id } = await context.params;
+  const vehicle = await prisma.vehicle.findUnique({ where: { id }, select: { ownerId: true, status: true } });
+  const isOwner = Boolean(user && user.role === 'OWNER' && vehicle?.ownerId === user.id);
+  if (!vehicle || (!isOwner && vehicle.status !== 'ACTIVE')) return NextResponse.json({ error: 'Vehículo no encontrado' }, { status: 404 });
   const blocks = await prisma.availabilityBlock.findMany({ where: { vehicleId: id }, orderBy: { startDate: 'asc' } });
   return NextResponse.json({ success: true, blocks });
 }

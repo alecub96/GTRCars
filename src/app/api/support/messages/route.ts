@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getCurrentUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { closeInactiveSupportChats, SUPPORT_WAIT_MESSAGE } from '@/lib/support';
 
 function canAccess(user: { id: string; role: string }, conversation: { userId: string }) {
   return user.role === 'ADMIN' || conversation.userId === user.id;
@@ -8,6 +9,7 @@ function canAccess(user: { id: string; role: string }, conversation: { userId: s
 
 export async function GET(request: Request) {
   try {
+    await closeInactiveSupportChats().catch((error) => console.error('Support cleanup error:', error));
     const user = await getCurrentUser();
     if (!user) return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
 
@@ -61,6 +63,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    await closeInactiveSupportChats().catch((error) => console.error('Support cleanup error:', error));
     const user = await getCurrentUser();
     if (!user) return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
 
@@ -75,19 +78,40 @@ export async function POST(request: Request) {
       if (!conversationId) return NextResponse.json({ error: 'Selecciona una conversación' }, { status: 400 });
       conversation = await prisma.supportConversation.findUnique({ where: { id: conversationId } });
       if (!conversation) return NextResponse.json({ error: 'Conversación no encontrada' }, { status: 404 });
+      if (conversation.status === 'CLOSED') {
+        conversation = await prisma.supportConversation.update({
+          where: { id: conversation.id },
+          data: { status: 'OPEN', closedAt: null, userSummarySentAt: null, adminSummarySentAt: null },
+        });
+      }
     } else {
-      conversation = await prisma.supportConversation.upsert({
-        where: { userId: user.id },
-        update: { status: 'OPEN' },
-        create: { userId: user.id },
-      });
+      conversation = await prisma.supportConversation.findUnique({ where: { userId: user.id } });
+      if (!conversation) {
+        conversation = await prisma.supportConversation.create({
+          data: {
+            userId: user.id,
+            messages: { create: { content: SUPPORT_WAIT_MESSAGE, system: true } },
+          },
+        });
+      } else if (conversation.status === 'CLOSED') {
+        conversation = await prisma.supportConversation.update({
+          where: { id: conversation.id },
+          data: {
+            status: 'OPEN', closedAt: null, userSummarySentAt: null, adminSummarySentAt: null,
+            messages: { create: { content: SUPPORT_WAIT_MESSAGE, system: true } },
+          },
+        });
+      }
     }
 
     const message = await prisma.supportMessage.create({
       data: { conversationId: conversation.id, senderId: user.id, content: cleanContent },
       include: { sender: { select: { id: true, firstName: true, lastName: true, role: true } } },
     });
-    await prisma.supportConversation.update({ where: { id: conversation.id }, data: { status: 'OPEN' } });
+    await prisma.supportConversation.update({
+      where: { id: conversation.id },
+      data: { status: 'OPEN', closedAt: null },
+    });
     return NextResponse.json({ success: true, conversationId: conversation.id, message });
   } catch (error) {
     console.error('Support Messages POST Error:', error);

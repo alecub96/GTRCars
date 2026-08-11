@@ -4,7 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import { CANARY_ISLANDS } from '@/lib/pricing';
-import { Compass, CheckCircle2, Upload, MapPin, DollarSign, ChevronRight, ShieldCheck } from 'lucide-react';
+import { CheckCircle2 } from 'lucide-react';
+
+const EQUIPMENT = ['Aire acondicionado', 'Calefacción', 'Ducha interior', 'WC', 'Cocina', 'Frigorífico', 'Agua caliente', 'Placa solar', 'Toldo', 'Portabicicletas', 'Menaje', 'Ropa de cama'];
 
 export default function PublishCamperPage() {
   const router = useRouter();
@@ -23,22 +25,32 @@ export default function PublishCamperPage() {
 
   const [formData, setFormData] = useState({
     title: '',
-    brand: 'Volkswagen',
-    model: 'California Ocean T6.1',
-    year: 2023,
+    brand: '',
+    model: '',
+    year: new Date().getFullYear(),
     island: 'Gran Canaria',
     municipality: 'Las Palmas de Gran Canaria',
     passengers: 4,
     beds: 4,
+    doors: 4,
     transmission: 'AUTOMATIC',
     fuelType: 'DIESEL',
+    fuelConsumption: '',
     basePricePerDay: 90,
     includedKmPerDay: 150,
+    extraKmPrice: 0.25,
+    unlimitedMileage: false,
     securityDeposit: 600,
     cleaningFee: 30,
+    minDays: 2,
+    maxDays: 30,
+    bookingType: 'REQUEST_TO_BOOK',
+    cancellationPolicy: 'FLEXIBLE',
+    addressApprox: '',
     description: '',
     rules: '',
     photoUrl: 'https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=1200',
+    features: [] as string[],
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -56,7 +68,7 @@ export default function PublishCamperPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Error al publicar vehículo');
 
-      router.push(`/camper/${data.vehicle.slug}`);
+      router.push('/propietario?anuncio=creado');
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -81,7 +93,7 @@ export default function PublishCamperPage() {
               Publica tu Camper en Canarias
             </h1>
             <p className="text-xs text-[#6B726E] font-medium mt-2">
-              Paso {step} de 3 — Datos técnicos y precios de alquiler
+              Paso {step} de 3 — Completa una ficha fiable para enviarla a revisión
             </p>
           </div>
 
@@ -134,14 +146,26 @@ export default function PublishCamperPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">Marca y Modelo</label>
+                    <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">Marca</label>
                     <input
                       type="text"
                       required
-                      value={`${formData.brand} ${formData.model}`}
+                      placeholder="Ej. Volkswagen"
+                      value={formData.brand}
                       onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
+                      className="w-full p-3 rounded-xl border border-[#E9E1D2] text-sm focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">Modelo</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Ej. California Ocean"
+                      value={formData.model}
+                      onChange={(e) => setFormData({ ...formData, model: e.target.value })}
                       className="w-full p-3 rounded-xl border border-[#E9E1D2] text-sm focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
                     />
                   </div>
@@ -169,7 +193,7 @@ export default function PublishCamperPage() {
 
             {step === 2 && (
               <div className="space-y-4">
-                <h3 className="font-serif text-xl font-bold text-[#13322E]">2. Capacidad y Precios</h3>
+                <h3 className="font-serif text-xl font-bold text-[#13322E]">2. Capacidad y equipamiento</h3>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
@@ -192,6 +216,24 @@ export default function PublishCamperPage() {
                   </div>
                 </div>
 
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <label className="text-xs font-black uppercase tracking-wider text-[#6B726E]">Puertas<input type="number" min="2" max="8" value={formData.doors} onChange={(e) => setFormData({ ...formData, doors: Number(e.target.value) })} className="mt-1 w-full p-3 rounded-xl border border-[#E9E1D2] text-sm" /></label>
+                  <label className="text-xs font-black uppercase tracking-wider text-[#6B726E]">Cambio<select value={formData.transmission} onChange={(e) => setFormData({ ...formData, transmission: e.target.value })} className="mt-1 w-full p-3 rounded-xl border border-[#E9E1D2] text-sm"><option value="MANUAL">Manual</option><option value="AUTOMATIC">Automático</option></select></label>
+                  <label className="text-xs font-black uppercase tracking-wider text-[#6B726E]">Combustible<select value={formData.fuelType} onChange={(e) => setFormData({ ...formData, fuelType: e.target.value })} className="mt-1 w-full p-3 rounded-xl border border-[#E9E1D2] text-sm"><option value="DIESEL">Diésel</option><option value="GASOLINE">Gasolina</option><option value="HYBRID">Híbrido</option><option value="ELECTRIC">Eléctrico</option></select></label>
+                </div>
+
+                <fieldset><legend className="mb-2 text-xs font-black uppercase tracking-wider text-[#6B726E]">Equipamiento incluido</legend><div className="grid grid-cols-2 sm:grid-cols-3 gap-2">{EQUIPMENT.map((item) => <label key={item} className={`rounded-xl border p-3 text-xs cursor-pointer ${formData.features.includes(item) ? 'border-[#16B8AA] bg-[#F0FDFA]' : 'border-[#E9E1D2]'}`}><input type="checkbox" className="mr-2" checked={formData.features.includes(item)} onChange={() => setFormData({ ...formData, features: formData.features.includes(item) ? formData.features.filter((value) => value !== item) : [...formData.features, item] })} />{item}</label>)}</div></fieldset>
+
+                <div className="flex gap-3">
+                  <button type="button" onClick={() => setStep(1)} className="w-1/3 py-4 rounded-full border border-[#E9E1D2] font-bold text-xs uppercase tracking-wider">Atrás</button>
+                  <button type="button" onClick={() => setStep(3)} className="w-2/3 py-4 rounded-full bg-[#16B8AA] text-white font-black text-xs uppercase tracking-widest">Continuar a tarifas y condiciones</button>
+                </div>
+              </div>
+            )}
+
+            {step === 3 && (
+              <div className="space-y-4">
+                <h3 className="font-serif text-xl font-bold text-[#13322E]">3. Tarifas, condiciones y presentación</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">Precio / día (€)</label>
@@ -215,6 +257,20 @@ export default function PublishCamperPage() {
                   </div>
                 </div>
 
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                  <label className="text-xs font-black uppercase tracking-wider text-[#6B726E]">Km incluidos/día<input type="number" min="0" value={formData.includedKmPerDay} onChange={(e) => setFormData({ ...formData, includedKmPerDay: Number(e.target.value) })} className="mt-1 w-full p-3 rounded-xl border border-[#E9E1D2] text-sm" /></label>
+                  <label className="text-xs font-black uppercase tracking-wider text-[#6B726E]">Km extra (€)<input type="number" min="0" step="0.01" value={formData.extraKmPrice} onChange={(e) => setFormData({ ...formData, extraKmPrice: Number(e.target.value) })} className="mt-1 w-full p-3 rounded-xl border border-[#E9E1D2] text-sm" /></label>
+                  <label className="text-xs font-black uppercase tracking-wider text-[#6B726E]">Mínimo días<input type="number" min="1" value={formData.minDays} onChange={(e) => setFormData({ ...formData, minDays: Number(e.target.value) })} className="mt-1 w-full p-3 rounded-xl border border-[#E9E1D2] text-sm" /></label>
+                  <label className="text-xs font-black uppercase tracking-wider text-[#6B726E]">Máximo días<input type="number" min={formData.minDays} value={formData.maxDays} onChange={(e) => setFormData({ ...formData, maxDays: Number(e.target.value) })} className="mt-1 w-full p-3 rounded-xl border border-[#E9E1D2] text-sm" /></label>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <label className="text-xs font-black uppercase tracking-wider text-[#6B726E]">Tipo de reserva<select value={formData.bookingType} onChange={(e) => setFormData({ ...formData, bookingType: e.target.value })} className="mt-1 w-full p-3 rounded-xl border border-[#E9E1D2] text-sm"><option value="REQUEST_TO_BOOK">Solicitud con aprobación</option><option value="INSTANT_BOOKING">Reserva inmediata</option></select></label>
+                  <label className="text-xs font-black uppercase tracking-wider text-[#6B726E]">Cancelación<select value={formData.cancellationPolicy} onChange={(e) => setFormData({ ...formData, cancellationPolicy: e.target.value })} className="mt-1 w-full p-3 rounded-xl border border-[#E9E1D2] text-sm"><option value="FLEXIBLE">Flexible</option><option value="MODERATE">Moderada</option><option value="STRICT">Estricta</option></select></label>
+                </div>
+
+                <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E]">Punto aproximado de recogida<input required placeholder="Zona o barrio; la dirección exacta no será pública" value={formData.addressApprox} onChange={(e) => setFormData({ ...formData, addressApprox: e.target.value })} className="mt-1 w-full p-3 rounded-xl border border-[#E9E1D2] text-sm" /></label>
+
                 <div>
                   <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">Descripción de la Camper</label>
                   <textarea
@@ -227,10 +283,19 @@ export default function PublishCamperPage() {
                   />
                 </div>
 
+                <div>
+                  <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">Normas y condiciones de uso</label>
+                  <textarea rows={3} required placeholder="Mascotas, fumar, festivales, horarios de entrega, experiencia mínima..." value={formData.rules} onChange={(e) => setFormData({ ...formData, rules: e.target.value })} className="w-full p-3 rounded-xl border border-[#E9E1D2] text-sm" />
+                </div>
+
+                <div><label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">Foto principal (URL temporal)</label><input type="url" required value={formData.photoUrl} onChange={(e) => setFormData({ ...formData, photoUrl: e.target.value })} className="w-full p-3 rounded-xl border border-[#E9E1D2] text-sm" /><p className="mt-1 text-[11px] text-[#6B726E]">Tras crear el borrador podrás gestionar más fotos y el calendario desde tu panel.</p></div>
+
+                <div className="rounded-2xl border border-[#16B8AA]/30 bg-[#F0FDFA] p-4 text-xs"><CheckCircle2 className="inline h-4 w-4 mr-2 text-[#16B8AA]" />El anuncio quedará pendiente de revisión. No aparecerá públicamente ni permitirá reservas hasta ser aprobado.</div>
+
                 <div className="flex gap-3">
                   <button
                     type="button"
-                    onClick={() => setStep(1)}
+                    onClick={() => setStep(2)}
                     className="w-1/3 py-4 rounded-full border border-[#E9E1D2] font-bold text-xs uppercase tracking-wider hover:bg-[#F8FAFC]"
                   >
                     Atrás
@@ -240,7 +305,7 @@ export default function PublishCamperPage() {
                     disabled={loading}
                     className="w-2/3 py-4 rounded-full bg-[#16B8AA] text-white font-black text-xs uppercase tracking-widest hover:bg-[#0F766E] transition-all"
                   >
-                    {loading ? 'Publicando...' : 'PUBLICAR CAMPER AHORA'}
+                    {loading ? 'Enviando...' : 'ENVIAR ANUNCIO A REVISIÓN'}
                   </button>
                 </div>
               </div>

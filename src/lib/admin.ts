@@ -1,7 +1,10 @@
-export function isConfiguredAdmin(email: string) {
-  const configured = (process.env.ADMIN_EMAILS || '')
+export function getConfiguredAdminEmails() {
+  return (process.env.ADMIN_EMAILS || '')
     .split(',')
     .map((value) => value.trim().toLowerCase())
     .filter(Boolean);
-  return configured.includes(email.trim().toLowerCase());
+}
+
+export function isConfiguredAdmin(email: string) {
+  return getConfiguredAdminEmails().includes(email.trim().toLowerCase());
 }

@@ -66,3 +66,31 @@ export async function sendEmailTest(to: string) {
     html: '<p>La configuración de correo de <strong>vaneando.</strong> funciona correctamente.</p>',
   });
 }
+
+function escapeHtml(value: string) {
+  return value.replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[character] || character);
+}
+
+export async function sendChatSummaryEmail(to: string, participantName: string, messages: Array<{ author: string; content: string; createdAt: Date }>) {
+  if (!transporter) throw new Error('SMTP_PASSWORD no está configurada');
+  const lines = messages.map((message) => `[${message.createdAt.toLocaleString('es-ES')}] ${message.author}: ${message.content}`);
+  const rows = messages.map((message) => `<p><small>${escapeHtml(message.createdAt.toLocaleString('es-ES'))}</small><br><strong>${escapeHtml(message.author)}:</strong> ${escapeHtml(message.content)}</p>`).join('');
+  await transporter.sendMail({
+    from,
+    to,
+    subject: 'Resumen de tu chat con vaneando.',
+    text: `Hola ${participantName},\n\nEl chat se cerró automáticamente después de una hora sin actividad.\n\n${lines.join('\n')}\n\nPuedes abrir una nueva conversación desde tu cuenta.`,
+    html: `<p>Hola ${escapeHtml(participantName)},</p><p>El chat se cerró automáticamente después de una hora sin actividad.</p>${rows}<p>Puedes abrir una nueva conversación desde tu cuenta.</p>`,
+  });
+}
+
+export async function sendBookingRequestEmail(to: string, ownerName: string, details: { code: string; vehicle: string; traveler: string; start: Date; end: Date }) {
+  if (!transporter) throw new Error('SMTP_PASSWORD no está configurada');
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://vaneando.com';
+  await transporter.sendMail({
+    from, to,
+    subject: `Nueva solicitud ${details.code} para ${details.vehicle}`,
+    text: `Hola ${ownerName},\n\n${details.traveler} quiere alquilar ${details.vehicle} del ${details.start.toLocaleDateString('es-ES')} al ${details.end.toLocaleDateString('es-ES')}.\n\nGestiona la solicitud: ${appUrl}/propietario`,
+    html: `<p>Hola ${escapeHtml(ownerName)},</p><p><strong>${escapeHtml(details.traveler)}</strong> quiere alquilar <strong>${escapeHtml(details.vehicle)}</strong> del ${escapeHtml(details.start.toLocaleDateString('es-ES'))} al ${escapeHtml(details.end.toLocaleDateString('es-ES'))}.</p><p><a href="${appUrl}/propietario">Aceptar o rechazar la solicitud</a></p>`,
+  });
+}

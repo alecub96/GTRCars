@@ -30,9 +30,11 @@ export default function Navbar() {
 
         {/* ENLACES CENTRALES */}
         <div className="hidden md:flex items-center space-x-8 text-xs font-black uppercase tracking-wider text-[#13322E]">
-          <Link href="/buscar" className="hover:text-[#16B8AA] transition-colors">
-            Campers
-          </Link>
+          {(role === 'TRAVELER' || role === 'ANONYMOUS' || role === null) && (
+            <Link href="/buscar" className="hover:text-[#16B8AA] transition-colors">
+              Campers
+            </Link>
+          )}
           <Link href="/guias" className="hover:text-[#16B8AA] transition-colors">
             Blog & Guías
           </Link>

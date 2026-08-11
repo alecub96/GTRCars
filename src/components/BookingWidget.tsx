@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { calculatePricing } from '@/lib/pricing';
-import { Calendar, CheckCircle2, ShieldAlert } from 'lucide-react';
+import DateRangeCalendar from '@/components/DateRangeCalendar';
 
 interface BookingWidgetProps {
   vehicle: {
@@ -24,7 +24,12 @@ export default function BookingWidget({ vehicle }: BookingWidgetProps) {
   const [selectedExtraIds, setSelectedExtraIds] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [blocked, setBlocked] = useState<{ startDate: string; endDate: string }[]>([]);
   const router = useRouter();
+
+  useEffect(() => {
+    fetch(`/api/vehicles/${vehicle.id}/availability`).then((response) => response.json()).then((data) => setBlocked(data.blocks || [])).catch(() => setBlocked([]));
+  }, [vehicle.id]);
 
   const toggleExtra = (id: string) => {
     if (selectedExtraIds.includes(id)) {
@@ -101,26 +106,7 @@ export default function BookingWidget({ vehicle }: BookingWidgetProps) {
       {/* SELECCIÓN DE FECHAS */}
       <div className="space-y-2">
         <label className="block text-xs font-semibold uppercase tracking-wider text-[#6B726E]">Fechas de Viaje</label>
-        <div className="grid grid-cols-2 gap-2 p-2 rounded-2xl bg-[#F7F6F2] border border-[#E9E1D2]">
-          <div>
-            <span className="block text-[10px] text-[#6B726E] uppercase font-semibold">Entrega</span>
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className="w-full bg-transparent text-xs font-medium focus:outline-none"
-            />
-          </div>
-          <div>
-            <span className="block text-[10px] text-[#6B726E] uppercase font-semibold">Devolución</span>
-            <input
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              className="w-full bg-transparent text-xs font-medium focus:outline-none"
-            />
-          </div>
-        </div>
+        <DateRangeCalendar startDate={startDate} endDate={endDate} blocked={blocked} onChange={(start, end) => { setStartDate(start); setEndDate(end); }} />
       </div>
 
       {/* EXTRAS */}

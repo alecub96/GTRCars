@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
 import { calculatePricing } from '@/lib/pricing';
+import { sendBookingRequestEmail } from '@/lib/email';
 
 export async function GET() {
   const user = await getCurrentUser();
@@ -30,11 +31,15 @@ export async function POST(request: Request) {
       include: {
         extras: { include: { extra: true } },
         availabilityBlocks: true,
+        owner: { select: { email: true, firstName: true } },
       },
     });
 
     if (!vehicle || vehicle.status !== 'ACTIVE') {
       return NextResponse.json({ error: 'El vehículo no está disponible' }, { status: 404 });
+    }
+    if (vehicle.ownerId === user.id || user.role === 'OWNER' || user.role === 'ADMIN') {
+      return NextResponse.json({ error: 'Cambia a modo viajero para solicitar una reserva' }, { status: 403 });
     }
 
     const start = new Date(startDate);
@@ -120,8 +125,19 @@ export async function POST(request: Request) {
         },
       });
 
+      await tx.conversation.create({
+        data: {
+          travelerId: user.id, ownerId: vehicle.ownerId, vehicleId: vehicle.id, bookingId: newBooking.id,
+          messages: { create: { senderId: user.id, content: `Solicitud ${newBooking.code}: quiero alquilar esta camper del ${start.toLocaleDateString('es-ES')} al ${end.toLocaleDateString('es-ES')}.` } },
+        },
+      });
+
       return newBooking;
     });
+
+    if (booking.status === 'REQUESTED') {
+      sendBookingRequestEmail(vehicle.owner.email, vehicle.owner.firstName, { code: booking.code, vehicle: vehicle.title, traveler: `${user.firstName} ${user.lastName}`, start, end }).catch((error) => console.error('Booking request email error:', error));
+    }
 
     return NextResponse.json({
       success: true,

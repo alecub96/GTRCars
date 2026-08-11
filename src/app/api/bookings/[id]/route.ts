@@ -4,6 +4,24 @@ import { getCurrentUser } from '@/lib/auth';
 
 const cancellable = ['REQUESTED', 'OWNER_ACCEPTED', 'PAYMENT_PENDING'];
 
+export async function GET(_request: Request, context: { params: Promise<{ id: string }> }) {
+  const user = await getCurrentUser();
+  if (!user) return NextResponse.json({ error: 'Debes iniciar sesión' }, { status: 401 });
+  const { id } = await context.params;
+  const booking = await prisma.booking.findUnique({
+    where: { id },
+    include: {
+      vehicle: { select: { title: true, brand: true, model: true, year: true, island: true, municipality: true, rules: true, cancellationPolicy: true, includedKmPerDay: true, extraKmPrice: true } },
+      traveler: { select: { id: true, firstName: true, lastName: true, email: true } },
+      owner: { select: { id: true, firstName: true, lastName: true, email: true } },
+      contract: true,
+    },
+  });
+  if (!booking) return NextResponse.json({ error: 'Reserva no encontrada' }, { status: 404 });
+  if (![booking.travelerId, booking.ownerId].includes(user.id) && user.role !== 'ADMIN') return NextResponse.json({ error: 'No autorizado' }, { status: 403 });
+  return NextResponse.json({ success: true, booking });
+}
+
 export async function PATCH(request: Request, context: { params: Promise<{ id: string }> }) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: 'Debes iniciar sesión' }, { status: 401 });
@@ -22,7 +40,23 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
   if (action === 'accept' && (isOwner || isAdmin) && booking.status === 'REQUESTED') status = 'OWNER_ACCEPTED';
   else if (action === 'reject' && (isOwner || isAdmin) && ['REQUESTED', 'OWNER_ACCEPTED'].includes(booking.status)) status = 'OWNER_REJECTED';
   else if (action === 'cancel' && (isTraveler || isOwner || isAdmin) && cancellable.includes(booking.status)) status = 'CANCELLED';
-  else return NextResponse.json({ error: 'La acción no está permitida para el estado actual' }, { status: 409 });
+  else if (action === 'sign-contract' && isTraveler) {
+    const signature = typeof body.signature === 'string' ? body.signature.trim() : '';
+    const accepted = body.acceptedTerms === true && body.acceptedPrivacy === true && body.acceptedDeposit === true;
+    if (signature.length < 5 || !accepted) return NextResponse.json({ error: 'Completa la firma y acepta todas las condiciones' }, { status: 400 });
+    const termsSnapshot = JSON.stringify({
+      version: '2026-08-11', bookingCode: booking.code, vehicle: booking.vehicle.title,
+      pickupDate: booking.pickupDate, returnDate: booking.returnDate, totalAmount: booking.totalAmount,
+      depositAmount: booking.depositAmount, pricingSnapshot: booking.pricingSnapshot,
+      acceptedAt: new Date().toISOString(), acceptedTerms: true, acceptedPrivacy: true, acceptedDeposit: true,
+    });
+    const contract = await prisma.contract.upsert({
+      where: { bookingId: booking.id },
+      update: { signedByTraveler: true, travelerSignature: signature, signedAt: new Date(), termsSnapshot },
+      create: { bookingId: booking.id, signedByTraveler: true, travelerSignature: signature, signedAt: new Date(), termsSnapshot },
+    });
+    return NextResponse.json({ success: true, contract });
+  } else return NextResponse.json({ error: 'La acción no está permitida para el estado actual' }, { status: 409 });
 
   const updated = await prisma.$transaction(async (tx) => {
     const result = await tx.booking.update({ where: { id }, data: { status } });

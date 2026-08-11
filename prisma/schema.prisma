@@ -137,6 +137,7 @@ model User {
   blogPosts             BlogPost[]
   auditLogs             AuditLog[]
   subscriptions         VipSubscription[]
+  vehicleViews          VehicleView[]
 }
 
 model Document {
@@ -209,10 +210,25 @@ model Vehicle {
   reviews            Review[]
   favorites          Favorite[]
   conversations      Conversation[]
+  views              VehicleView[]
 
   @@index([island, status])
   @@index([basePricePerDay])
   @@index([isVip])
+}
+
+model VehicleView {
+  id            String   @id @default(uuid())
+  vehicleId     String
+  vehicle       Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  viewerId      String?
+  viewer        User?    @relation(fields: [viewerId], references: [id], onDelete: SetNull)
+  country       String?
+  source        String?
+  createdAt     DateTime @default(now())
+
+  @@index([vehicleId, createdAt])
+  @@index([viewerId])
 }
 
 model VipSubscription {
@@ -487,6 +503,9 @@ model SupportConversation {
   userId    String   @unique
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   status    String   @default("OPEN")
+  closedAt  DateTime?
+  userSummarySentAt DateTime?
+  adminSummarySentAt DateTime?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -497,8 +516,9 @@ model SupportMessage {
   id             String              @id @default(uuid())
   conversationId String
   conversation   SupportConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  senderId       String
-  sender         User                @relation(fields: [senderId], references: [id])
+  senderId       String?
+  sender         User?               @relation(fields: [senderId], references: [id])
+  system         Boolean             @default(false)
   content        String              @db.Text
   read           Boolean             @default(false)
   createdAt      DateTime            @default(now())

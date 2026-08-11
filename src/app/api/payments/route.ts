@@ -28,7 +28,7 @@ export async function POST(request: Request) {
 
     const booking = await prisma.booking.findUnique({
       where: { id: bookingId },
-      include: { vehicle: true, owner: true },
+      include: { vehicle: true, owner: true, contract: true },
     });
 
     if (!booking) {
@@ -36,6 +36,12 @@ export async function POST(request: Request) {
     }
     if (booking.travelerId !== sessionUser.id) {
       return NextResponse.json({ error: 'No tienes permiso para pagar esta reserva' }, { status: 403 });
+    }
+    if (!booking.contract?.signedByTraveler) {
+      return NextResponse.json({ error: 'Firma y acepta el contrato antes de pagar' }, { status: 409 });
+    }
+    if (!['OWNER_ACCEPTED', 'CONFIRMED', 'PAYMENT_PENDING'].includes(booking.status)) {
+      return NextResponse.json({ error: 'El propietario debe aceptar la solicitud antes del pago' }, { status: 409 });
     }
 
     // SI EXISTE UNA CLAVE REAL DE STRIPE (sk_live_... o sk_test_... real de producción)
@@ -58,36 +64,35 @@ export async function POST(request: Request) {
         });
       }
 
-      // 2. Calcular comisión de la plataforma en céntimos (Traveler Fee + Owner Fee)
       const totalAmountCents = Math.round(booking.totalAmount * 100);
       const platformFeeCents = Math.round((booking.travelerFee + booking.ownerFee) * 100);
-
-      // Params para Checkout / PaymentIntent
-      const paymentIntentParams: Stripe.PaymentIntentCreateParams = {
-        amount: totalAmountCents,
-        currency: 'eur',
-        customer: customerId,
-        metadata: {
-          bookingId: booking.id,
-          bookingCode: booking.code,
-          vehicleTitle: booking.vehicle.title,
-        },
+      const paymentIntentData: Stripe.Checkout.SessionCreateParams.PaymentIntentData = {
+        metadata: { bookingId: booking.id, bookingCode: booking.code, vehicleTitle: booking.vehicle.title },
       };
-
-      // Si el propietario tiene cuenta de Stripe Connect vinculada
       if (booking.owner.stripeAccountId) {
-        paymentIntentParams.application_fee_amount = platformFeeCents;
-        paymentIntentParams.transfer_data = {
-          destination: booking.owner.stripeAccountId,
-        };
+        paymentIntentData.application_fee_amount = platformFeeCents;
+        paymentIntentData.transfer_data = { destination: booking.owner.stripeAccountId };
       }
-
-      const paymentIntent = await stripe.paymentIntents.create(paymentIntentParams);
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+      const checkout = await stripe.checkout.sessions.create({
+        mode: 'payment',
+        customer: customerId,
+        // Stripe muestra tarjeta y Klarna dinámicamente según país, importe y elegibilidad de la cuenta.
+        automatic_tax: { enabled: false },
+        line_items: [{
+          price_data: { currency: 'eur', unit_amount: totalAmountCents, product_data: { name: `Reserva ${booking.code}`, description: booking.vehicle.title } },
+          quantity: 1,
+        }],
+        metadata: { bookingId: booking.id, bookingCode: booking.code },
+        payment_intent_data: paymentIntentData,
+        success_url: `${appUrl}/reserva/${booking.id}?pago=correcto&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${appUrl}/reserva/${booking.id}?pago=cancelado`,
+      });
 
       await prisma.payment.create({
         data: {
           bookingId: booking.id,
-          stripeId: paymentIntent.id,
+          stripeId: checkout.id,
           amount: booking.totalAmount,
           currency: 'EUR',
           status: 'PENDING',
@@ -97,9 +102,8 @@ export async function POST(request: Request) {
 
       return NextResponse.json({
         success: true,
-        mode: 'STRIPE_LIVE',
-        clientSecret: paymentIntent.client_secret,
-        paymentIntentId: paymentIntent.id,
+        mode: 'STRIPE_CHECKOUT',
+        url: checkout.url,
       });
     }
 

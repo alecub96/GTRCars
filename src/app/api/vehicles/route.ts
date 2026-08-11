@@ -8,9 +8,10 @@ export async function GET(request: Request) {
     const island = searchParams.get('island');
     const minPassengers = searchParams.get('passengers');
 
-    const whereClause: any = { status: 'ACTIVE' };
+    const whereClause: any = {};
     const currentUser = await getCurrentUser();
     if (currentUser?.role === 'OWNER') whereClause.ownerId = currentUser.id;
+    else whereClause.status = 'ACTIVE';
     if (island) whereClause.island = island;
     if (minPassengers) whereClause.passengers = { gte: Number(minPassengers) };
 

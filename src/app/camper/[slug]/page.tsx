@@ -4,6 +4,8 @@ import Navbar from '@/components/Navbar';
 import BookingWidget from '@/components/BookingWidget';
 import FavoriteButton from '@/components/FavoriteButton';
 import { prisma } from '@/lib/prisma';
+import { getCurrentUser } from '@/lib/auth';
+import VehicleViewTracker from '@/components/VehicleViewTracker';
 import { Star, MapPin, Users, Bed, ShieldCheck, Check, Fuel, Settings2, Compass } from 'lucide-react';
 
 interface CamperDetailPageProps {
@@ -12,6 +14,7 @@ interface CamperDetailPageProps {
 
 export default async function CamperDetailPage({ params }: CamperDetailPageProps) {
   const { slug } = await params;
+  const currentUser = await getCurrentUser();
 
   const vehicle = await prisma.vehicle.findUnique({
     where: { slug },
@@ -24,7 +27,7 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
     },
   });
 
-  if (!vehicle || vehicle.status !== 'ACTIVE') {
+  if (!vehicle || (vehicle.status !== 'ACTIVE' && currentUser?.role !== 'ADMIN' && currentUser?.id !== vehicle.owner.id)) {
     notFound();
   }
 
@@ -35,6 +38,7 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
 
   return (
     <div className="min-h-screen bg-[#F7F6F2] text-[#1C2826]">
+      <VehicleViewTracker vehicleId={vehicle.id} />
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -186,7 +190,14 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
 
           {/* WIDGET STICKY DE RESERVA */}
           <div>
-            <BookingWidget
+            {currentUser?.role === 'OWNER' || currentUser?.role === 'ADMIN' ? (
+              <div className="sticky top-28 rounded-3xl border border-[#E9E1D2] bg-white p-6 shadow-xl">
+                <ShieldCheck className="mb-3 h-8 w-8 text-[#16B8AA]" />
+                <h3 className="font-serif text-xl font-bold">Vista del anuncio</h3>
+                <p className="mt-2 text-sm text-[#6B726E]">Estás en modo {currentUser.role === 'ADMIN' ? 'administrador' : 'propietario'}. Las solicitudes de fechas solo están disponibles en modo viajero.</p>
+                {vehicle.owner.id === currentUser.id && <a href="/propietario" className="mt-5 block rounded-full bg-[#13322E] px-5 py-3 text-center text-xs font-bold uppercase tracking-wider text-white">Volver a gestionar mi anuncio</a>}
+              </div>
+            ) : <BookingWidget
               vehicle={{
                 id: vehicle.id,
                 basePricePerDay: vehicle.basePricePerDay,
@@ -195,7 +206,7 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
                 securityDeposit: vehicle.securityDeposit,
                 extras: vehicle.extras as any,
               }}
-            />
+            />}
           </div>
 
         </div>

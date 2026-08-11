@@ -1,147 +1,59 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
 import Navbar from '@/components/Navbar';
-import { CheckCircle2, CreditCard, Lock, ShieldCheck, Download, AlertCircle } from 'lucide-react';
+import { CalendarDays, CheckCircle2, CreditCard, FileCheck2, Lock, ShieldCheck } from 'lucide-react';
 
 export default function BookingCheckoutClient() {
-  const params = useParams<{ id: string }>();
-  const id = params.id;
+  const { id } = useParams<{ id: string }>();
+  const [booking, setBooking] = useState<any>(null);
+  const [signature, setSignature] = useState('');
+  const [checks, setChecks] = useState({ terms: false, privacy: false, deposit: false });
   const [loading, setLoading] = useState(false);
-  const [paid, setPaid] = useState(false);
-  const [signed, setSigned] = useState(false);
-  const [signatureText, setSignatureText] = useState('');
   const [error, setError] = useState('');
-  const router = useRouter();
 
-  const handlePay = async () => {
-    setLoading(true);
-    setError('');
-
-    try {
-      const res = await fetch('/api/payments', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ bookingId: id }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Error al pagar');
-
-      setPaid(true);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+  const load = async () => {
+    const response = await fetch(`/api/bookings/${id}`);
+    const data = await response.json();
+    if (response.ok) setBooking(data.booking); else setError(data.error || 'No se pudo cargar la reserva');
   };
+  useEffect(() => { load(); }, [id]);
 
-  return (
-    <div className="min-h-screen bg-[#F7F6F2] text-[#1C2826]">
-      <Navbar />
+  async function sign() {
+    setLoading(true); setError('');
+    const response = await fetch(`/api/bookings/${id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'sign-contract', signature, acceptedTerms: checks.terms, acceptedPrivacy: checks.privacy, acceptedDeposit: checks.deposit }) });
+    const data = await response.json();
+    if (!response.ok) setError(data.error || 'No se pudo firmar'); else await load();
+    setLoading(false);
+  }
 
-      <main className="max-w-4xl mx-auto px-4 py-12">
-        <div className="bg-white rounded-3xl p-8 border border-[#E9E1D2] shadow-xl space-y-8">
-          
-          <div className="border-b border-[#E9E1D2] pb-6 text-center">
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E07A5F]">
-              Confirmación y Firma de Contrato
-            </span>
-            <h1 className="font-serif text-3xl font-normal mt-1">Reserva #{id.substring(0, 8)}</h1>
-          </div>
+  async function pay() {
+    setLoading(true); setError('');
+    const response = await fetch('/api/payments', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ bookingId: id }) });
+    const data = await response.json();
+    if (!response.ok) setError(data.error || 'No se pudo iniciar el pago');
+    else if (data.url) window.location.href = data.url;
+    else await load();
+    setLoading(false);
+  }
 
-          {error && (
-            <div className="p-4 rounded-2xl bg-red-50 text-red-700 text-xs font-medium border border-red-200">
-              {error}
-            </div>
-          )}
+  if (!booking) return <div className="min-h-screen bg-[#F7F6F2]"><Navbar /><p className="p-12 text-center">{error || 'Cargando reserva…'}</p></div>;
+  const signed = booking.contract?.signedByTraveler;
+  const payable = ['OWNER_ACCEPTED', 'CONFIRMED', 'PAYMENT_PENDING'].includes(booking.status);
+  const date = (value: string) => new Date(value).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
 
-          {/* PASO 1: FIRMA DE CONTRATO DE ALQUILER */}
-          <div className="space-y-4">
-            <h3 className="font-serif text-xl font-semibold flex items-center space-x-2">
-              <CheckCircle2 className={`w-5 h-5 ${signed ? 'text-green-600' : 'text-[#6B726E]'}`} />
-              <span>1. Contrato de Alquiler de Vehículo sin Conductor en España</span>
-            </h3>
-
-            <div className="p-4 bg-[#F7F6F2] rounded-2xl border border-[#E9E1D2] text-xs text-[#4A4643] h-32 overflow-y-auto font-light leading-relaxed">
-              El arrendatario acepta las condiciones generales de alquiler de camper vans en las Islas Canarias. El vehículo entregado debe devolverse con los mismos niveles de combustible y en idénticas condiciones de limpieza. La fianza retenida cubrirá posibles desperfectos o excesos de kilometraje según contrato.
-            </div>
-
-            {!signed ? (
-              <div className="space-y-3 pt-2">
-                <label className="block text-xs font-semibold text-[#4A4643]">Firma Digital (Escribe tu Nombre Completo):</label>
-                <div className="flex gap-3">
-                  <input
-                    type="text"
-                    value={signatureText}
-                    onChange={(e) => setSignatureText(e.target.value)}
-                    placeholder="Ej. Marc García López"
-                    className="w-full px-4 py-2.5 rounded-xl border border-[#E9E1D2] bg-white text-sm"
-                  />
-                  <button
-                    onClick={() => {
-                      if (signatureText.trim().length > 3) setSigned(true);
-                    }}
-                    className="px-6 py-2.5 bg-[#1C2826] text-white font-semibold text-xs rounded-xl hover:bg-[#2C3E3B] transition-colors"
-                  >
-                    Firmar
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="p-3 bg-green-50 text-green-800 rounded-xl text-xs font-medium border border-green-200">
-                ✓ Contrato firmado digitalmente por {signatureText}
-              </div>
-            )}
-          </div>
-
-          {/* PASO 2: PAGO SEGURO STRIPE */}
-          <div className="space-y-4 border-t border-[#E9E1D2] pt-6">
-            <h3 className="font-serif text-xl font-semibold flex items-center space-x-2">
-              <CreditCard className={`w-5 h-5 ${paid ? 'text-green-600' : 'text-[#6B726E]'}`} />
-              <span>2. Pago Seguro y Confirmación</span>
-            </h3>
-
-            {!paid ? (
-              <div className="space-y-4">
-                <div className="p-4 bg-[#F3EFEA] rounded-2xl border border-[#E9E1D2] flex items-center justify-between text-xs">
-                  <span className="font-medium">Total a Pagar ahora:</span>
-                  <span className="font-serif text-xl font-semibold text-[#1C2826]">Confirmar en el siguiente paso</span>
-                </div>
-
-                <button
-                  onClick={handlePay}
-                  disabled={!signed || loading}
-                  className={`w-full py-4 rounded-full font-semibold text-sm transition-all shadow-md flex items-center justify-center space-x-2 ${
-                    signed
-                      ? 'bg-[#E07A5F] text-white hover:bg-[#D0694E]'
-                      : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                  }`}
-                >
-                  <Lock className="w-4 h-4" />
-                  <span>{loading ? 'Procesando con Stripe...' : 'PAGAR Y CONFIRMAR RESERVA'}</span>
-                </button>
-              </div>
-            ) : (
-              <div className="p-6 bg-green-50 border border-green-200 rounded-2xl text-center space-y-3">
-                <CheckCircle2 className="w-12 h-12 text-green-600 mx-auto" />
-                <h4 className="font-serif text-2xl font-semibold text-green-900">¡Reserva Confirmada con Éxito!</h4>
-                <p className="text-xs text-green-800">
-                  Hemos enviado la confirmación y el documento del contrato a tu correo electrónico.
-                </p>
-                <button
-                  onClick={() => router.push('/cuenta')}
-                  className="px-6 py-2.5 bg-green-900 text-white rounded-full text-xs font-semibold hover:bg-green-950"
-                >
-                  Ir a Mis Viajes
-                </button>
-              </div>
-            )}
-          </div>
-
-        </div>
-      </main>
+  return <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]"><Navbar /><main className="mx-auto max-w-6xl px-4 py-10">
+    <header className="mb-7"><span className="text-[11px] font-black uppercase tracking-[.25em] text-[#16B8AA]">Reserva {booking.code}</span><h1 className="font-serif text-4xl font-bold">Revisa, firma y paga con seguridad</h1><p className="mt-2 text-sm text-[#6B726E]">Ningún importe se cobra desde esta página: el pago se completa en Stripe.</p></header>
+    {error && <div className="mb-5 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-bold text-red-700">{error}</div>}
+    <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
+      <section className="space-y-6">
+        <article className="rounded-3xl border border-[#E9E1D2] bg-white p-6 shadow-sm"><div className="mb-5 flex items-center gap-3"><CalendarDays className="h-6 w-6 text-[#16B8AA]" /><div><h2 className="font-serif text-2xl font-bold">Datos de la reserva</h2><p className="text-xs text-[#6B726E]">Información vinculada al contrato</p></div></div><dl className="grid gap-4 text-sm sm:grid-cols-2"><div><dt className="text-xs text-[#6B726E]">Vehículo</dt><dd className="font-bold">{booking.vehicle.title}</dd><dd>{booking.vehicle.brand} {booking.vehicle.model} · {booking.vehicle.year}</dd></div><div><dt className="text-xs text-[#6B726E]">Recogida</dt><dd className="font-bold">{booking.vehicle.municipality}, {booking.vehicle.island}</dd></div><div><dt className="text-xs text-[#6B726E]">Entrega</dt><dd className="font-bold">{date(booking.pickupDate)} · {booking.pickupTime}</dd></div><div><dt className="text-xs text-[#6B726E]">Devolución</dt><dd className="font-bold">{date(booking.returnDate)} · {booking.returnTime}</dd></div><div><dt className="text-xs text-[#6B726E]">Viajero</dt><dd className="font-bold">{booking.traveler.firstName} {booking.traveler.lastName}</dd></div><div><dt className="text-xs text-[#6B726E]">Propietario</dt><dd className="font-bold">{booking.owner.firstName} {booking.owner.lastName}</dd></div></dl></article>
+        <article className="rounded-3xl border border-[#E9E1D2] bg-white p-6 shadow-sm"><div className="mb-4 flex items-center gap-3"><FileCheck2 className="h-6 w-6 text-[#16B8AA]" /><h2 className="font-serif text-2xl font-bold">Contrato de alquiler sin conductor</h2></div><div className="max-h-80 space-y-4 overflow-y-auto rounded-2xl bg-[#F7F6F2] p-5 text-sm leading-relaxed"><p><strong>1. Objeto.</strong> El propietario cede temporalmente el vehículo descrito para las fechas, horarios y lugar indicados en esta reserva. El viajero declara disponer de permiso de conducción válido.</p><p><strong>2. Precio y fianza.</strong> El precio total es de {booking.totalAmount} €. La fianza de {booking.depositAmount} € responde de daños, combustible, limpieza y kilometraje no incluidos, sin sustituir las coberturas del seguro.</p><p><strong>3. Uso y kilometraje.</strong> Se incluyen {booking.vehicle.includedKmPerDay} km por día. El exceso se factura a {booking.vehicle.extraKmPrice} €/km. No se permite conducción por personas no declaradas, uso ilícito, competición o cesión a terceros.</p><p><strong>4. Estado, entrega y devolución.</strong> Ambas partes documentarán kilometraje, combustible, limpieza, inventario y daños mediante check-in y check-out. El viajero debe comunicar inmediatamente cualquier accidente o avería.</p><p><strong>5. Cancelación.</strong> Política aplicable: {booking.vehicle.cancellationPolicy}. Los reembolsos y cargos se resolverán conforme a las condiciones aceptadas y al estado de la reserva.</p><p><strong>6. Normas del vehículo.</strong> {booking.vehicle.rules || 'Uso responsable, devolución puntual y respeto del inventario entregado.'}</p><p><strong>7. Firma electrónica.</strong> La plataforma conserva la versión de condiciones, fecha, identidad autenticada y texto de firma como evidencia de aceptación. La firma no sustituye las verificaciones documentales obligatorias.</p></div>
+        {!signed ? <div className="mt-5 space-y-3">{[['terms', 'He leído y acepto íntegramente el contrato y las normas del vehículo.'], ['deposit', `Comprendo la fianza de ${booking.depositAmount} € y los posibles cargos documentados.`], ['privacy', 'Acepto el tratamiento de datos necesario para gestionar esta reserva.']].map(([key, label]) => <label key={key} className="flex gap-3 rounded-xl border border-[#E9E1D2] p-3 text-sm"><input type="checkbox" checked={checks[key as keyof typeof checks]} onChange={(event) => setChecks({ ...checks, [key]: event.target.checked })} />{label}</label>)}<label className="block text-xs font-bold uppercase tracking-wider">Nombre completo como firma<input value={signature} onChange={(event) => setSignature(event.target.value)} placeholder={`${booking.traveler.firstName} ${booking.traveler.lastName}`} className="mt-2 w-full rounded-xl border border-[#E9E1D2] p-3 text-base normal-case" /></label><button onClick={sign} disabled={loading} className="w-full rounded-full bg-[#13322E] py-4 text-sm font-bold text-white">{loading ? 'Guardando firma…' : 'Firmar electrónicamente'}</button></div> : <div className="mt-5 rounded-2xl border border-green-200 bg-green-50 p-4 text-sm font-bold text-green-800"><CheckCircle2 className="mr-2 inline h-5 w-5" />Firmado por {booking.contract.travelerSignature} el {new Date(booking.contract.signedAt).toLocaleString('es-ES')}</div>}
+        </article>
+      </section>
+      <aside className="h-fit rounded-3xl border border-[#E9E1D2] bg-white p-6 shadow-xl lg:sticky lg:top-28"><h2 className="font-serif text-2xl font-bold">Resumen de pago</h2><div className="my-5 space-y-3 border-y border-[#E9E1D2] py-5 text-sm"><div className="flex justify-between"><span>Alquiler</span><span>{booking.basePrice} €</span></div><div className="flex justify-between"><span>Limpieza</span><span>{booking.cleaningFee} €</span></div><div className="flex justify-between"><span>Extras</span><span>{booking.extrasTotal} €</span></div><div className="flex justify-between"><span>Gestión y protección</span><span>{booking.travelerFee} €</span></div><div className="flex justify-between text-lg font-bold"><span>Total</span><span>{booking.totalAmount} €</span></div></div><div className="mb-5 rounded-2xl bg-[#F0FDFA] p-4 text-xs"><ShieldCheck className="mb-2 h-6 w-6 text-[#16B8AA]" /><strong className="block">Pago protegido por Stripe</strong>En el siguiente paso podrás elegir tarjeta o Klarna si Stripe lo ofrece para tu compra.</div>{booking.status === 'REQUESTED' && <p className="mb-4 rounded-xl bg-amber-50 p-3 text-xs font-bold text-amber-800">Solicitud enviada. Podrás pagar cuando el propietario la acepte.</p>}<button onClick={pay} disabled={!signed || !payable || loading} className="flex w-full items-center justify-center gap-2 rounded-full bg-[#16B8AA] py-4 text-sm font-bold text-white disabled:cursor-not-allowed disabled:bg-slate-300"><Lock className="h-4 w-4" />Continuar a pago seguro</button><div className="mt-4 flex items-center justify-center gap-4 text-xs font-bold text-[#6B726E]"><span className="flex items-center gap-1"><CreditCard className="h-4 w-4" />Tarjeta</span><span>Klarna.</span></div></aside>
     </div>
-  );
+  </main></div>;
 }
