@@ -21,8 +21,8 @@ export default function Navbar() {
   return (
     <header className="w-full relative z-40">
       {/* BARRA SUPERIOR BANNER */}
-      <div className="bg-[#13322E] text-[#f4efe7] text-[10px] font-semibold uppercase tracking-[0.28em] py-2.5 px-4 text-center">
-        Hecha en Canarias, para Canarias. Apoya lo local.
+      <div className="bg-[#13322E] text-[#f4efe7] text-[10px] font-semibold tracking-[0.12em] py-2.5 px-4 text-center">
+        Dejemos de usar apps de empresas externas, apoyemos el comercio local. Una app de Canarias para Canarias.
       </div>
 
       {/* NAVEGACIÓN PRINCIPAL */}
