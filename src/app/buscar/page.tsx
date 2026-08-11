@@ -48,8 +48,6 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       id: true, slug: true, title: true, island: true, municipality: true, passengers: true, beds: true,
       transmission: true, basePricePerDay: true, description: true,
       photos: { orderBy: { orderIndex: 'asc' } },
-      features: true,
-      owner: { select: { firstName: true, avatarUrl: true, verification: true } },
       reviews: { select: { rating: true } },
     },
     orderBy,
