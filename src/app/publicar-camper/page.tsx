@@ -14,6 +14,8 @@ export default function PublishCamperPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [authorized, setAuthorized] = useState<boolean | null>(null);
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState('');
 
   useEffect(() => {
     fetch('/api/auth/me').then((response) => response.json()).then((data) => {
@@ -49,7 +51,7 @@ export default function PublishCamperPage() {
     addressApprox: '',
     description: '',
     rules: '',
-    photoUrl: 'https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=1200',
+    photoUrl: '',
     features: [] as string[],
   });
 
@@ -67,6 +69,12 @@ export default function PublishCamperPage() {
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Error al publicar vehículo');
+
+      if (photoFile) {
+        const upload = new FormData(); upload.set('file', photoFile);
+        const photoResponse = await fetch(`/api/vehicles/${data.vehicle.id}/photos`, { method: 'POST', body: upload });
+        if (!photoResponse.ok) throw new Error((await photoResponse.json()).error || 'El anuncio se creó, pero no se pudo subir la foto');
+      }
 
       router.push('/propietario?anuncio=creado');
     } catch (err: any) {
@@ -288,7 +296,7 @@ export default function PublishCamperPage() {
                   <textarea rows={3} required placeholder="Mascotas, fumar, festivales, horarios de entrega, experiencia mínima..." value={formData.rules} onChange={(e) => setFormData({ ...formData, rules: e.target.value })} className="w-full p-3 rounded-xl border border-[#E9E1D2] text-sm" />
                 </div>
 
-                <div><label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">Foto principal (URL temporal)</label><input type="url" required value={formData.photoUrl} onChange={(e) => setFormData({ ...formData, photoUrl: e.target.value })} className="w-full p-3 rounded-xl border border-[#E9E1D2] text-sm" /><p className="mt-1 text-[11px] text-[#6B726E]">Tras crear el borrador podrás gestionar más fotos y el calendario desde tu panel.</p></div>
+                <div><label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">Foto principal</label><label className="flex min-h-44 cursor-pointer items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-[#16B8AA]/40 bg-[#F0FDFA] text-center">{photoPreview ? <img src={photoPreview} alt="Vista previa" className="h-56 w-full object-cover" /> : <span className="p-6 text-sm font-bold text-[#0F766E]">Pulsa para subir una foto JPG, PNG o WEBP</span>}<input type="file" required accept="image/jpeg,image/png,image/webp" className="hidden" onChange={(event) => { const file = event.target.files?.[0]; if (file) { setPhotoFile(file); setPhotoPreview(URL.createObjectURL(file)); } }} /></label><p className="mt-1 text-[11px] text-[#6B726E]">Máximo 5 MB. Podrás añadir más fotografías después.</p></div>
 
                 <div className="rounded-2xl border border-[#16B8AA]/30 bg-[#F0FDFA] p-4 text-xs"><CheckCircle2 className="inline h-4 w-4 mr-2 text-[#16B8AA]" />El anuncio quedará pendiente de revisión. No aparecerá públicamente ni permitirá reservas hasta ser aprobado.</div>
 

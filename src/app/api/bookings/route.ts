@@ -48,6 +48,9 @@ export async function POST(request: Request) {
     if (start >= end) {
       return NextResponse.json({ error: 'La fecha de salida debe ser anterior a la de devolución' }, { status: 400 });
     }
+    if (start < new Date(new Date().toISOString().slice(0, 10))) return NextResponse.json({ error: 'La fecha de entrega no puede estar en el pasado' }, { status: 400 });
+    const requestedDays = Math.ceil((end.getTime() - start.getTime()) / 86400000);
+    if (requestedDays < vehicle.minDays || requestedDays > vehicle.maxDays) return NextResponse.json({ error: `Este vehículo admite reservas de ${vehicle.minDays} a ${vehicle.maxDays} días` }, { status: 400 });
 
     // Comprobar Double-Booking con bloques de disponibilidad existentes
     const isConflict = vehicle.availabilityBlocks.some((block: any) => {
@@ -103,7 +106,7 @@ export async function POST(request: Request) {
           depositAmount: vehicle.securityDeposit,
           totalAmount: pricing.totalAmount,
           pricingSnapshot: JSON.stringify(pricing),
-          status: vehicle.bookingType === 'INSTANT_BOOKING' ? 'CONFIRMED' : 'REQUESTED',
+          status: vehicle.bookingType === 'INSTANT_BOOKING' ? 'OWNER_ACCEPTED' : 'REQUESTED',
           depositStatus: 'PENDING',
           extras: {
             create: chosenExtras.map((e: any) => ({

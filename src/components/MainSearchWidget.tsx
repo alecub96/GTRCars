@@ -2,8 +2,9 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { MapPin, Calendar, Users, Search } from 'lucide-react';
+import { MapPin, Users, Search } from 'lucide-react';
 import { CANARY_ISLANDS } from '@/lib/pricing';
+import DateRangeCalendar from '@/components/DateRangeCalendar';
 
 interface MainSearchWidgetProps {
   selectedIsland?: string;
@@ -63,27 +64,7 @@ export default function MainSearchWidget({ selectedIsland, onIslandChange }: Mai
 
       {/* FECHAS */}
       <div className="p-3 rounded-2xl hover:bg-[#F8FAFC] transition-colors flex items-center space-x-3 border border-transparent hover:border-[#E9E1D2]">
-        <Calendar className="w-5 h-5 text-[#16B8AA] shrink-0" />
-        <div className="w-full grid grid-cols-2 gap-1">
-          <div>
-            <label className="block text-[10px] font-black tracking-wider uppercase text-[#94A3B8]">FECHA SALIDA</label>
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className="w-full bg-transparent font-bold text-xs focus:outline-none text-[#13322E]"
-            />
-          </div>
-          <div>
-            <label className="block text-[10px] font-black tracking-wider uppercase text-[#94A3B8]">DEVOLUCIÓN</label>
-            <input
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              className="w-full bg-transparent font-bold text-xs focus:outline-none text-[#13322E]"
-            />
-          </div>
-        </div>
+        <DateRangeCalendar variant="popover" startDate={startDate} endDate={endDate} onChange={(start, end) => { setStartDate(start); setEndDate(end); }} />
       </div>
 
       {/* VIAJEROS */}

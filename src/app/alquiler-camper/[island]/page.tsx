@@ -4,6 +4,14 @@ import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { MapPin, ChevronRight, Star, Compass } from 'lucide-react';
+import type { Metadata } from 'next';
+import VehicleViewTracker from '@/components/VehicleViewTracker';
+
+export async function generateMetadata({ params }: SeoIslandPageProps): Promise<Metadata> {
+  const { island } = await params;
+  const name = island.split('-').map((part) => part[0]?.toUpperCase() + part.slice(1)).join(' ');
+  return { title: `Alquiler de campers en ${name}`, description: `Encuentra campers de propietarios locales para recorrer ${name}. Compara precios, disponibilidad y equipamiento en vaneando.`, alternates: { canonical: `/alquiler-camper/${island}` }, openGraph: { title: `Alquiler de campers en ${name}`, description: `Descubre ${name} en camper con propietarios locales.`, url: `/alquiler-camper/${island}` } };
+}
 
 interface SeoIslandPageProps {
   params: Promise<{ island: string }>;
@@ -28,10 +36,12 @@ export default async function SeoIslandPage({ params }: SeoIslandPageProps) {
   });
 
   const faqs = locationData?.faq ? JSON.parse(locationData.faq) : [];
+  const jsonLd = { '@context': 'https://schema.org', '@type': 'ItemList', name: `Campers en ${locationData?.name || island}`, numberOfItems: vehicles.length, itemListElement: vehicles.map((vehicle, index) => ({ '@type': 'ListItem', position: index + 1, url: `https://vaneando.com/camper/${vehicle.slug}`, name: vehicle.title })) };
 
   return (
     <div className="min-h-screen bg-[#F7F6F2] text-[#1C2826]">
       <Navbar />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* HERO SEO ISLA */}
       <section className="relative py-20 bg-[#1C2826] text-white">
@@ -61,6 +71,7 @@ export default async function SeoIslandPage({ params }: SeoIslandPageProps) {
               href={`/camper/${v.slug}`}
               className="group bg-white rounded-3xl overflow-hidden border border-[#E9E1D2] shadow-sm hover:shadow-xl transition-all duration-300"
             >
+              <VehicleViewTracker vehicleId={v.id} event="IMPRESSION" />
               <div className="relative h-60">
                 <img
                   src={v.photos[0]?.url || 'https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=800'}

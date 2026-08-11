@@ -12,6 +12,9 @@ interface BookingWidgetProps {
     cleaningFee: number;
     ownershipType: 'PLATFORM' | 'THIRD_PARTY';
     securityDeposit: number;
+    bookingType: 'INSTANT_BOOKING' | 'REQUEST_TO_BOOK';
+    minDays: number;
+    maxDays: number;
     extras: {
       extra: { id: string; name: string; price: number; priceType: 'PER_RENTAL' | 'PER_DAY' };
     }[];
@@ -173,11 +176,11 @@ export default function BookingWidget({ vehicle }: BookingWidgetProps) {
         disabled={loading}
         className="w-full py-4 rounded-full bg-[#1C2826] text-white font-semibold text-sm hover:bg-[#2C3E3B] transition-all shadow-md"
       >
-        {loading ? 'Procesando...' : 'SOLICITAR RESERVA'}
+        {loading ? 'Procesando...' : vehicle.bookingType === 'INSTANT_BOOKING' ? 'RESERVAR AHORA' : 'SOLICITAR FECHAS'}
       </button>
 
       <p className="text-[11px] text-center text-[#6B726E] font-light">
-        No se realizará ningún cargo hasta que confirmes la reserva.
+        {vehicle.bookingType === 'INSTANT_BOOKING' ? 'Podrás firmar y pagar de forma segura en el siguiente paso.' : `El propietario revisará tu solicitud. Estancias de ${vehicle.minDays} a ${vehicle.maxDays} días.`}
       </p>
     </div>
   );

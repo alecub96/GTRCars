@@ -75,9 +75,7 @@ export async function POST(request: Request) {
         description,
         rules,
         status: 'PENDING_REVIEW',
-        photos: {
-          create: [{ url: photoUrl || 'https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=1200', orderIndex: 0 }],
-        },
+        photos: photoUrl ? { create: [{ url: photoUrl, orderIndex: 0 }] } : undefined,
         features: {
           create: Array.isArray(features)
             ? features.filter((name): name is string => typeof name === 'string' && name.trim().length > 0).map((name) => ({ name: name.trim() }))

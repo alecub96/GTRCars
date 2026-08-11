@@ -6,6 +6,8 @@ import Navbar from '@/components/Navbar';
 import MainSearchWidget from '@/components/MainSearchWidget';
 import { CANARY_ISLANDS } from '@/lib/pricing';
 import { Star, ChevronRight, MapPin, ShieldCheck, HeartHandshake, KeyRound } from 'lucide-react';
+import VehicleViewTracker from '@/components/VehicleViewTracker';
+import Image from 'next/image';
 
 const ISLAND_HERO_IMAGES: Record<string, string> = {
   'Gran Canaria': '/Islas/gran%20canaria.png',
@@ -34,10 +36,13 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
       {/* 1. HERO CON CAMBIO DINÁMICO DE IMAGEN DE FONDO SEGÚN LA ISLA */}
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden px-4 py-16 transition-all duration-700">
         <div className="absolute inset-0 z-0">
-          <img
+          <Image
             key={selectedIsland}
             src={currentHeroImage}
             alt={`Camper viajando por ${selectedIsland}`}
+            fill
+            priority
+            sizes="100vw"
             className="w-full h-full object-cover object-center filter brightness-[0.75] transition-opacity duration-1000"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#F7F6F2] via-black/20 to-black/50" />
@@ -93,11 +98,14 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                 href={`/camper/${vehicle.slug}`}
                 className="group bg-[#F4F9F8] rounded-3xl overflow-hidden border border-[#E9E1D2] shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
               >
+                <VehicleViewTracker vehicleId={vehicle.id} event="IMPRESSION" />
                 <div className="p-5">
                   <div className="relative h-60 rounded-2xl overflow-hidden mb-4">
-                    <img
+                    <Image
                       src={vehicle.photos[0]?.url || 'https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=800'}
                       alt={vehicle.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black uppercase text-[#16B8AA] tracking-wider">

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { User, X, LogIn, UserPlus, LogOut, ShieldCheck, Truck, KeyRound, RefreshCw, Compass, MessageSquare } from 'lucide-react';
+import { User, X, LogIn, UserPlus, LogOut, ShieldCheck, Truck, KeyRound, RefreshCw, Compass, Mail, UserCircle, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AuthModal() {
@@ -18,6 +18,8 @@ export default function AuthModal() {
   const [loading, setLoading] = useState(false);
   const [switching, setSwitching] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [roleNotice, setRoleNotice] = useState<'TRAVELER' | 'OWNER' | null>(null);
+  const [switchError, setSwitchError] = useState('');
   const router = useRouter();
 
   useEffect(() => {
@@ -70,6 +72,7 @@ export default function AuthModal() {
   const handleSwitchRole = async () => {
     const targetRole = user.role === 'OWNER' ? 'TRAVELER' : 'OWNER';
     setSwitching(true);
+    setSwitchError('');
 
     try {
       const res = await fetch('/api/auth/switch-role', {
@@ -83,15 +86,15 @@ export default function AuthModal() {
 
       setUser(data.user);
       setIsOpen(false);
+      setRoleNotice(targetRole);
 
-      if (targetRole === 'TRAVELER') {
-        router.push('/cuenta');
-      } else {
-        router.push('/propietario');
-      }
-      router.refresh();
+      setTimeout(() => {
+        if (targetRole === 'TRAVELER') router.push('/cuenta');
+        else router.push('/propietario');
+        router.refresh();
+      }, 1200);
     } catch (err: any) {
-      alert(err.message);
+      setSwitchError(err.message || 'No se pudo cambiar de modo');
     } finally {
       setSwitching(false);
     }
@@ -111,6 +114,7 @@ export default function AuthModal() {
 
   return (
     <>
+      {roleNotice && <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-[#13322E]/55 p-4 backdrop-blur-sm"><div className="w-full max-w-sm rounded-[32px] bg-white p-8 text-center shadow-2xl"><CheckCircle2 className="mx-auto mb-4 h-14 w-14 text-[#16B8AA]" /><span className="text-[10px] font-black uppercase tracking-[.25em] text-[#16B8AA]">Modo actualizado</span><h2 className="mt-2 font-serif text-3xl font-bold text-[#13322E]">Ahora estás en modo {roleNotice === 'OWNER' ? 'propietario' : 'viajero'}</h2><p className="mt-3 text-sm text-[#6B726E]">{roleNotice === 'OWNER' ? 'Puedes gestionar tus campers, reservas, calendario y finanzas.' : 'Puedes explorar campers, solicitar fechas y gestionar tus viajes.'}</p></div></div>}
       {user ? (
         /* MENÚ DESPLEGABLE DE PERFIL CON BOTÓN DE CONMUTACIÓN DE MODO Y ACCESO A MENSAJES */
         <div className="relative">
@@ -146,38 +150,32 @@ export default function AuthModal() {
                 >
                   <div className="flex items-center space-x-2">
                     <RefreshCw className={`w-4 h-4 text-[#16B8AA] ${switching ? 'animate-spin' : ''}`} />
-                    <span>{user.role === 'OWNER' ? 'Pasar a Modo Alquiler (Viajero)' : 'Pasar a Modo Propietario'}</span>
+                    <span>{user.role === 'OWNER' ? 'Pasar a Modo Viajero' : 'Pasar a Modo Propietario'}</span>
                   </div>
                 </button>
               )}
+              {switchError && <p role="alert" className="mb-3 rounded-xl border border-red-200 bg-red-50 p-3 text-xs font-bold text-red-700">{switchError}</p>}
 
               <div className="space-y-1 text-xs font-bold text-slate-700">
-                <Link
-                  href="/soporte"
-                  onClick={() => setIsOpen(false)}
-                  className="flex items-center space-x-2.5 p-2.5 rounded-2xl hover:bg-slate-50 transition-colors"
-                >
-                  <MessageSquare className="w-4 h-4 text-[#16B8AA]" />
-                  <span>{user.role === 'ADMIN' ? 'Chat con usuarios' : 'Contactar con soporte'}</span>
-                </Link>
-
                 {user.role !== 'ADMIN' && <Link
                   href="/mensajes"
                   onClick={() => setIsOpen(false)}
                   className="flex items-center space-x-2.5 p-2.5 rounded-2xl hover:bg-slate-50 transition-colors"
                 >
-                  <MessageSquare className="w-4 h-4 text-[#16B8AA]" />
+                  <Mail className="w-4 h-4 text-[#16B8AA]" />
                   <span>Mensajes de reservas</span>
                 </Link>}
 
                 {user.role !== 'ADMIN' && <Link
-                  href="/cuenta"
+                  href="/perfil"
                   onClick={() => setIsOpen(false)}
                   className="flex items-center space-x-2.5 p-2.5 rounded-2xl hover:bg-slate-50 transition-colors"
                 >
-                  <Compass className="w-4 h-4 text-[#16B8AA]" />
-                  <span>Mi Perfil y Mis Reservas</span>
+                  <UserCircle className="w-4 h-4 text-[#16B8AA]" />
+                  <span>Mi perfil</span>
                 </Link>}
+
+                {user.role === 'TRAVELER' && <Link href="/cuenta" onClick={() => setIsOpen(false)} className="flex items-center space-x-2.5 p-2.5 rounded-2xl hover:bg-slate-50 transition-colors"><Compass className="w-4 h-4 text-[#16B8AA]" /><span>Mis reservas y viajes</span></Link>}
 
                 {user.role === 'OWNER' && <Link
                   href="/propietario"

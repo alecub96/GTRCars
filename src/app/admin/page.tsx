@@ -7,6 +7,7 @@ import AdminVerificationQueue from '@/components/AdminVerificationQueue';
 import AdminEmailDiagnostics from '@/components/AdminEmailDiagnostics';
 import Link from 'next/link';
 import AdminVehicleQueue from '@/components/AdminVehicleQueue';
+import AdminLogin from '@/components/AdminLogin';
 
 export default function AdminPage() {
   const [data, setData] = useState<any>(null);
@@ -17,7 +18,6 @@ export default function AdminPage() {
     fetch('/api/auth/me').then((response) => response.json()).then((auth) => {
       const isAdmin = auth.user?.role === 'ADMIN';
       setAuthorized(isAdmin);
-      if (!isAdmin) window.location.href = auth.user ? '/cuenta' : '/';
       return isAdmin ? fetch('/api/admin/dashboard') : null;
     })
       .then((res) => res?.json())
@@ -27,7 +27,8 @@ export default function AdminPage() {
       });
   }, []);
 
-  if (authorized !== true) return <div className="min-h-screen bg-[#F7F6F2]" />;
+  if (authorized === null) return <div className="min-h-screen bg-[#F7F6F2]" />;
+  if (authorized === false) return <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]"><Navbar /><AdminLogin /></div>;
 
   return (
     <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]">

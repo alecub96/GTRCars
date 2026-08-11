@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { createCipheriv, createDecipheriv, createHash, randomBytes, randomUUID } from 'node:crypto';
 
-export type UploadKind = 'vehicles' | 'documents';
+export type UploadKind = 'vehicles' | 'documents' | 'avatars';
 
 export class UploadConfigurationError extends Error {}
 

@@ -26,3 +26,13 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
   const block = await prisma.availabilityBlock.create({ data: { vehicleId: id, startDate: start, endDate: end, reason: reason || 'OWNER_BLOCK' } });
   return NextResponse.json({ success: true, block });
 }
+
+export async function DELETE(request: Request, context: { params: Promise<{ id: string }> }) {
+  const user = await getCurrentUser();
+  if (!user || user.role !== 'OWNER') return NextResponse.json({ error: 'Solo los propietarios pueden modificar la disponibilidad' }, { status: 403 });
+  const { id } = await context.params; const { blockId } = await request.json();
+  const block = await prisma.availabilityBlock.findUnique({ where: { id: blockId }, include: { vehicle: { select: { ownerId: true } } } });
+  if (!block || block.vehicleId !== id || block.vehicle.ownerId !== user.id || block.reason?.startsWith('BOOKING_')) return NextResponse.json({ error: 'Este bloqueo no se puede eliminar' }, { status: 403 });
+  await prisma.availabilityBlock.delete({ where: { id: block.id } });
+  return NextResponse.json({ success: true });
+}

@@ -17,7 +17,7 @@ export default function ChatPage() {
     fetchConversations();
   }, []);
 
-  // POLLING AUTOMÁTICO CADA 2 SEGUNDOS PARA SIMULAR WEBSOCKET / CHAT EN TIEMPO REAL
+  // Actualización automática ligera mientras la conversación está abierta.
   useEffect(() => {
     if (!activeConvId) return;
 
@@ -25,7 +25,7 @@ export default function ChatPage() {
 
     const interval = setInterval(() => {
       fetchMessagesSilently(activeConvId);
-    }, 2000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [activeConvId]);
@@ -115,12 +115,12 @@ export default function ChatPage() {
           <div className="flex items-center space-x-3 text-xs font-medium">
             <Lock className="w-5 h-5 text-[#16B8AA] shrink-0" />
             <span>
-              <strong>Chat en Directo Protegido:</strong> Los mensajes se reciben en tiempo real. Por tu seguridad, no está permitido compartir datos de contacto externos (teléfonos, emails o webs de terceros).
+              <strong>Chat protegido:</strong> Los mensajes se actualizan automáticamente. Por tu seguridad, no está permitido compartir datos de contacto externos (teléfonos, emails o webs de terceros).
             </span>
           </div>
           <div className="hidden sm:flex items-center space-x-1.5 text-[10px] font-black uppercase tracking-widest bg-[#16B8AA]/20 text-[#16B8AA] px-3 py-1 rounded-full border border-[#16B8AA]/30">
             <span className="w-2 h-2 rounded-full bg-[#16B8AA] animate-pulse" />
-            <span>En directo 2s</span>
+            <span>Actualización automática</span>
           </div>
         </div>
 

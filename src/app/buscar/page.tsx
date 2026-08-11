@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar';
 import { prisma } from '@/lib/prisma';
 import { CANARY_ISLANDS } from '@/lib/pricing';
 import { Star, MapPin, Filter, SlidersHorizontal, ShieldCheck, ChevronRight } from 'lucide-react';
+import VehicleViewTracker from '@/components/VehicleViewTracker';
 
 interface SearchPageProps {
   searchParams: Promise<{
@@ -12,6 +13,8 @@ interface SearchPageProps {
     maxPrice?: string;
     passengers?: string;
     sort?: string;
+    startDate?: string;
+    endDate?: string;
   }>;
 }
 
@@ -22,6 +25,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const minPrice = params.minPrice ? parseFloat(params.minPrice) : undefined;
   const maxPrice = params.maxPrice ? parseFloat(params.maxPrice) : undefined;
   const sort = params.sort || 'recommended';
+  const startDate = params.startDate;
+  const endDate = params.endDate;
 
   const whereClause: any = { status: 'ACTIVE' };
   if (selectedIsland) whereClause.island = { equals: selectedIsland, mode: 'insensitive' };
@@ -31,6 +36,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     if (minPrice) whereClause.basePricePerDay.gte = minPrice;
     if (maxPrice) whereClause.basePricePerDay.lte = maxPrice;
   }
+  if (startDate && endDate) whereClause.availabilityBlocks = { none: { startDate: { lt: new Date(endDate) }, endDate: { gt: new Date(startDate) } } };
 
   let orderBy: any = { createdAt: 'desc' };
   if (sort === 'price_asc') orderBy = { basePricePerDay: 'asc' };
@@ -157,6 +163,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                     key={v.id}
                     className="bg-white rounded-3xl overflow-hidden border border-[#E9E1D2] shadow-sm hover:shadow-xl transition-all duration-300 grid grid-cols-1 md:grid-cols-3"
                   >
+                    <VehicleViewTracker vehicleId={v.id} event="IMPRESSION" />
                     <div className="relative h-64 md:h-full">
                       <img
                         src={v.photos[0]?.url || 'https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=800'}

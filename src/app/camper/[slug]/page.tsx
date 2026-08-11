@@ -7,9 +7,18 @@ import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
 import VehicleViewTracker from '@/components/VehicleViewTracker';
 import { Star, MapPin, Users, Bed, ShieldCheck, Check, Fuel, Settings2, Compass } from 'lucide-react';
+import type { Metadata } from 'next';
 
 interface CamperDetailPageProps {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({ params }: CamperDetailPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const vehicle = await prisma.vehicle.findUnique({ where: { slug }, select: { title: true, description: true, island: true, municipality: true, status: true, photos: { take: 1, orderBy: { orderIndex: 'asc' } } } });
+  if (!vehicle) return {};
+  const description = `${vehicle.description.slice(0, 125)} Alquiler en ${vehicle.municipality}, ${vehicle.island}.`;
+  return { title: `${vehicle.title} en ${vehicle.island}`, description, alternates: { canonical: `/camper/${slug}` }, robots: vehicle.status === 'ACTIVE' ? { index: true, follow: true } : { index: false, follow: false }, openGraph: { title: vehicle.title, description, url: `/camper/${slug}`, images: vehicle.photos[0]?.url ? [vehicle.photos[0].url] : [] } };
 }
 
 export default async function CamperDetailPage({ params }: CamperDetailPageProps) {
@@ -35,10 +44,12 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
     vehicle.reviews.length > 0
       ? vehicle.reviews.reduce((acc: number, r: any) => acc + r.rating, 0) / vehicle.reviews.length
       : 5.0;
+  const jsonLd = { '@context': 'https://schema.org', '@type': 'Product', name: vehicle.title, description: vehicle.description, image: vehicle.photos.map((photo) => photo.url), brand: { '@type': 'Brand', name: vehicle.brand }, offers: { '@type': 'Offer', priceCurrency: 'EUR', price: vehicle.basePricePerDay, availability: 'https://schema.org/InStock', url: `https://vaneando.com/camper/${vehicle.slug}` }, aggregateRating: vehicle.reviews.length ? { '@type': 'AggregateRating', ratingValue: avgRating, reviewCount: vehicle.reviews.length } : undefined };
 
   return (
     <div className="min-h-screen bg-[#F7F6F2] text-[#1C2826]">
       <VehicleViewTracker vehicleId={vehicle.id} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -204,6 +215,9 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
                 cleaningFee: vehicle.cleaningFee,
                 ownershipType: vehicle.ownershipType as 'PLATFORM' | 'THIRD_PARTY',
                 securityDeposit: vehicle.securityDeposit,
+                bookingType: vehicle.bookingType,
+                minDays: vehicle.minDays,
+                maxDays: vehicle.maxDays,
                 extras: vehicle.extras as any,
               }}
             />}

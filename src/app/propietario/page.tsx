@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar';
 import Link from 'next/link';
 import { Crown, Sparkles, Plus, BarChart3, WalletCards } from 'lucide-react';
 import OwnerAvailabilityCalendar from '@/components/OwnerAvailabilityCalendar';
+import OwnerBookingsPanel from '@/components/OwnerBookingsPanel';
 
 export default function OwnerDashboardPage() {
   const [vehicles, setVehicles] = useState<any[]>([]);
@@ -15,7 +16,6 @@ export default function OwnerDashboardPage() {
   const [bookings, setBookings] = useState<any[]>([]);
   const [stripeMessage, setStripeMessage] = useState('');
   const [stripeSetupUrl, setStripeSetupUrl] = useState('');
-  const [bookingTab, setBookingTab] = useState<'requests' | 'confirmed' | 'completed'>('requests');
 
   useEffect(() => {
     fetch('/api/auth/me')
@@ -41,12 +41,6 @@ export default function OwnerDashboardPage() {
     return <div className="min-h-screen bg-[#F7F6F2]" />;
   }
 
-  const bookingGroups: Record<typeof bookingTab, string[]> = {
-    requests: ['REQUESTED'],
-    confirmed: ['OWNER_ACCEPTED', 'PAYMENT_PENDING', 'CONFIRMED', 'CHECKIN_PENDING', 'ACTIVE', 'CHECKOUT_PENDING'],
-    completed: ['COMPLETED', 'CANCELLED', 'OWNER_REJECTED', 'REFUNDED'],
-  };
-  const visibleBookings = bookings.filter((booking) => bookingGroups[bookingTab].includes(booking.status));
 
   const handleActivateVip = async (vehicleId: string) => {
     setVipLoading(vehicleId);
@@ -70,7 +64,7 @@ export default function OwnerDashboardPage() {
         setVehicles(vehicles.map(v => v.id === vehicleId ? { ...v, isVip: true } : v));
       }
     } catch (err: any) {
-      alert(err.message);
+      setMsg(err.message || 'No se pudo activar la visibilidad VIP');
     } finally {
       setVipLoading(null);
     }
@@ -146,20 +140,7 @@ export default function OwnerDashboardPage() {
         </div>
 
         {/* LISTADO DE MIS CAMPERS */}
-        <section className="mb-12 space-y-4">
-          <div><h3 className="font-serif text-2xl font-bold text-[#13322E]">Reservas</h3><p className="text-sm text-[#6B726E]">Gestiona cada etapa sin mezclar solicitudes pendientes con viajes ya cerrados.</p></div>
-          <div className="flex gap-2 overflow-x-auto rounded-2xl bg-white p-2 border border-[#E9E1D2]">{([
-            ['requests', 'Solicitudes', ['REQUESTED']],
-            ['confirmed', 'Confirmadas', ['OWNER_ACCEPTED', 'PAYMENT_PENDING', 'CONFIRMED', 'CHECKIN_PENDING', 'ACTIVE', 'CHECKOUT_PENDING']],
-            ['completed', 'Terminadas', ['COMPLETED', 'CANCELLED', 'OWNER_REJECTED', 'REFUNDED']],
-          ] as const).map(([key, label, statuses]) => <button key={key} onClick={() => setBookingTab(key)} className={`rounded-xl px-4 py-2 text-xs font-bold ${bookingTab === key ? 'bg-[#13322E] text-white' : 'text-[#6B726E]'}`}>{label} <span className="ml-1 opacity-70">{bookings.filter((booking) => (statuses as readonly string[]).includes(booking.status)).length}</span></button>)}</div>
-          {visibleBookings.length === 0 ? <p className="rounded-2xl border border-dashed border-[#E9E1D2] p-6 text-center text-sm text-[#6B726E]">No hay reservas en esta sección.</p> : visibleBookings.map((booking) => (
-            <div key={booking.id} className="bg-white rounded-2xl p-4 border border-[#E9E1D2] flex flex-wrap items-center justify-between gap-3">
-              <div><strong>{booking.code}</strong><p className="text-xs text-[#6B726E]">{booking.vehicle.title} · {booking.traveler.firstName} {booking.traveler.lastName}</p><p className="mt-1 text-xs font-semibold">{new Date(booking.pickupDate).toLocaleDateString('es-ES')} → {new Date(booking.returnDate).toLocaleDateString('es-ES')} · {booking.totalAmount} €</p></div>
-              {booking.status === 'REQUESTED' && <div className="flex gap-2"><button onClick={async () => { await fetch(`/api/bookings/${booking.id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'accept' }) }); setBookings(bookings.map((b) => b.id === booking.id ? { ...b, status: 'OWNER_ACCEPTED' } : b)); }} className="px-4 py-2 rounded-full bg-[#16B8AA] text-white text-xs font-bold">Aceptar</button><button onClick={async () => { await fetch(`/api/bookings/${booking.id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'reject' }) }); setBookings(bookings.map((b) => b.id === booking.id ? { ...b, status: 'OWNER_REJECTED' } : b)); }} className="px-4 py-2 rounded-full bg-red-50 text-red-700 text-xs font-bold">Rechazar</button></div>}
-            </div>
-          ))}
-        </section>
+        <OwnerBookingsPanel initialBookings={bookings} />
 
         <OwnerAvailabilityCalendar vehicles={vehicles} />
 

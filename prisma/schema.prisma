@@ -225,6 +225,7 @@ model VehicleView {
   viewer        User?    @relation(fields: [viewerId], references: [id], onDelete: SetNull)
   country       String?
   source        String?
+  event         String   @default("VIEW")
   createdAt     DateTime @default(now())
 
   @@index([vehicleId, createdAt])
