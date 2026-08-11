@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
+import { sendBookingStatusEmail } from '@/lib/email';
 
 const cancellable = ['REQUESTED', 'OWNER_ACCEPTED', 'PAYMENT_PENDING'];
 
@@ -28,7 +29,7 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
   const { id } = await context.params;
   const body = await request.json();
   const action = body.action;
-  const booking = await prisma.booking.findUnique({ where: { id }, include: { vehicle: true } });
+  const booking = await prisma.booking.findUnique({ where: { id }, include: { vehicle: true, traveler: { select: { email: true, firstName: true } }, owner: { select: { email: true, firstName: true } } } });
   if (!booking) return NextResponse.json({ error: 'Reserva no encontrada' }, { status: 404 });
 
   const isTraveler = booking.travelerId === user.id;
@@ -65,5 +66,7 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
     }
     return result;
   });
+  const recipient = isTraveler ? booking.owner : booking.traveler;
+  sendBookingStatusEmail(recipient.email, recipient.firstName, { code: booking.code, status, vehicle: booking.vehicle.title, reservationId: booking.id }).catch((error) => console.error('Booking status email error:', error));
   return NextResponse.json({ success: true, booking: updated });
 }

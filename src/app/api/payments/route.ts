@@ -83,6 +83,7 @@ export async function POST(request: Request) {
           price_data: { currency: 'eur', unit_amount: totalAmountCents, product_data: { name: `Reserva ${booking.code}`, description: booking.vehicle.title } },
           quantity: 1,
         }],
+        payment_method_types: ['card', 'klarna'],
         metadata: { bookingId: booking.id, bookingCode: booking.code },
         payment_intent_data: paymentIntentData,
         success_url: `${appUrl}/reserva/${booking.id}?pago=correcto&session_id={CHECKOUT_SESSION_ID}`,

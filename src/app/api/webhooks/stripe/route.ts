@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { prisma } from '@/lib/prisma';
+import { sendBookingStatusEmail } from '@/lib/email';
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY || '';
 
@@ -51,6 +52,8 @@ export async function POST(request: Request) {
           data: { status: 'SUCCEEDED' },
         }),
       ]);
+      const booking = await prisma.booking.findUnique({ where: { id: bookingId }, include: { traveler: { select: { email: true, firstName: true } }, vehicle: { select: { title: true } } } });
+      if (booking) sendBookingStatusEmail(booking.traveler.email, booking.traveler.firstName, { code: booking.code, status: 'CONFIRMED', vehicle: booking.vehicle.title, reservationId: booking.id }).catch((error) => console.error('Payment confirmation email error:', error));
     }
   }
 
@@ -63,6 +66,8 @@ export async function POST(request: Request) {
         prisma.booking.update({ where: { id: bookingId }, data: { status: 'CONFIRMED', stripePaymentIntentId: paymentIntentId || null } }),
         prisma.payment.updateMany({ where: { stripeId: session.id }, data: { status: 'SUCCEEDED' } }),
       ]);
+      const booking = await prisma.booking.findUnique({ where: { id: bookingId }, include: { traveler: { select: { email: true, firstName: true } }, vehicle: { select: { title: true } } } });
+      if (booking) sendBookingStatusEmail(booking.traveler.email, booking.traveler.firstName, { code: booking.code, status: 'CONFIRMED', vehicle: booking.vehicle.title, reservationId: booking.id }).catch((error) => console.error('Checkout confirmation email error:', error));
     }
   }
 
