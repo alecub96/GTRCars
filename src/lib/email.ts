@@ -8,13 +8,13 @@ const transporter = smtpPassword
       port: Number(process.env.SMTP_PORT || 465),
       secure: process.env.SMTP_SECURE !== 'false',
       auth: {
-        user: process.env.SMTP_USER || 'contacto@vaneando.com',
+        user: process.env.SMTP_USER || 'admin@vaneando.com',
         pass: smtpPassword,
       },
     })
   : null;
 
-const from = process.env.EMAIL_FROM || 'vaneando. <contacto@vaneando.com>';
+const from = process.env.EMAIL_FROM || 'vaneando. <admin@vaneando.com>';
 
 export async function sendWelcomeEmail(to: string, firstName: string) {
   if (!transporter) {
@@ -50,7 +50,7 @@ export function getEmailConfiguration() {
     configured: Boolean(transporter),
     host: process.env.SMTP_HOST || 'smtp.hostinger.com',
     port: Number(process.env.SMTP_PORT || 465),
-    user: process.env.SMTP_USER || 'contacto@vaneando.com',
+    user: process.env.SMTP_USER || 'admin@vaneando.com',
     from,
   };
 }

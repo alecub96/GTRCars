@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
-import { DollarSign, ArrowUpRight, ShieldCheck, Wallet, RefreshCw, Layers } from 'lucide-react';
+import { DollarSign, ArrowUpRight, ShieldCheck, Wallet, UserRound } from 'lucide-react';
 import AdminVerificationQueue from '@/components/AdminVerificationQueue';
 import AdminEmailDiagnostics from '@/components/AdminEmailDiagnostics';
 import Link from 'next/link';
@@ -48,8 +48,13 @@ export default function AdminPage() {
             <ShieldCheck className="w-4 h-4" />
             <span>Cuenta de Recaudación Principal Activa</span>
           </div>
-          <Link href="/soporte" className="mt-3 md:mt-0 rounded-full bg-[#13322E] px-5 py-3 text-xs font-bold uppercase tracking-wider text-white">Chat con usuarios</Link>
+          <Link href="/mensajes" className="mt-3 md:mt-0 rounded-full bg-[#13322E] px-5 py-3 text-xs font-bold uppercase tracking-wider text-white">Mensajes con usuarios</Link>
         </div>
+
+        <section className="mb-8 flex flex-col gap-4 rounded-3xl border border-[#E9E1D2] bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-4"><div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#13322E] text-[#16B8AA]"><UserRound className="h-6 w-6" /></div><div><p className="text-[10px] font-black uppercase tracking-[.2em] text-[#16B8AA]">Perfil administrador</p><h2 className="font-serif text-2xl font-bold">Tu cuenta y preferencias</h2><p className="text-sm text-[#6B726E]">Gestiona tu perfil, seguridad y sesiones desde un espacio separado del panel financiero.</p></div></div>
+          <Link href="/perfil" className="rounded-full border border-[#13322E] px-5 py-3 text-center text-xs font-bold uppercase tracking-wider text-[#13322E]">Abrir mi perfil</Link>
+        </section>
 
         {/* MÉTRICAS FINANCIERAS */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
@@ -63,7 +68,7 @@ export default function AdminPage() {
             <h3 className="font-serif text-3xl font-bold text-[#13322E] mt-1">
               {data?.metrics?.totalVolume ? `${data.metrics.totalVolume.toFixed(2)}€` : '0.00€'}
             </h3>
-            <p className="text-[11px] text-[#6B726E] mt-2">Fondos ingresados en la cuenta de la plataforma</p>
+            <p className="text-[11px] text-[#6B726E] mt-2">Solo pagos confirmados por Stripe; las solicitudes aún no cuentan como ingresos.</p>
           </div>
 
           <div className="bg-white p-6 rounded-3xl border border-[#E9E1D2] shadow-sm">
@@ -76,7 +81,7 @@ export default function AdminPage() {
             <h3 className="font-serif text-3xl font-bold text-[#16B8AA] mt-1">
               {data?.metrics?.totalPlatformCommission ? `${data.metrics.totalPlatformCommission.toFixed(2)}€` : '0.00€'}
             </h3>
-            <p className="text-[11px] text-[#6B726E] mt-2">Descontada automáticamente antes de la liquidación</p>
+            <p className="text-[11px] text-[#6B726E] mt-2">Comisiones de reservas cuyo pago ya se ha confirmado.</p>
           </div>
 
           <div className="bg-white p-6 rounded-3xl border border-[#E9E1D2] shadow-sm">
@@ -89,7 +94,7 @@ export default function AdminPage() {
             <h3 className="font-serif text-3xl font-bold text-[#D97706] mt-1">
               {data?.metrics?.totalOwnerPayoutsPending ? `${data.metrics.totalOwnerPayoutsPending.toFixed(2)}€` : '0.00€'}
             </h3>
-            <p className="text-[11px] text-[#6B726E] mt-2">Para transferir a cuentas bancarias de propietarios</p>
+            <p className="text-[11px] text-[#6B726E] mt-2">Importe de reservas pagadas pendiente de liquidación.</p>
           </div>
         </div>
 
@@ -100,7 +105,8 @@ export default function AdminPage() {
         {/* TABLA DE RESERVAS Y LIQUIDACIÓN POR PROPIETARIO */}
         <div className="bg-white rounded-3xl border border-[#E9E1D2] shadow-sm overflow-hidden">
           <div className="p-6 border-b border-[#E9E1D2]">
-            <h3 className="font-serif text-xl font-bold">Desglose de Reservas & Liquidaciones a Propietarios</h3>
+            <h3 className="font-serif text-xl font-bold">Pagos confirmados y liquidaciones</h3>
+            <p className="mt-1 text-sm text-[#6B726E]">Esta tabla solo muestra reservas con un pago confirmado. Desde «Ver reserva» puedes revisar el contrato, el estado y las acciones disponibles para administración.</p>
           </div>
 
           <div className="overflow-x-auto">
@@ -114,6 +120,7 @@ export default function AdminPage() {
                   <th className="p-4 text-right">Tu Comisión</th>
                   <th className="p-4 text-right">A Transferir al Propietario</th>
                   <th className="p-4 text-center">Estado</th>
+                  <th className="p-4 text-center">Acciones</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#E9E1D2] font-medium text-[#13322E]">
@@ -134,12 +141,13 @@ export default function AdminPage() {
                           {p.status}
                         </span>
                       </td>
+                      <td className="p-4 text-center"><Link href={`/reserva/${p.bookingId}`} className="font-bold text-[#0F766E] underline">Ver reserva</Link></td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={7} className="p-8 text-center text-[#6B726E]">
-                      No hay reservas procesadas en el sistema aún.
+                    <td colSpan={8} className="p-8 text-center text-[#6B726E]">
+                      Todavía no hay pagos confirmados. Las solicitudes y reservas pendientes no aparecen como ingresos hasta que Stripe confirme el pago.
                     </td>
                   </tr>
                 )}

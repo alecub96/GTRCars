@@ -39,9 +39,7 @@ export default function Navbar() {
               Campers
             </Link>
           )}
-          <Link href="/guias" className="hover:text-[#16B8AA] transition-colors">
-            Blog & Guías
-          </Link>
+          {role !== 'ADMIN' && <Link href="/guias" className="hover:text-[#16B8AA] transition-colors">Blog & Guías</Link>}
           {role === 'OWNER' && (
             <Link href="/propietario" className="hover:text-[#16B8AA] transition-colors">
               Panel de propietario
@@ -52,20 +50,18 @@ export default function Navbar() {
               Administración
             </Link>
           )}
-          <Link href="/seguridad" className="hover:text-[#16B8AA] transition-colors">
-            Seguros
-          </Link>
+          {role !== 'ADMIN' && <Link href="/seguridad" className="hover:text-[#16B8AA] transition-colors">Seguros</Link>}
         </div>
 
         {/* BOTÓN ACCESO */}
         <div className="flex items-center space-x-3">
-          {role && role !== 'ANONYMOUS' && <Link href="/soporte" aria-label="Contactar con soporte" title="Contactar con soporte" className="flex items-center gap-2 rounded-full border border-[#E9E1D2] bg-white px-3 py-2 text-xs font-bold text-[#13322E] hover:border-[#16B8AA]"><LifeBuoy className="h-4 w-4 text-[#16B8AA]" /><span className="hidden lg:inline">Soporte</span></Link>}
+          {role && role !== 'ANONYMOUS' && role !== 'ADMIN' && <Link href="/soporte" aria-label="Contactar con soporte" title="Contactar con soporte" className="flex items-center gap-2 rounded-full border border-[#E9E1D2] bg-white px-3 py-2 text-xs font-bold text-[#13322E] hover:border-[#16B8AA]"><LifeBuoy className="h-4 w-4 text-[#16B8AA]" /><span className="hidden lg:inline">Soporte</span></Link>}
           <AuthModal />
           <button onClick={() => setMobileOpen(!mobileOpen)} aria-label="Abrir navegación" className="rounded-full border border-[#E9E1D2] p-2 text-[#13322E] md:hidden">{mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}</button>
         </div>
       </nav>
-      {mobileOpen && <div className="absolute left-0 right-0 z-50 border-b border-[#E9E1D2] bg-white p-4 shadow-xl md:hidden"><div className="grid gap-2 text-sm font-bold">{(role === 'TRAVELER' || role === 'ANONYMOUS') && <Link onClick={() => setMobileOpen(false)} href="/buscar" className="rounded-xl p-3 hover:bg-[#F7F6F2]">Buscar campers</Link>}{role === 'OWNER' && <Link onClick={() => setMobileOpen(false)} href="/propietario" className="rounded-xl p-3 hover:bg-[#F7F6F2]">Panel de propietario</Link>}{role === 'ADMIN' && <Link onClick={() => setMobileOpen(false)} href="/admin" className="rounded-xl p-3 hover:bg-[#F7F6F2]">Administración</Link>}<Link onClick={() => setMobileOpen(false)} href="/guias" className="rounded-xl p-3 hover:bg-[#F7F6F2]">Blog y guías</Link><Link onClick={() => setMobileOpen(false)} href="/seguridad" className="rounded-xl p-3 hover:bg-[#F7F6F2]">Seguridad y seguros</Link>{role && role !== 'ANONYMOUS' && <Link onClick={() => setMobileOpen(false)} href="/soporte" className="rounded-xl p-3 hover:bg-[#F7F6F2]">Contactar con soporte</Link>}</div></div>}
-      {role && role !== 'ANONYMOUS' && <OnboardingTour role={role} />}
+      {mobileOpen && <div className="absolute left-0 right-0 z-50 border-b border-[#E9E1D2] bg-white p-4 shadow-xl md:hidden"><div className="grid gap-2 text-sm font-bold">{(role === 'TRAVELER' || role === 'ANONYMOUS') && <Link onClick={() => setMobileOpen(false)} href="/buscar" className="rounded-xl p-3 hover:bg-[#F7F6F2]">Buscar campers</Link>}{role === 'OWNER' && <Link onClick={() => setMobileOpen(false)} href="/propietario" className="rounded-xl p-3 hover:bg-[#F7F6F2]">Panel de propietario</Link>}{role === 'ADMIN' && <Link onClick={() => setMobileOpen(false)} href="/admin" className="rounded-xl p-3 hover:bg-[#F7F6F2]">Administración</Link>}{role !== 'ADMIN' && <><Link onClick={() => setMobileOpen(false)} href="/guias" className="rounded-xl p-3 hover:bg-[#F7F6F2]">Blog y guías</Link><Link onClick={() => setMobileOpen(false)} href="/seguridad" className="rounded-xl p-3 hover:bg-[#F7F6F2]">Seguridad y seguros</Link></>}{role && role !== 'ANONYMOUS' && role !== 'ADMIN' && <Link onClick={() => setMobileOpen(false)} href="/soporte" className="rounded-xl p-3 hover:bg-[#F7F6F2]">Contactar con soporte</Link>}</div></div>}
+      {role && role !== 'ANONYMOUS' && role !== 'ADMIN' && <OnboardingTour role={role} />}
     </header>
   );
 }

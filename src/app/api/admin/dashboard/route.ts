@@ -12,13 +12,15 @@ export async function GET() {
         vehicle: { select: { title: true, island: true } },
         traveler: { select: { firstName: true, lastName: true, email: true } },
         owner: { select: { firstName: true, lastName: true, email: true, stripeAccountId: true } },
+        payments: { select: { status: true, amount: true, currency: true, createdAt: true } },
       },
       orderBy: { createdAt: 'desc' },
     });
 
-    const totalVolume = bookings.reduce((sum, b) => sum + b.totalAmount, 0);
-    const totalPlatformCommission = bookings.reduce((sum, b) => sum + (b.travelerFee + b.ownerFee), 0);
-    const totalOwnerPayoutsPending = bookings
+    const paidBookings = bookings.filter((b) => b.payments.some((payment) => payment.status === 'SUCCEEDED'));
+    const totalVolume = paidBookings.reduce((sum, b) => sum + b.totalAmount, 0);
+    const totalPlatformCommission = paidBookings.reduce((sum, b) => sum + (b.travelerFee + b.ownerFee), 0);
+    const totalOwnerPayoutsPending = paidBookings
       .filter((b) => b.status === 'CONFIRMED' || b.status === 'COMPLETED')
       .reduce((sum, b) => sum + b.ownerPayout, 0);
 
@@ -30,7 +32,8 @@ export async function GET() {
         totalPlatformCommission,
         totalOwnerPayoutsPending,
       },
-      payouts: bookings.map((b) => ({
+      payouts: paidBookings.map((b) => ({
+        bookingId: b.id,
         bookingCode: b.code,
         vehicleTitle: b.vehicle.title,
         island: b.vehicle.island,
