@@ -3,20 +3,21 @@ import Navbar from '@/components/Navbar';
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import { prisma } from '@/lib/prisma';
+import { BLOG_ARTICLES } from '@/lib/blog';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Blog camper en Canarias: rutas y consejos | vaneando.',
+  description: 'Guías para viajar en camper por Canarias y recursos para propietarios que quieren alquilar su vehículo con seguridad y rentabilidad.',
+  alternates: { canonical: 'https://vaneando.com/guias' },
+};
 
 export const dynamic = 'force-dynamic';
 
 export default async function GuidesPage() {
-  let blogPosts: any[] = [];
   let locations: any[] = [];
 
   try {
-    blogPosts = await prisma.blogPost.findMany({
-      where: { published: true },
-      include: { author: { select: { firstName: true } } },
-      orderBy: { createdAt: 'desc' },
-    });
-
     locations = await prisma.seoLocation.findMany({
       where: { published: true },
     });
@@ -45,16 +46,14 @@ export default async function GuidesPage() {
         <div className="mb-16">
           <h2 className="font-serif text-2xl font-bold text-[#0F172A] mb-8">Artículos y Consejos Destacados</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {blogPosts.map((post) => (
-              <div key={post.id} className="bg-white rounded-3xl overflow-hidden border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
-                {post.featuredImage && (
-                  <div className="h-56 overflow-hidden">
-                    <img src={post.featuredImage} alt={post.title} className="w-full h-full object-cover" />
-                  </div>
-                )}
+            {BLOG_ARTICLES.map((post) => (
+              <Link href={`/guias/${post.slug}`} key={post.slug} className="group bg-white rounded-3xl overflow-hidden border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
+                <div className="h-56 overflow-hidden">
+                  <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                </div>
                 <div className="p-6">
                   <span className="text-[10px] font-black uppercase tracking-wider text-[#14B8A6] block mb-2">
-                    {post.category}
+                    {post.category} · {post.readingTime}
                   </span>
                   <h3 className="font-serif text-2xl font-bold text-[#0F172A] mb-3 leading-tight">
                     {post.title}
@@ -63,11 +62,11 @@ export default async function GuidesPage() {
                     {post.excerpt}
                   </p>
                   <div className="pt-4 border-t border-[#E2E8F0] flex items-center justify-between text-xs text-[#64748B]">
-                    <span>Por {post.author.firstName}</span>
+                    <span>Por vaneando.</span>
                     <span className="text-[11px] font-black uppercase text-[#14B8A6]">Leer artículo completo →</span>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
