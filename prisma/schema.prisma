@@ -160,6 +160,7 @@ model Vehicle {
   slug               String         @unique
   brand              String
   model              String
+  vehicleType        String         @default("CAMPER")
   year               Int
   licensePlateHidden String?
   ownershipType      OwnershipType  @default(THIRD_PARTY)

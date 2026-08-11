@@ -15,7 +15,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Usuario no autenticado' }, { status: 401 });
     }
     if (sessionUser.role !== 'OWNER') {
-      return NextResponse.json({ error: 'Solo los propietarios pueden activar visibilidad VIP' }, { status: 403 });
+      return NextResponse.json({ error: 'Solo los propietarios pueden activar Usuario destacado' }, { status: 403 });
     }
 
     const body = await request.json();
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
     }
 
     const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + 30); // 30 días de suscripción VIP activa
+    expiresAt.setDate(expiresAt.getDate() + 30); // 30 días de suscripción activa
 
     if (stripeSecretKey && !stripeSecretKey.includes('mock')) {
       const stripe = new Stripe(stripeSecretKey, { apiVersion: '2025-02-24.acacia' as any });
@@ -43,8 +43,8 @@ export async function POST(request: Request) {
             price_data: {
               currency: 'eur',
               product_data: {
-                name: `Membresía VIP Destacada - ${vehicle.title}`,
-                description: 'Posicionamiento en el Top 5 rotativo diario en tu isla',
+                name: `Suscripción Usuario destacado - ${vehicle.title}`,
+                description: 'Insignia Usuario destacado para tu perfil y anuncios',
               },
               unit_amount: 299, // 2,99€
               recurring: { interval: 'month' },
@@ -53,14 +53,15 @@ export async function POST(request: Request) {
           },
         ],
         mode: 'subscription',
-        success_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3003'}/propietario?vip=success`,
-        cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3003'}/propietario?vip=cancel`,
+        metadata: { userId: sessionUser.id, vehicleId: vehicle.id, feature: 'featured' },
+        success_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3003'}/propietario?featured=success`,
+        cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3003'}/propietario?featured=cancel`,
       });
 
       return NextResponse.json({ success: true, url: session.url });
     }
 
-    // MODO SIMULADOR DE MEMBRESÍA VIP 2,99€/MES
+    // MODO SIMULADOR DE SUSCRIPCIÓN Usuario destacado 2,99€/MES
     await prisma.$transaction([
       prisma.vehicle.update({
         where: { id: vehicleId },
@@ -83,10 +84,10 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: 'Membresía VIP activada con éxito por 2,99€/mes. Tu camper aparecerá en el Top 5 destacado.',
+      message: 'Usuario destacado activado con éxito por 2,99€/mes.',
     });
   } catch (error: any) {
     console.error('API VIP Subscription Error:', error);
-    return NextResponse.json({ error: error.message || 'Error al procesar suscripción VIP' }, { status: 500 });
+    return NextResponse.json({ error: error.message || 'Error al activar Usuario destacado' }, { status: 500 });
   }
 }

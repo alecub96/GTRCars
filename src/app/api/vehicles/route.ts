@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
+import { getFeaturedAudience } from '@/lib/featured';
 
 export async function GET(request: Request) {
   try {
@@ -24,23 +25,24 @@ export async function GET(request: Request) {
       },
     });
 
-    // SISTEMA INTELIGENTE DE ORDENACIÓN Y ROTACIÓN VIP (2,99€/mes)
-    // 1. Separar anuncios VIP activos de anuncios Estándar
-    const now = new Date();
-    const activeVipVehicles = vehicles.filter(
-      (v) => v.isVip && v.vipExpiresAt && new Date(v.vipExpiresAt) > now
-    );
-    const standardVehicles = vehicles.filter(
-      (v) => !v.isVip || !v.vipExpiresAt || new Date(v.vipExpiresAt) <= now
-    );
+    const featured = await getFeaturedAudience();
+    const featuredVehicles = vehicles.map((vehicle) => ({
+      ...vehicle,
+      isFeatured: featured.ownerIds.has(vehicle.ownerId) || featured.vehicleIds.has(vehicle.id) || featured.subscriptionOwnerIds.has(vehicle.ownerId),
+    }));
 
-    // 2. ROTACIÓN DIARIA JUSTA ENTRE ANUNCIOS VIP EN LAS PRIMERAS 5 POSICIONES
+    // Usuario destacado: mérito (20 reseñas de 5 estrellas) o suscripción activa.
+    const now = new Date();
+    const activeFeaturedVehicles = featuredVehicles.filter((vehicle) => vehicle.isFeatured);
+    const standardVehicles = featuredVehicles.filter((vehicle) => !vehicle.isFeatured);
+
+    // 2. Rotación diaria justa entre anuncios destacados.
     // Utilizamos el día actual del año (1-365) como semilla de rotación
     const dayOfYear = Math.floor(
       (now.getTime() - new Date(now.getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24)
     );
 
-    const rotatedVipVehicles = [...activeVipVehicles].sort((a, b) => {
+    const rotatedFeaturedVehicles = [...activeFeaturedVehicles].sort((a, b) => {
       // Determinación pseudo-aleatoria rotativa diaria por ID de vehículo y día del año
       const hashA = (a.id.charCodeAt(0) + dayOfYear) % 100;
       const hashB = (b.id.charCodeAt(0) + dayOfYear) % 100;
@@ -54,8 +56,8 @@ export async function GET(request: Request) {
       return avgB - avgA;
     });
 
-    // 4. COMBINAR: Los primeros 5 puestos pertenecen a la rotación VIP diaria, seguidos del resto ordenados por estrellas
-    const finalSortedVehicles = [...rotatedVipVehicles, ...sortedStandardVehicles];
+    // 4. COMBINAR: los destacados aparecen primero, seguidos del resto por valoración.
+    const finalSortedVehicles = [...rotatedFeaturedVehicles, ...sortedStandardVehicles];
 
     return NextResponse.json({ success: true, vehicles: finalSortedVehicles });
   } catch (error) {

@@ -109,7 +109,7 @@ async function main() {
 
   const extraAirport = await prisma.extra.create({
     data: {
-      name: 'Entrega VIP en Aeropuerto',
+      name: 'Entrega prioritaria en aeropuerto',
       description: 'Recepción directa en la terminal de llegadas.',
       price: 35.0,
       priceType: 'PER_RENTAL',

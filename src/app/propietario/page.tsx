@@ -3,14 +3,14 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
-import { Crown, Sparkles, Plus, BarChart3, WalletCards } from 'lucide-react';
+import { BadgeCheck, Sparkles, Plus, BarChart3, WalletCards } from 'lucide-react';
 import OwnerAvailabilityCalendar from '@/components/OwnerAvailabilityCalendar';
 import OwnerBookingsPanel from '@/components/OwnerBookingsPanel';
 
 export default function OwnerDashboardPage() {
   const [vehicles, setVehicles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [vipLoading, setVipLoading] = useState<string | null>(null);
+  const [featuredLoading, setFeaturedLoading] = useState<string | null>(null);
   const [msg, setMsg] = useState('');
   const [authorized, setAuthorized] = useState<boolean | null>(null);
   const [bookings, setBookings] = useState<any[]>([]);
@@ -42,8 +42,8 @@ export default function OwnerDashboardPage() {
   }
 
 
-  const handleActivateVip = async (vehicleId: string) => {
-    setVipLoading(vehicleId);
+  const handleActivateFeatured = async (vehicleId: string) => {
+    setFeaturedLoading(vehicleId);
     setMsg('');
 
     try {
@@ -54,19 +54,19 @@ export default function OwnerDashboardPage() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Error al activar VIP');
+      if (!res.ok) throw new Error(data.error || 'Error al activar Usuario destacado');
 
       if (data.url) {
         window.location.href = data.url;
       } else {
-        setMsg('👑 ¡Felicidades! Membresía VIP activada (2,99€/mes). Tu camper ahora ocupa las primeras 5 posiciones rotativas en tu isla.');
+        setMsg('✨ ¡Listo! Tu suscripción de Usuario destacado está activa por 2,99€/mes.');
         // Actualizar estado local
-        setVehicles(vehicles.map(v => v.id === vehicleId ? { ...v, isVip: true } : v));
+        setVehicles(vehicles.map(v => v.id === vehicleId ? { ...v, isFeatured: true } : v));
       }
     } catch (err: any) {
-      setMsg(err.message || 'No se pudo activar la visibilidad VIP');
+      setMsg(err.message || 'No se pudo activar Usuario destacado');
     } finally {
-      setVipLoading(null);
+      setFeaturedLoading(null);
     }
   };
 
@@ -93,7 +93,7 @@ export default function OwnerDashboardPage() {
               PANEL DE PROPIETARIOS
             </span>
             <h1 className="font-serif text-3xl sm:text-4xl font-bold mt-1">
-              Gestión de Flota & Visibilidad VIP
+              Gestión de Flota & Usuario destacado
             </h1>
           </div>
 
@@ -113,7 +113,7 @@ export default function OwnerDashboardPage() {
 
         {msg && (
           <div className="mb-8 p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-bold flex items-center space-x-3">
-            <Crown className="w-5 h-5 text-[#D97706] shrink-0" />
+            <BadgeCheck className="w-5 h-5 text-[#D97706] shrink-0" />
             <span>{msg}</span>
           </div>
         )}
@@ -123,18 +123,18 @@ export default function OwnerDashboardPage() {
           {stripeMessage && <div className="w-full rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs font-bold text-amber-800"><p>{stripeMessage}</p>{stripeSetupUrl && <a href={stripeSetupUrl} target="_blank" rel="noreferrer" className="mt-3 inline-flex rounded-full bg-[#13322E] px-4 py-2 text-white">Completar configuración de cobros</a>}</div>}
         </div>
 
-        {/* TARJETA INFORMATIVA PLAN VIP DE 2,99€/MES */}
+        {/* TARJETA INFORMATIVA DE USUARIO DESTACADO */}
         <div className="bg-gradient-to-r from-[#13322E] to-[#254842] rounded-3xl p-8 text-white mb-12 shadow-xl relative overflow-hidden">
           <div className="max-w-2xl relative z-10">
             <div className="inline-flex items-center space-x-2 bg-[#D97706] text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full mb-4">
-              <Crown className="w-3.5 h-3.5" />
-              <span>MEMBRESÍA PROPIETARIO VIP</span>
+              <BadgeCheck className="w-3.5 h-3.5" />
+              <span>USUARIO DESTACADO</span>
             </div>
             <h2 className="font-serif text-3xl font-bold mb-3">
-              Multiplica x5 tus reservas por solo <span className="text-[#F2CC8F]">2,99€ / mes</span>
+              Más visibilidad para tu camper desde <span className="text-[#F2CC8F]">2,99€ / mes</span>
             </h2>
             <p className="text-white/80 text-xs sm:text-sm font-medium leading-relaxed mb-6">
-              Los vehículos con suscripción VIP activa se mantienen fijados de forma permanente en las <strong>5 primeras posiciones</strong> de tu isla. Los anuncios VIP rotan equitativamente día a día para garantizar la máxima visibilidad a todos los propietarios suscriptores.
+              Consigue la insignia por mérito al alcanzar <strong>20 reseñas de 5 estrellas</strong> o actívala mediante una suscripción mensual. La condición de Usuario destacado mejora la visibilidad de tus anuncios.
             </p>
           </div>
         </div>
@@ -150,10 +150,10 @@ export default function OwnerDashboardPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {vehicles.map((v) => (
               <div key={v.id} className="bg-white rounded-3xl p-6 border border-[#E9E1D2] shadow-sm flex flex-col justify-between relative overflow-hidden">
-                {v.isVip && (
+                {v.isFeatured && (
                   <div className="absolute top-4 right-4 bg-[#D97706] text-white text-[9px] font-black uppercase tracking-wider px-3 py-1 rounded-full flex items-center space-x-1 shadow-sm">
-                    <Crown className="w-3 h-3" />
-                    <span>DESTACADO VIP TOP 5</span>
+                    <BadgeCheck className="w-3 h-3" />
+                    <span>USUARIO DESTACADO</span>
                   </div>
                 )}
 
@@ -171,19 +171,19 @@ export default function OwnerDashboardPage() {
                 </div>
 
                 <div className="pt-4 border-t border-[#E9E1D2] space-y-3">
-                  {!v.isVip ? (
+                  {!v.isFeatured ? (
                     <button
-                      onClick={() => handleActivateVip(v.id)}
-                      disabled={vipLoading === v.id}
+                      onClick={() => handleActivateFeatured(v.id)}
+                      disabled={featuredLoading === v.id}
                       className="w-full py-3 rounded-full bg-[#D97706] text-white font-black text-xs uppercase tracking-widest hover:bg-[#B45309] transition-all flex items-center justify-center space-x-2 shadow-md"
                     >
-                      <Crown className="w-4 h-4" />
-                      <span>{vipLoading === v.id ? 'Activando...' : 'ACTIVAR VIP (2,99€/MES)'}</span>
+                      <BadgeCheck className="w-4 h-4" />
+                      <span>{featuredLoading === v.id ? 'Activando...' : 'ACTIVAR USUARIO DESTACADO (2,99€/MES)'}</span>
                     </button>
                   ) : (
                     <div className="py-2.5 px-4 rounded-full bg-amber-50 text-amber-900 border border-amber-200 text-center text-xs font-bold flex items-center justify-center space-x-2">
                       <Sparkles className="w-4 h-4 text-[#D97706]" />
-                      <span>Suscripción VIP Activa</span>
+                      <span>Usuario destacado activo</span>
                     </div>
                   )}
                 </div>

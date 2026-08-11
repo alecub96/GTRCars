@@ -4,9 +4,18 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import { CANARY_ISLANDS } from '@/lib/pricing';
-import { CheckCircle2 } from 'lucide-react';
+import { BusFront, CarFront, Caravan, CheckCircle2, Mountain, Ship, Truck, Van } from 'lucide-react';
 
 const EQUIPMENT = ['Aire acondicionado', 'Calefacción', 'Ducha interior', 'WC', 'Cocina', 'Frigorífico', 'Agua caliente', 'Placa solar', 'Toldo', 'Portabicicletas', 'Menaje', 'Ropa de cama'];
+const VEHICLE_TYPES = [
+  { value: 'CAMPER', label: 'Camper', icon: Van },
+  { value: 'CAMPER_GRAN_VOLUMEN', label: 'Camper de gran volumen', icon: Truck },
+  { value: 'TURISMO_CAMPERIZADO', label: 'Turismo camperizado', icon: CarFront },
+  { value: 'CARAVANA', label: 'Caravana', icon: Caravan },
+  { value: 'AUTOCARAVANA', label: 'Autocaravana', icon: BusFront },
+  { value: '4X4_CAMPERIZADO', label: '4x4 camperizado', icon: Mountain },
+  { value: 'BARCO', label: 'Barco', icon: Ship },
+] as const;
 
 export default function PublishCamperPage() {
   const router = useRouter();
@@ -29,6 +38,7 @@ export default function PublishCamperPage() {
     title: '',
     brand: '',
     model: '',
+    vehicleType: 'CAMPER',
     year: new Date().getFullYear(),
     island: 'Gran Canaria',
     municipality: 'Las Palmas de Gran Canaria',
@@ -116,6 +126,16 @@ export default function PublishCamperPage() {
             {step === 1 && (
               <div className="space-y-4">
                 <h3 className="font-serif text-xl font-bold text-[#13322E]">1. Datos del Vehículo</h3>
+
+                <fieldset>
+                  <legend className="mb-3 text-xs font-black uppercase tracking-wider text-[#6B726E]">Tipo de vehículo</legend>
+                  <div className="-mx-1 flex snap-x gap-3 overflow-x-auto px-1 pb-3 scrollbar-thin sm:grid sm:grid-cols-4 sm:overflow-visible lg:grid-cols-7">
+                    {VEHICLE_TYPES.map(({ value, label, icon: Icon }) => {
+                      const selected = formData.vehicleType === value;
+                      return <button key={value} type="button" aria-pressed={selected} onClick={() => setFormData({ ...formData, vehicleType: value })} className={`flex min-w-[126px] snap-start flex-col items-center justify-center rounded-2xl border p-4 text-center transition ${selected ? 'border-[#16B8AA] bg-[#F0FDFA] text-[#0F766E] ring-2 ring-[#16B8AA]/30' : 'border-[#E9E1D2] bg-white text-[#6B726E] hover:border-[#16B8AA]/60'}`}><Icon className="mb-2 h-9 w-9" strokeWidth={1.7} /><span className="text-[11px] font-bold leading-tight">{label}</span></button>;
+                    })}
+                  </div>
+                </fieldset>
                 
                 <div>
                   <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">Título del Anuncio</label>

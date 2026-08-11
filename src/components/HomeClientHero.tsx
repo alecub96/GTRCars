@@ -172,14 +172,14 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
               <button
                 key={isla.id}
                 onClick={() => setSelectedIsland(isla.name)}
-                className={`group relative h-48 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border text-left ${
+                className={`group relative h-40 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border bg-[#F7F6F2] text-left sm:h-48 ${
                   selectedIsland === isla.name ? 'ring-4 ring-[#16B8AA] border-transparent' : 'border-[#E9E1D2]'
                 }`}
               >
                 <img
                   src={ISLAND_HERO_IMAGES[isla.name] || ISLAND_HERO_IMAGES['Gran Canaria']}
                   alt={`Alquiler camper en ${isla.name}`}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 filter brightness-[0.85]"
+                  className="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4 text-white">
