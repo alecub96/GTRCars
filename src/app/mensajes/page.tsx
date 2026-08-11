@@ -14,7 +14,8 @@ export default function ChatPage() {
   const [sending, setSending] = useState(false);
 
   useEffect(() => {
-    fetchConversations();
+    const requestedId = new URLSearchParams(window.location.search).get('conversationId');
+    fetchConversations(requestedId);
   }, []);
 
   // Actualización automática ligera mientras la conversación está abierta.
@@ -30,14 +31,15 @@ export default function ChatPage() {
     return () => clearInterval(interval);
   }, [activeConvId]);
 
-  const fetchConversations = async () => {
+  const fetchConversations = async (requestedId?: string | null) => {
     try {
       const res = await fetch('/api/messages');
       const data = await res.json();
       if (data.conversations) {
         setConversations(data.conversations);
         if (data.conversations.length > 0 && !activeConvId) {
-          setActiveConvId(data.conversations[0].id);
+          const requested = requestedId && data.conversations.some((conversation: any) => conversation.id === requestedId) ? requestedId : data.conversations[0].id;
+          setActiveConvId(requested);
         }
       }
     } catch (err) {
@@ -151,6 +153,7 @@ export default function ChatPage() {
                         <h4 className="font-serif text-sm font-bold text-[#13322E] truncate">
                           {c.vehicle?.title || 'Consulta Camper'}
                         </h4>
+                        <p className="text-[10px] font-bold text-[#16B8AA]">{c.owner?.firstName || c.traveler?.firstName || 'Participante'}</p>
                         <p className="text-[11px] text-[#6B726E] truncate font-medium mt-0.5">
                           {lastMsg}
                         </p>

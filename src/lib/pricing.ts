@@ -12,6 +12,12 @@ export interface PricingBreakdown {
   discountPct: number;
 }
 
+export interface PricingRuleInput {
+  startDate: Date;
+  endDate: Date;
+  pricePerDay: number;
+}
+
 export function calculatePricing({
   basePricePerDay,
   startDate,
@@ -19,6 +25,7 @@ export function calculatePricing({
   selectedExtras = [],
   cleaningFee = 0,
   ownershipType = 'THIRD_PARTY',
+  pricingRules = [],
 }: {
   basePricePerDay: number;
   startDate: Date;
@@ -26,11 +33,19 @@ export function calculatePricing({
   selectedExtras?: Array<{ price: number; priceType: 'PER_RENTAL' | 'PER_DAY' }>;
   cleaningFee?: number;
   ownershipType?: 'PLATFORM' | 'THIRD_PARTY';
+  pricingRules?: PricingRuleInput[];
 }): PricingBreakdown {
   const diffTime = Math.abs(endDate.getTime() - startDate.getTime());
   const totalDays = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
 
-  const basePriceTotal = basePricePerDay * totalDays;
+  let basePriceTotal = 0;
+  for (let index = 0; index < totalDays; index += 1) {
+    const day = new Date(startDate);
+    day.setDate(day.getDate() + index);
+    const rule = pricingRules.find((candidate) => day >= candidate.startDate && day < candidate.endDate);
+    basePriceTotal += rule?.pricePerDay ?? basePricePerDay;
+  }
+  basePriceTotal = Math.round(basePriceTotal * 100) / 100;
 
   const extrasTotal = selectedExtras.reduce((sum, extra) => {
     if (extra.priceType === 'PER_DAY') {

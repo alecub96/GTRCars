@@ -15,6 +15,7 @@ interface BookingWidgetProps {
     bookingType: 'INSTANT_BOOKING' | 'REQUEST_TO_BOOK';
     minDays: number;
     maxDays: number;
+    pricingRules?: { startDate: Date | string; endDate: Date | string; pricePerDay: number }[];
     extras: {
       extra: { id: string; name: string; price: number; priceType: 'PER_RENTAL' | 'PER_DAY' };
     }[];
@@ -54,6 +55,7 @@ export default function BookingWidget({ vehicle }: BookingWidgetProps) {
         selectedExtras: selectedExtrasObj,
         cleaningFee: vehicle.cleaningFee,
         ownershipType: vehicle.ownershipType,
+        pricingRules: vehicle.pricingRules?.map((rule) => ({ startDate: new Date(rule.startDate), endDate: new Date(rule.endDate), pricePerDay: rule.pricePerDay })),
       })
     : null;
 

@@ -16,10 +16,11 @@ function Month({ month, startDate, endDate, blocked, onSelect }: { month: Date; 
   return <div className="min-w-0 flex-1"><h4 className="mb-4 text-center font-serif text-lg font-bold capitalize">{month.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}</h4><div className="grid grid-cols-7 gap-1">{WEEK.map((day) => <span key={day} className="pb-2 text-center text-[10px] font-black text-[#94A3B8]">{day}</span>)}{cells.map((day, index) => {
     if (!day) return <span key={`empty-${index}`} />;
     const value = iso(new Date(month.getFullYear(), month.getMonth(), day));
-    const disabled = value < today || unavailable(value);
+    const isBlocked = unavailable(value);
+    const disabled = value < today || isBlocked;
     const selected = value === startDate || value === endDate;
     const inRange = Boolean(startDate && endDate && value > startDate && value < endDate);
-    return <button type="button" key={value} disabled={disabled} onClick={() => onSelect(value)} className={`relative aspect-square rounded-full text-xs font-bold transition-all ${selected ? 'z-10 bg-[#16B8AA] text-white shadow-md ring-4 ring-[#16B8AA]/15' : inRange ? 'rounded-none bg-[#CCFBF1] text-[#13322E]' : disabled ? 'cursor-not-allowed text-slate-300 line-through' : 'text-[#13322E] hover:bg-[#F0FDFA] hover:text-[#0F766E]'}`}>{day}</button>;
+    return <button type="button" key={value} disabled={disabled} onClick={() => onSelect(value)} className={`relative aspect-square rounded-full text-xs font-bold transition-all ${selected ? 'z-10 bg-[#16B8AA] text-white shadow-md ring-4 ring-[#16B8AA]/15' : inRange ? 'rounded-none bg-[#CCFBF1] text-[#13322E]' : isBlocked ? 'cursor-not-allowed bg-amber-100 text-amber-800 line-through' : disabled ? 'cursor-not-allowed text-slate-300 line-through' : 'text-[#13322E] hover:bg-[#F0FDFA] hover:text-[#0F766E]'}`} title={isBlocked ? 'No disponible' : undefined}>{day}</button>;
   })}</div></div>;
 }
 

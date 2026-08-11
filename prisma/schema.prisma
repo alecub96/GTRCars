@@ -462,6 +462,7 @@ model Review {
   author        User     @relation("AuthorReviews", fields: [authorId], references: [id])
   subjectId     String
   subject       User     @relation("SubjectReviews", fields: [subjectId], references: [id])
+  subjectRole    String   @default("OWNER")
   
   rating        Int
   cleanliness   Int      @default(5)

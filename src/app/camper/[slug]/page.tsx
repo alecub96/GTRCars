@@ -31,6 +31,7 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
       photos: { orderBy: { orderIndex: 'asc' } },
       features: true,
       extras: { include: { extra: true } },
+      pricingRules: { orderBy: { startDate: 'asc' } },
       owner: { select: { id: true, firstName: true, lastName: true, avatarUrl: true, verification: true, createdAt: true } },
       reviews: { include: { author: { select: { firstName: true, avatarUrl: true } } } },
     },
@@ -218,6 +219,7 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
                 bookingType: vehicle.bookingType,
                 minDays: vehicle.minDays,
                 maxDays: vehicle.maxDays,
+                pricingRules: vehicle.pricingRules,
                 extras: vehicle.extras as any,
               }}
             />}

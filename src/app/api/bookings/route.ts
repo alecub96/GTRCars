@@ -8,7 +8,7 @@ export async function GET() {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: 'Debes iniciar sesión' }, { status: 401 });
   const where = user.role === 'OWNER' ? { ownerId: user.id } : { travelerId: user.id };
-  const bookings = await prisma.booking.findMany({ where, include: { vehicle: { include: { photos: { take: 1 } } }, traveler: { select: { firstName: true, lastName: true } }, owner: { select: { firstName: true, lastName: true } } }, orderBy: { createdAt: 'desc' } });
+  const bookings = await prisma.booking.findMany({ where, include: { vehicle: { include: { photos: { take: 1 } } }, traveler: { select: { firstName: true, lastName: true } }, owner: { select: { firstName: true, lastName: true } }, conversations: { select: { id: true }, take: 1 } }, orderBy: { createdAt: 'desc' } });
   return NextResponse.json({ success: true, bookings });
 }
 
@@ -31,6 +31,7 @@ export async function POST(request: Request) {
       include: {
         extras: { include: { extra: true } },
         availabilityBlocks: true,
+        pricingRules: true,
         owner: { select: { email: true, firstName: true } },
       },
     });
@@ -79,6 +80,7 @@ export async function POST(request: Request) {
       selectedExtras: chosenExtras,
       cleaningFee: vehicle.cleaningFee,
       ownershipType: vehicle.ownershipType as 'PLATFORM' | 'THIRD_PARTY',
+      pricingRules: vehicle.pricingRules,
     });
 
     // Código aleatorio único de reserva

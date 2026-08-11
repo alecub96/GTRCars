@@ -44,7 +44,7 @@ export default function Navbar() {
           </Link>
           {role === 'OWNER' && (
             <Link href="/propietario" className="hover:text-[#16B8AA] transition-colors">
-              Propietarios
+              Panel de propietario
             </Link>
           )}
           {role === 'ADMIN' && (
