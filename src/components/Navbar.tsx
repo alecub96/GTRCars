@@ -34,7 +34,7 @@ export default function Navbar() {
 
         {/* ENLACES CENTRALES */}
         <div className="hidden md:flex items-center space-x-8 text-xs font-black uppercase tracking-wider text-[#13322E]">
-          {(role === 'TRAVELER' || role === 'ANONYMOUS' || role === null) && (
+          {(role === 'TRAVELER' || role === 'ANONYMOUS') && (
             <Link href="/buscar" className="hover:text-[#16B8AA] transition-colors">
               Campers
             </Link>
@@ -64,7 +64,7 @@ export default function Navbar() {
           <button onClick={() => setMobileOpen(!mobileOpen)} aria-label="Abrir navegación" className="rounded-full border border-[#E9E1D2] p-2 text-[#13322E] md:hidden">{mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}</button>
         </div>
       </nav>
-      {mobileOpen && <div className="absolute left-0 right-0 z-50 border-b border-[#E9E1D2] bg-white p-4 shadow-xl md:hidden"><div className="grid gap-2 text-sm font-bold">{(role === 'TRAVELER' || role === 'ANONYMOUS' || role === null) && <Link onClick={() => setMobileOpen(false)} href="/buscar" className="rounded-xl p-3 hover:bg-[#F7F6F2]">Buscar campers</Link>}{role === 'OWNER' && <Link onClick={() => setMobileOpen(false)} href="/propietario" className="rounded-xl p-3 hover:bg-[#F7F6F2]">Panel de propietario</Link>}{role === 'ADMIN' && <Link onClick={() => setMobileOpen(false)} href="/admin" className="rounded-xl p-3 hover:bg-[#F7F6F2]">Administración</Link>}<Link onClick={() => setMobileOpen(false)} href="/guias" className="rounded-xl p-3 hover:bg-[#F7F6F2]">Blog y guías</Link><Link onClick={() => setMobileOpen(false)} href="/seguridad" className="rounded-xl p-3 hover:bg-[#F7F6F2]">Seguridad y seguros</Link>{role && role !== 'ANONYMOUS' && <Link onClick={() => setMobileOpen(false)} href="/soporte" className="rounded-xl p-3 hover:bg-[#F7F6F2]">Contactar con soporte</Link>}</div></div>}
+      {mobileOpen && <div className="absolute left-0 right-0 z-50 border-b border-[#E9E1D2] bg-white p-4 shadow-xl md:hidden"><div className="grid gap-2 text-sm font-bold">{(role === 'TRAVELER' || role === 'ANONYMOUS') && <Link onClick={() => setMobileOpen(false)} href="/buscar" className="rounded-xl p-3 hover:bg-[#F7F6F2]">Buscar campers</Link>}{role === 'OWNER' && <Link onClick={() => setMobileOpen(false)} href="/propietario" className="rounded-xl p-3 hover:bg-[#F7F6F2]">Panel de propietario</Link>}{role === 'ADMIN' && <Link onClick={() => setMobileOpen(false)} href="/admin" className="rounded-xl p-3 hover:bg-[#F7F6F2]">Administración</Link>}<Link onClick={() => setMobileOpen(false)} href="/guias" className="rounded-xl p-3 hover:bg-[#F7F6F2]">Blog y guías</Link><Link onClick={() => setMobileOpen(false)} href="/seguridad" className="rounded-xl p-3 hover:bg-[#F7F6F2]">Seguridad y seguros</Link>{role && role !== 'ANONYMOUS' && <Link onClick={() => setMobileOpen(false)} href="/soporte" className="rounded-xl p-3 hover:bg-[#F7F6F2]">Contactar con soporte</Link>}</div></div>}
       {role && role !== 'ANONYMOUS' && <OnboardingTour role={role} />}
     </header>
   );

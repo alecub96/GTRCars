@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import MainSearchWidget from '@/components/MainSearchWidget';
@@ -26,6 +26,14 @@ interface HeroSectionProps {
 
 export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
   const [selectedIsland, setSelectedIsland] = useState<string>('Gran Canaria');
+  const [role, setRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch('/api/auth/me')
+      .then((response) => response.json())
+      .then((data) => setRole(data.user?.role || 'ANONYMOUS'))
+      .catch(() => setRole('ANONYMOUS'));
+  }, []);
 
   const currentHeroImage = ISLAND_HERO_IMAGES[selectedIsland] || ISLAND_HERO_IMAGES['Gran Canaria'];
 
@@ -34,7 +42,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
       <Navbar />
 
       {/* 1. HERO CON CAMBIO DINÁMICO DE IMAGEN DE FONDO SEGÚN LA ISLA */}
-      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden px-4 py-16 transition-all duration-700">
+      <section className="relative z-20 min-h-[85vh] flex items-center justify-center overflow-visible px-4 py-16 transition-all duration-700">
         <div className="absolute inset-0 z-0">
           <Image
             key={selectedIsland}
@@ -62,10 +70,17 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
             Libertad absoluta para despertar frente al Atlántico en <strong className="font-extrabold text-white">{selectedIsland}</strong>.
           </p>
 
-          <MainSearchWidget
-            selectedIsland={selectedIsland}
-            onIslandChange={(newIsland) => setSelectedIsland(newIsland)}
-          />
+          {role === 'OWNER' ? (
+            <div className="mx-auto flex max-w-xl flex-col items-center gap-4 rounded-3xl border border-white/30 bg-[#13322E]/80 p-6 text-center text-white shadow-2xl backdrop-blur-md">
+              <p className="text-sm font-medium text-white/85">Estás en modo propietario. Gestiona tu flota y tus reservas desde tu panel.</p>
+              <Link href="/propietario" className="rounded-full bg-[#16B8AA] px-6 py-3 text-xs font-black uppercase tracking-widest text-white transition hover:bg-[#0F766E]">Ir al panel de propietario</Link>
+            </div>
+          ) : (
+            <MainSearchWidget
+              selectedIsland={selectedIsland}
+              onIslandChange={(newIsland) => setSelectedIsland(newIsland)}
+            />
+          )}
         </div>
       </section>
 
@@ -76,13 +91,13 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
             <span className="text-[11px] font-black uppercase tracking-widest text-[#D97706]">VEHÍCULOS VERIFICADOS</span>
             <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#13322E] mt-1">Campers y Autocaravanas Destacadas</h2>
           </div>
-          <Link
+          {role !== 'OWNER' && <Link
             href="/buscar"
             className="hidden sm:flex items-center space-x-2 text-xs font-black uppercase tracking-widest text-[#16B8AA] hover:text-[#0F766E] transition-colors"
           >
             <span>Ver todas las campers</span>
             <ChevronRight className="w-4 h-4" />
-          </Link>
+          </Link>}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
