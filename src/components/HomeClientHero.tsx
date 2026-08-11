@@ -260,12 +260,12 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
           <div>
             <h4 className="text-xs font-black uppercase tracking-widest text-[#16B8AA] mb-4">Contacto</h4>
             <p className="text-xs text-white/70 font-medium mb-2">Atención 24/7 en Canarias</p>
-            <p className="text-sm font-serif font-bold text-white">soporte@nomadcanarias.com</p>
+            <p className="text-sm font-serif font-bold text-white">contacto@vaneando.com</p>
           </div>
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 pt-8 border-t border-white/10 text-center text-xs text-white/40 font-medium">
-          © 2026 Nomad Canarias. Todos los derechos reservados.
+          © 2026 Vaneando. Todos los derechos reservados.
         </div>
       </footer>
     </div>

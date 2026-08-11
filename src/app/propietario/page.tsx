@@ -118,9 +118,9 @@ export default function OwnerDashboardPage() {
           </div>
         )}
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#E9E1D2] bg-white p-5">
-          <div><strong className="block text-sm">Cobra tus reservas de forma segura</strong><span className="text-xs text-[#6B726E]">Configura tu cuenta Stripe Connect para recibir liquidaciones.</span></div>
-          <button onClick={handleStripeConnect} className="rounded-full bg-[#13322E] px-5 py-3 text-xs font-bold uppercase tracking-wider text-white">Configurar cobros</button>
-          {stripeMessage && <div className="w-full rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs font-bold text-amber-800"><p>{stripeMessage}</p>{stripeSetupUrl && <a href={stripeSetupUrl} target="_blank" rel="noreferrer" className="mt-3 inline-flex rounded-full bg-[#13322E] px-4 py-2 text-white">Completar perfil de Stripe Connect</a>}</div>}
+          <div><strong className="block text-sm">Recibe tus reservas directamente en tu banco</strong><span className="text-xs text-[#6B726E]">Introduce tu IBAN en el proceso seguro de Stripe. No necesitas abrir ni gestionar una cuenta Stripe aparte.</span></div>
+          <button onClick={handleStripeConnect} className="rounded-full bg-[#13322E] px-5 py-3 text-xs font-bold uppercase tracking-wider text-white">Configurar cuenta bancaria</button>
+          {stripeMessage && <div className="w-full rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs font-bold text-amber-800"><p>{stripeMessage}</p>{stripeSetupUrl && <a href={stripeSetupUrl} target="_blank" rel="noreferrer" className="mt-3 inline-flex rounded-full bg-[#13322E] px-4 py-2 text-white">Completar configuración de cobros</a>}</div>}
         </div>
 
         {/* TARJETA INFORMATIVA PLAN VIP DE 2,99€/MES */}
