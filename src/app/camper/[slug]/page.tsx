@@ -15,7 +15,7 @@ interface CamperDetailPageProps {
 
 export async function generateMetadata({ params }: CamperDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const vehicle = await prisma.vehicle.findUnique({ where: { slug }, select: { title: true, description: true, island: true, municipality: true, status: true, photos: { take: 1, orderBy: { orderIndex: 'asc' } } } });
+  const vehicle = await prisma.vehicle.findUnique({ where: { slug }, select: { title: true, description: true, island: true, municipality: true, status: true, photos: { take: 1, orderBy: { orderIndex: 'asc' } } } }).catch(() => null);
   if (!vehicle) return {};
   const description = `${vehicle.description.slice(0, 125)} Alquiler en ${vehicle.municipality}, ${vehicle.island}.`;
   return { title: `${vehicle.title} en ${vehicle.island}`, description, alternates: { canonical: `/camper/${slug}` }, robots: vehicle.status === 'ACTIVE' ? { index: true, follow: true } : { index: false, follow: false }, openGraph: { title: vehicle.title, description, url: `/camper/${slug}`, images: vehicle.photos[0]?.url ? [vehicle.photos[0].url] : [] } };
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: CamperDetailPageProps): Promi
 
 export default async function CamperDetailPage({ params }: CamperDetailPageProps) {
   const { slug } = await params;
-  const currentUser = await getCurrentUser();
+  const currentUser = await getCurrentUser().catch(() => null);
 
   const vehicle = await prisma.vehicle.findUnique({
     where: { slug },
@@ -35,7 +35,7 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
       owner: { select: { id: true, firstName: true, lastName: true, avatarUrl: true, verification: true, createdAt: true } },
       reviews: { include: { author: { select: { firstName: true, avatarUrl: true } } } },
     },
-  });
+  }).catch(() => null);
 
   if (!vehicle || (vehicle.status !== 'ACTIVE' && currentUser?.role !== 'ADMIN' && currentUser?.id !== vehicle.owner.id)) {
     notFound();

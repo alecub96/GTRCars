@@ -47,7 +47,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
             key={selectedIsland}
             src={currentHeroImage}
             alt={`Camper viajando por ${selectedIsland}`}
-            className="absolute inset-0 h-full w-full object-contain object-center scale-[0.78] mix-blend-multiply brightness-[0.82] transition-transform duration-1000"
+            className="absolute inset-0 h-full w-full scale-[0.78] object-contain object-center brightness-[0.82] transition-transform duration-1000"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#F7F6F2] via-black/20 to-black/50" />
         </div>

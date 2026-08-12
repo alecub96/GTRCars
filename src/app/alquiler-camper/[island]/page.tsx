@@ -2,10 +2,9 @@ import React from 'react';
 import Navbar from '@/components/Navbar';
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { MapPin, ChevronRight, Star, Compass } from 'lucide-react';
 import type { Metadata } from 'next';
 import VehicleViewTracker from '@/components/VehicleViewTracker';
+import { CANARY_ISLANDS } from '@/lib/pricing';
 
 export async function generateMetadata({ params }: SeoIslandPageProps): Promise<Metadata> {
   const { island } = await params;
@@ -19,21 +18,21 @@ interface SeoIslandPageProps {
 
 export default async function SeoIslandPage({ params }: SeoIslandPageProps) {
   const { island } = await params;
+  const fallbackName = CANARY_ISLANDS.find((candidate) => candidate.id === island)?.name || island.split('-').map((part) => part[0]?.toUpperCase() + part.slice(1)).join(' ');
+  let locationData: Awaited<ReturnType<typeof prisma.seoLocation.findUnique>> = null;
+  let vehicles: Awaited<ReturnType<typeof prisma.vehicle.findMany>> = [];
+  let databaseUnavailable = false;
 
-  const locationData = await prisma.seoLocation.findUnique({
-    where: { slug: island },
-  });
-
-  const vehicles = await prisma.vehicle.findMany({
-    where: {
-      status: 'ACTIVE',
-      island: locationData?.island || island,
-    },
-    include: {
-      photos: { orderBy: { orderIndex: 'asc' } },
-      reviews: { select: { rating: true } },
-    },
-  });
+  try {
+    locationData = await prisma.seoLocation.findUnique({ where: { slug: island } });
+    vehicles = await prisma.vehicle.findMany({
+      where: { status: 'ACTIVE', island: locationData?.island || fallbackName },
+      include: { photos: { orderBy: { orderIndex: 'asc' } }, reviews: { select: { rating: true } } },
+    });
+  } catch (error) {
+    databaseUnavailable = true;
+    console.error('Island landing data unavailable:', error);
+  }
 
   const faqs = locationData?.faq ? JSON.parse(locationData.faq) : [];
   const jsonLd = { '@context': 'https://schema.org', '@type': 'ItemList', name: `Campers en ${locationData?.name || island}`, numberOfItems: vehicles.length, itemListElement: vehicles.map((vehicle, index) => ({ '@type': 'ListItem', position: index + 1, url: `https://vaneando.com/camper/${vehicle.slug}`, name: vehicle.title })) };
@@ -53,7 +52,7 @@ export default async function SeoIslandPage({ params }: SeoIslandPageProps) {
             Alquiler de Campers en {locationData?.name || island}
           </h1>
           <p className="text-sm sm:text-base text-white/80 max-w-2xl mx-auto font-light leading-relaxed">
-            {locationData?.description || `Descubre los mejores rincones y rutas camper de ${island} con máxima libertad.`}
+            {locationData?.description || `Descubre los mejores rincones y rutas camper de ${fallbackName} con máxima libertad.`}
           </p>
         </div>
       </section>
@@ -61,8 +60,10 @@ export default async function SeoIslandPage({ params }: SeoIslandPageProps) {
       {/* CAMPERS EN ESTA ISLA */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <h2 className="font-serif text-3xl font-normal mb-8">
-          Campers disponibles en {locationData?.name || island} ({vehicles.length})
+          Campers disponibles en {locationData?.name || fallbackName} ({vehicles.length})
         </h2>
+
+        {databaseUnavailable && <div className="mb-8 rounded-3xl border border-[#E9E1D2] bg-white p-8 text-center"><h3 className="font-serif text-2xl">Estamos actualizando la disponibilidad</h3><p className="mt-2 text-sm text-[#6B726E]">La guía sigue disponible, pero no podemos mostrar vehículos en este momento. Inténtalo de nuevo en unos minutos.</p></div>}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {vehicles.map((v: any) => (
@@ -96,7 +97,7 @@ export default async function SeoIslandPage({ params }: SeoIslandPageProps) {
       {faqs.length > 0 && (
         <section className="bg-[#F3EFEA] py-16 border-t border-[#E9E1D2]">
           <div className="max-w-4xl mx-auto px-4 space-y-6">
-            <h3 className="font-serif text-2xl text-center mb-8">Preguntas Frecuentes en {locationData?.name || island}</h3>
+            <h3 className="font-serif text-2xl text-center mb-8">Preguntas Frecuentes en {locationData?.name || fallbackName}</h3>
             {faqs.map((faq: any, i: number) => (
               <div key={i} className="bg-white p-6 rounded-2xl border border-[#E9E1D2]">
                 <h4 className="font-serif text-lg font-medium text-[#1C2826] mb-2">{faq.q}</h4>
