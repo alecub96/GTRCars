@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
+import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 
 export async function POST(request: Request) {
+ try {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: 'Debes iniciar sesión' }, { status: 401 });
   const body = await request.json();
@@ -19,4 +21,9 @@ export async function POST(request: Request) {
     create: { bookingId: booking.id, vehicleId: booking.vehicleId, authorId: user.id, subjectId: isOwnerReviewingTraveler ? booking.travelerId : booking.ownerId, subjectRole: isOwnerReviewingTraveler ? 'TRAVELER' : 'OWNER', rating, cleanliness: categoryRatings[0], communication: categoryRatings[1], accuracy: categoryRatings[2], condition: categoryRatings[3], comment },
   });
   return NextResponse.json({ success: true, review });
+ } catch (error) {
+   if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
+   console.error('Review creation error:', error);
+   return NextResponse.json({ error: 'No se pudo guardar la valoración' }, { status: 500 });
+ }
 }

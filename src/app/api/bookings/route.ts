@@ -4,6 +4,7 @@ import { getCurrentUser } from '@/lib/auth';
 import { calculatePricing } from '@/lib/pricing';
 import { sendBookingRequestEmail } from '@/lib/email';
 import { Prisma } from '@/generated/prisma/client';
+import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 
 const MAX_BOOKING_ATTEMPTS = 3;
 
@@ -12,11 +13,16 @@ function isSerializationConflict(error: unknown) {
 }
 
 export async function GET() {
-  const user = await getCurrentUser();
-  if (!user) return NextResponse.json({ error: 'Debes iniciar sesión' }, { status: 401 });
-  const where = user.role === 'OWNER' ? { ownerId: user.id } : { travelerId: user.id };
-  const bookings = await prisma.booking.findMany({ where, include: { vehicle: { include: { photos: { take: 1 } } }, traveler: { select: { firstName: true, lastName: true } }, owner: { select: { firstName: true, lastName: true } }, conversations: { select: { id: true }, take: 1 } }, orderBy: { createdAt: 'desc' } });
-  return NextResponse.json({ success: true, bookings });
+  try {
+    const user = await getCurrentUser();
+    if (!user) return NextResponse.json({ error: 'Debes iniciar sesión' }, { status: 401 });
+    const where = user.role === 'OWNER' ? { ownerId: user.id } : { travelerId: user.id };
+    const bookings = await prisma.booking.findMany({ where, include: { vehicle: { include: { photos: { take: 1 } } }, traveler: { select: { firstName: true, lastName: true } }, owner: { select: { firstName: true, lastName: true } }, conversations: { select: { id: true }, take: 1 } }, orderBy: { createdAt: 'desc' } });
+    return NextResponse.json({ success: true, bookings });
+  } catch (error) {
+    if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
+    return NextResponse.json({ error: 'No se pudieron cargar las reservas' }, { status: 500 });
+  }
 }
 
 export async function POST(request: Request) {
@@ -186,6 +192,7 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error('API Booking Creation Error:', error);
+    if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
     return NextResponse.json({ error: 'Error al procesar la reserva' }, { status: 500 });
   }
 }

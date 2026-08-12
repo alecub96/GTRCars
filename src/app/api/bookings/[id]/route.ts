@@ -2,10 +2,12 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
 import { sendBookingStatusEmail } from '@/lib/email';
+import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 
 const cancellable = ['REQUESTED', 'OWNER_ACCEPTED', 'PAYMENT_PENDING'];
 
 export async function GET(_request: Request, context: { params: Promise<{ id: string }> }) {
+ try {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: 'Debes iniciar sesión' }, { status: 401 });
   const { id } = await context.params;
@@ -22,9 +24,14 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
   if (![booking.travelerId, booking.ownerId].includes(user.id) && user.role !== 'ADMIN') return NextResponse.json({ error: 'No autorizado' }, { status: 403 });
   const viewerRole = booking.travelerId === user.id ? 'TRAVELER' : booking.ownerId === user.id ? 'OWNER' : 'ADMIN';
   return NextResponse.json({ success: true, booking, viewerRole });
+ } catch (error) {
+   if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
+   return NextResponse.json({ error: 'No se pudo cargar la reserva' }, { status: 500 });
+ }
 }
 
 export async function PATCH(request: Request, context: { params: Promise<{ id: string }> }) {
+ try {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: 'Debes iniciar sesión' }, { status: 401 });
   const { id } = await context.params;
@@ -73,4 +80,9 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
   const recipient = isTraveler ? booking.owner : booking.traveler;
   sendBookingStatusEmail(recipient.email, recipient.firstName, { code: booking.code, status, vehicle: booking.vehicle.title, reservationId: booking.id }).catch((error) => console.error('Booking status email error:', error));
   return NextResponse.json({ success: true, booking: updated });
+ } catch (error) {
+   if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
+   console.error('Booking update error:', error);
+   return NextResponse.json({ error: 'No se pudo actualizar la reserva' }, { status: 500 });
+ }
 }
