@@ -3,6 +3,13 @@ import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
 import { calculatePricing } from '@/lib/pricing';
 import { sendBookingRequestEmail } from '@/lib/email';
+import { Prisma } from '@/generated/prisma/client';
+
+const MAX_BOOKING_ATTEMPTS = 3;
+
+function isSerializationConflict(error: unknown) {
+  return error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2034';
+}
 
 export async function GET() {
   const user = await getCurrentUser();
@@ -20,7 +27,10 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { vehicleId, startDate, endDate, pickupTime, returnTime, selectedExtraIds = [] } = body;
+    const { vehicleId, startDate, endDate, pickupTime, returnTime } = body;
+    const selectedExtraIds = Array.isArray(body.selectedExtraIds)
+      ? body.selectedExtraIds.filter((id: unknown): id is string => typeof id === 'string')
+      : [];
 
     if (!vehicleId || !startDate || !endDate) {
       return NextResponse.json({ error: 'Parámetros de reserva incompletos' }, { status: 400 });
@@ -54,7 +64,7 @@ export async function POST(request: Request) {
     if (requestedDays < vehicle.minDays || requestedDays > vehicle.maxDays) return NextResponse.json({ error: `Este vehículo admite reservas de ${vehicle.minDays} a ${vehicle.maxDays} días` }, { status: 400 });
 
     // Comprobar Double-Booking con bloques de disponibilidad existentes
-    const isConflict = vehicle.availabilityBlocks.some((block: any) => {
+    const isConflict = vehicle.availabilityBlocks.some((block) => {
       return start < block.endDate && end > block.startDate;
     });
 
@@ -64,8 +74,8 @@ export async function POST(request: Request) {
 
     // Filtrar extras seleccionados válidos
     const chosenExtras = vehicle.extras
-      .filter((ve: any) => selectedExtraIds.includes(ve.extraId) && ve.enabled)
-      .map((ve: any) => ({
+      .filter((ve) => selectedExtraIds.includes(ve.extraId) && ve.enabled)
+      .map((ve) => ({
         id: ve.extra.id,
         name: ve.extra.name,
         price: ve.price,
@@ -83,12 +93,22 @@ export async function POST(request: Request) {
       pricingRules: vehicle.pricingRules,
     });
 
-    // Código aleatorio único de reserva
-    const bookingCode = `NC-${Math.floor(100000 + Math.random() * 900000)}`;
+    let booking = null;
+    for (let attempt = 1; attempt <= MAX_BOOKING_ATTEMPTS; attempt += 1) {
+      try {
+        booking = await prisma.$transaction(async (tx) => {
+          const conflict = await tx.availabilityBlock.findFirst({
+            where: {
+              vehicleId: vehicle.id,
+              startDate: { lt: end },
+              endDate: { gt: start },
+            },
+            select: { id: true },
+          });
+          if (conflict) throw new Error('BOOKING_DATES_CONFLICT');
 
-    // Transacción atómica para evitar solapamientos
-    const booking = await prisma.$transaction(async (tx: any) => {
-      const newBooking = await tx.booking.create({
+          const bookingCode = `NC-${crypto.randomUUID().replaceAll('-', '').slice(0, 8).toUpperCase()}`;
+          const newBooking = await tx.booking.create({
         data: {
           code: bookingCode,
           travelerId: user.id,
@@ -111,34 +131,44 @@ export async function POST(request: Request) {
           status: vehicle.bookingType === 'INSTANT_BOOKING' ? 'OWNER_ACCEPTED' : 'REQUESTED',
           depositStatus: 'PENDING',
           extras: {
-            create: chosenExtras.map((e: any) => ({
-              vehicleExtraId: vehicle.extras.find((ve: any) => ve.extraId === e.id)!.id,
+            create: chosenExtras.map((e) => ({
+              vehicleExtraId: vehicle.extras.find((ve) => ve.extraId === e.id)!.id,
               name: e.name,
               price: e.price,
             })),
           },
         },
-      });
+          });
 
       // Crear bloqueo de calendario automáticamente
-      await tx.availabilityBlock.create({
+          await tx.availabilityBlock.create({
         data: {
           vehicleId: vehicle.id,
           startDate: start,
           endDate: end,
           reason: `BOOKING_${newBooking.code}`,
         },
-      });
+          });
 
-      await tx.conversation.create({
+          await tx.conversation.create({
         data: {
           travelerId: user.id, ownerId: vehicle.ownerId, vehicleId: vehicle.id, bookingId: newBooking.id,
           messages: { create: { senderId: user.id, content: `Solicitud ${newBooking.code}: quiero alquilar esta camper del ${start.toLocaleDateString('es-ES')} al ${end.toLocaleDateString('es-ES')}.` } },
         },
-      });
+          });
 
-      return newBooking;
-    });
+          return newBooking;
+        }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+        break;
+      } catch (error) {
+        if (error instanceof Error && error.message === 'BOOKING_DATES_CONFLICT') {
+          return NextResponse.json({ error: 'Las fechas seleccionadas ya no están disponibles' }, { status: 409 });
+        }
+        if (!isSerializationConflict(error) || attempt === MAX_BOOKING_ATTEMPTS) throw error;
+      }
+    }
+
+    if (!booking) throw new Error('No se pudo confirmar la reserva');
 
     if (booking.status === 'REQUESTED') {
       sendBookingRequestEmail(vehicle.owner.email, vehicle.owner.firstName, { code: booking.code, vehicle: vehicle.title, traveler: `${user.firstName} ${user.lastName}`, start, end }).catch((error) => console.error('Booking request email error:', error));

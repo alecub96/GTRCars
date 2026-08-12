@@ -48,7 +48,7 @@ export default function AdminPage() {
             <ShieldCheck className="w-4 h-4" />
             <span>Cuenta de Recaudación Principal Activa</span>
           </div>
-          <Link href="/mensajes" className="mt-3 md:mt-0 rounded-full bg-[#13322E] px-5 py-3 text-xs font-bold uppercase tracking-wider text-white">Mensajes con usuarios</Link>
+          <Link href="/soporte" className="mt-3 md:mt-0 rounded-full bg-[#13322E] px-5 py-3 text-xs font-bold uppercase tracking-wider text-white">Bandeja de soporte</Link>
         </div>
 
         <section className="mb-8 flex flex-col gap-4 rounded-3xl border border-[#E9E1D2] bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between">

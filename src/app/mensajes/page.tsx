@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Navbar from '@/components/Navbar';
-import { MessageSquare, Send, ShieldAlert, Lock, User, RefreshCw } from 'lucide-react';
+import { MessageSquare, Send, ShieldAlert, Lock } from 'lucide-react';
 
 export default function ChatPage() {
   const [conversations, setConversations] = useState<any[]>([]);
@@ -13,43 +13,26 @@ export default function ChatPage() {
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
 
-  useEffect(() => {
-    const requestedId = new URLSearchParams(window.location.search).get('conversationId');
-    fetchConversations(requestedId);
-  }, []);
-
-  // Actualización automática ligera mientras la conversación está abierta.
-  useEffect(() => {
-    if (!activeConvId) return;
-
-    fetchMessages(activeConvId);
-
-    const interval = setInterval(() => {
-      fetchMessagesSilently(activeConvId);
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [activeConvId]);
-
-  const fetchConversations = async (requestedId?: string | null) => {
+  const fetchConversations = useCallback(async (requestedId?: string | null) => {
     try {
       const res = await fetch('/api/messages');
       const data = await res.json();
       if (data.conversations) {
         setConversations(data.conversations);
-        if (data.conversations.length > 0 && !activeConvId) {
-          const requested = requestedId && data.conversations.some((conversation: any) => conversation.id === requestedId) ? requestedId : data.conversations[0].id;
-          setActiveConvId(requested);
-        }
+        setActiveConvId((current) => current || (
+          requestedId && data.conversations.some((conversation: any) => conversation.id === requestedId)
+            ? requestedId
+            : data.conversations[0]?.id || null
+        ));
       }
     } catch (err) {
       console.error(err);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const fetchMessages = async (convId: string) => {
+  const fetchMessages = useCallback(async (convId: string) => {
     try {
       const res = await fetch(`/api/messages?conversationId=${convId}`);
       const data = await res.json();
@@ -59,9 +42,9 @@ export default function ChatPage() {
     } catch (err) {
       console.error(err);
     }
-  };
+  }, []);
 
-  const fetchMessagesSilently = async (convId: string) => {
+  const fetchMessagesSilently = useCallback(async (convId: string) => {
     try {
       const res = await fetch(`/api/messages?conversationId=${convId}`);
       const data = await res.json();
@@ -71,7 +54,19 @@ export default function ChatPage() {
     } catch (err) {
       // Silencioso sin refrescar UI agresivo
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    const requestedId = new URLSearchParams(window.location.search).get('conversationId');
+    void Promise.resolve().then(() => fetchConversations(requestedId));
+  }, [fetchConversations]);
+
+  useEffect(() => {
+    if (!activeConvId) return;
+    void Promise.resolve().then(() => fetchMessages(activeConvId));
+    const interval = setInterval(() => void fetchMessagesSilently(activeConvId), 5000);
+    return () => clearInterval(interval);
+  }, [activeConvId, fetchMessages, fetchMessagesSilently]);
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();

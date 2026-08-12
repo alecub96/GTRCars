@@ -87,7 +87,7 @@ export async function POST(request: Request) {
       message: 'Usuario destacado activado con éxito por 2,99€/mes.',
     });
   } catch (error: any) {
-    console.error('API VIP Subscription Error:', error);
+    console.error('API Featured Subscription Error:', error);
     return NextResponse.json({ error: error.message || 'Error al activar Usuario destacado' }, { status: 500 });
   }
 }

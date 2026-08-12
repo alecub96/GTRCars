@@ -6,8 +6,10 @@ import Link from 'next/link';
 import { BadgeCheck, Sparkles, Plus, BarChart3, WalletCards } from 'lucide-react';
 import OwnerAvailabilityCalendar from '@/components/OwnerAvailabilityCalendar';
 import OwnerBookingsPanel from '@/components/OwnerBookingsPanel';
+import { useRouter } from 'next/navigation';
 
 export default function OwnerDashboardPage() {
+  const router = useRouter();
   const [vehicles, setVehicles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [featuredLoading, setFeaturedLoading] = useState<string | null>(null);
@@ -20,22 +22,31 @@ export default function OwnerDashboardPage() {
   useEffect(() => {
     fetch('/api/auth/me')
       .then((res) => res.json())
-      .then((data) => {
+      .then(async (data) => {
         const isOwner = data.user?.role === 'OWNER';
         setAuthorized(isOwner);
-        if (!isOwner) window.location.href = data.user ? '/cuenta' : '/';
-      })
-      .catch(() => { setAuthorized(false); window.location.href = '/'; });
+        if (!isOwner) {
+          router.replace(data.user ? '/cuenta' : '/');
+          return;
+        }
 
-    if (authorized === false) return;
-    fetch('/api/vehicles')
-      .then((res) => res.json())
-      .then((data) => {
-        setVehicles(data.vehicles || []);
+        const [vehiclesResponse, bookingsResponse] = await Promise.all([
+          fetch('/api/vehicles'),
+          fetch('/api/bookings'),
+        ]);
+        const [vehiclesData, bookingsData] = await Promise.all([
+          vehiclesResponse.json(),
+          bookingsResponse.json(),
+        ]);
+        setVehicles(vehiclesData.vehicles || []);
+        setBookings(bookingsData.bookings || []);
         setLoading(false);
+      })
+      .catch(() => {
+        setAuthorized(false);
+        router.replace('/');
       });
-    fetch('/api/bookings').then((res) => res.json()).then((data) => setBookings(data.bookings || []));
-  }, [authorized]);
+  }, [router]);
 
   if (authorized !== true) {
     return <div className="min-h-screen bg-[#F7F6F2]" />;
@@ -47,7 +58,7 @@ export default function OwnerDashboardPage() {
     setMsg('');
 
     try {
-      const res = await fetch('/api/vip/subscribe', {
+      const res = await fetch('/api/featured/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ vehicleId }),
@@ -57,7 +68,7 @@ export default function OwnerDashboardPage() {
       if (!res.ok) throw new Error(data.error || 'Error al activar Usuario destacado');
 
       if (data.url) {
-        window.location.href = data.url;
+        window.open(data.url, '_self');
       } else {
         setMsg('✨ ¡Listo! Tu suscripción de Usuario destacado está activa por 2,99€/mes.');
         // Actualizar estado local
@@ -75,7 +86,7 @@ export default function OwnerDashboardPage() {
     setStripeSetupUrl('');
     const response = await fetch('/api/stripe/connect', { method: 'POST' });
     const data = await response.json();
-    if (data.url) window.location.href = data.url;
+    if (data.url) window.open(data.url, '_self');
     else {
       setStripeMessage(data.error || 'No se pudo iniciar la configuración de cobros');
       if (data.setupRequired && data.dashboardUrl) setStripeSetupUrl(data.dashboardUrl);

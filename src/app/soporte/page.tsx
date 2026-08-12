@@ -28,12 +28,12 @@ export default function SupportPage() {
 
   useEffect(() => {
     fetch('/api/auth/me').then((response) => response.json()).then((data) => setCurrentUser(data.user));
-    loadConversations();
+    void Promise.resolve().then(loadConversations);
   }, [loadConversations]);
 
   useEffect(() => {
-    if (!activeId) { setMessages([]); return; }
-    loadMessages(activeId);
+    if (!activeId) return;
+    void Promise.resolve().then(() => loadMessages(activeId));
     const interval = setInterval(() => loadMessages(activeId), 3000);
     return () => clearInterval(interval);
   }, [activeId, loadMessages]);

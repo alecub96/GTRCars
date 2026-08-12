@@ -47,6 +47,8 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
             key={selectedIsland}
             src={currentHeroImage}
             alt={`Camper viajando por ${selectedIsland}`}
+            decoding="async"
+            fetchPriority="high"
             className="absolute inset-0 h-full w-full scale-[0.78] object-contain object-center brightness-[0.82] transition-transform duration-1000"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#F7F6F2] via-black/20 to-black/50" />
@@ -175,6 +177,8 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                 <img
                   src={ISLAND_HERO_IMAGES[isla.name] || ISLAND_HERO_IMAGES['Gran Canaria']}
                   alt={`Alquiler camper en ${isla.name}`}
+                  loading="lazy"
+                  decoding="async"
                   className="h-full w-full object-contain p-4 sm:p-5 transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
@@ -215,6 +219,8 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
             <img
               src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800"
               alt="Propietario de camper entregando llaves"
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover"
             />
           </div>

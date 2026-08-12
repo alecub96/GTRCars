@@ -18,7 +18,16 @@ export default function BookingCheckoutClient() {
     const data = await response.json();
     if (response.ok) setBooking(data.booking); else setError(data.error || 'No se pudo cargar la reserva');
   };
-  useEffect(() => { load(); }, [id]);
+  useEffect(() => {
+    let active = true;
+    void fetch(`/api/bookings/${id}`).then(async (response) => {
+      const data = await response.json();
+      if (!active) return;
+      if (response.ok) setBooking(data.booking);
+      else setError(data.error || 'No se pudo cargar la reserva');
+    });
+    return () => { active = false; };
+  }, [id]);
 
   async function sign() {
     setLoading(true); setError('');
