@@ -2,12 +2,17 @@ import { createHash } from 'node:crypto';
 import bcrypt from 'bcryptjs';
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 export async function POST(request: Request) {
   try {
+    const rateLimit = checkRateLimit(request, 'password-reset-confirm', 10, 30 * 60 * 1000);
+    if (!rateLimit.allowed) {
+      return NextResponse.json({ error: 'Demasiados intentos. Solicita un enlace nuevo más tarde.' }, { status: 429, headers: { 'Retry-After': String(rateLimit.retryAfter) } });
+    }
     const { token, password } = await request.json();
 
-    if (typeof token !== 'string' || typeof password !== 'string' || password.length < 8) {
+    if (typeof token !== 'string' || token.length !== 64 || typeof password !== 'string' || password.length < 8 || password.length > 128) {
       return NextResponse.json({ error: 'El enlace o la contraseña no son válidos' }, { status: 400 });
     }
 

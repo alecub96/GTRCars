@@ -5,7 +5,7 @@ export async function GET() {
   try {
     const user = await getCurrentUser();
     if (!user) {
-      return NextResponse.json({ user: null });
+      return NextResponse.json({ user: null }, { headers: { 'Cache-Control': 'no-store' } });
     }
 
     return NextResponse.json({
@@ -17,8 +17,8 @@ export async function GET() {
         role: user.role,
         avatarUrl: user.avatarUrl,
       },
-    });
+    }, { headers: { 'Cache-Control': 'no-store' } });
   } catch (error) {
-    return NextResponse.json({ user: null });
+    return NextResponse.json({ user: null }, { headers: { 'Cache-Control': 'no-store' } });
   }
 }

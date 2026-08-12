@@ -2,15 +2,20 @@ import { createHash, randomBytes } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { sendPasswordResetEmail } from '@/lib/email';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 const genericMessage = 'Si existe una cuenta con ese correo, recibirás un enlace para restablecer la contraseña.';
 
 export async function POST(request: Request) {
   try {
+    const rateLimit = checkRateLimit(request, 'password-reset', 5, 30 * 60 * 1000);
+    if (!rateLimit.allowed) {
+      return NextResponse.json({ success: true, message: genericMessage }, { headers: { 'Retry-After': String(rateLimit.retryAfter), 'Cache-Control': 'no-store' } });
+    }
     const { email } = await request.json();
     const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
 
-    if (!normalizedEmail) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
       return NextResponse.json({ error: 'Introduce un correo electrónico válido' }, { status: 400 });
     }
 
@@ -33,7 +38,7 @@ export async function POST(request: Request) {
       });
     }
 
-    return NextResponse.json({ success: true, message: genericMessage });
+    return NextResponse.json({ success: true, message: genericMessage }, { headers: { 'Cache-Control': 'no-store' } });
   } catch (error) {
     console.error('Password Reset Request Error:', error);
     return NextResponse.json({ error: 'No se pudo enviar el correo. Inténtalo de nuevo más tarde.' }, { status: 500 });
