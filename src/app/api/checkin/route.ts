@@ -2,18 +2,24 @@ import { NextResponse } from 'next/server';
 import { getCurrentUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { saveUpload, UploadConfigurationError } from '@/lib/uploads';
+import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 
 const LEVELS = new Set(['FULL', '3/4', '1/2', '1/4', 'EMPTY']);
 const CLEANLINESS = new Set(['EXCELLENT', 'GOOD', 'FAIR']);
 
 export async function GET(request: Request) {
-  const user = await getCurrentUser();
-  if (!user) return NextResponse.json({ error: 'Debes iniciar sesión' }, { status: 401 });
-  const bookingId = new URL(request.url).searchParams.get('bookingId');
-  if (!bookingId) return NextResponse.json({ error: 'Reserva requerida' }, { status: 400 });
-  const booking = await prisma.booking.findUnique({ where: { id: bookingId }, select: { travelerId: true, ownerId: true, code: true, vehicle: { select: { title: true } }, checkIn: { include: { photos: true } } } });
-  if (!booking || (![booking.travelerId, booking.ownerId].includes(user.id) && user.role !== 'ADMIN')) return NextResponse.json({ error: 'Reserva no encontrada' }, { status: 404 });
-  return NextResponse.json({ success: true, booking: { code: booking.code, vehicle: booking.vehicle.title }, checkIn: booking.checkIn });
+  try {
+    const user = await getCurrentUser();
+    if (!user) return NextResponse.json({ error: 'Debes iniciar sesión' }, { status: 401 });
+    const bookingId = new URL(request.url).searchParams.get('bookingId');
+    if (!bookingId) return NextResponse.json({ error: 'Reserva requerida' }, { status: 400 });
+    const booking = await prisma.booking.findUnique({ where: { id: bookingId }, select: { travelerId: true, ownerId: true, code: true, vehicle: { select: { title: true } }, checkIn: { include: { photos: true } } } });
+    if (!booking || (![booking.travelerId, booking.ownerId].includes(user.id) && user.role !== 'ADMIN')) return NextResponse.json({ error: 'Reserva no encontrada' }, { status: 404 });
+    return NextResponse.json({ success: true, booking: { code: booking.code, vehicle: booking.vehicle.title, canSubmit: user.id === booking.ownerId }, checkIn: booking.checkIn });
+  } catch (error) {
+    if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
+    return NextResponse.json({ error: 'No se pudo cargar el acta de entrega' }, { status: 500 });
+  }
 }
 
 export async function POST(request: Request) {
@@ -23,7 +29,7 @@ export async function POST(request: Request) {
     const form = await request.formData();
     const bookingId = String(form.get('bookingId') || '');
     const booking = await prisma.booking.findUnique({ where: { id: bookingId }, select: { travelerId: true, ownerId: true, status: true, checkIn: { select: { id: true } } } });
-    if (!booking || ![booking.travelerId, booking.ownerId].includes(user.id)) return NextResponse.json({ error: 'No tienes permiso sobre esta reserva' }, { status: 403 });
+    if (!booking || booking.ownerId !== user.id) return NextResponse.json({ error: 'El acta de entrega debe registrarla el propietario' }, { status: 403 });
     if (!['CONFIRMED', 'CHECKIN_PENDING'].includes(booking.status) || booking.checkIn) return NextResponse.json({ error: 'El acta de entrega no está disponible o ya fue registrada' }, { status: 409 });
 
     const odometer = Number(form.get('odometer'));
@@ -46,6 +52,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Check-in error:', error);
     if (error instanceof UploadConfigurationError) return NextResponse.json({ error: 'El almacenamiento seguro no está configurado' }, { status: 503 });
+    if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
     return NextResponse.json({ error: 'No se pudo registrar el acta de entrega' }, { status: 500 });
   }
 }
