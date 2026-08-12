@@ -7,7 +7,7 @@ import { BLOG_ARTICLES } from '@/lib/blog';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Blog camper en Canarias: rutas y consejos | vaneando.',
+  title: 'Blog camper en Canarias: rutas y consejos',
   description: 'Guías para viajar en camper por Canarias y recursos para propietarios que quieren alquilar su vehículo con seguridad y rentabilidad.',
   alternates: { canonical: 'https://vaneando.com/guias' },
 };
