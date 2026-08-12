@@ -19,8 +19,6 @@ const ISLAND_HERO_IMAGES: Record<string, string> = {
   'El Hierro': '/Islas/el%20hierro.png',
   'La Graciosa': '/Islas/la%20graciosa.png',
 };
-const ISLAND_ASSET_VERSION = 'transparent-v2';
-
 interface HeroSectionProps {
   initialVehicles: any[];
 }
@@ -45,14 +43,11 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
       {/* 1. HERO CON CAMBIO DINÁMICO DE IMAGEN DE FONDO SEGÚN LA ISLA */}
       <section className="relative z-20 min-h-[85vh] flex items-center justify-center overflow-visible px-4 py-16 transition-all duration-700">
         <div className="absolute inset-0 z-0">
-          <Image
+          <img
             key={selectedIsland}
-            src={`${currentHeroImage}?v=${ISLAND_ASSET_VERSION}`}
+            src={currentHeroImage}
             alt={`Camper viajando por ${selectedIsland}`}
-            fill
-            priority
-            sizes="100vw"
-            className="w-full h-full object-contain object-center scale-[0.72] mix-blend-multiply filter brightness-[0.82] transition-transform duration-1000"
+            className="absolute inset-0 h-full w-full object-contain object-center scale-[0.78] mix-blend-multiply brightness-[0.82] transition-transform duration-1000"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#F7F6F2] via-black/20 to-black/50" />
         </div>
@@ -178,9 +173,9 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                 }`}
               >
                 <img
-                  src={`${ISLAND_HERO_IMAGES[isla.name] || ISLAND_HERO_IMAGES['Gran Canaria']}?v=${ISLAND_ASSET_VERSION}`}
+                  src={ISLAND_HERO_IMAGES[isla.name] || ISLAND_HERO_IMAGES['Gran Canaria']}
                   alt={`Alquiler camper en ${isla.name}`}
-                  className="h-full w-full object-contain p-12 sm:p-14 transition-transform duration-500 group-hover:scale-105"
+                  className="h-full w-full object-contain p-4 sm:p-5 transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4 text-white">
