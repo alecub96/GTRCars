@@ -2,7 +2,7 @@
 
 Plataforma marketplace en producción especializada en el alquiler de campervans, furgonetas camperizadas y autocaravanas entre particulares y profesionales en **todas las Islas Canarias** (Gran Canaria, Tenerife, Lanzarote, Fuerteventura, La Palma, La Gomera, El Hierro y La Graciosa).
 
-Diseñada con un lenguaje visual inspirador **estilo Alisios Picnic** (tonos tierra, crema, arena, negro suave y azul océano).
+Diseñada con la identidad visual propia de vaneando. (turquesa atlántico, verde profundo, crema y arena).
 
 ## 🚀 Características Principales
 
@@ -26,12 +26,7 @@ Diseñada con un lenguaje visual inspirador **estilo Alisios Picnic** (tonos tie
 ### 2. Variables de Entorno
 Crea un archivo `.env` en la raíz con el siguiente contenido:
 
-```env
-DATABASE_URL="postgresql://USUARIO:CONTRASEÑA@HOST:5432/BASE_DE_DATOS?sslmode=require"
-JWT_SECRET="secret-jwt-key-canarias-2026"
-STRIPE_SECRET_KEY="sk_test_mock_canarias_key"
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_test_mock_canarias_key"
-```
+Usa [`.env.example`](.env.example) como referencia. No guardes credenciales reales en Git y utiliza secretos aleatorios de al menos 32 caracteres para sesiones, documentos y cron.
 
 ### 3. Instalación de Dependencias
 ```bash
@@ -42,7 +37,7 @@ npm install
 Poblar la base de datos con campers y ubicaciones reales en las 8 Islas Canarias:
 
 ```bash
-npx prisma db push
+npm run db:deploy
 npx tsx prisma/seed.ts
 ```
 
@@ -54,12 +49,7 @@ Accede a [http://localhost:3000](http://localhost:3000).
 
 ---
 
-## 🔑 Cuentas Demo de Prueba (Sembradas en el Seed)
-
-- **Administrador:** `admin@canariascampers.es` (Password: `Password123!`)
-- **Propietario Gran Canaria:** `propietario.grancanaria@canariascampers.es` (Password: `Password123!`)
-- **Propietario Tenerife:** `propietario.tenerife@canariascampers.es` (Password: `Password123!`)
-- **Viajero:** `viajero@canariascampers.es` (Password: `Password123!`)
+El seed es exclusivamente local. Las cuentas administrativas de producción se crean mediante el registro normal y se autorizan con `ADMIN_EMAILS`.
 
 ---
 

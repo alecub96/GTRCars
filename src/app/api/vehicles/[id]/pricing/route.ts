@@ -11,8 +11,9 @@ async function ownedVehicle(id: string) {
 
 export async function GET(_: Request, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;
-  const vehicle = await prisma.vehicle.findUnique({ where: { id }, select: { status: true, pricingRules: { orderBy: { startDate: 'asc' } } } });
-  if (!vehicle) return NextResponse.json({ error: 'Vehículo no encontrado' }, { status: 404 });
+  const user = await getCurrentUser();
+  const vehicle = await prisma.vehicle.findUnique({ where: { id }, select: { ownerId: true, status: true, pricingRules: { orderBy: { startDate: 'asc' } } } });
+  if (!vehicle || (vehicle.status !== 'ACTIVE' && vehicle.ownerId !== user?.id)) return NextResponse.json({ error: 'Vehículo no encontrado' }, { status: 404 });
   return NextResponse.json({ success: true, rules: vehicle.pricingRules });
 }
 
@@ -25,7 +26,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
   const start = new Date(body.startDate);
   const end = new Date(body.endDate);
   const pricePerDay = Number(body.pricePerDay);
-  if (!name || Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || start >= end || !Number.isFinite(pricePerDay) || pricePerDay <= 0) return NextResponse.json({ error: 'Completa un periodo y una tarifa válida' }, { status: 400 });
+  if (!name || Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || start >= end || !Number.isFinite(pricePerDay) || pricePerDay < 10 || pricePerDay > 2_000) return NextResponse.json({ error: 'Completa un periodo y una tarifa entre 10 € y 2.000 € al día' }, { status: 400 });
   const count = await prisma.pricingRule.count({ where: { vehicleId: id } });
   if (count >= 5) return NextResponse.json({ error: 'Puedes crear hasta cinco tarifas por camper' }, { status: 400 });
   const overlap = await prisma.pricingRule.findFirst({ where: { vehicleId: id, startDate: { lt: end }, endDate: { gt: start } } });

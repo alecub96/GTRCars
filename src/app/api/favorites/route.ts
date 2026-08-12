@@ -14,6 +14,8 @@ export async function POST(request: Request) {
   if (!user) return NextResponse.json({ error: 'Debes iniciar sesión' }, { status: 401 });
   const { vehicleId } = await request.json();
   if (!vehicleId) return NextResponse.json({ error: 'Vehículo requerido' }, { status: 400 });
+  const vehicle = await prisma.vehicle.findUnique({ where: { id: vehicleId }, select: { status: true } });
+  if (!vehicle || vehicle.status !== 'ACTIVE') return NextResponse.json({ error: 'Vehículo no disponible' }, { status: 404 });
   const favorite = await prisma.favorite.upsert({ where: { userId_vehicleId: { userId: user.id, vehicleId } }, update: {}, create: { userId: user.id, vehicleId } });
   return NextResponse.json({ success: true, favorite });
 }

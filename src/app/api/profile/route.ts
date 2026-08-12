@@ -11,7 +11,7 @@ export async function POST(request: Request) {
   const lastName = String(form.get('lastName') || '').trim();
   const phone = String(form.get('phone') || '').trim();
   const avatar = form.get('avatar');
-  if (firstName.length < 2 || lastName.length < 2) return NextResponse.json({ error: 'Nombre y apellidos son obligatorios' }, { status: 400 });
+  if (firstName.length < 2 || firstName.length > 80 || lastName.length < 2 || lastName.length > 120 || phone.length > 30) return NextResponse.json({ error: 'Revisa el nombre, los apellidos y el teléfono' }, { status: 400 });
   let avatarUrl = user.avatarUrl;
   if (avatar instanceof File && avatar.size > 0) {
     if (avatar.size > 5 * 1024 * 1024 || !['image/jpeg', 'image/png', 'image/webp'].includes(avatar.type)) return NextResponse.json({ error: 'La foto debe ser JPG, PNG o WEBP y pesar menos de 5 MB' }, { status: 400 });

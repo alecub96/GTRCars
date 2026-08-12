@@ -35,15 +35,27 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
   const form = await request.formData();
   const file = form.get('file');
   if (!(file instanceof File)) return NextResponse.json({ error: 'Selecciona un archivo .ics' }, { status: 400 });
-  const content = await file.text();
-  const events = datesFromIcs(content);
-  if (!events.length) return NextResponse.json({ error: 'No encontramos eventos con fechas en ese calendario' }, { status: 422 });
-  let imported = 0;
-  for (const event of events) {
-    const conflict = await prisma.availabilityBlock.findFirst({ where: { vehicleId: id, startDate: { lt: event.end }, endDate: { gt: event.start }, reason: { startsWith: 'BOOKING_' } } });
-    if (conflict) continue;
-    const exists = await prisma.availabilityBlock.findFirst({ where: { vehicleId: id, startDate: event.start, endDate: event.end, reason: { startsWith: 'SYNC_' } } });
-    if (!exists) { await prisma.availabilityBlock.create({ data: { vehicleId: id, startDate: event.start, endDate: event.end, reason: `SYNC_ICS_${event.summary.slice(0, 50)}` } }); imported += 1; }
+  if (file.size > 2 * 1024 * 1024) return NextResponse.json({ error: 'El calendario no puede superar 2 MB' }, { status: 413 });
+  if (!file.name.toLowerCase().endsWith('.ics') && !['text/calendar', 'application/octet-stream'].includes(file.type)) {
+    return NextResponse.json({ error: 'El archivo debe ser un calendario .ics' }, { status: 400 });
   }
+  const content = await file.text();
+  const now = new Date();
+  const horizon = new Date(now); horizon.setFullYear(horizon.getFullYear() + 3);
+  const events = datesFromIcs(content).filter((event) => event.end > now && event.start < horizon).slice(0, 2_000);
+  if (!events.length) return NextResponse.json({ error: 'No encontramos eventos con fechas en ese calendario' }, { status: 422 });
+  const imported = await prisma.$transaction(async (tx) => {
+    let count = 0;
+    for (const event of events) {
+      const conflict = await tx.availabilityBlock.findFirst({ where: { vehicleId: id, startDate: { lt: event.end }, endDate: { gt: event.start }, reason: { startsWith: 'BOOKING_' } } });
+      if (conflict) continue;
+      const exists = await tx.availabilityBlock.findFirst({ where: { vehicleId: id, startDate: event.start, endDate: event.end, reason: { startsWith: 'SYNC_' } } });
+      if (!exists) {
+        await tx.availabilityBlock.create({ data: { vehicleId: id, startDate: event.start, endDate: event.end, reason: `SYNC_ICS_${event.summary.replace(/[\r\n]/g, ' ').slice(0, 50)}` } });
+        count += 1;
+      }
+    }
+    return count;
+  });
   return NextResponse.json({ success: true, imported, total: events.length });
 }
