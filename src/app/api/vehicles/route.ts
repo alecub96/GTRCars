@@ -52,8 +52,8 @@ export async function GET(request: Request) {
 
     // 3. ORDENAR ANUNCIOS ESTÁNDAR POR VALORACIÓN Y CERCANÍA (estrellas y fecha)
     const sortedStandardVehicles = [...standardVehicles].sort((a, b) => {
-      const avgA = a.reviews.length > 0 ? a.reviews.reduce((s, r) => s + r.rating, 0) / a.reviews.length : 5.0;
-      const avgB = b.reviews.length > 0 ? b.reviews.reduce((s, r) => s + r.rating, 0) / b.reviews.length : 5.0;
+      const avgA = a.reviews.length > 0 ? a.reviews.reduce((s, r) => s + r.rating, 0) / a.reviews.length : 0;
+      const avgB = b.reviews.length > 0 ? b.reviews.reduce((s, r) => s + r.rating, 0) / b.reviews.length : 0;
       return avgB - avgA;
     });
 

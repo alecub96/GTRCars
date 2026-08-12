@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma';
 import { CANARY_ISLANDS } from '@/lib/pricing';
 import { Star, MapPin, Filter, SlidersHorizontal, ShieldCheck, ChevronRight } from 'lucide-react';
 import VehicleViewTracker from '@/components/VehicleViewTracker';
+import { getFeaturedAudience } from '@/lib/featured';
 
 interface SearchPageProps {
   searchParams: Promise<{
@@ -29,14 +30,18 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const endDate = params.endDate;
 
   const whereClause: any = { status: 'ACTIVE' };
-  if (selectedIsland) whereClause.island = { equals: selectedIsland, mode: 'insensitive' };
+  if (selectedIsland) whereClause.island = selectedIsland;
   if (passengers) whereClause.passengers = { gte: passengers };
   if (minPrice || maxPrice) {
     whereClause.basePricePerDay = {};
     if (minPrice) whereClause.basePricePerDay.gte = minPrice;
     if (maxPrice) whereClause.basePricePerDay.lte = maxPrice;
   }
-  if (startDate && endDate) whereClause.availabilityBlocks = { none: { startDate: { lt: new Date(endDate) }, endDate: { gt: new Date(startDate) } } };
+  const parsedStartDate = startDate ? new Date(`${startDate}T00:00:00`) : null;
+  const parsedEndDate = endDate ? new Date(`${endDate}T00:00:00`) : null;
+  if (parsedStartDate && parsedEndDate && !Number.isNaN(parsedStartDate.getTime()) && !Number.isNaN(parsedEndDate.getTime()) && parsedStartDate < parsedEndDate) {
+    whereClause.availabilityBlocks = { none: { startDate: { lt: parsedEndDate }, endDate: { gt: parsedStartDate } } };
+  }
 
   let orderBy: any = { createdAt: 'desc' };
   if (sort === 'price_asc') orderBy = { basePricePerDay: 'asc' };
@@ -45,16 +50,23 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   let vehicles: any[] = [];
   let databaseUnavailable = false;
   try {
-    vehicles = await prisma.vehicle.findMany({
+    const databaseVehicles = await prisma.vehicle.findMany({
       where: whereClause,
       select: {
-        id: true, slug: true, title: true, island: true, municipality: true, passengers: true, beds: true,
+        id: true, ownerId: true, slug: true, title: true, island: true, municipality: true, passengers: true, beds: true,
         transmission: true, basePricePerDay: true, description: true,
         photos: { orderBy: { orderIndex: 'asc' } },
         reviews: { select: { rating: true } },
       },
       orderBy,
     });
+    const featured = await getFeaturedAudience();
+    vehicles = databaseVehicles
+      .map((vehicle) => ({
+        ...vehicle,
+        isFeatured: featured.ownerIds.has(vehicle.ownerId) || featured.vehicleIds.has(vehicle.id) || featured.subscriptionOwnerIds.has(vehicle.ownerId),
+      }))
+      .sort((a, b) => Number(b.isFeatured) - Number(a.isFeatured));
   } catch (error) {
     databaseUnavailable = true;
     if (process.env.NODE_ENV !== 'production') {
@@ -171,7 +183,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 const avgRating =
                   v.reviews.length > 0
                     ? v.reviews.reduce((acc: number, r: any) => acc + r.rating, 0) / v.reviews.length
-                    : 5.0;
+                    : 0;
 
                 return (
                   <div
@@ -188,6 +200,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                       <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold">
                         {v.island}
                       </div>
+                      {v.isFeatured && <div className="absolute right-4 top-4 rounded-full bg-[#D97706] px-3 py-1 text-[10px] font-black uppercase tracking-wider text-white shadow">Usuario destacado</div>}
                     </div>
 
                     <div className="md:col-span-2 p-6 flex flex-col justify-between">

@@ -8,6 +8,7 @@ import { getCurrentUser } from '@/lib/auth';
 import VehicleViewTracker from '@/components/VehicleViewTracker';
 import { Star, MapPin, Users, Bed, ShieldCheck, Check, Fuel, Settings2, Compass } from 'lucide-react';
 import type { Metadata } from 'next';
+import { getFeaturedAudience } from '@/lib/featured';
 
 interface CamperDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -44,7 +45,13 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
   const avgRating =
     vehicle.reviews.length > 0
       ? vehicle.reviews.reduce((acc: number, r: any) => acc + r.rating, 0) / vehicle.reviews.length
-      : 5.0;
+      : 0;
+  const featured = await getFeaturedAudience().catch(() => null);
+  const isFeatured = Boolean(featured && (
+    featured.ownerIds.has(vehicle.owner.id) ||
+    featured.vehicleIds.has(vehicle.id) ||
+    featured.subscriptionOwnerIds.has(vehicle.owner.id)
+  ));
   const jsonLd = { '@context': 'https://schema.org', '@type': 'Product', name: vehicle.title, description: vehicle.description, image: vehicle.photos.map((photo) => photo.url), brand: { '@type': 'Brand', name: vehicle.brand }, offers: { '@type': 'Offer', priceCurrency: 'EUR', price: vehicle.basePricePerDay, availability: 'https://schema.org/InStock', url: `https://vaneando.com/camper/${vehicle.slug}` }, aggregateRating: vehicle.reviews.length ? { '@type': 'AggregateRating', ratingValue: avgRating, reviewCount: vehicle.reviews.length } : undefined };
 
   return (
@@ -69,13 +76,11 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
           <div className="flex items-center space-x-4 mt-3 text-xs text-[#4A4643]">
             <div className="flex items-center space-x-1 font-semibold text-[#1C2826]">
               <Star className="w-4 h-4 fill-[#E07A5F] text-[#E07A5F]" />
-              <span>{avgRating.toFixed(1)} ({vehicle.reviews.length} opiniones)</span>
+              <span>{vehicle.reviews.length ? `${avgRating.toFixed(1)} (${vehicle.reviews.length} opiniones)` : 'Nuevo · sin opiniones'}</span>
             </div>
             <span>•</span>
-            <div className="flex items-center space-x-1 text-[#E07A5F]">
-              <ShieldCheck className="w-4 h-4" />
-              <span>Propietario Verificado</span>
-            </div>
+            {vehicle.owner.verification === 'VERIFIED' && <div className="flex items-center space-x-1 text-[#E07A5F]"><ShieldCheck className="w-4 h-4" /><span>Propietario verificado</span></div>}
+            {isFeatured && <div className="flex items-center space-x-1 text-[#D97706]"><ShieldCheck className="w-4 h-4" /><span>Usuario destacado</span></div>}
           </div>
         </div>
 
@@ -159,9 +164,9 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
                 className="w-16 h-16 rounded-full object-cover border-2 border-white"
               />
               <div>
-                <span className="text-xs uppercase tracking-wider font-semibold text-[#E07A5F]">Propietario Anfitrión</span>
+                <span className="text-xs uppercase tracking-wider font-semibold text-[#E07A5F]">Propietario</span>
                 <h4 className="font-serif text-xl font-medium">{vehicle.owner.firstName} {vehicle.owner.lastName}</h4>
-                <p className="text-xs text-[#6B726E] mt-0.5">Propietario verificado en Canarias desde 2024</p>
+                <p className="text-xs text-[#6B726E] mt-0.5">En vaneando. desde {new Date(vehicle.owner.createdAt).getFullYear()}{vehicle.owner.verification === 'VERIFIED' ? ' · identidad verificada' : ''}{isFeatured ? ' · Usuario destacado' : ''}</p>
               </div>
             </div>
 
