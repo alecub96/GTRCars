@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
+import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 
 // REGEX DE BLINDAJE ANTI-BYPASS Y ANTI-FRAUDE
 // 1. Detección de números de teléfono (españoles o internacionales, con espacios, puntos, guiones o texto disimulado "seis doce...")
@@ -113,6 +114,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true, message, conversationId: activeConversationId });
   } catch (error) {
     console.error('API Messaging Error:', error);
+    if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
     return NextResponse.json({ error: 'Error al enviar el mensaje' }, { status: 500 });
   }
 }
@@ -176,6 +178,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ success: true, conversations, requestedConversationId });
   } catch (error) {
     console.error('API Get Messages Error:', error);
+    if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
     return NextResponse.json({ error: 'Error al cargar mensajes' }, { status: 500 });
   }
 }

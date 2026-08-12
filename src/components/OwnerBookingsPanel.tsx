@@ -1,15 +1,248 @@
 'use client';
 
 import Link from 'next/link';
-import { CalendarDays, Check, Clock3, MessageCircle, Star, UserRound, WalletCards, X } from 'lucide-react';
+import {
+  CalendarDays,
+  Check,
+  ClipboardCheck,
+  Clock3,
+  FileSignature,
+  MessageCircle,
+  Star,
+  UserRound,
+  WalletCards,
+  X,
+} from 'lucide-react';
 import { useState } from 'react';
 
-const groups = { requests: ['REQUESTED'], confirmed: ['OWNER_ACCEPTED', 'PAYMENT_PENDING', 'CONFIRMED', 'CHECKIN_PENDING', 'ACTIVE', 'CHECKOUT_PENDING'], completed: ['COMPLETED', 'CANCELLED', 'OWNER_REJECTED', 'REFUNDED'] };
+const groups = {
+  requests: ['REQUESTED'],
+  confirmed: [
+    'OWNER_ACCEPTED',
+    'PAYMENT_PENDING',
+    'CONFIRMED',
+    'CHECKIN_PENDING',
+    'ACTIVE',
+    'CHECKOUT_PENDING',
+    'DISPUTED',
+  ],
+  completed: ['COMPLETED', 'CANCELLED', 'OWNER_REJECTED', 'REFUNDED'],
+} as const;
 
-export default function OwnerBookingsPanel({ initialBookings }: { initialBookings: any[] }) {
-  const [bookings, setBookings] = useState(initialBookings); const [tab, setTab] = useState<keyof typeof groups>('requests'); const [decision, setDecision] = useState<{ id: string; action: 'accept' | 'reject' } | null>(null); const [reviewing, setReviewing] = useState<any>(null); const [rating, setRating] = useState(5); const [comment, setComment] = useState(''); const [error, setError] = useState('');
-  const visible = bookings.filter((booking) => groups[tab].includes(booking.status));
-  async function decide() { if (!decision) return; setError(''); const response = await fetch(`/api/bookings/${decision.id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: decision.action }) }); const data = await response.json(); if (response.ok) { setBookings(bookings.map((booking) => booking.id === decision.id ? { ...booking, status: data.booking.status } : booking)); setDecision(null); } else setError(data.error || 'No se pudo actualizar'); }
-  async function review(event: React.FormEvent) { event.preventDefault(); if (!reviewing) return; const response = await fetch('/api/reviews', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ bookingId: reviewing.id, rating, comment }) }); const data = await response.json(); if (response.ok) setReviewing(null); else setError(data.error || 'No se pudo enviar la valoración'); }
-  return <section className="mb-12 space-y-4"><div><h2 className="font-serif text-3xl font-bold">Reservas</h2><p className="text-sm text-[#6B726E]">Evalúa cada solicitud con contexto antes de tomar una decisión.</p></div><div className="flex gap-2 overflow-x-auto rounded-2xl border border-[#E9E1D2] bg-white p-2">{([['requests','Solicitudes'],['confirmed','Confirmadas'],['completed','Terminadas']] as const).map(([key, label]) => <button type="button" key={key} onClick={() => setTab(key)} className={`rounded-xl px-4 py-2.5 text-xs font-bold ${tab === key ? 'bg-[#13322E] text-white shadow' : 'text-[#6B726E]'}`}>{label}<span className="ml-2 opacity-60">{bookings.filter((booking) => groups[key].includes(booking.status)).length}</span></button>)}</div>{error && <p className="rounded-xl bg-red-50 p-3 text-xs font-bold text-red-700">{error}</p>}{visible.length === 0 ? <div className="rounded-3xl border border-dashed border-[#E9E1D2] bg-white p-8 text-center text-sm text-[#6B726E]">No hay reservas en esta sección.</div> : <div className="grid gap-4">{visible.map((booking) => { const conversationHref = booking.conversations?.[0]?.id ? `/mensajes?conversationId=${booking.conversations[0].id}` : '/mensajes'; return <article key={booking.id} className="rounded-3xl border border-[#E9E1D2] bg-white p-5 shadow-sm"><div className="flex flex-wrap items-start justify-between gap-4"><div><span className="text-[10px] font-black uppercase tracking-wider text-[#16B8AA]">{booking.code}</span><h3 className="font-serif text-xl font-bold">{booking.vehicle.title}</h3><p className="mt-1 flex items-center gap-1 text-xs text-[#6B726E]"><UserRound className="h-3.5 w-3.5" />{booking.traveler.firstName} {booking.traveler.lastName}</p></div><strong className="font-serif text-2xl">{booking.ownerPayout.toFixed(2)} € <small className="block text-right font-sans text-[10px] font-normal text-[#6B726E]">netos estimados</small></strong></div><div className="my-4 grid gap-3 rounded-2xl bg-[#F7F6F2] p-4 sm:grid-cols-3"><span className="text-xs"><CalendarDays className="mb-1 h-4 w-4 text-[#16B8AA]" /><small className="block text-[#6B726E]">Periodo</small><strong>{new Date(booking.pickupDate).toLocaleDateString('es-ES')} → {new Date(booking.returnDate).toLocaleDateString('es-ES')}</strong></span><span className="text-xs"><Clock3 className="mb-1 h-4 w-4 text-[#16B8AA]" /><small className="block text-[#6B726E]">Duración</small><strong>{booking.totalDays} días</strong></span><span className="text-xs"><WalletCards className="mb-1 h-4 w-4 text-[#16B8AA]" /><small className="block text-[#6B726E]">Total viajero</small><strong>{booking.totalAmount.toFixed(2)} €</strong></span></div><div className="flex flex-wrap gap-2"><Link href={conversationHref} className="flex items-center gap-2 rounded-full border border-[#E9E1D2] px-4 py-2.5 text-xs font-bold"><MessageCircle className="h-4 w-4" />Abrir conversación</Link>{booking.status === 'COMPLETED' && <button type="button" onClick={() => setReviewing(booking)} className="flex items-center gap-2 rounded-full border border-[#E9E1D2] px-4 py-2.5 text-xs font-bold"><Star className="h-4 w-4" />Valorar viajero</button>}{booking.status === 'REQUESTED' && <><button type="button" onClick={() => setDecision({ id: booking.id, action: 'accept' })} className="flex items-center gap-2 rounded-full bg-[#16B8AA] px-4 py-2.5 text-xs font-bold text-white"><Check className="h-4 w-4" />Aceptar fechas</button><button type="button" onClick={() => setDecision({ id: booking.id, action: 'reject' })} className="flex items-center gap-2 rounded-full px-4 py-2.5 text-xs font-bold text-red-600"><X className="h-4 w-4" />Rechazar</button></>}</div></article>; })}</div>}{decision && <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-[#13322E]/60 p-4 backdrop-blur-sm"><div className="w-full max-w-md rounded-[32px] bg-white p-7 shadow-2xl"><span className="text-[10px] font-black uppercase tracking-[.2em] text-[#16B8AA]">Confirmar decisión</span><h3 className="mt-2 font-serif text-3xl font-bold">{decision.action === 'accept' ? '¿Aceptar estas fechas?' : '¿Rechazar la solicitud?'}</h3><p className="mt-3 text-sm text-[#6B726E]">El viajero recibirá una notificación del cambio.</p><div className="mt-6 flex gap-2"><button type="button" onClick={decide} className={`rounded-full px-5 py-3 text-xs font-bold text-white ${decision.action === 'accept' ? 'bg-[#16B8AA]' : 'bg-red-600'}`}>Confirmar</button><button type="button" onClick={() => setDecision(null)} className="rounded-full border border-[#E9E1D2] px-5 py-3 text-xs font-bold">Volver</button></div></div></div>}{reviewing && <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-[#13322E]/60 p-4"><form onSubmit={review} className="w-full max-w-md space-y-4 rounded-[32px] bg-white p-7 shadow-2xl"><h3 className="font-serif text-3xl font-bold">Valorar a {reviewing.traveler.firstName}</h3><select value={rating} onChange={(event) => setRating(Number(event.target.value))} className="w-full rounded-xl border border-[#E9E1D2] p-3">{[5, 4, 3, 2, 1].map((value) => <option key={value} value={value}>{value} estrellas</option>)}</select><textarea required value={comment} onChange={(event) => setComment(event.target.value)} placeholder="¿Cómo fue la comunicación y el cuidado del vehículo?" className="min-h-28 w-full rounded-xl border border-[#E9E1D2] p-3 text-sm" /><div className="flex gap-2"><button className="rounded-full bg-[#16B8AA] px-5 py-3 text-xs font-bold text-white">Enviar valoración</button><button type="button" onClick={() => setReviewing(null)} className="rounded-full border border-[#E9E1D2] px-5 py-3 text-xs font-bold">Cancelar</button></div></form></div>}</section>;
+type BookingTab = keyof typeof groups;
+
+type OwnerBooking = {
+  id: string;
+  code: string;
+  status: string;
+  pickupDate: string | Date;
+  returnDate: string | Date;
+  totalDays: number;
+  totalAmount: number;
+  ownerPayout: number;
+  vehicle: { title: string };
+  traveler: { firstName: string; lastName: string };
+  conversations?: Array<{ id: string }>;
+};
+
+const tabs: Array<[BookingTab, string]> = [
+  ['requests', 'Solicitudes'],
+  ['confirmed', 'En curso'],
+  ['completed', 'Terminadas'],
+];
+
+export default function OwnerBookingsPanel({ initialBookings }: { initialBookings: OwnerBooking[] }) {
+  const [bookings, setBookings] = useState(initialBookings);
+  const [tab, setTab] = useState<BookingTab>('requests');
+  const [decision, setDecision] = useState<{ id: string; action: 'accept' | 'reject' } | null>(null);
+  const [reviewing, setReviewing] = useState<OwnerBooking | null>(null);
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState('');
+  const [error, setError] = useState('');
+
+  const visible = bookings.filter((booking) => groups[tab].some((status) => status === booking.status));
+
+  async function decide() {
+    if (!decision) return;
+    setError('');
+    const response = await fetch(`/api/bookings/${decision.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: decision.action }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      setError(data.error || 'No se pudo actualizar la reserva');
+      return;
+    }
+    setBookings((current) => current.map((booking) => (
+      booking.id === decision.id ? { ...booking, status: data.booking.status } : booking
+    )));
+    setDecision(null);
+  }
+
+  async function review(event: React.FormEvent) {
+    event.preventDefault();
+    if (!reviewing) return;
+    setError('');
+    const response = await fetch('/api/reviews', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ bookingId: reviewing.id, rating, comment }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      setError(data.error || 'No se pudo enviar la valoración');
+      return;
+    }
+    setReviewing(null);
+    setComment('');
+    setRating(5);
+  }
+
+  return (
+    <section className="mb-12 space-y-4">
+      <div>
+        <h2 className="font-serif text-3xl font-bold">Reservas</h2>
+        <p className="text-sm text-[#6B726E]">Evalúa solicitudes y completa cada etapa sin salir de tu panel.</p>
+      </div>
+
+      <div className="flex gap-2 overflow-x-auto rounded-2xl border border-[#E9E1D2] bg-white p-2">
+        {tabs.map(([key, label]) => (
+          <button
+            type="button"
+            key={key}
+            onClick={() => setTab(key)}
+            className={`whitespace-nowrap rounded-xl px-4 py-2.5 text-xs font-bold ${tab === key ? 'bg-[#13322E] text-white shadow' : 'text-[#6B726E]'}`}
+          >
+            {label}
+            <span className="ml-2 opacity-60">
+              {bookings.filter((booking) => groups[key].some((status) => status === booking.status)).length}
+            </span>
+          </button>
+        ))}
+      </div>
+
+      {error && <p className="rounded-xl bg-red-50 p-3 text-xs font-bold text-red-700">{error}</p>}
+
+      {visible.length === 0 ? (
+        <div className="rounded-3xl border border-dashed border-[#E9E1D2] bg-white p-8 text-center text-sm text-[#6B726E]">
+          No hay reservas en esta sección.
+        </div>
+      ) : (
+        <div className="grid gap-4">
+          {visible.map((booking) => {
+            const existingConversation = booking.conversations?.[0]?.id;
+            const conversationHref = existingConversation
+              ? `/mensajes?conversationId=${encodeURIComponent(existingConversation)}`
+              : `/mensajes?bookingId=${encodeURIComponent(booking.id)}`;
+            const canOpenReservation = !['REQUESTED', 'OWNER_REJECTED', 'CANCELLED'].includes(booking.status);
+
+            return (
+              <article key={booking.id} className="rounded-3xl border border-[#E9E1D2] bg-white p-5 shadow-sm">
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                  <div>
+                    <span className="text-[10px] font-black uppercase tracking-wider text-[#16B8AA]">{booking.code}</span>
+                    <h3 className="font-serif text-xl font-bold">{booking.vehicle.title}</h3>
+                    <p className="mt-1 flex items-center gap-1 text-xs text-[#6B726E]">
+                      <UserRound className="h-3.5 w-3.5" />
+                      {booking.traveler.firstName} {booking.traveler.lastName}
+                    </p>
+                  </div>
+                  <strong className="font-serif text-2xl">
+                    {booking.ownerPayout.toFixed(2)} €
+                    <small className="block text-right font-sans text-[10px] font-normal text-[#6B726E]">netos estimados</small>
+                  </strong>
+                </div>
+
+                <div className="my-4 grid gap-3 rounded-2xl bg-[#F7F6F2] p-4 sm:grid-cols-3">
+                  <span className="text-xs">
+                    <CalendarDays className="mb-1 h-4 w-4 text-[#16B8AA]" />
+                    <small className="block text-[#6B726E]">Periodo</small>
+                    <strong>{new Date(booking.pickupDate).toLocaleDateString('es-ES')} → {new Date(booking.returnDate).toLocaleDateString('es-ES')}</strong>
+                  </span>
+                  <span className="text-xs">
+                    <Clock3 className="mb-1 h-4 w-4 text-[#16B8AA]" />
+                    <small className="block text-[#6B726E]">Duración</small>
+                    <strong>{booking.totalDays} días</strong>
+                  </span>
+                  <span className="text-xs">
+                    <WalletCards className="mb-1 h-4 w-4 text-[#16B8AA]" />
+                    <small className="block text-[#6B726E]">Total viajero</small>
+                    <strong>{booking.totalAmount.toFixed(2)} €</strong>
+                  </span>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  <Link href={conversationHref} className="flex items-center gap-2 rounded-full border border-[#E9E1D2] px-4 py-2.5 text-xs font-bold">
+                    <MessageCircle className="h-4 w-4" /> Hablar con el viajero
+                  </Link>
+                  {canOpenReservation && (
+                    <Link href={`/reserva/${booking.id}`} className="flex items-center gap-2 rounded-full border border-[#E9E1D2] px-4 py-2.5 text-xs font-bold">
+                      <FileSignature className="h-4 w-4" /> Contrato y reserva
+                    </Link>
+                  )}
+                  {['CONFIRMED', 'CHECKIN_PENDING'].includes(booking.status) && (
+                    <Link href={`/checkin?bookingId=${booking.id}`} className="flex items-center gap-2 rounded-full bg-[#13322E] px-4 py-2.5 text-xs font-bold text-white">
+                      <ClipboardCheck className="h-4 w-4" /> Registrar entrega
+                    </Link>
+                  )}
+                  {['ACTIVE', 'CHECKOUT_PENDING'].includes(booking.status) && (
+                    <Link href={`/checkout?bookingId=${booking.id}`} className="flex items-center gap-2 rounded-full bg-[#13322E] px-4 py-2.5 text-xs font-bold text-white">
+                      <ClipboardCheck className="h-4 w-4" /> Registrar devolución
+                    </Link>
+                  )}
+                  {booking.status === 'COMPLETED' && (
+                    <button type="button" onClick={() => setReviewing(booking)} className="flex items-center gap-2 rounded-full border border-[#E9E1D2] px-4 py-2.5 text-xs font-bold">
+                      <Star className="h-4 w-4" /> Valorar viajero
+                    </button>
+                  )}
+                  {booking.status === 'REQUESTED' && (
+                    <>
+                      <button type="button" onClick={() => setDecision({ id: booking.id, action: 'accept' })} className="flex items-center gap-2 rounded-full bg-[#16B8AA] px-4 py-2.5 text-xs font-bold text-white">
+                        <Check className="h-4 w-4" /> Aceptar fechas
+                      </button>
+                      <button type="button" onClick={() => setDecision({ id: booking.id, action: 'reject' })} className="flex items-center gap-2 rounded-full px-4 py-2.5 text-xs font-bold text-red-600">
+                        <X className="h-4 w-4" /> Rechazar
+                      </button>
+                    </>
+                  )}
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      )}
+
+      {decision && (
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-[#13322E]/60 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-md rounded-[32px] bg-white p-7 shadow-2xl">
+            <span className="text-[10px] font-black uppercase tracking-[.2em] text-[#16B8AA]">Confirmar decisión</span>
+            <h3 className="mt-2 font-serif text-3xl font-bold">{decision.action === 'accept' ? '¿Aceptar estas fechas?' : '¿Rechazar la solicitud?'}</h3>
+            <p className="mt-3 text-sm text-[#6B726E]">El viajero recibirá una notificación del cambio.</p>
+            <div className="mt-6 flex gap-2">
+              <button type="button" onClick={decide} className={`rounded-full px-5 py-3 text-xs font-bold text-white ${decision.action === 'accept' ? 'bg-[#16B8AA]' : 'bg-red-600'}`}>Confirmar</button>
+              <button type="button" onClick={() => setDecision(null)} className="rounded-full border border-[#E9E1D2] px-5 py-3 text-xs font-bold">Volver</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {reviewing && (
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-[#13322E]/60 p-4">
+          <form onSubmit={review} className="w-full max-w-md space-y-4 rounded-[32px] bg-white p-7 shadow-2xl">
+            <h3 className="font-serif text-3xl font-bold">Valorar a {reviewing.traveler.firstName}</h3>
+            <select value={rating} onChange={(event) => setRating(Number(event.target.value))} className="w-full rounded-xl border border-[#E9E1D2] p-3">
+              {[5, 4, 3, 2, 1].map((value) => <option key={value} value={value}>{value} estrellas</option>)}
+            </select>
+            <textarea required value={comment} onChange={(event) => setComment(event.target.value)} placeholder="¿Cómo fue la comunicación y el cuidado del vehículo?" className="min-h-28 w-full rounded-xl border border-[#E9E1D2] p-3 text-sm" />
+            <div className="flex gap-2">
+              <button className="rounded-full bg-[#16B8AA] px-5 py-3 text-xs font-bold text-white">Enviar valoración</button>
+              <button type="button" onClick={() => setReviewing(null)} className="rounded-full border border-[#E9E1D2] px-5 py-3 text-xs font-bold">Cancelar</button>
+            </div>
+          </form>
+        </div>
+      )}
+    </section>
+  );
 }

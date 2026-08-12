@@ -15,17 +15,23 @@ async function confirmBookingPayment(bookingId: string, paymentIntentId: string 
       data: { status: 'CONFIRMED', stripePaymentIntentId: paymentIntentId },
     });
 
-    await tx.payment.updateMany({
+    const pendingPayment = await tx.payment.findFirst({
       where: {
         bookingId,
         status: 'PENDING',
         ...(checkoutSessionId ? { stripeId: checkoutSessionId } : {}),
       },
-      data: {
-        status: 'SUCCEEDED',
-        ...(paymentIntentId ? { stripeId: paymentIntentId } : {}),
-      },
+      orderBy: { createdAt: 'desc' },
     });
+    if (pendingPayment) {
+      await tx.payment.update({
+        where: { id: pendingPayment.id },
+        data: {
+          status: 'SUCCEEDED',
+          ...(paymentIntentId ? { stripeId: paymentIntentId } : {}),
+        },
+      });
+    }
 
     if (updated.count === 0) return null;
     return tx.booking.findUnique({
@@ -136,6 +142,20 @@ export async function POST(request: Request) {
   if (event.type === 'payment_intent.canceled') {
     const paymentIntent = event.data.object as Stripe.PaymentIntent;
     await prisma.payment.updateMany({ where: { stripeId: paymentIntent.id }, data: { status: 'CANCELLED' } });
+  }
+
+  if (event.type === 'charge.refunded') {
+    const charge = event.data.object as Stripe.Charge;
+    const paymentIntentId = typeof charge.payment_intent === 'string' ? charge.payment_intent : charge.payment_intent?.id;
+    if (paymentIntentId) {
+      const payment = await prisma.payment.findUnique({ where: { stripeId: paymentIntentId } });
+      if (payment) {
+        await prisma.$transaction([
+          prisma.payment.update({ where: { id: payment.id }, data: { status: 'REFUNDED' } }),
+          prisma.booking.update({ where: { id: payment.bookingId }, data: { status: 'REFUNDED' } }),
+        ]);
+      }
+    }
   }
 
   return NextResponse.json({ received: true });

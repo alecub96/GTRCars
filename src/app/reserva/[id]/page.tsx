@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import { CalendarDays, CheckCircle2, CreditCard, FileCheck2, Lock, ShieldCheck } from 'lucide-react';
 import StripePaymentElement from '@/components/StripePaymentElement';
+import BookingIncidentPanel from '@/components/BookingIncidentPanel';
 
 export default function BookingCheckoutClient() {
   const { id } = useParams<{ id: string }>();
@@ -69,5 +70,6 @@ export default function BookingCheckoutClient() {
       </section>
       <aside className="h-fit rounded-3xl border border-[#E9E1D2] bg-white p-6 shadow-xl lg:sticky lg:top-28"><h2 className="font-serif text-2xl font-bold">Resumen de pago</h2><div className="my-5 space-y-3 border-y border-[#E9E1D2] py-5 text-sm"><div className="flex justify-between"><span>Alquiler</span><span>{booking.basePrice} €</span></div><div className="flex justify-between"><span>Limpieza</span><span>{booking.cleaningFee} €</span></div><div className="flex justify-between"><span>Extras</span><span>{booking.extrasTotal} €</span></div><div className="flex justify-between"><span>Gestión y protección</span><span>{booking.travelerFee} €</span></div><div className="flex justify-between text-lg font-bold"><span>Total</span><span>{booking.totalAmount} €</span></div></div><div className="mb-5 rounded-2xl bg-[#F0FDFA] p-4 text-xs"><ShieldCheck className="mb-2 h-6 w-6 text-[#16B8AA]" /><strong className="block">Pago protegido por Stripe</strong>En el siguiente paso podrás elegir tarjeta o Klarna si Stripe lo ofrece para tu compra.</div>{booking.status === 'REQUESTED' && <p className="mb-4 rounded-xl bg-amber-50 p-3 text-xs font-bold text-amber-800">Solicitud enviada. Podrás pagar cuando el propietario la acepte.</p>}{viewerRole === 'TRAVELER' && <button onClick={pay} disabled={!fullySigned || !payable || loading} className="flex w-full items-center justify-center gap-2 rounded-full bg-[#16B8AA] py-4 text-sm font-bold text-white disabled:cursor-not-allowed disabled:bg-slate-300"><Lock className="h-4 w-4" />Continuar a pago seguro</button>}<div className="mt-4 flex items-center justify-center gap-4 text-xs font-bold text-[#6B726E]"><span className="flex items-center gap-1"><CreditCard className="h-4 w-4" />Tarjeta</span><span>Klarna.</span></div></aside>
     </div>
+    <BookingIncidentPanel bookingId={id} bookingStatus={booking.status} canReport={viewerRole !== 'ADMIN'} />
   </main></div>;
 }

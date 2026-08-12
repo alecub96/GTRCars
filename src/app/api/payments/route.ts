@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
+import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY || '';
 
@@ -28,7 +29,12 @@ export async function POST(request: Request) {
 
     const booking = await prisma.booking.findUnique({
       where: { id: bookingId },
-      include: { vehicle: true, owner: true, contract: true },
+      include: {
+        vehicle: true,
+        owner: true,
+        contract: true,
+        payments: { where: { type: 'RENTAL_CHARGE' }, orderBy: { createdAt: 'desc' }, take: 1 },
+      },
     });
 
     if (!booking) {
@@ -40,13 +46,24 @@ export async function POST(request: Request) {
     if (!booking.contract?.signedByTraveler || !booking.contract?.signedByOwner) {
       return NextResponse.json({ error: 'El contrato debe estar firmado por viajero y propietario antes de pagar' }, { status: 409 });
     }
-    if (!['OWNER_ACCEPTED', 'CONFIRMED', 'PAYMENT_PENDING'].includes(booking.status)) {
+    const latestPayment = booking.payments[0];
+    if (latestPayment?.status === 'SUCCEEDED' || booking.stripePaymentIntentId) {
+      return NextResponse.json({ error: 'Esta reserva ya está pagada' }, { status: 409 });
+    }
+    if (!['OWNER_ACCEPTED', 'PAYMENT_PENDING'].includes(booking.status)) {
       return NextResponse.json({ error: 'El propietario debe aceptar la solicitud antes del pago' }, { status: 409 });
     }
 
     // SI EXISTE UNA CLAVE REAL DE STRIPE (sk_live_... o sk_test_... real de producción)
     if (stripeSecretKey && !stripeSecretKey.includes('mock')) {
       const stripe = new Stripe(stripeSecretKey);
+
+      if (latestPayment?.status === 'PENDING' && latestPayment.stripeId.startsWith('cs_')) {
+        const existingCheckout = await stripe.checkout.sessions.retrieve(latestPayment.stripeId);
+        if (existingCheckout.status === 'open' && existingCheckout.client_secret) {
+          return NextResponse.json({ success: true, mode: 'STRIPE_ELEMENTS', clientSecret: existingCheckout.client_secret });
+        }
+      }
 
       // 1. Crear o recuperar Stripe Customer
       let customerId = user.stripeCustomerId;
@@ -98,6 +115,7 @@ export async function POST(request: Request) {
           type: 'RENTAL_CHARGE',
         },
       });
+      await prisma.booking.update({ where: { id: booking.id }, data: { status: 'PAYMENT_PENDING' } });
 
       return NextResponse.json({
         success: true,
@@ -135,8 +153,10 @@ export async function POST(request: Request) {
       message: 'Pago procesado correctamente en entorno de prueba de Stripe',
       bookingId: booking.id,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
     console.error('API Payment Processing Error:', error);
-    return NextResponse.json({ error: error.message || 'Error en la pasarela de pago' }, { status: 500 });
+    const message = error instanceof Error ? error.message : '';
+    return NextResponse.json({ error: message || 'Error en la pasarela de pago' }, { status: 500 });
   }
 }
