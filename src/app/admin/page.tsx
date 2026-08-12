@@ -46,7 +46,7 @@ export default function AdminPage() {
           </div>
           <div className="mt-4 md:mt-0 flex items-center space-x-2 text-xs font-bold bg-[#16B8AA]/10 text-[#16B8AA] px-4 py-2 rounded-full border border-[#16B8AA]/30">
             <ShieldCheck className="w-4 h-4" />
-            <span>Cuenta de Recaudación Principal Activa</span>
+            <span>{data?.metrics?.stripeConfigured ? 'Stripe configurado' : 'Stripe pendiente de configuración'}</span>
           </div>
           <Link href="/soporte" className="mt-3 md:mt-0 rounded-full bg-[#13322E] px-5 py-3 text-xs font-bold uppercase tracking-wider text-white">Bandeja de soporte</Link>
         </div>

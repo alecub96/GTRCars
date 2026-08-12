@@ -31,6 +31,8 @@ export async function GET() {
         totalVolume,
         totalPlatformCommission,
         totalOwnerPayoutsPending,
+        stripeConfigured: Boolean(process.env.STRIPE_SECRET_KEY && !process.env.STRIPE_SECRET_KEY.includes('mock')),
+        connectedOwners: new Set(bookings.filter((booking) => booking.owner.stripeAccountId).map((booking) => booking.owner.email)).size,
       },
       payouts: paidBookings.map((b) => ({
         bookingId: b.id,

@@ -24,8 +24,8 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { conversationId, content, recipientId, vehicleId } = body;
 
-    if (!content || content.trim().length === 0) {
-      return NextResponse.json({ error: 'El contenido del mensaje no puede estar vacío' }, { status: 400 });
+    if (typeof content !== 'string' || content.trim().length === 0 || content.trim().length > 4000) {
+      return NextResponse.json({ error: 'Escribe un mensaje de hasta 4.000 caracteres' }, { status: 400 });
     }
 
     // === SISTEMA DE BLINDAJE DE MENSAJERÍA SEGURA ===
@@ -70,6 +70,11 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Parámetros de conversación incompletos' }, { status: 400 });
       }
 
+      const vehicle = await prisma.vehicle.findUnique({ where: { id: vehicleId }, select: { ownerId: true, status: true } });
+      if (!vehicle || vehicle.status !== 'ACTIVE' || user.role !== 'TRAVELER' || vehicle.ownerId !== recipientId || recipientId === user.id) {
+        return NextResponse.json({ error: 'No se puede iniciar esta conversación' }, { status: 403 });
+      }
+
       // Buscar si ya existe una conversación entre estos usuarios para este vehículo
       let conv = await prisma.conversation.findFirst({
         where: {
@@ -85,8 +90,8 @@ export async function POST(request: Request) {
         conv = await prisma.conversation.create({
           data: {
             vehicleId,
-            travelerId: user.role === 'OWNER' ? recipientId : user.id,
-            ownerId: user.role === 'OWNER' ? user.id : recipientId,
+            travelerId: user.id,
+            ownerId: recipientId,
           },
         });
       }
@@ -121,6 +126,23 @@ export async function GET(request: Request) {
 
     const { searchParams } = new URL(request.url);
     const conversationId = searchParams.get('conversationId');
+    const bookingId = searchParams.get('bookingId');
+
+    let requestedConversationId: string | null = null;
+    if (bookingId) {
+      const booking = await prisma.booking.findUnique({ where: { id: bookingId }, select: { id: true, travelerId: true, ownerId: true, vehicleId: true } });
+      if (!booking || ![booking.travelerId, booking.ownerId].includes(user.id)) {
+        return NextResponse.json({ error: 'No tienes acceso a esta reserva' }, { status: 403 });
+      }
+      let conversation = await prisma.conversation.findFirst({ where: { bookingId: booking.id }, select: { id: true } });
+      if (!conversation) {
+        conversation = await prisma.conversation.create({
+          data: { bookingId: booking.id, travelerId: booking.travelerId, ownerId: booking.ownerId, vehicleId: booking.vehicleId },
+          select: { id: true },
+        });
+      }
+      requestedConversationId = conversation.id;
+    }
 
     if (conversationId) {
       const conversation = await prisma.conversation.findUnique({ where: { id: conversationId }, select: { travelerId: true, ownerId: true } });
@@ -151,7 +173,7 @@ export async function GET(request: Request) {
       orderBy: { updatedAt: 'desc' },
     });
 
-    return NextResponse.json({ success: true, conversations });
+    return NextResponse.json({ success: true, conversations, requestedConversationId });
   } catch (error) {
     console.error('API Get Messages Error:', error);
     return NextResponse.json({ error: 'Error al cargar mensajes' }, { status: 500 });

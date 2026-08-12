@@ -5,6 +5,56 @@ import { sendBookingStatusEmail } from '@/lib/email';
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY || '';
 
+async function confirmBookingPayment(bookingId: string, paymentIntentId: string | null, checkoutSessionId?: string) {
+  const result = await prisma.$transaction(async (tx) => {
+    const updated = await tx.booking.updateMany({
+      where: {
+        id: bookingId,
+        status: { in: ['OWNER_ACCEPTED', 'PAYMENT_PENDING'] },
+      },
+      data: { status: 'CONFIRMED', stripePaymentIntentId: paymentIntentId },
+    });
+
+    await tx.payment.updateMany({
+      where: {
+        bookingId,
+        status: 'PENDING',
+        ...(checkoutSessionId ? { stripeId: checkoutSessionId } : {}),
+      },
+      data: {
+        status: 'SUCCEEDED',
+        ...(paymentIntentId ? { stripeId: paymentIntentId } : {}),
+      },
+    });
+
+    if (updated.count === 0) return null;
+    return tx.booking.findUnique({
+      where: { id: bookingId },
+      include: {
+        traveler: { select: { email: true, firstName: true } },
+        vehicle: { select: { title: true } },
+      },
+    });
+  });
+
+  if (result) {
+    await sendBookingStatusEmail(result.traveler.email, result.traveler.firstName, {
+      code: result.code,
+      status: 'CONFIRMED',
+      vehicle: result.vehicle.title,
+      reservationId: result.id,
+    }).catch((error) => console.error('Payment confirmation email error:', error));
+  }
+}
+
+function getSubscriptionPeriodEnd(subscription: Stripe.Subscription) {
+  const itemPeriodEnd = subscription.items.data
+    .map((item) => item.current_period_end)
+    .filter((value): value is number => typeof value === 'number')
+    .sort((a, b) => b - a)[0];
+  return new Date((itemPeriodEnd || Math.floor(Date.now() / 1000) + 30 * 86400) * 1000);
+}
+
 export async function POST(request: Request) {
   const body = await request.text();
   const signature = request.headers.get('stripe-signature') || '';
@@ -37,21 +87,7 @@ export async function POST(request: Request) {
     const bookingId = paymentIntent.metadata?.bookingId;
 
     if (bookingId) {
-      await prisma.$transaction([
-        prisma.booking.update({
-          where: { id: bookingId },
-          data: {
-            status: 'CONFIRMED',
-            stripePaymentIntentId: paymentIntent.id,
-          },
-        }),
-        prisma.payment.updateMany({
-          where: { stripeId: paymentIntent.id },
-          data: { status: 'SUCCEEDED' },
-        }),
-      ]);
-      const booking = await prisma.booking.findUnique({ where: { id: bookingId }, include: { traveler: { select: { email: true, firstName: true } }, vehicle: { select: { title: true } } } });
-      if (booking) sendBookingStatusEmail(booking.traveler.email, booking.traveler.firstName, { code: booking.code, status: 'CONFIRMED', vehicle: booking.vehicle.title, reservationId: booking.id }).catch((error) => console.error('Payment confirmation email error:', error));
+      await confirmBookingPayment(bookingId, paymentIntent.id);
     }
   }
 
@@ -61,8 +97,8 @@ export async function POST(request: Request) {
     const featureVehicleId = session.metadata?.vehicleId;
     if (featureUserId && featureVehicleId && session.mode === 'subscription' && session.subscription) {
       const subscriptionId = typeof session.subscription === 'string' ? session.subscription : session.subscription.id;
-      const subscription = await stripe.subscriptions.retrieve(subscriptionId) as any;
-      const periodEnd = new Date((subscription.current_period_end || Math.floor(Date.now() / 1000) + 30 * 86400) * 1000);
+      const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+      const periodEnd = getSubscriptionPeriodEnd(subscription);
       const existing = await prisma.vipSubscription.findFirst({ where: { stripeSubscriptionId: subscriptionId } });
       if (existing) {
         await prisma.vipSubscription.update({ where: { id: existing.id }, data: { status: 'ACTIVE', currentPeriodEnd: periodEnd } });
@@ -74,12 +110,7 @@ export async function POST(request: Request) {
     const bookingId = session.metadata?.bookingId;
     if (bookingId && session.payment_status !== 'unpaid') {
       const paymentIntentId = typeof session.payment_intent === 'string' ? session.payment_intent : session.payment_intent?.id;
-      await prisma.$transaction([
-        prisma.booking.update({ where: { id: bookingId }, data: { status: 'CONFIRMED', stripePaymentIntentId: paymentIntentId || null } }),
-        prisma.payment.updateMany({ where: { stripeId: session.id }, data: { status: 'SUCCEEDED' } }),
-      ]);
-      const booking = await prisma.booking.findUnique({ where: { id: bookingId }, include: { traveler: { select: { email: true, firstName: true } }, vehicle: { select: { title: true } } } });
-      if (booking) sendBookingStatusEmail(booking.traveler.email, booking.traveler.firstName, { code: booking.code, status: 'CONFIRMED', vehicle: booking.vehicle.title, reservationId: booking.id }).catch((error) => console.error('Checkout confirmation email error:', error));
+      await confirmBookingPayment(bookingId, paymentIntentId || null, session.id);
     }
   }
 
@@ -87,7 +118,7 @@ export async function POST(request: Request) {
     const subscription = event.data.object as Stripe.Subscription;
     const subscriptionId = subscription.id;
     const active = subscription.status === 'active' || subscription.status === 'trialing';
-    const periodEnd = new Date(((subscription as any).current_period_end || Math.floor(Date.now() / 1000)) * 1000);
+    const periodEnd = getSubscriptionPeriodEnd(subscription);
     const stored = await prisma.vipSubscription.findFirst({ where: { stripeSubscriptionId: subscriptionId } });
     if (stored) {
       await prisma.$transaction([

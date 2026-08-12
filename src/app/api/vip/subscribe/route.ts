@@ -33,7 +33,7 @@ export async function POST(request: Request) {
     expiresAt.setDate(expiresAt.getDate() + 30); // 30 días de suscripción activa
 
     if (stripeSecretKey && !stripeSecretKey.includes('mock')) {
-      const stripe = new Stripe(stripeSecretKey, { apiVersion: '2025-02-24.acacia' as any });
+      const stripe = new Stripe(stripeSecretKey);
 
       // Suscripción real recurrente de 2,99€/mes en Stripe
       const session = await stripe.checkout.sessions.create({

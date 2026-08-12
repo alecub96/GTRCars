@@ -15,7 +15,7 @@ export async function POST(request: Request) {
   const key = process.env.STRIPE_SECRET_KEY || '';
   if (!key || key.includes('mock')) return NextResponse.json({ error: 'Stripe no está configurado' }, { status: 503 });
   try {
-    const stripe = new Stripe(key, { apiVersion: '2025-02-24.acacia' as any });
+    const stripe = new Stripe(key);
     const refund = await stripe.refunds.create({ payment_intent: payment.stripeId });
     await prisma.$transaction([prisma.payment.update({ where: { id: payment.id }, data: { status: refund.status === 'succeeded' ? 'REFUNDED' : 'REFUND_PENDING' } }), prisma.booking.update({ where: { id: booking.id }, data: { status: 'REFUNDED' } })]);
     if (refund.status === 'succeeded') sendBookingStatusEmail(booking.traveler.email, booking.traveler.firstName, { code: booking.code, status: 'REFUNDED', vehicle: booking.vehicle.title, reservationId: booking.id }).catch((error) => console.error('Refund email error:', error));

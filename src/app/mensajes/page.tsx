@@ -13,15 +13,16 @@ export default function ChatPage() {
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
 
-  const fetchConversations = useCallback(async (requestedId?: string | null) => {
+  const fetchConversations = useCallback(async (requestedId?: string | null, bookingId?: string | null) => {
     try {
-      const res = await fetch('/api/messages');
+      const res = await fetch(bookingId ? `/api/messages?bookingId=${encodeURIComponent(bookingId)}` : '/api/messages');
       const data = await res.json();
       if (data.conversations) {
         setConversations(data.conversations);
+        const targetId = data.requestedConversationId || requestedId;
         setActiveConvId((current) => current || (
-          requestedId && data.conversations.some((conversation: any) => conversation.id === requestedId)
-            ? requestedId
+          targetId && data.conversations.some((conversation: any) => conversation.id === targetId)
+            ? targetId
             : data.conversations[0]?.id || null
         ));
       }
@@ -58,7 +59,8 @@ export default function ChatPage() {
 
   useEffect(() => {
     const requestedId = new URLSearchParams(window.location.search).get('conversationId');
-    void Promise.resolve().then(() => fetchConversations(requestedId));
+    const bookingId = new URLSearchParams(window.location.search).get('bookingId');
+    void Promise.resolve().then(() => fetchConversations(requestedId, bookingId));
   }, [fetchConversations]);
 
   useEffect(() => {
