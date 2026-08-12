@@ -10,14 +10,14 @@ import VehicleViewTracker from '@/components/VehicleViewTracker';
 import Image from 'next/image';
 
 const ISLAND_HERO_IMAGES: Record<string, string> = {
-  'Gran Canaria': '/Islas/gran%20canaria.png',
-  'Tenerife': '/Islas/Tenerife.png',
-  'Lanzarote': '/Islas/lanzarote.png',
-  'Fuerteventura': '/Islas/fuerteventura.png',
-  'La Palma': '/Islas/la%20palma.png',
-  'La Gomera': '/Islas/la%20gomera.png',
-  'El Hierro': '/Islas/el%20hierro.png',
-  'La Graciosa': '/Islas/la%20graciosa.png',
+  'Gran Canaria': '/Islas/gran%20canaria.webp',
+  'Tenerife': '/Islas/Tenerife.webp',
+  'Lanzarote': '/Islas/lanzarote.webp',
+  'Fuerteventura': '/Islas/fuerteventura.webp',
+  'La Palma': '/Islas/la%20palma.webp',
+  'La Gomera': '/Islas/la%20gomera.webp',
+  'El Hierro': '/Islas/el%20hierro.webp',
+  'La Graciosa': '/Islas/la%20graciosa.webp',
 };
 interface HeroSectionProps {
   initialVehicles: any[];
