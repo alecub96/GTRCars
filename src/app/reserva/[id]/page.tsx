@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import { CalendarDays, CheckCircle2, CreditCard, FileCheck2, Lock, ShieldCheck } from 'lucide-react';
+import StripePaymentElement from '@/components/StripePaymentElement';
 
 export default function BookingCheckoutClient() {
   const { id } = useParams<{ id: string }>();
@@ -12,6 +13,7 @@ export default function BookingCheckoutClient() {
   const [checks, setChecks] = useState({ terms: false, privacy: false, deposit: false });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [paymentClientSecret, setPaymentClientSecret] = useState('');
 
   const load = async () => {
     const response = await fetch(`/api/bookings/${id}`);
@@ -42,7 +44,7 @@ export default function BookingCheckoutClient() {
     const response = await fetch('/api/payments', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ bookingId: id }) });
     const data = await response.json();
     if (!response.ok) setError(data.error || 'No se pudo iniciar el pago');
-    else if (data.url) window.location.href = data.url;
+    else if (data.clientSecret) setPaymentClientSecret(data.clientSecret);
     else await load();
     setLoading(false);
   }
@@ -52,8 +54,8 @@ export default function BookingCheckoutClient() {
   const payable = ['OWNER_ACCEPTED', 'CONFIRMED', 'PAYMENT_PENDING'].includes(booking.status);
   const date = (value: string) => new Date(value).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
 
-  return <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]"><Navbar /><main className="mx-auto max-w-6xl px-4 py-10">
-    <header className="mb-7"><span className="text-[11px] font-black uppercase tracking-[.25em] text-[#16B8AA]">Reserva {booking.code}</span><h1 className="font-serif text-4xl font-bold">Revisa, firma y paga con seguridad</h1><p className="mt-2 text-sm text-[#6B726E]">Ningún importe se cobra desde esta página: el pago se completa en Stripe.</p></header>
+  return <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]"><Navbar />{paymentClientSecret && <StripePaymentElement clientSecret={paymentClientSecret} bookingId={id} onClose={() => setPaymentClientSecret('')} />}<main className="mx-auto max-w-6xl px-4 py-10">
+    <header className="mb-7"><span className="text-[11px] font-black uppercase tracking-[.25em] text-[#16B8AA]">Reserva {booking.code}</span><h1 className="font-serif text-4xl font-bold">Revisa, firma y paga con seguridad</h1><p className="mt-2 text-sm text-[#6B726E]">El pago se completa aquí mediante componentes seguros de Stripe integrados en Vaneando.</p></header>
     {error && <div className="mb-5 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-bold text-red-700">{error}</div>}
     <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
       <section className="space-y-6">

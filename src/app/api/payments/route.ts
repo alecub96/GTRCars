@@ -46,9 +46,7 @@ export async function POST(request: Request) {
 
     // SI EXISTE UNA CLAVE REAL DE STRIPE (sk_live_... o sk_test_... real de producción)
     if (stripeSecretKey && !stripeSecretKey.includes('mock')) {
-      const stripe = new Stripe(stripeSecretKey, {
-        apiVersion: '2025-02-24.acacia' as any,
-      });
+      const stripe = new Stripe(stripeSecretKey);
 
       // 1. Crear o recuperar Stripe Customer
       let customerId = user.stripeCustomerId;
@@ -76,6 +74,7 @@ export async function POST(request: Request) {
       const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
       const checkout = await stripe.checkout.sessions.create({
         mode: 'payment',
+        ui_mode: 'elements',
         customer: customerId,
         // Stripe muestra tarjeta y Klarna dinámicamente según país, importe y elegibilidad de la cuenta.
         automatic_tax: { enabled: false },
@@ -86,8 +85,7 @@ export async function POST(request: Request) {
         payment_method_types: ['card', 'klarna'],
         metadata: { bookingId: booking.id, bookingCode: booking.code },
         payment_intent_data: paymentIntentData,
-        success_url: `${appUrl}/reserva/${booking.id}?pago=correcto&session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${appUrl}/reserva/${booking.id}?pago=cancelado`,
+        return_url: `${appUrl}/reserva/${booking.id}?pago=procesado&session_id={CHECKOUT_SESSION_ID}`,
       });
 
       await prisma.payment.create({
@@ -103,8 +101,8 @@ export async function POST(request: Request) {
 
       return NextResponse.json({
         success: true,
-        mode: 'STRIPE_CHECKOUT',
-        url: checkout.url,
+        mode: 'STRIPE_ELEMENTS',
+        clientSecret: checkout.client_secret,
       });
     }
 

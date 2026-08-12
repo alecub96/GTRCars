@@ -7,6 +7,7 @@ import { BadgeCheck, Sparkles, Plus, BarChart3, WalletCards } from 'lucide-react
 import OwnerAvailabilityCalendar from '@/components/OwnerAvailabilityCalendar';
 import OwnerBookingsPanel from '@/components/OwnerBookingsPanel';
 import { useRouter } from 'next/navigation';
+import StripeConnectOnboarding from '@/components/StripeConnectOnboarding';
 
 export default function OwnerDashboardPage() {
   const router = useRouter();
@@ -18,6 +19,7 @@ export default function OwnerDashboardPage() {
   const [bookings, setBookings] = useState<any[]>([]);
   const [stripeMessage, setStripeMessage] = useState('');
   const [stripeSetupUrl, setStripeSetupUrl] = useState('');
+  const [showBankSetup, setShowBankSetup] = useState(false);
 
   useEffect(() => {
     fetch('/api/auth/me')
@@ -84,18 +86,13 @@ export default function OwnerDashboardPage() {
   const handleStripeConnect = async () => {
     setStripeMessage('');
     setStripeSetupUrl('');
-    const response = await fetch('/api/stripe/connect', { method: 'POST' });
-    const data = await response.json();
-    if (data.url) window.open(data.url, '_self');
-    else {
-      setStripeMessage(data.error || 'No se pudo iniciar la configuración de cobros');
-      if (data.setupRequired && data.dashboardUrl) setStripeSetupUrl(data.dashboardUrl);
-    }
+    setShowBankSetup(true);
   };
 
   return (
     <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]">
       <Navbar />
+      {showBankSetup && <StripeConnectOnboarding onClose={() => setShowBankSetup(false)} />}
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 pb-6 border-b border-[#E9E1D2]">

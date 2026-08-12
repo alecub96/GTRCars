@@ -13,9 +13,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ received: true, note: 'Mock mode active' });
   }
 
-  const stripe = new Stripe(stripeSecretKey, {
-    apiVersion: '2025-02-24.acacia' as any,
-  });
+  const stripe = new Stripe(stripeSecretKey);
 
   let event: Stripe.Event;
 
