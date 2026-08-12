@@ -5,6 +5,7 @@ const nextConfig = {
   },
   images: {
     formats: ['image/avif', 'image/webp'],
+    localPatterns: [{ pathname: '/Islas/**', search: '?v=transparent-v2' }],
     remotePatterns: [{ protocol: 'https', hostname: 'images.unsplash.com' }],
   },
 };

@@ -19,6 +19,7 @@ const ISLAND_HERO_IMAGES: Record<string, string> = {
   'El Hierro': '/Islas/el%20hierro.png',
   'La Graciosa': '/Islas/la%20graciosa.png',
 };
+const ISLAND_ASSET_VERSION = 'transparent-v2';
 
 interface HeroSectionProps {
   initialVehicles: any[];
@@ -46,12 +47,12 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
         <div className="absolute inset-0 z-0">
           <Image
             key={selectedIsland}
-            src={currentHeroImage}
+            src={`${currentHeroImage}?v=${ISLAND_ASSET_VERSION}`}
             alt={`Camper viajando por ${selectedIsland}`}
             fill
             priority
             sizes="100vw"
-            className="w-full h-full object-cover object-center filter brightness-[0.75] transition-opacity duration-1000"
+            className="w-full h-full object-contain object-center scale-[0.72] mix-blend-multiply filter brightness-[0.82] transition-transform duration-1000"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#F7F6F2] via-black/20 to-black/50" />
         </div>
@@ -177,9 +178,9 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                 }`}
               >
                 <img
-                  src={ISLAND_HERO_IMAGES[isla.name] || ISLAND_HERO_IMAGES['Gran Canaria']}
+                  src={`${ISLAND_HERO_IMAGES[isla.name] || ISLAND_HERO_IMAGES['Gran Canaria']}?v=${ISLAND_ASSET_VERSION}`}
                   alt={`Alquiler camper en ${isla.name}`}
-                  className="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-105"
+                  className="h-full w-full object-contain p-12 sm:p-14 transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4 text-white">

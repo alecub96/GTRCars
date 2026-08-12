@@ -21,13 +21,13 @@ Diseñada con un lenguaje visual inspirador **estilo Alisios Picnic** (tonos tie
 
 ### 1. Requisitos Previos
 - Node.js 20+
-- PostgreSQL (o Docker instalado)
+- MySQL/MariaDB de Hostinger (o Docker instalado)
 
 ### 2. Variables de Entorno
 Crea un archivo `.env` en la raíz con el siguiente contenido:
 
 ```env
-DATABASE_URL="postgresql://nomad:canarias2026@localhost:5432/nomadcanarias?schema=public"
+DATABASE_URL="mysql://USUARIO:CONTRASEÑA@HOST:3306/BASE_DE_DATOS"
 JWT_SECRET="secret-jwt-key-canarias-2026"
 STRIPE_SECRET_KEY="sk_test_mock_canarias_key"
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_test_mock_canarias_key"

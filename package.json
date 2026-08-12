@@ -4,13 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && prisma db push && next build --webpack",
-    "start": "prisma db push && next start",
+    "build": "prisma generate && next build --webpack",
+    "start": "next start",
     "db:push": "prisma db push",
     "lint": "eslint"
   },
   "dependencies": {
-    "@prisma/adapter-pg": "7.9.1",
+    "@prisma/adapter-mariadb": "^7.9.1",
     "@prisma/client": "7.9.1",
     "@stripe/stripe-js": "^9.13.0",
     "@tailwindcss/postcss": "^4",
@@ -27,9 +27,9 @@
     "jsonwebtoken": "^9.0.3",
     "jspdf": "^4.2.1",
     "lucide-react": "^1.31.0",
+    "mariadb": "^3.5.3",
     "next": "16.3.0",
     "nodemailer": "^7.0.11",
-    "pg": "^8.16.3",
     "prisma": "7.9.1",
     "react": "19.2.8",
     "react-dom": "19.2.8",

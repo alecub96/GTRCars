@@ -57,7 +57,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     });
   } catch (error) {
     databaseUnavailable = true;
-    console.error('Search vehicles unavailable:', error);
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('Search vehicles unavailable; showing recovery state.', error instanceof Error ? error.message : error);
+    }
   }
 
   return (
