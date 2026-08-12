@@ -1,4 +1,4 @@
-# Nomad Canarias - Plataforma Full-Stack de Alquiler de Campers en Canarias
+# vaneando. — Plataforma de alquiler de vehículos recreativos en Canarias
 
 Plataforma marketplace en producción especializada en el alquiler de campervans, furgonetas camperizadas y autocaravanas entre particulares y profesionales en **todas las Islas Canarias** (Gran Canaria, Tenerife, Lanzarote, Fuerteventura, La Palma, La Gomera, El Hierro y La Graciosa).
 
@@ -33,11 +33,12 @@ Usa [`.env.example`](.env.example) como referencia. No guardes credenciales real
 npm install
 ```
 
-### 4. Migraciones y Seed de Datos
-Poblar la base de datos con campers y ubicaciones reales en las 8 Islas Canarias:
+### 4. Esquema y datos de desarrollo
+Sincroniza primero el esquema. Ejecuta el seed únicamente sobre una base local o vacía:
 
 ```bash
 npm run db:deploy
+# Solo en desarrollo y después de confirmar que la base está vacía:
 npx tsx prisma/seed.ts
 ```
 
@@ -50,6 +51,14 @@ Accede a [http://localhost:3000](http://localhost:3000).
 ---
 
 El seed es exclusivamente local. Las cuentas administrativas de producción se crean mediante el registro normal y se autorizan con `ADMIN_EMAILS`.
+
+## Despliegue en Hostinger
+
+- Usa `VANEANDO_DATABASE_URL` para la conexión MySQL/MariaDB de la aplicación. Tiene prioridad sobre `DATABASE_URL`, que algunas integraciones pueden sobrescribir.
+- El formato es `mysql://USUARIO:CONTRASEÑA_URL_ENCODED@HOST_MYSQL:3306/BASE_DE_DATOS`.
+- `SMTP_USER` debe ser un buzón real de Hostinger (por ejemplo, `admin@vaneando.com`) y `SMTP_PASSWORD` debe ser la contraseña de ese buzón, no la contraseña del panel hPanel.
+- Tras cambiar variables, vuelve a desplegar y comprueba `https://vaneando.com/api/health`. No publiques si el proveedor de base aparece como `missing` o `incompatible`.
+- El webhook de Stripe debe apuntar a `https://vaneando.com/api/webhooks/stripe` y su secreto de firma debe guardarse en `STRIPE_WEBHOOK_SECRET`.
 
 ---
 

@@ -24,7 +24,7 @@ const from = process.env.EMAIL_FROM || (smtpUser ? `vaneando. <${smtpUser}>` : '
 
 export async function sendWelcomeEmail(to: string, firstName: string) {
   if (!transporter) {
-    console.warn('Correo de bienvenida omitido: SMTP_PASSWORD no configurada');
+    console.warn('Correo de bienvenida omitido: faltan SMTP_USER o SMTP_PASSWORD');
     return;
   }
 
@@ -39,7 +39,7 @@ export async function sendWelcomeEmail(to: string, firstName: string) {
 
 export async function sendPasswordResetEmail(to: string, firstName: string, resetUrl: string) {
   if (!transporter) {
-    throw new Error('SMTP_PASSWORD no está configurada');
+    throw new Error('Faltan SMTP_USER o SMTP_PASSWORD');
   }
 
   await transporter.sendMail({
@@ -64,7 +64,7 @@ export function getEmailConfiguration() {
 }
 
 export async function sendEmailTest(to: string) {
-  if (!transporter) throw new Error('SMTP_PASSWORD no está configurada');
+  if (!transporter) throw new Error('Faltan SMTP_USER o SMTP_PASSWORD');
   await transporter.verify();
   await transporter.sendMail({
     from,
@@ -80,7 +80,7 @@ function escapeHtml(value: string) {
 }
 
 export async function sendChatSummaryEmail(to: string, participantName: string, messages: Array<{ author: string; content: string; createdAt: Date }>) {
-  if (!transporter) throw new Error('SMTP_PASSWORD no está configurada');
+  if (!transporter) throw new Error('Faltan SMTP_USER o SMTP_PASSWORD');
   const lines = messages.map((message) => `[${message.createdAt.toLocaleString('es-ES')}] ${message.author}: ${message.content}`);
   const rows = messages.map((message) => `<p><small>${escapeHtml(message.createdAt.toLocaleString('es-ES'))}</small><br><strong>${escapeHtml(message.author)}:</strong> ${escapeHtml(message.content)}</p>`).join('');
   await transporter.sendMail({
@@ -93,7 +93,7 @@ export async function sendChatSummaryEmail(to: string, participantName: string, 
 }
 
 export async function sendBookingRequestEmail(to: string, ownerName: string, details: { code: string; vehicle: string; traveler: string; start: Date; end: Date }) {
-  if (!transporter) throw new Error('SMTP_PASSWORD no está configurada');
+  if (!transporter) throw new Error('Faltan SMTP_USER o SMTP_PASSWORD');
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://vaneando.com';
   await transporter.sendMail({
     from, to,

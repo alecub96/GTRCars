@@ -8,7 +8,16 @@ export default function AdminEmailDiagnostics() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetch('/api/admin/email-test').then((response) => response.json()).then((data) => setConfiguration(data.configuration));
+    let cancelled = false;
+    fetch('/api/admin/email-test')
+      .then(async (response) => {
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'No se pudo comprobar el correo');
+        return data.configuration;
+      })
+      .then((data) => { if (!cancelled) setConfiguration(data); })
+      .catch((error: Error) => { if (!cancelled) setMessage(error.message); });
+    return () => { cancelled = true; };
   }, []);
 
   async function testEmail() {
@@ -26,7 +35,9 @@ export default function AdminEmailDiagnostics() {
         <div>
           <h2 className="font-serif text-2xl font-bold">Correo transaccional</h2>
           <p className="text-xs text-slate-500">
-            {configuration?.configured ? `Configurado como ${configuration.user} en ${configuration.host}:${configuration.port}` : 'Falta configurar SMTP_PASSWORD.'}
+            {configuration?.configured
+              ? `Configurado como ${configuration.user} en ${configuration.host}:${configuration.port}`
+              : `Faltan variables: ${configuration?.missing?.join(', ') || 'SMTP_USER y/o SMTP_PASSWORD'}.`}
           </p>
         </div>
         <button onClick={testEmail} disabled={loading || !configuration?.configured} className="rounded-full bg-[#13322E] px-5 py-3 text-xs font-bold uppercase tracking-wider text-white disabled:opacity-40">

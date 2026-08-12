@@ -34,9 +34,19 @@ export async function POST(request: Request) {
 
       const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://vaneando.com';
       const resetUrl = `${appUrl}/restablecer-contrasena?token=${token}`;
-      await sendPasswordResetEmail(user.email, user.firstName, resetUrl).catch((error) => {
-        console.error('Password Reset Email Error:', error);
-      });
+      try {
+        await sendPasswordResetEmail(user.email, user.firstName, resetUrl);
+      } catch (emailError) {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { resetTokenHash: null, resetTokenExpiresAt: null },
+        });
+        console.error('Password Reset Email Error:', emailError);
+        return NextResponse.json(
+          { error: 'El correo transaccional no está disponible. Administración debe revisar SMTP_USER y SMTP_PASSWORD.' },
+          { status: 503, headers: { 'Retry-After': '300', 'Cache-Control': 'no-store' } },
+        );
+      }
     }
 
     return NextResponse.json({ success: true, message: genericMessage }, { headers: { 'Cache-Control': 'no-store' } });
