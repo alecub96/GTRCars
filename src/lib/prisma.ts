@@ -1,17 +1,24 @@
-import { PrismaPg } from '@prisma/adapter-pg';
+import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import { PrismaClient } from '@/generated/prisma/client';
-import { getDatabaseUrl } from './database-url';
+import { getDatabaseUrl, isSupportedDatabaseUrl } from './database-url';
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
-const databaseUrl = getDatabaseUrl();
-if (!databaseUrl) throw new Error('VANEANDO_DATABASE_URL o DATABASE_URL no está configurada');
+const configuredDatabaseUrl = getDatabaseUrl();
+const databaseUrl = isSupportedDatabaseUrl(configuredDatabaseUrl)
+  ? configuredDatabaseUrl
+  : 'mysql://invalid:invalid@127.0.0.1:3306/vaneando_missing_configuration';
 
-const adapter = new PrismaPg({
-  connectionString: databaseUrl,
-  connectionTimeoutMillis: 10_000,
-  idleTimeoutMillis: 30_000,
-  max: 5,
+const url = new URL(databaseUrl);
+const adapter = new PrismaMariaDb({
+  host: url.hostname,
+  port: url.port ? Number(url.port) : 3306,
+  user: decodeURIComponent(url.username),
+  password: decodeURIComponent(url.password),
+  database: decodeURIComponent(url.pathname.replace(/^\//, '')),
+  connectionLimit: 5,
+  connectTimeout: 10_000,
+  acquireTimeout: 10_000,
 });
 
 export const prisma =

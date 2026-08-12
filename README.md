@@ -7,7 +7,7 @@ Diseñada con la identidad visual propia de vaneando. (turquesa atlántico, verd
 ## 🚀 Características Principales
 
 - **Frontend & Backend Integrado:** Next.js 14+ App Router, TypeScript, React 19, Tailwind CSS.
-- **Base de Datos Relacional:** PostgreSQL + Prisma ORM con un esquema completo (`User`, `Vehicle`, `Booking`, `Payment`, `Contract`, `Review`, `Conversation`, `Message`, `SeoLocation`, etc.).
+- **Base de Datos Relacional:** MySQL/MariaDB + Prisma ORM con un esquema completo (`User`, `Vehicle`, `Booking`, `Payment`, `Contract`, `Review`, `Conversation`, `Message`, `SeoLocation`, etc.).
 - **Motor de Precios Backend:** Cálculo autoritativo de tarifas por día, estancias mínimas, descuentos automáticos semanales/mensuales, comisiones marketplace y tarifas de servicio.
 - **Prevención de Double-Booking:** Transacciones de base de datos atómicas para bloquear calendarios e impedir solapamientos.
 - **Pagos Marketplace:** Integración de Stripe & Stripe Connect para cobros, payout de propietarios y depósitos de fianza.
@@ -21,7 +21,7 @@ Diseñada con la identidad visual propia de vaneando. (turquesa atlántico, verd
 
 ### 1. Requisitos Previos
 - Node.js 20+
-- PostgreSQL administrado (o Docker instalado)
+- MySQL/MariaDB administrado (o Docker instalado)
 
 ### 2. Variables de Entorno
 Crea un archivo `.env` en la raíz con el siguiente contenido:
@@ -55,7 +55,7 @@ El seed es exclusivamente local. Las cuentas administrativas de producción se c
 
 ## 🐳 Despliegue con Docker
 
-Para levantar la infraestructura completa (Next.js + PostgreSQL) en producción:
+Para levantar la infraestructura completa (Next.js + MariaDB) en producción:
 
 ```bash
 docker-compose up --build -d
