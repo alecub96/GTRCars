@@ -37,8 +37,8 @@ export async function POST(request: Request) {
     if (booking.travelerId !== sessionUser.id) {
       return NextResponse.json({ error: 'No tienes permiso para pagar esta reserva' }, { status: 403 });
     }
-    if (!booking.contract?.signedByTraveler) {
-      return NextResponse.json({ error: 'Firma y acepta el contrato antes de pagar' }, { status: 409 });
+    if (!booking.contract?.signedByTraveler || !booking.contract?.signedByOwner) {
+      return NextResponse.json({ error: 'El contrato debe estar firmado por viajero y propietario antes de pagar' }, { status: 409 });
     }
     if (!['OWNER_ACCEPTED', 'CONFIRMED', 'PAYMENT_PENDING'].includes(booking.status)) {
       return NextResponse.json({ error: 'El propietario debe aceptar la solicitud antes del pago' }, { status: 409 });

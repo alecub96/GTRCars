@@ -20,7 +20,8 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
   });
   if (!booking) return NextResponse.json({ error: 'Reserva no encontrada' }, { status: 404 });
   if (![booking.travelerId, booking.ownerId].includes(user.id) && user.role !== 'ADMIN') return NextResponse.json({ error: 'No autorizado' }, { status: 403 });
-  return NextResponse.json({ success: true, booking });
+  const viewerRole = booking.travelerId === user.id ? 'TRAVELER' : booking.ownerId === user.id ? 'OWNER' : 'ADMIN';
+  return NextResponse.json({ success: true, booking, viewerRole });
 }
 
 export async function PATCH(request: Request, context: { params: Promise<{ id: string }> }) {
@@ -41,7 +42,7 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
   if (action === 'accept' && (isOwner || isAdmin) && booking.status === 'REQUESTED') status = 'OWNER_ACCEPTED';
   else if (action === 'reject' && (isOwner || isAdmin) && ['REQUESTED', 'OWNER_ACCEPTED'].includes(booking.status)) status = 'OWNER_REJECTED';
   else if (action === 'cancel' && (isTraveler || isOwner || isAdmin) && cancellable.includes(booking.status)) status = 'CANCELLED';
-  else if (action === 'sign-contract' && isTraveler) {
+  else if (action === 'sign-contract' && (isTraveler || isOwner)) {
     const signature = typeof body.signature === 'string' ? body.signature.trim() : '';
     const accepted = body.acceptedTerms === true && body.acceptedPrivacy === true && body.acceptedDeposit === true;
     if (signature.length < 5 || !accepted) return NextResponse.json({ error: 'Completa la firma y acepta todas las condiciones' }, { status: 400 });
@@ -51,10 +52,13 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
       depositAmount: booking.depositAmount, pricingSnapshot: booking.pricingSnapshot,
       acceptedAt: new Date().toISOString(), acceptedTerms: true, acceptedPrivacy: true, acceptedDeposit: true,
     });
+    const signatureUpdate = isTraveler
+      ? { signedByTraveler: true, travelerSignature: signature }
+      : { signedByOwner: true, ownerSignature: signature };
     const contract = await prisma.contract.upsert({
       where: { bookingId: booking.id },
-      update: { signedByTraveler: true, travelerSignature: signature, signedAt: new Date(), termsSnapshot },
-      create: { bookingId: booking.id, signedByTraveler: true, travelerSignature: signature, signedAt: new Date(), termsSnapshot },
+      update: { ...signatureUpdate, signedAt: new Date(), termsSnapshot },
+      create: { bookingId: booking.id, ...signatureUpdate, signedAt: new Date(), termsSnapshot },
     });
     return NextResponse.json({ success: true, contract });
   } else return NextResponse.json({ error: 'La acción no está permitida para el estado actual' }, { status: 409 });

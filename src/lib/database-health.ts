@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { getDatabaseUrl, isSupportedDatabaseUrl } from '@/lib/database-url';
 
 type DatabaseFailure = {
   status: 'unavailable';
@@ -23,6 +24,8 @@ function classifyDatabaseError(error: unknown): DatabaseFailure {
     code === 'P1002' ||
     message.includes("can't reach database") ||
     message.includes('connection timeout') ||
+    message.includes('pool timeout') ||
+    message.includes('connect ehostunreach') ||
     message.includes('econnrefused')
   ) {
     return { status: 'unavailable', category: 'network', code };
@@ -38,6 +41,10 @@ function classifyDatabaseError(error: unknown): DatabaseFailure {
 }
 
 export async function checkDatabaseHealth(): Promise<DatabaseHealth> {
+  const databaseUrl = getDatabaseUrl();
+  if (!databaseUrl || !isSupportedDatabaseUrl(databaseUrl)) {
+    return { status: 'unavailable', category: 'configuration', code: null };
+  }
   const startedAt = Date.now();
   try {
     await prisma.$queryRaw`SELECT 1`;
