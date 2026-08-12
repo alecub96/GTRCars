@@ -27,7 +27,7 @@ Diseñada con un lenguaje visual inspirador **estilo Alisios Picnic** (tonos tie
 Crea un archivo `.env` en la raíz con el siguiente contenido:
 
 ```env
-DATABASE_URL="mysql://USUARIO:CONTRASEÑA@HOST:3306/BASE_DE_DATOS"
+DATABASE_URL="mariadb://USUARIO:CONTRASEÑA@HOST:3306/BASE_DE_DATOS"
 JWT_SECRET="secret-jwt-key-canarias-2026"
 STRIPE_SECRET_KEY="sk_test_mock_canarias_key"
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_test_mock_canarias_key"
