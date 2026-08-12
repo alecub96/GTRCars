@@ -1,17 +1,12 @@
-import { PrismaMariaDb } from '@prisma/adapter-mariadb';
+import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '@/generated/prisma/client';
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
-const rawDatabaseUrl = process.env.DATABASE_URL?.trim();
-if (!rawDatabaseUrl) throw new Error('DATABASE_URL no está configurada');
+const databaseUrl = process.env.DATABASE_URL?.trim();
+if (!databaseUrl) throw new Error('DATABASE_URL no está configurada');
 
-// PrismaMariaDb espera el esquema `mariadb://`. Hostinger suele mostrar
-// `mysql://`, así que aceptamos ambos formatos para evitar errores 500 de
-// autenticación cuando la variable se copia tal cual desde el panel.
-const databaseUrl = rawDatabaseUrl.replace(/^mysql:\/\//i, 'mariadb://');
-
-const adapter = new PrismaMariaDb(databaseUrl, { useTextProtocol: true });
+const adapter = new PrismaPg({ connectionString: databaseUrl });
 
 export const prisma =
   globalForPrisma.prisma ||

@@ -21,13 +21,13 @@ Diseñada con un lenguaje visual inspirador **estilo Alisios Picnic** (tonos tie
 
 ### 1. Requisitos Previos
 - Node.js 20+
-- MySQL/MariaDB de Hostinger (o Docker instalado)
+- PostgreSQL administrado (o Docker instalado)
 
 ### 2. Variables de Entorno
 Crea un archivo `.env` en la raíz con el siguiente contenido:
 
 ```env
-DATABASE_URL="mariadb://USUARIO:CONTRASEÑA@HOST:3306/BASE_DE_DATOS"
+DATABASE_URL="postgresql://USUARIO:CONTRASEÑA@HOST:5432/BASE_DE_DATOS?sslmode=require"
 JWT_SECRET="secret-jwt-key-canarias-2026"
 STRIPE_SECRET_KEY="sk_test_mock_canarias_key"
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_test_mock_canarias_key"
