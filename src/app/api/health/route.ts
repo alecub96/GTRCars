@@ -1,11 +1,13 @@
 import { NextResponse } from 'next/server';
 import { checkDatabaseHealth } from '@/lib/database-health';
 import { getEmailConfiguration } from '@/lib/email';
+import { getDatabaseUrl } from '@/lib/database-url';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   const database = await checkDatabaseHealth();
+  const databaseUrl = getDatabaseUrl();
   const email = getEmailConfiguration();
   const configuration = {
     email: { status: email.configured ? 'configured' : 'missing', missing: email.missing },
@@ -31,7 +33,7 @@ export async function GET() {
   return NextResponse.json(
     {
       status: healthy ? 'ok' : 'degraded',
-      checks: { database, configuration },
+      checks: { database: { ...database, source: process.env.VANEANDO_DATABASE_URL?.trim() ? 'VANEANDO_DATABASE_URL' : process.env.DATABASE_URL?.trim() ? 'DATABASE_URL' : 'missing', provider: databaseUrl.startsWith('postgres') ? 'postgresql' : databaseUrl.startsWith('mysql') ? 'mysql' : 'unknown' }, configuration },
       timestamp: new Date().toISOString(),
     },
     {

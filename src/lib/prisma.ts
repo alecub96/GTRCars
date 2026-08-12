@@ -1,10 +1,11 @@
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '@/generated/prisma/client';
+import { getDatabaseUrl } from './database-url';
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
-const databaseUrl = process.env.DATABASE_URL?.trim();
-if (!databaseUrl) throw new Error('DATABASE_URL no está configurada');
+const databaseUrl = getDatabaseUrl();
+if (!databaseUrl) throw new Error('VANEANDO_DATABASE_URL o DATABASE_URL no está configurada');
 
 const adapter = new PrismaPg({
   connectionString: databaseUrl,
