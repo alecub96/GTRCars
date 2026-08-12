@@ -16,6 +16,10 @@ export function isDatabaseUnavailable(error: unknown) {
     message.includes('authentication failed') ||
     message.includes('credentials are incorrect') ||
     message.includes("can't reach database") ||
-    message.includes('connection timeout')
+    message.includes('connection timeout') ||
+    message.includes('pool timeout') ||
+    message.includes('econnrefused') ||
+    message.includes('access denied for user') ||
+    message.includes('unknown database')
   );
 }

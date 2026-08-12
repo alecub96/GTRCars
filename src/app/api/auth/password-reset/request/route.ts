@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { sendPasswordResetEmail } from '@/lib/email';
 import { checkRateLimit } from '@/lib/rate-limit';
+import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 
 const genericMessage = 'Si existe una cuenta con ese correo, recibirás un enlace para restablecer la contraseña.';
 
@@ -41,6 +42,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true, message: genericMessage }, { headers: { 'Cache-Control': 'no-store' } });
   } catch (error) {
     console.error('Password Reset Request Error:', error);
+    if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
     return NextResponse.json({ error: 'No se pudo enviar el correo. Inténtalo de nuevo más tarde.' }, { status: 500 });
   }
 }
