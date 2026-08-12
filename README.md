@@ -7,7 +7,7 @@ Diseñada con un lenguaje visual inspirador **estilo Alisios Picnic** (tonos tie
 ## 🚀 Características Principales
 
 - **Frontend & Backend Integrado:** Next.js 14+ App Router, TypeScript, React 19, Tailwind CSS.
-- **Base de Datos Relacional:** MySQL/MariaDB + Prisma ORM con un esquema completo (`User`, `Vehicle`, `Booking`, `Payment`, `Contract`, `Review`, `Conversation`, `Message`, `SeoLocation`, etc.).
+- **Base de Datos Relacional:** PostgreSQL + Prisma ORM con un esquema completo (`User`, `Vehicle`, `Booking`, `Payment`, `Contract`, `Review`, `Conversation`, `Message`, `SeoLocation`, etc.).
 - **Motor de Precios Backend:** Cálculo autoritativo de tarifas por día, estancias mínimas, descuentos automáticos semanales/mensuales, comisiones marketplace y tarifas de servicio.
 - **Prevención de Double-Booking:** Transacciones de base de datos atómicas para bloquear calendarios e impedir solapamientos.
 - **Pagos Marketplace:** Integración de Stripe & Stripe Connect para cobros, payout de propietarios y depósitos de fianza.
@@ -27,7 +27,7 @@ Diseñada con un lenguaje visual inspirador **estilo Alisios Picnic** (tonos tie
 Crea un archivo `.env` en la raíz con el siguiente contenido:
 
 ```env
-VANEANDO_DATABASE_URL="mariadb://USUARIO:CONTRASEÑA@HOST:3306/BASE_DE_DATOS"
+DATABASE_URL="mariadb://USUARIO:CONTRASEÑA@HOST:3306/BASE_DE_DATOS"
 JWT_SECRET="secret-jwt-key-canarias-2026"
 STRIPE_SECRET_KEY="sk_test_mock_canarias_key"
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_test_mock_canarias_key"
@@ -65,7 +65,7 @@ Accede a [http://localhost:3000](http://localhost:3000).
 
 ## 🐳 Despliegue con Docker
 
-Para levantar la infraestructura completa (Next.js + MariaDB) en producción:
+Para levantar la infraestructura completa (Next.js + PostgreSQL) en producción:
 
 ```bash
 docker-compose up --build -d

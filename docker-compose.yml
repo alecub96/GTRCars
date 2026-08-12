@@ -8,24 +8,23 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - VANEANDO_DATABASE_URL=mariadb://nomad:canarias2026@mariadb:3306/nomadcanarias
+      - DATABASE_URL=postgresql://nomad:canarias2026@postgres:5432/nomadcanarias?schema=public
       - NODE_ENV=production
     depends_on:
-      - mariadb
+      - postgres
 
-  mariadb:
-    image: mariadb:11
-    container_name: vaneando_mariadb
+  postgres:
+    image: postgres:16-alpine
+    container_name: nomad_postgres
     restart: always
     environment:
-      MARIADB_USER: nomad
-      MARIADB_PASSWORD: canarias2026
-      MARIADB_DATABASE: nomadcanarias
-      MARIADB_ROOT_PASSWORD: root-canarias2026
+      POSTGRES_USER: nomad
+      POSTGRES_PASSWORD: canarias2026
+      POSTGRES_DB: nomadcanarias
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - mariadb_data:/var/lib/mysql
+      - postgres_data:/var/lib/postgresql/data
 
 volumes:
-  mariadb_data:
+  postgres_data:

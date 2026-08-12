@@ -2,7 +2,7 @@ import { prisma } from '../src/lib/prisma';
 import bcrypt from 'bcryptjs';
 
 async function main() {
-  console.log('🌱 Iniciando Seed de Datos Completo para Vaneando en MariaDB...');
+  console.log('🌱 Iniciando Seed de Datos Completo para Nomad Canarias en PostgreSQL Cloud...');
 
   // Limpiar base de datos
   await prisma.auditLog.deleteMany();
@@ -345,7 +345,7 @@ async function main() {
     await prisma.systemSetting.create({ data: s });
   }
 
-  console.log('✅ Base de Datos MariaDB sincronizada y poblada exitosamente con campers, usuarios y entradas de blog!');
+  console.log('✅ Base de Datos PostgreSQL en la nube sincronizada y poblada exitosamente con campers, usuarios y entradas de blog!');
 }
 
 main()

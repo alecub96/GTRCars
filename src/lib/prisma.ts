@@ -3,8 +3,8 @@ import { PrismaClient } from '@/generated/prisma/client';
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
-const rawDatabaseUrl = process.env.VANEANDO_DATABASE_URL?.trim();
-if (!rawDatabaseUrl) throw new Error('VANEANDO_DATABASE_URL no está configurada');
+const rawDatabaseUrl = process.env.DATABASE_URL?.trim();
+if (!rawDatabaseUrl) throw new Error('DATABASE_URL no está configurada');
 
 // PrismaMariaDb espera el esquema `mariadb://`. Hostinger suele mostrar
 // `mysql://`, así que aceptamos ambos formatos para evitar errores 500 de
