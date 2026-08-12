@@ -13,9 +13,14 @@ export default function AdminPage() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [authorized, setAuthorized] = useState<boolean | null>(null);
+  const [serviceError, setServiceError] = useState('');
 
   useEffect(() => {
-    fetch('/api/auth/me').then((response) => response.json()).then((auth) => {
+    fetch('/api/auth/me').then(async (response) => {
+      const auth = await response.json();
+      if (!response.ok) throw new Error(auth.error || 'No se pudo comprobar la sesión administrativa');
+      return auth;
+    }).then((auth) => {
       const isAdmin = auth.user?.role === 'ADMIN';
       setAuthorized(isAdmin);
       return isAdmin ? fetch('/api/admin/dashboard') : null;
@@ -24,9 +29,10 @@ export default function AdminPage() {
       .then((d) => {
         if (d) setData(d);
         setLoading(false);
-      });
+      }).catch((error: Error) => { setServiceError(error.message); setLoading(false); });
   }, []);
 
+  if (serviceError) return <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]"><Navbar /><main className="mx-auto max-w-xl px-4 py-20"><div className="rounded-3xl border border-amber-200 bg-white p-8 text-center shadow-sm"><ShieldCheck className="mx-auto h-10 w-10 text-amber-600" /><h1 className="mt-4 font-serif text-3xl font-bold">Administración temporalmente no disponible</h1><p className="mt-3 text-sm text-[#6B726E]">{serviceError}</p><button type="button" onClick={() => window.location.reload()} className="mt-6 rounded-full bg-[#13322E] px-5 py-3 text-xs font-bold uppercase tracking-wider text-white">Reintentar conexión</button></div></main></div>;
   if (authorized === null) return <div className="min-h-screen bg-[#F7F6F2]" />;
   if (authorized === false) return <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]"><Navbar /><AdminLogin /></div>;
 

@@ -20,10 +20,11 @@ export default function OwnerDashboardPage() {
   const [stripeMessage, setStripeMessage] = useState('');
   const [stripeSetupUrl, setStripeSetupUrl] = useState('');
   const [showBankSetup, setShowBankSetup] = useState(false);
+  const [serviceError, setServiceError] = useState('');
 
   useEffect(() => {
     fetch('/api/auth/me')
-      .then((res) => res.json())
+      .then(async (res) => { const data = await res.json(); if (!res.ok) throw new Error(data.error || 'No se pudo comprobar la sesión'); return data; })
       .then(async (data) => {
         const isOwner = data.user?.role === 'OWNER';
         setAuthorized(isOwner);
@@ -44,12 +45,13 @@ export default function OwnerDashboardPage() {
         setBookings(bookingsData.bookings || []);
         setLoading(false);
       })
-      .catch(() => {
-        setAuthorized(false);
-        router.replace('/');
+      .catch((error: Error) => {
+        setServiceError(error.message);
+        setLoading(false);
       });
   }, [router]);
 
+  if (serviceError) return <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]"><Navbar /><main className="mx-auto max-w-xl px-4 py-20 text-center"><h1 className="font-serif text-3xl font-bold">No podemos cargar el panel ahora mismo</h1><p className="mt-3 text-sm text-[#6B726E]">{serviceError}</p><button type="button" onClick={() => window.location.reload()} className="mt-6 rounded-full bg-[#13322E] px-5 py-3 text-xs font-bold text-white">Reintentar</button></main></div>;
   if (authorized !== true) {
     return <div className="min-h-screen bg-[#F7F6F2]" />;
   }

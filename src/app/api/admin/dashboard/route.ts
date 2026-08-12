@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
+import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 
 export async function GET() {
   try {
@@ -51,6 +52,7 @@ export async function GET() {
     });
   } catch (error) {
     console.error('API Admin Dashboard Error:', error);
+    if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
     return NextResponse.json({ error: 'Error al consultar panel financiero' }, { status: 500 });
   }
 }
