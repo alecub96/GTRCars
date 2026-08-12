@@ -9,7 +9,6 @@ export async function POST(request: Request) {
     if (user.role !== 'OWNER') return NextResponse.json({ error: 'Solo los propietarios pueden publicar campers' }, { status: 403 });
     const ownerId = user.id;
 
-    // Si no está autenticado, usar el propietario demo de Gran Canaria para no cortar el onboarding
     if (!ownerId) return NextResponse.json({ error: 'Propietario no válido' }, { status: 401 });
 
     const body = await request.json();

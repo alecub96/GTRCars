@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
 import { getFeaturedAudience } from '@/lib/featured';
+import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 
 export async function GET(request: Request) {
   try {
@@ -62,6 +63,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ success: true, vehicles: finalSortedVehicles });
   } catch (error) {
     console.error('API Vehicles Search Error:', error);
+    if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
     return NextResponse.json({ error: 'Error al buscar vehículos' }, { status: 500 });
   }
 }

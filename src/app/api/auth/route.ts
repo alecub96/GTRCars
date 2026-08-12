@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { signToken } from '@/lib/jwt';
 import { sendWelcomeEmail } from '@/lib/email';
 import { isConfiguredAdmin } from '@/lib/admin';
+import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 
 export async function POST(request: Request) {
   try {
@@ -101,6 +102,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Acción no válida' }, { status: 400 });
   } catch (error) {
     console.error('API Auth Error:', error);
+    if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
     return NextResponse.json({ error: 'Error interno del servidor' }, { status: 500 });
   }
 }
