@@ -1,20 +1,26 @@
 import nodemailer from 'nodemailer';
 
 const smtpPassword = process.env.SMTP_PASSWORD;
+const smtpUser = process.env.SMTP_USER || '';
+const smtpHost = process.env.SMTP_HOST || 'smtp.hostinger.com';
+const smtpPort = Number(process.env.SMTP_PORT || 465);
+const smtpSecure = process.env.SMTP_SECURE !== 'false';
 
-const transporter = smtpPassword
+const transporter = smtpPassword && smtpUser
   ? nodemailer.createTransport({
-      host: process.env.SMTP_HOST || 'smtp.hostinger.com',
-      port: Number(process.env.SMTP_PORT || 465),
-      secure: process.env.SMTP_SECURE !== 'false',
+      host: smtpHost,
+      port: smtpPort,
+      secure: smtpSecure,
       auth: {
-        user: process.env.SMTP_USER || 'admin@vaneando.com',
+        user: smtpUser,
         pass: smtpPassword,
       },
+      disableFileAccess: true,
+      disableUrlAccess: true,
     })
   : null;
 
-const from = process.env.EMAIL_FROM || 'vaneando. <admin@vaneando.com>';
+const from = process.env.EMAIL_FROM || (smtpUser ? `vaneando. <${smtpUser}>` : '');
 
 export async function sendWelcomeEmail(to: string, firstName: string) {
   if (!transporter) {
@@ -48,10 +54,12 @@ export async function sendPasswordResetEmail(to: string, firstName: string, rese
 export function getEmailConfiguration() {
   return {
     configured: Boolean(transporter),
-    host: process.env.SMTP_HOST || 'smtp.hostinger.com',
-    port: Number(process.env.SMTP_PORT || 465),
-    user: process.env.SMTP_USER || 'admin@vaneando.com',
+    host: smtpHost,
+    port: smtpPort,
+    secure: smtpSecure,
+    user: smtpUser || null,
     from,
+    missing: [!smtpUser && 'SMTP_USER', !smtpPassword && 'SMTP_PASSWORD', !from && 'EMAIL_FROM'].filter(Boolean),
   };
 }
 
