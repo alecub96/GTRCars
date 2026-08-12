@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { createCipheriv, createDecipheriv, createHash, randomBytes, randomUUID } from 'node:crypto';
 
-export type UploadKind = 'vehicles' | 'documents' | 'avatars';
+export type UploadKind = 'vehicles' | 'documents' | 'avatars' | 'inspections';
 
 export class UploadConfigurationError extends Error {}
 
@@ -28,8 +28,9 @@ export async function saveUpload(file: File, kind: UploadKind) {
   const directory = path.join(getUploadRoot(), kind);
   await mkdir(directory, { recursive: true });
   const contents = Buffer.from(await file.arrayBuffer());
-  const filename = kind === 'documents' ? `${randomUUID()}.enc` : `${randomUUID()}${extension}`;
-  const storedContents = kind === 'documents' ? encryptDocument(contents, file.type) : contents;
+  const encrypted = kind === 'documents' || kind === 'inspections';
+  const filename = encrypted ? `${randomUUID()}.enc` : `${randomUUID()}${extension}`;
+  const storedContents = encrypted ? encryptDocument(contents, file.type) : contents;
   await writeFile(path.join(directory, filename), storedContents, { flag: 'wx', mode: 0o600 });
   return `/api/uploads/${kind}/${filename}`;
 }
@@ -57,7 +58,7 @@ function encryptDocument(contents: Buffer, mimeType: string) {
 
 export async function readUpload(kind: UploadKind, filename: string) {
   const contents = await readFile(resolveUploadPath(kind, filename));
-  if (kind !== 'documents' || path.extname(filename) !== '.enc') {
+  if ((kind !== 'documents' && kind !== 'inspections') || path.extname(filename) !== '.enc') {
     return { contents, contentType: extensionsToMime[path.extname(filename).toLowerCase()] || 'application/octet-stream' };
   }
 

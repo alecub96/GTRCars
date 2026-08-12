@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getCurrentUser } from '@/lib/auth';
+import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 
 export async function GET() {
   try {
@@ -19,6 +20,8 @@ export async function GET() {
       },
     }, { headers: { 'Cache-Control': 'no-store' } });
   } catch (error) {
-    return NextResponse.json({ user: null }, { headers: { 'Cache-Control': 'no-store' } });
+    console.error('Auth me error:', error);
+    if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
+    return NextResponse.json({ error: 'No se pudo comprobar la sesión' }, { status: 500, headers: { 'Cache-Control': 'no-store' } });
   }
 }
