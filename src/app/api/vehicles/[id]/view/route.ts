@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
+import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
+ try {
   const { id } = await context.params;
   const vehicle = await prisma.vehicle.findUnique({ where: { id }, select: { ownerId: true, status: true } });
   if (!vehicle || vehicle.status !== 'ACTIVE') return NextResponse.json({ error: 'Anuncio no encontrado' }, { status: 404 });
@@ -16,4 +18,9 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
   if (referer) { try { source = new URL(referer).hostname; } catch {} }
   await prisma.vehicleView.create({ data: { vehicleId: id, viewerId: user?.id || null, country, source, event } });
   return NextResponse.json({ success: true, tracked: true });
+ } catch (error) {
+   console.error('Vehicle analytics event error:', error);
+   if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
+   return NextResponse.json({ error: 'No se pudo registrar el evento' }, { status: 500 });
+ }
 }

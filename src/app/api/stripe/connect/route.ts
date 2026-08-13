@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
+import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 
 export async function POST() {
   const user = await getCurrentUser();
@@ -29,6 +30,7 @@ export async function POST() {
     return NextResponse.json({ success: true, clientSecret: accountSession.client_secret });
   } catch (error: any) {
     console.error('Stripe Connect onboarding error:', error);
+    if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
     const message = typeof error?.message === 'string' ? error.message : '';
     if (message.includes('complete your platform profile')) {
       return NextResponse.json({
@@ -37,6 +39,6 @@ export async function POST() {
         dashboardUrl: 'https://dashboard.stripe.com/connect/accounts/overview',
       }, { status: 409 });
     }
-    return NextResponse.json({ error: error.message || 'No se pudo iniciar Stripe Connect' }, { status: 500 });
+    return NextResponse.json({ error: 'No se pudo iniciar la configuración segura de cobros' }, { status: 502 });
   }
 }

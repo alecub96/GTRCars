@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getCurrentUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { closeInactiveSupportChats, SUPPORT_WAIT_MESSAGE } from '@/lib/support';
+import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 
 function canAccess(user: { id: string; role: string }, conversation: { userId: string }) {
   return user.role === 'ADMIN' || conversation.userId === user.id;
@@ -57,6 +58,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ success: true, conversations: conversation ? [conversation] : [] });
   } catch (error) {
     console.error('Support Messages GET Error:', error);
+    if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
     return NextResponse.json({ error: 'No se pudo cargar el chat de soporte' }, { status: 500 });
   }
 }
@@ -115,6 +117,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true, conversationId: conversation.id, message });
   } catch (error) {
     console.error('Support Messages POST Error:', error);
+    if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
     return NextResponse.json({ error: 'No se pudo enviar el mensaje' }, { status: 500 });
   }
 }

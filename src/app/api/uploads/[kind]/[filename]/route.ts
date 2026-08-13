@@ -2,10 +2,12 @@ import { NextResponse } from 'next/server';
 import { getCurrentUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { readUpload, type UploadKind } from '@/lib/uploads';
+import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 
 export async function GET(_: Request, context: { params: Promise<{ kind: string; filename: string }> }) {
-  const { kind, filename } = await context.params;
-  if (kind !== 'vehicles' && kind !== 'documents' && kind !== 'avatars' && kind !== 'inspections') return NextResponse.json({ error: 'Archivo no encontrado' }, { status: 404 });
+  try {
+    const { kind, filename } = await context.params;
+    if (kind !== 'vehicles' && kind !== 'documents' && kind !== 'avatars' && kind !== 'inspections') return NextResponse.json({ error: 'Archivo no encontrado' }, { status: 404 });
 
   if (kind === 'documents') {
     const user = await getCurrentUser();
@@ -31,8 +33,13 @@ export async function GET(_: Request, context: { params: Promise<{ kind: string;
     }
   }
 
-  try {
-    const file = await readUpload(kind as UploadKind, filename);
+    let file;
+    try {
+      file = await readUpload(kind as UploadKind, filename);
+    } catch (error) {
+      console.error('Upload read error:', error);
+      return NextResponse.json({ error: 'Archivo no encontrado' }, { status: 404 });
+    }
     return new NextResponse(new Uint8Array(file.contents), {
       headers: {
         'Content-Type': file.contentType,
@@ -40,7 +47,9 @@ export async function GET(_: Request, context: { params: Promise<{ kind: string;
         'X-Content-Type-Options': 'nosniff',
       },
     });
-  } catch {
-    return NextResponse.json({ error: 'Archivo no encontrado' }, { status: 404 });
+  } catch (error) {
+    console.error('Protected upload access error:', error);
+    if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
+    return NextResponse.json({ error: 'No se pudo comprobar el acceso al archivo' }, { status: 500 });
   }
 }

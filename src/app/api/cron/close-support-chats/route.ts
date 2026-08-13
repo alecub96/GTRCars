@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { closeInactiveSupportChats } from '@/lib/support';
+import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 
 export async function GET(request: Request) {
   const secret = process.env.CRON_SECRET;
@@ -13,6 +14,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ success: true, ...result });
   } catch (error) {
     console.error('Close support chats cron error:', error);
+    if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
     return NextResponse.json({ error: 'No se pudieron cerrar los chats inactivos' }, { status: 500 });
   }
 }

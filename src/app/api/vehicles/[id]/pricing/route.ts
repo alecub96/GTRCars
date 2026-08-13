@@ -1,6 +1,16 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
+import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
+
+async function respond(operation: () => Promise<NextResponse>) {
+  try { return await operation(); }
+  catch (error) {
+    console.error('Pricing rules API error:', error);
+    if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
+    return NextResponse.json({ error: 'No se pudieron actualizar las tarifas' }, { status: 500 });
+  }
+}
 
 async function ownedVehicle(id: string) {
   const user = await getCurrentUser();
@@ -10,14 +20,17 @@ async function ownedVehicle(id: string) {
 }
 
 export async function GET(_: Request, context: { params: Promise<{ id: string }> }) {
+ return respond(async () => {
   const { id } = await context.params;
   const user = await getCurrentUser();
   const vehicle = await prisma.vehicle.findUnique({ where: { id }, select: { ownerId: true, status: true, pricingRules: { orderBy: { startDate: 'asc' } } } });
   if (!vehicle || (vehicle.status !== 'ACTIVE' && vehicle.ownerId !== user?.id)) return NextResponse.json({ error: 'Vehículo no encontrado' }, { status: 404 });
   return NextResponse.json({ success: true, rules: vehicle.pricingRules });
+ });
 }
 
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
+ return respond(async () => {
   const { id } = await context.params;
   const { vehicle } = await ownedVehicle(id);
   if (!vehicle) return NextResponse.json({ error: 'Solo el propietario puede gestionar tarifas' }, { status: 403 });
@@ -26,16 +39,20 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
   const start = new Date(body.startDate);
   const end = new Date(body.endDate);
   const pricePerDay = Number(body.pricePerDay);
-  if (!name || Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || start >= end || !Number.isFinite(pricePerDay) || pricePerDay < 10 || pricePerDay > 2_000) return NextResponse.json({ error: 'Completa un periodo y una tarifa entre 10 € y 2.000 € al día' }, { status: 400 });
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const horizon = new Date(today); horizon.setFullYear(horizon.getFullYear() + 3);
+  if (!name || Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || start < today || start >= end || end > horizon || !Number.isFinite(pricePerDay) || pricePerDay < 10 || pricePerDay > 2_000) return NextResponse.json({ error: 'Completa un periodo futuro de hasta tres años y una tarifa entre 10 € y 2.000 € al día' }, { status: 400 });
   const count = await prisma.pricingRule.count({ where: { vehicleId: id } });
   if (count >= 5) return NextResponse.json({ error: 'Puedes crear hasta cinco tarifas por camper' }, { status: 400 });
   const overlap = await prisma.pricingRule.findFirst({ where: { vehicleId: id, startDate: { lt: end }, endDate: { gt: start } } });
   if (overlap) return NextResponse.json({ error: 'Ese periodo se solapa con otra tarifa' }, { status: 409 });
   const rule = await prisma.pricingRule.create({ data: { vehicleId: id, name, startDate: start, endDate: end, pricePerDay: Math.round(pricePerDay * 100) / 100 } });
   return NextResponse.json({ success: true, rule });
+ });
 }
 
 export async function DELETE(request: Request, context: { params: Promise<{ id: string }> }) {
+ return respond(async () => {
   const { id } = await context.params;
   const { vehicle } = await ownedVehicle(id);
   if (!vehicle) return NextResponse.json({ error: 'Solo el propietario puede gestionar tarifas' }, { status: 403 });
@@ -44,4 +61,5 @@ export async function DELETE(request: Request, context: { params: Promise<{ id: 
   if (!rule || rule.vehicleId !== id) return NextResponse.json({ error: 'Tarifa no encontrada' }, { status: 404 });
   await prisma.pricingRule.delete({ where: { id: rule.id } });
   return NextResponse.json({ success: true });
+ });
 }

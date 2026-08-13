@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
+import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 
 function datesFromIcs(content: string) {
   const events: { start: Date; end: Date; summary: string }[] = [];
@@ -28,6 +29,7 @@ function parseIcsDate(value: string) {
 }
 
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
+ try {
   const user = await getCurrentUser();
   const { id } = await context.params;
   const vehicle = await prisma.vehicle.findUnique({ where: { id }, select: { ownerId: true } });
@@ -58,4 +60,9 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     return count;
   });
   return NextResponse.json({ success: true, imported, total: events.length });
+ } catch (error) {
+   console.error('Calendar import error:', error);
+   if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
+   return NextResponse.json({ error: 'No se pudo importar el calendario' }, { status: 500 });
+ }
 }

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
+import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 
 const VEHICLE_TYPES = new Set(['CAMPER', 'CAMPER_GRAN_VOLUMEN', 'TURISMO_CAMPERIZADO', 'CARAVANA', 'AUTOCARAVANA', '4X4_CAMPERIZADO', 'BARCO']);
 const ISLANDS = new Set(['Gran Canaria', 'Tenerife', 'Lanzarote', 'Fuerteventura', 'La Palma', 'La Gomera', 'El Hierro', 'La Graciosa']);
@@ -42,7 +43,6 @@ export async function POST(request: Request) {
       addressApprox,
       description,
       rules,
-      photoUrl,
       features,
     } = body;
 
@@ -96,7 +96,6 @@ export async function POST(request: Request) {
         description: clean.description,
         rules: clean.rules,
         status: 'PENDING_REVIEW',
-        photos: photoUrl ? { create: [{ url: photoUrl, orderIndex: 0 }] } : undefined,
         features: {
           create: Array.isArray(features)
             ? features.filter((name): name is string => typeof name === 'string' && name.trim().length > 0).map((name) => ({ name: name.trim() }))
@@ -108,6 +107,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true, vehicle });
   } catch (error) {
     console.error('API Publish Vehicle Error:', error);
+    if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
     return NextResponse.json({ error: 'Error al publicar camper' }, { status: 500 });
   }
 }

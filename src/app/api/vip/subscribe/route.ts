@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
+import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY || '';
 
@@ -88,6 +89,7 @@ export async function POST(request: Request) {
     });
   } catch (error: any) {
     console.error('API Featured Subscription Error:', error);
-    return NextResponse.json({ error: error.message || 'Error al activar Usuario destacado' }, { status: 500 });
+    if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
+    return NextResponse.json({ error: 'No se pudo activar Usuario destacado' }, { status: 500 });
   }
 }

@@ -61,7 +61,6 @@ export default function PublishCamperPage() {
     addressApprox: '',
     description: '',
     rules: '',
-    photoUrl: '',
     features: [] as string[],
   });
 

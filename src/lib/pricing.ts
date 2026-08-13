@@ -81,7 +81,9 @@ export function calculatePricing({
     ownerPayout,
     subtotalBeforeFees,
     totalAmount,
-    discountPct: totalDays >= 7 ? 10 : 0,
+    // No anunciamos un descuento que no se haya aplicado realmente al total.
+    // Las tarifas por periodo ya quedan reflejadas día a día en basePriceTotal.
+    discountPct: 0,
   };
 }
 
