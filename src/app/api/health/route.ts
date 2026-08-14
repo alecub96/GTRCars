@@ -34,7 +34,7 @@ export async function GET() {
   return NextResponse.json(
     {
       status: healthy ? 'ok' : 'degraded',
-      checks: { database: { ...database, source: process.env.VANEANDO_DATABASE_URL?.trim() ? 'VANEANDO_DATABASE_URL' : process.env.DATABASE_URL?.trim() ? 'DATABASE_URL' : 'missing', provider: databaseProvider }, configuration },
+      checks: { database: { ...database, source: process.env.DATABASE_URL?.trim() ? 'DATABASE_URL' : 'missing', provider: databaseProvider }, configuration },
       timestamp: new Date().toISOString(),
     },
     {

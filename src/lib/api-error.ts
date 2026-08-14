@@ -15,8 +15,8 @@ export function databaseUnavailableResponse(error?: unknown) {
     debug = 'No se puede alcanzar el servidor MySQL (revisa el host/puerto en la URL).';
   } else if (code === 'P1002' || message.includes('connection timeout') || message.includes('pool timeout')) {
     debug = 'Tiempo de espera agotado al conectar con MySQL.';
-  } else if (!process.env.VANEANDO_DATABASE_URL && !process.env.DATABASE_URL) {
-    debug = 'Falta configurar la variable VANEANDO_DATABASE_URL en Hostinger.';
+  } else if (!process.env.DATABASE_URL) {
+    debug = 'Falta configurar la variable DATABASE_URL en Hostinger.';
   }
 
   return NextResponse.json(
