@@ -112,6 +112,7 @@ export async function POST(request: Request) {
     const slugBase = clean.title.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 80) || 'vehiculo';
     const slug = `${slugBase}-${crypto.randomUUID().slice(0, 8)}`;
 
+    // CREACIÓN DIRECTA DEL VEHÍCULO
     const vehicle = await prisma.vehicle.create({
       data: {
         ownerId,
@@ -126,8 +127,8 @@ export async function POST(request: Request) {
         passengers: numeric.passengers || 2,
         beds: numeric.beds || 2,
         doors: numeric.doors || 4,
-        transmission: transmission || 'MANUAL',
-        fuelType: fuelType || 'DIESEL',
+        transmission: (['MANUAL', 'AUTOMATIC'].includes(transmission) ? transmission : 'MANUAL') as any,
+        fuelType: (['DIESEL', 'GASOLINE', 'HYBRID', 'ELECTRIC'].includes(fuelType) ? fuelType : 'DIESEL') as any,
         fuelConsumption: fuelConsumption || null,
         basePricePerDay: numeric.basePricePerDay,
         includedKmPerDay: numeric.includedKmPerDay || 150,
@@ -137,24 +138,36 @@ export async function POST(request: Request) {
         cleaningFee: numeric.cleaningFee || 30,
         minDays: numeric.minDays || 2,
         maxDays: numeric.maxDays || 30,
-        bookingType: bookingType || 'REQUEST_TO_BOOK',
+        bookingType: (['REQUEST_TO_BOOK', 'INSTANT_BOOKING'].includes(bookingType) ? bookingType : 'REQUEST_TO_BOOK') as any,
         cancellationPolicy: cancellationPolicy || 'MODERATE',
         addressApprox: addressApprox || null,
         description: clean.description,
         rules: clean.rules,
         status: 'PENDING_REVIEW',
-        features: {
-          create: Array.isArray(features)
-            ? features.filter((name): name is string => typeof name === 'string' && name.trim().length > 0).map((name) => ({ name: name.trim() }))
-            : [],
-        },
       },
     });
 
+    // CREACIÓN DE EQUIPAMIENTOS SECUNDARIOS SI EXISTEN
+    if (Array.isArray(features) && features.length > 0) {
+      const validFeatures = features
+        .filter((name): name is string => typeof name === 'string' && name.trim().length > 0)
+        .map((name) => ({ vehicleId: vehicle.id, name: name.trim() }));
+
+      if (validFeatures.length > 0) {
+        await prisma.vehicleFeature.createMany({
+          data: validFeatures,
+        }).catch((err) => console.warn('Non-fatal feature creation warning:', err));
+      }
+    }
+
     return NextResponse.json({ success: true, vehicle });
-  } catch (error) {
+  } catch (error: any) {
     console.error('API Publish Vehicle Error:', error);
     if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
-    return NextResponse.json({ error: 'No se pudo guardar el anuncio. Inténtalo de nuevo.' }, { status: 500 });
+    const message = typeof error?.message === 'string' ? error.message : '';
+    return NextResponse.json({
+      error: `No se pudo guardar el anuncio: ${message || 'Error en la base de datos.'}`,
+      debug: message,
+    }, { status: 500 });
   }
 }
