@@ -6,8 +6,12 @@ import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-er
 const VEHICLE_TYPES = new Set(['CAMPER', 'CAMPER_GRAN_VOLUMEN', 'TURISMO_CAMPERIZADO', 'CARAVANA', 'AUTOCARAVANA', '4X4_CAMPERIZADO', 'BARCO']);
 const ISLANDS = new Set(['Gran Canaria', 'Tenerife', 'Lanzarote', 'Fuerteventura', 'La Palma', 'La Gomera', 'El Hierro', 'La Graciosa']);
 
+import { ensureDbSchema } from '@/lib/prisma-ensure-schema';
+
 export async function POST(request: Request) {
   try {
+    await ensureDbSchema();
+
     const user = await getCurrentUser();
     if (!user) return NextResponse.json({ error: 'Debes iniciar sesión para publicar una camper' }, { status: 401 });
 
