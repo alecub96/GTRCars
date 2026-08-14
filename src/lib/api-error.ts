@@ -8,13 +8,13 @@ export function databaseUnavailableResponse(error?: unknown) {
   let debug = 'No se pudo conectar con la base de datos.';
 
   if (code === 'P1000' || message.includes('authentication failed') || message.includes('credentials are incorrect') || message.includes('access denied for user')) {
-    debug = 'Fallo de autenticación en MySQL (usuario o contraseña incorrectos en Hostinger).';
+    debug = 'Fallo de autenticación en PostgreSQL (usuario o contraseña incorrectos en Hostinger).';
   } else if (message.includes('unknown database')) {
-    debug = 'El nombre de la base de datos no existe en el servidor MySQL.';
+    debug = 'El nombre de la base de datos no existe en el servidor PostgreSQL.';
   } else if (code === 'P1001' || message.includes("can't reach database") || message.includes('econnrefused')) {
-    debug = 'No se puede alcanzar el servidor MySQL (revisa el host/puerto en la URL).';
+    debug = 'No se puede alcanzar el servidor PostgreSQL (revisa el host/puerto en la URL).';
   } else if (code === 'P1002' || message.includes('connection timeout') || message.includes('pool timeout')) {
-    debug = 'Tiempo de espera agotado al conectar con MySQL.';
+    debug = 'Tiempo de espera agotado al conectar con PostgreSQL.';
   } else if (!process.env.DATABASE_URL) {
     debug = 'Falta configurar la variable DATABASE_URL en Hostinger.';
   }

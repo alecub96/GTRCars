@@ -3,5 +3,5 @@ export function getDatabaseUrl() {
 }
 
 export function isSupportedDatabaseUrl(databaseUrl = getDatabaseUrl()) {
-  return /^(mysql|mariadb):\/\//i.test(databaseUrl);
+  return /^(postgresql|postgres):\/\//i.test(databaseUrl);
 }
