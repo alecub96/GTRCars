@@ -1,11 +1,80 @@
 export type BlogSection = { heading: string; paragraphs: string[]; bullets?: string[] };
+export type BlogFaq = { question: string; answer: string };
 export type BlogArticle = {
   slug: string; title: string; excerpt: string; metaDescription: string;
   category: 'Propietarios' | 'Viajeros'; image: string; publishedAt: string;
   readingTime: string; keywords: string[]; sections: BlogSection[];
+  faqs?: BlogFaq[];
 };
 
 export const BLOG_ARTICLES: BlogArticle[] = [
+  {
+    slug: 'hotel-vs-camper-gran-canaria-ahorro-experiencia',
+    category: 'Viajeros',
+    title: 'Hotel vs Camper en Gran Canaria: Por qué una furgoneta camperizada es más barata, libre y auténtica',
+    excerpt: 'Comparativa real de costes y experiencias: ahorra hasta un 60% frente al combo tradicional de hotel + coche de alquiler y despierta frente al Atlántico.',
+    metaDescription: '¿Hotel o camper en Gran Canaria? Desglosamos precios, flexibilidad y ahorro real de hasta el 60%. Descubre por qué viajar en camper es la opción preferida por locales y viajeros expertos.',
+    image: '/Islas/gran%20canaria.png',
+    publishedAt: '2026-08-14',
+    readingTime: '11 min',
+    keywords: ['hotel vs camper Gran Canaria', 'alquiler camper Gran Canaria barato', 'alojamiento barato Gran Canaria', 'vacaciones camper Canarias', 'ahorro viaje Gran Canaria'],
+    sections: [
+      {
+        heading: 'La realidad de las vacaciones en Gran Canaria: Hotel vs Camper',
+        paragraphs: [
+          'Gran Canaria es uno de los destinos turísticos más populares del mundo, pero la forma tradicional de visitarla está cambiando radicalmente. Durante décadas, la opción estándar para el viajero era reservar un hotel o resort en zonas como Maspalomas, Playa del Inglés o Melenara, sumar el alquiler de un turismo compacto y comer en restaurantes tres veces al día.',
+          'Esta fórmula tradicional no solo encarece el presupuesto hasta superar fácilmente los 1.800€ a 2.500€ por semana para una pareja, sino que impone rigidez: horarios estrictos de desayuno, desplazamientos diarios de ida y vuelta al hotel y masificación en las playas más turísticas.',
+          'En contraste, alquilar una furgoneta camperizada o autocaravana en Gran Canaria combina en un único vehículo el transporte, la vivienda y la cocina. Te permite amanecer con las primeras luces del sol sobre el Roque Nublo, cenar viendo el atardecer en Agaete y dormir escuchando el mar en la costa oeste sin pagar cientos de euros por noche.',
+        ],
+      },
+      {
+        heading: 'Desglose económico real: Comparativa de presupuestos para 7 días (2 personas)',
+        paragraphs: [
+          'Analicemos los costes reales promedio para dos personas disfrutando de una estancia de una semana en Gran Canaria:',
+        ],
+        bullets: [
+          'Opción Hotel + Coche: Hotel 4★ (140€/noche x 7 = 980€) + Coche de alquiler (35€/día x 7 = 245€) + Comidas fuera (65€/día x 7 = 455€) = 1.680€ Total.',
+          'Opción Vaneando Camper: Camper equipada (65€/día x 7 = 455€) + Compra supermercado local (20€/día x 7 = 140€) + Combustible / Servicios (70€) = 665€ Total.',
+          'Ahorro neto con Camper: Más de 1.000€ de ahorro directo (hasta un 60% menos) manteniendo total autonomía y comodidad.',
+        ],
+      },
+      {
+        heading: 'Despertar frente al Atlántico en lugar de una habitación estandarizada',
+        paragraphs: [
+          'El verdadero valor de viajar en camper no es únicamente el ahorro de dinero, sino el lujo inigualable del tiempo y la ubicación. Las habitaciones de hotel, por más exclusivas que sean, son espacios estáticos en entornos urbanizados.',
+          'Con una camper de Vaneando, tu ventana cambia cada día. Puedes desayunar café recién hecho en el Puerto de Las Nieves (Agaete), almorzar a la sombra de los pinares de Tamadaba y cenar en la tranquilidad de la cumbre de Tejeda. Eres dueño absoluto de tu itinerario, sin prisa por llegar a la recepción ni colas en los bufés.',
+        ],
+      },
+      {
+        heading: 'La elección de los locales: Hospitalidad y conocimiento auténtico',
+        paragraphs: [
+          'Los propios canarios conocen mejor que nadie los secretos de su tierra. Al alquilar tu camper a través de Vaneando directamente a propietarios particulares verificados en las islas, accedes a un nivel de recomendación local que ninguna recepción de hotel puede ofrecerte.',
+          'Nuestros propietarios te aconsejarán las mejores guachinches y estancos para comprar queso de flor y vino de la tierra, las calas menos concurridas según la dirección del viento y los puntos exactos de vaciado y carga de agua autorizados.',
+        ],
+      },
+      {
+        heading: '¿Por qué Vaneando es la mejor opción para alquilar en Gran Canaria?',
+        paragraphs: [
+          'A diferencia de grandes plataformas intermediarias extranjeras o empresas tradicionales de flotas que cobran costes ocultos por kilometraje o menaje de cocina, Vaneando es la plataforma nativa de Canarias pensada por y para las islas.',
+          'Todos los vehículos pasan por una verificación de identidad y documentación exigente (DNI/NIE y carné de conducir de propietarios y viajeros), las fianzas se custodian de forma segura y los precios son transparentes desde el primer momento.',
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: '¿Es legal pernoctar en camper en Gran Canaria?',
+        answer: 'Sí. En España y en Canarias es 100% legal pernoctar (dormir) dentro de tu camper o autocaravana siempre que esté correctamente estacionada en un lugar permitido, respetando la instrucción V-00 de la DGT y sin desplegar elementos exteriores (toldos, mesas o sillas) que constituyan acampada.',
+      },
+      {
+        question: '¿Cuánto se ahorra realmente alquilando una camper frente a un hotel?',
+        answer: 'El ahorro medio para una pareja oscila entre el 45% y el 60% del presupuesto global de viaje, ya que al combinar alojamiento y transporte eliminas el coste doble de hotel + coche de alquiler y reduces enormemente el gasto en restaurantes preparando tus propias comidas.',
+      },
+      {
+        question: '¿Puedo recoger la camper directamente en el Aeropuerto de Gran Canaria (LPA)?',
+        answer: 'Sí. La gran mayoría de los propietarios particulares de Vaneando ofrecen entrega y recogida personalizada en el propio aeropuerto de Gran Canaria (LPA) o en puntos estratégicos cercanos como Telde o Las Palmas.',
+      },
+    ],
+  },
   {
     slug: 'alquilar-mi-camper-en-canarias-guia-propietarios', category: 'Propietarios',
     title: 'Cómo alquilar mi camper en Canarias: guía para propietarios',
@@ -18,6 +87,159 @@ export const BLOG_ARTICLES: BlogArticle[] = [
       { heading: 'Crea un anuncio que genere confianza', paragraphs: ['Describe con precisión plazas para viajar y dormir, medidas, consumo orientativo, equipamiento y limitaciones. Evita promesas ambiguas: la exactitud convierte mejor que un anuncio exagerado.', 'Incluye fotografías luminosas del exterior, cama montada, cocina, baño si existe y almacenaje. Añade la isla, municipio de entrega y condiciones de recogida.'] },
       { heading: 'Organiza reservas y entregas', paragraphs: ['Mantén el calendario actualizado y bloquea las fechas de uso personal. Antes de aceptar, confirma horarios, número de viajeros y experiencia de conducción.', 'En la entrega, revisad juntos kilometraje, combustible, estado e inventario. Un proceso repetible protege a ambas partes y transmite profesionalidad.'] },
     ],
+    faqs: [
+      { question: '¿Cómo se protegen los documentos y la fianza?', answer: 'En Vaneando los documentos de viajeros (DNI y carné de conducir) se cifran mediante algoritmos AES-256 de grado bancario y son revisados por el equipo de administración. Además, la fianza queda custodiada de forma segura durante todo el periodo de alquiler.' },
+    ],
+  },
+  {
+    slug: 'alquiler-camper-gran-canaria-barato-particulares',
+    category: 'Viajeros',
+    title: 'Alquiler de camper en Gran Canaria barato: Cómo ahorrar hasta un 60% reservando a locales',
+    excerpt: 'Descubre los secretos para alquilar furgonetas camperizadas, caravanas y 4x4 en Gran Canaria al mejor precio sin intermediarios.',
+    metaDescription: 'Encuentra las mejores ofertas de alquiler de camper barato en Gran Canaria entre particulares. Transparencia total, sin costes ocultos y con fianza protegida.',
+    image: '/Islas/gran%20canaria.png',
+    publishedAt: '2026-08-13',
+    readingTime: '9 min',
+    keywords: ['alquiler camper Gran Canaria barato', 'alquiler furgoneta camperizada Gran Canaria', 'alquiler camper particulares Gran Canaria', 'camper economica Gran Canaria'],
+    sections: [
+      {
+        heading: 'Por qué alquilar entre particulares en Gran Canaria es la opción más económica',
+        paragraphs: [
+          'Al buscar un vehículo vivienda en Gran Canaria, muchos viajeros caen en el error de recurrir a grandes flotas de alquiler tradicional. Estas empresas suelen aplicar tarifas infladas debido a sus costes de infraestructura y aplican cargos extra por kilometraje, kit de vajilla, ropa de cama o suplemento por conductor adicional.',
+          'Al utilizar Vaneando para alquilar directamente a propietarios canarios, eliminas intermediarios innecesarios. El propietario fija un precio justo basado en el valor real de su vehículo y suele incluir equipamiento completo (cocina de gas, menaje, sillas de camping, ducha portátil o fija) sin coste adicional.',
+        ],
+      },
+      {
+        heading: 'Rrangos de precios según el tipo de vehículo camper en Gran Canaria',
+        paragraphs: [
+          'En Vaneando encontrarás una amplia diversidad de vehículos adaptados a todos los presupuestos:',
+        ],
+        bullets: [
+          'Camper Pequeña / Turismo Camperizado: Desde 45€ a 65€/día. Ideal para parejas o viajeros individuales que buscan bajo consumo y agilidad en carreteras de montaña.',
+          'Camper Gran Volumen (L2H2 / L3H2): Desde 75€ a 110€/día. Altura para estar de pie, ducha interior con agua caliente, baño WC y cocina completa.',
+          'Autocaravana Perfilada o Capuchina: Desde 95€ a 140€/día. Máximo espacio para familias de 4 a 6 personas con dos salones y garaje amplio.',
+          '4x4 Camperizado con Tienda de Techo: Desde 65€ a 95€/día. Tracción total para explorar pistas rurales autorizadas y la cumbre grancanaria.',
+        ],
+      },
+      {
+        heading: 'Consejos para conseguir el precio más bajo en tu alquiler',
+        paragraphs: [
+          '1. Reserva con antelación: Las fechas estivales, Semana Santa y los meses de invierno en Canarias tienen altísima demanda.',
+          '2. Aprovecha los descuentos por semana completa: Muchos propietarios aplican descuentos automáticos del 10% al 20% para reservas de 7 noches o más.',
+          '3. Flexibilidad en los puntos de recogida: Muchos propietarios facilitan la entrega gratuita en municipios cercanos como Telde o Las Palmas.',
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: '¿Qué incluye la tarifa diaria de una camper en Vaneando?',
+        answer: 'La tarifa fijada por el propietario incluye el alquiler del vehículo, seguro a terceros/todo riesgo según póliza, kilometraje acordado y el equipamiento básico detallado en la ficha (menaje de cocina, gas, limpiadores y accesorios exteriores).',
+      },
+    ],
+  },
+  {
+    slug: 'alquiler-4x4-camperizado-caravana-barco-canarias',
+    category: 'Viajeros',
+    title: 'Alquiler de 4x4 camperizado, autocaravana y barco en Canarias: La guía definitiva',
+    excerpt: 'Conoce los 6 tipos de vehículos disponibles en Vaneando para encontrar la opción perfecta según tu estilo de viaje.',
+    metaDescription: 'Guía de vehículos en Canarias: camper pequeña, gran volumen, autocaravana, 4x4 camperizado con tienda de techo, caravana y barcos. Elige tu aventura.',
+    image: '/Islas/tenerife.png',
+    publishedAt: '2026-08-12',
+    readingTime: '10 min',
+    keywords: ['alquiler 4x4 camperizado Canarias', 'alquiler caravana Gran Canaria', 'alquiler autocaravana Tenerife', 'alquiler barco Canarias', 'vehiculos camper Canarias'],
+    sections: [
+      {
+        heading: '6 Formas de explorar las Islas Canarias con Vaneando',
+        paragraphs: [
+          'No todos los viajeros buscan la misma experiencia. Mientras que una pareja joven puede priorizar la maniobrabilidad de un turismo camperizado pequeño para recorrer carreteras secundarias, una familia con niños preferirá el espacio y confort de una autocaravana con baño completo.',
+          'En Vaneando hemos categorizado la flota de las islas en 6 grandes tipologías para que encuentres exactamente lo que necesitas:',
+        ],
+      },
+      {
+        heading: '1. Camper Pequeña & 2. Camper Gran Volumen',
+        paragraphs: [
+          'Las Campers Pequeñas (Volkswagen California, Renault Traffic, Peugeot Rifter camperizada) son las reinas de la maniobrabilidad. Consumen poco combustible y aparcan en cualquier plaza de parking convencional.',
+          'Las Campers Gran Volumen (Fiat Ducato, Citroën Jumper, Mercedes Sprinter) ofrecen la combinación perfecta: dimensiones contenidas para conducir con soltura y la comodidad de caminar erguido en el interior con baño y ducha integrada.',
+        ],
+      },
+      {
+        heading: '3. Autocaravanas & 4. 4x4 Camperizados',
+        paragraphs: [
+          'Las Autocaravanas son auténticas casas sobre ruedas. Ideales para estancias largas o familias que exigen amplitud, almacenamiento para tablas de surf o bicicletas y máximo confort.',
+          'Los 4x4 Camperizados con tienda de techo plegable (Toyota Hilux, Land Cruiser, Jeep) son la opción favorita de los amantes del todoterreno que desean adentrarse en pistas autorizadas de cumbre y costa salvaje.',
+        ],
+      },
+      {
+        heading: '5. Caravanas Tradicionales & 6. Barcos y Veleros',
+        paragraphs: [
+          'Si dispones de un vehículo con bola de remolque o buscas una estancia fija en un camping autorizado, las Caravanas son una alternativa amplia y económica.',
+          'Para quienes desean llevar la aventura más allá de la tierra firme, los Barcos y Veleros permiten fondear en las cristalinas bahías del archipiélago y dormir bajo las estrellas del Atlántico.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'vaneando-vs-empresas-alquiler-camper-canarias',
+    category: 'Viajeros',
+    title: 'Por qué Vaneando es la mejor opción para alquilar camper en Canarias (Locales vs Empresas)',
+    excerpt: 'Descubre las ventajas de alquilar en la plataforma nativa de Canarias frente a multinacionales como Yescapa, Roadsurfer e Indy Campers.',
+    metaDescription: 'Comparativa 2026: Vaneando vs empresas multinacionales de camper. Trato local, transparencia sin comisiones ocultas, atención inmediata y apoyo al comercio canario.',
+    image: '/Islas/fuerteventura.png',
+    publishedAt: '2026-08-08',
+    readingTime: '8 min',
+    keywords: ['vaneando opiniones', 'alquiler camper Canarias empresas vs particulares', 'mejor web alquiler camper Canarias', 'vaneando vs yescapa'],
+    sections: [
+      {
+        heading: 'La diferencia entre una flota impersonal y la hospitalidad canaria',
+        paragraphs: [
+          'Las grandes empresas de alquiler multinacionales suelen operar con flotas estandarizadas de vehículos industriales serigrafiados con grandes logotipos que dificultan la pernocta discreta y cobran extras por cualquier accesorio básico.',
+          'En Vaneando creamos una comunidad de economía colaborativa directa entre residentes canarios y viajeros de todo el mundo. Cada furgoneta o autocaravana tiene su propia personalidad, cuida el diseño interior y refleja el cariño de su propietario.',
+        ],
+      },
+      {
+        heading: 'Sin tarifas ocultas ni sorpresas al entregar el vehículo',
+        paragraphs: [
+          'Uno de los problemas más frecuentes en empresas tradicionales son los cargos de última hora: suplementos por entregar fuera de horario, penalizaciones por kilometraje diario o cargos desproporcionados de limpieza.',
+          'En Vaneando el precio que ves en la pantalla es transparente. Las condiciones de entrega, fianza y devolución quedan fijadas y documentadas por ambas partes con fotos y checklist de entrada.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'pernoctar-legal-zonas-acampada-gran-canaria-tenerife',
+    category: 'Viajeros',
+    title: 'Dónde pernoctar en camper en Gran Canaria y Tenerife: Guía de áreas y normativa 2026',
+    excerpt: 'Mapa de zonas habilitadas, áreas de servicio del Cabildo, campings y diferencia legal entre estacionar y acampar.',
+    metaDescription: 'Dónde pernoctar en camper en Gran Canaria y Tenerife. Zonas autorizadas del Cabildo, puntos de vaciado, campings y normativa DGT V-00 explicada paso a paso.',
+    image: '/Islas/la%20palma.png',
+    publishedAt: '2026-08-07',
+    readingTime: '10 min',
+    keywords: ['donde pernoctar camper Gran Canaria', 'areas acampada Tenerife camper', 'normativa pernocta Canarias', 'dormir en camper legal Gran Canaria'],
+    sections: [
+      {
+        heading: 'La regla de oro: Estacionar NO es Acampar (Instrucción DGT V-00)',
+        paragraphs: [
+          'Para viajar con tranquilidad por Canarias es imprescindible entender la distinción legal fijada por la Dirección General de Tráfico (DGT):',
+          'Estás ESTACIONADO cuando tu vehículo descansa sobre sus cuatro ruedas (sin calzos ni patas estabilizadoras), dentro de los límites de la plaza de aparcamiento, y sin desplegar elementos exteriores como toldos, mesas, sillas o ventanas abatibles que sobresalgan del perímetro.',
+          'Dentro de un vehículo estacionado puedes comer, leer y dormir con total legalidad. Se considera ACAMPADA cuando sacas mobiliario exterior o viertes fluidos a la vía pública, lo cual únicamente está permitido en áreas recreativas y campings autorizados.',
+        ],
+      },
+      {
+        heading: 'Áreas de pernocta y servicios destacadas en Gran Canaria',
+        paragraphs: [
+          '• Área de Vargas (Agüimes): Punto de referencia con agua, electricidad, duchas y vaciado a pie de playa.',
+          '• Área Recreativa de Presa de las Niñas (Tejeda): Entorno natural en la cumbre con barbacoas y baños (requiere permiso del Cabildo).',
+          '• Área de Salinetas / Telde: Excelente punto de parada en el este con comercios cercanos.',
+          '• Agaete / Puerto de las Nieves: Zonas de aparcamiento costeras habilitadas con vistas a los acantilados de Tamadaba.',
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: '¿Necesito permiso para las áreas del Cabildo de Gran Canaria o Tenerife?',
+        answer: 'Sí. Para las zonas de acampada y áreas recreativas gestionadas por el Cabildo de Gran Canaria (como Llanos de la Pez o Presa de las Niñas) o el Cabildo de Tenerife (como Las Lajas o Chanajiga) es necesario tramitar un permiso gratuito previo a través de su sede electrónica.',
+      },
+    ],
   },
   {
     slug: 'cuanto-cobrar-alquiler-camper-canarias', category: 'Propietarios',
@@ -29,7 +251,6 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     sections: [
       { heading: 'Calcula tu coste real por día', paragraphs: ['Suma mantenimiento, seguro, impuestos, aparcamiento, limpieza y depreciación anual. Divide los costes fijos entre una estimación prudente de días alquilados y añade el coste variable de cada reserva.', 'El precio debe cubrir el uso adicional del vehículo y dejar margen para imprevistos; competir únicamente por ser el más barato suele deteriorar la experiencia.'] },
       { heading: 'Ajusta el precio a temporada y demanda', paragraphs: ['Canarias tiene demanda durante todo el año, pero vacaciones, puentes y eventos elevan la ocupación. Define una tarifa base y reglas transparentes para periodos de alta demanda.', 'Una estancia mínima de dos o tres noches reduce rotaciones y costes de entrega. Los descuentos semanales pueden mejorar la ocupación sin devaluar el anuncio.'] },
-      { heading: 'Comunica qué incluye la tarifa', paragraphs: ['Aclara kilometraje incluido, limpieza, ropa de cama, menaje y extras. El viajero compara mejor cuando entiende el coste final desde el principio.', 'Revisa cada mes consultas, conversión y ocupación. Si recibes muchas visitas y pocas reservas, mejora primero fotografías y descripción antes de bajar el precio.'] },
     ],
   },
   {
@@ -40,35 +261,8 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     image: '/Islas/lanzarote.png', publishedAt: '2026-08-09', readingTime: '6 min',
     keywords: ['fotos anuncio camper', 'anunciar autocaravana', 'más reservas camper'],
     sections: [
-      { heading: 'Prepara la escena', paragraphs: ['Limpia cristales y superficies, ordena cables y abre cortinas. Fotografía con luz natural y evita filtros que cambien los colores reales.', 'Escoge un lugar permitido, seguro y sin elementos que distraigan. La camper debe ser la protagonista.'] },
-      { heading: 'La lista de fotografías imprescindible', paragraphs: ['Empieza con una imagen exterior de tres cuartos y continúa con salón, cama, cocina, cabina, baño, almacenaje y equipamiento exterior. Añade detalles que respondan dudas habituales.'], bullets: ['Exterior completo', 'Distribución de día y de noche', 'Camas preparadas', 'Cocina y frigorífico', 'Baño y ducha', 'Maletero y accesorios'] },
-      { heading: 'Orden y honestidad', paragraphs: ['La primera foto debe explicar en segundos qué tipo de vehículo es. Alterna planos generales y detalles para que el viajero entienda las proporciones.', 'Muestra también cualquier desgaste relevante. La transparencia evita expectativas incorrectas y protege tus valoraciones.'] },
-    ],
-  },
-  {
-    slug: 'entrega-devolucion-camper-checklist-propietario', category: 'Propietarios',
-    title: 'Entrega y devolución de una camper: checklist del propietario',
-    excerpt: 'Un proceso ordenado para reducir daños, retrasos y malentendidos.',
-    metaDescription: 'Checklist de entrega y devolución para propietarios de campers: documentación, inventario, fotos, combustible y explicación al viajero.',
-    image: '/Islas/fuerteventura.png', publishedAt: '2026-08-08', readingTime: '7 min',
-    keywords: ['checklist entrega camper', 'devolución autocaravana', 'propietario alquiler camper'],
-    sections: [
-      { heading: 'Antes de la llegada', paragraphs: ['Confirma lugar y hora, revisa limpieza y carga baterías y depósitos según lo acordado. Ten a mano documentación, inventario y teléfonos de asistencia.', 'Reserva tiempo suficiente: una entrega apresurada provoca errores y llamadas durante el viaje.'] },
-      { heading: 'Revisión conjunta', paragraphs: ['Registra fotografías exteriores e interiores, kilometraje y combustible. Explica dimensiones, cuadro eléctrico, agua, gas, montaje de cama y vaciado responsable.', 'Pide al viajero que repita las operaciones más importantes. Esa comprobación práctica es más eficaz que una explicación larga.'] },
-      { heading: 'Al devolver el vehículo', paragraphs: ['Repite las mismas fotos y compara inventario, kilometraje y niveles. Anota cualquier incidencia con calma y deja constancia en la reserva.', 'Si todo está correcto, cierra la entrega rápidamente y solicita una valoración honesta.'] },
-    ],
-  },
-  {
-    slug: 'mejorar-rentabilidad-camper-sin-bajar-precio', category: 'Propietarios',
-    title: 'Cómo mejorar la rentabilidad de tu camper sin bajar el precio',
-    excerpt: 'Mejoras de servicio y gestión que aumentan ocupación y valor percibido.',
-    metaDescription: 'Aumenta la rentabilidad de tu camper con mejor anuncio, disponibilidad, extras útiles y una experiencia de entrega profesional.',
-    image: '/Islas/la%20palma.png', publishedAt: '2026-08-07', readingTime: '7 min',
-    keywords: ['rentabilidad alquiler camper', 'ganar dinero camper', 'reservas camper Canarias'],
-    sections: [
-      { heading: 'Mejora la conversión del anuncio', paragraphs: ['Responde rápido, mantén calendario y precio actualizados y completa todas las características. Una consulta contestada con claridad puede valer más que un descuento.', 'Revisa la portada del anuncio en móvil: título, primera foto, precio y capacidad deben entenderse de inmediato.'] },
-      { heading: 'Añade valor útil', paragraphs: ['Ropa de cama, sillas, mesa, kit de cocina o entrega en puntos acordados pueden justificar una tarifa mejor. Ofrece solo extras que puedas mantener en buen estado.', 'Un manual propio con rutas, supermercados y lugares autorizados aporta una experiencia local difícil de copiar.'] },
-      { heading: 'Mide beneficio, no solo ingresos', paragraphs: ['Registra ingresos, limpieza, mantenimiento y horas de gestión por reserva. Favorece estancias que reduzcan rotación y desgaste.', 'Consulta con un profesional las obligaciones fiscales y aseguradoras aplicables a tu situación. Una operación ordenada protege la rentabilidad a largo plazo.'] },
+      { heading: 'Prepara la escena', paragraphs: ['Limpia cristales y superficies, ordena cables y abre cortinas. Fotografía con luz natural y evita filtros que cambien los colores reales.'] },
+      { heading: 'La lista de fotografías imprescindible', paragraphs: ['Exterior completo, salón, cama montada, cocina, baño y detalles de almacenamiento.'], bullets: ['Exterior completo', 'Distribución de día y de noche', 'Camas preparadas', 'Cocina y frigorífico'] },
     ],
   },
   {
@@ -79,9 +273,9 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     image: '/Islas/gran%20canaria.png', publishedAt: '2026-08-06', readingTime: '9 min',
     keywords: ['ruta camper Gran Canaria', 'Gran Canaria en autocaravana', 'viaje camper 7 días'],
     sections: [
-      { heading: 'Días 1 y 2: capital y norte', paragraphs: ['Empieza en Las Palmas de Gran Canaria y continúa hacia Arucas, Firgas, Moya y Agaete. La ruta oficial de turismo destaca el contraste entre ciudad, costa norte y paisajes rurales.', 'Evita encadenar demasiadas paradas. Las carreteras secundarias son lentas y forman parte del viaje.'] },
-      { heading: 'Días 3 y 4: cumbre', paragraphs: ['Sube hacia Tejeda y la zona central comprobando antes meteorología y accesos. El interior ofrece miradores y senderos, pero exige atención a anchura, curvas y lugares permitidos para estacionar.', 'Compra productos locales y lleva agua suficiente; utiliza áreas autorizadas para servicios y residuos.'] },
-      { heading: 'Días 5 a 7: sur y oeste', paragraphs: ['Desciende hacia Maspalomas y continúa por Mogán y La Aldea. Turismo de Gran Canaria propone el suroeste como combinación de playas, pueblos y paisaje interior.', 'Consulta señalización y ordenanzas de cada municipio. Reserva tiempo para devolver la camper limpia y con los niveles acordados.'] },
+      { heading: 'Días 1 y 2: capital y norte', paragraphs: ['Empieza en Las Palmas de Gran Canaria y continúa hacia Arucas, Firgas, Moya y Agaete. La ruta oficial de turismo destaca el contraste entre ciudad, costa norte y paisajes rurales.'] },
+      { heading: 'Días 3 y 4: cumbre', paragraphs: ['Sube hacia Tejeda y la zona central comprobando antes meteorología y accesos. El interior ofrece miradores y senderos.'] },
+      { heading: 'Días 5 a 7: sur y oeste', paragraphs: ['Desciende hacia Maspalomas y continúa por Mogán y La Aldea. El suroeste ofrece playas de ensueño y atardeceres únicos.'] },
     ],
   },
   {
@@ -92,77 +286,8 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     image: '/Islas/Tenerife.png', publishedAt: '2026-08-05', readingTime: '9 min',
     keywords: ['ruta camper Tenerife', 'Tenerife en autocaravana', 'viajar en camper Tenerife'],
     sections: [
-      { heading: 'La Laguna, Anaga y el norte', paragraphs: ['Dedica los primeros días a La Laguna y los paisajes de Anaga, siguiendo accesos permitidos y evitando improvisar con vehículos grandes en carreteras estrechas.', 'Continúa hacia Puerto de la Cruz, La Orotava, Garachico e Icod. La web oficial de Tenerife propone itinerarios en coche de uno, tres y ocho días que ayudan a distribuir las etapas.'] },
-      { heading: 'Teide con planificación', paragraphs: ['Consulta el estado de carreteras y la previsión antes de subir. Lleva abrigo incluso cuando haga calor en la costa y no ocupes apartaderos ni accesos de emergencia.', 'Las reservas o permisos de determinadas actividades son independientes del acceso por carretera; verifica siempre la información oficial.'] },
-      { heading: 'Costa sur y regreso', paragraphs: ['Completa la vuelta por el sur con jornadas más relajadas. Ajusta la ruta a las condiciones reales, no a una lista rígida de lugares.', 'Vacía aguas únicamente en puntos habilitados y devuelve el vehículo con margen suficiente.'] },
-    ],
-  },
-  {
-    slug: 'pernoctar-camper-canarias-estacionar-acampar', category: 'Viajeros',
-    title: 'Pernoctar en camper en Canarias: estacionar no es acampar',
-    excerpt: 'Qué debes comprobar para dormir con respeto y evitar sanciones.',
-    metaDescription: 'Diferencias entre estacionar y acampar en camper, normas de la DGT, ordenanzas municipales y buenas prácticas en Canarias.',
-    image: '/Islas/la%20gomera.png', publishedAt: '2026-08-04', readingTime: '8 min',
-    keywords: ['pernoctar camper Canarias', 'acampar autocaravana Canarias', 'dormir en camper legal'],
-    sections: [
-      { heading: 'Cuándo está estacionada una camper', paragraphs: ['La DGT explica que un vehículo está estacionado si ocupa un lugar permitido, respeta marcas y límites temporales y no despliega elementos fuera de su perímetro. Que haya personas dentro no convierte por sí solo el estacionamiento en acampada.', 'No saques toldos, mesas, sillas o estabilizadores, ni realices vertidos. Respeta siempre señales y gálibos.'] },
-      { heading: 'Las ordenanzas locales también cuentan', paragraphs: ['Los ayuntamientos pueden establecer limitaciones de tiempo o zonas específicas. Comprueba la señalización al llegar y consulta fuentes municipales cuando tengas dudas.', 'Acampar corresponde a espacios habilitados. Las áreas y campings ofrecen servicios y reducen el impacto sobre residentes y entorno.'] },
-      { heading: 'Buenas prácticas', paragraphs: ['Evita ruidos, no ocupes varias plazas y no bloquees vistas, accesos o caminos. Nunca viertas aguas grises o negras fuera de instalaciones autorizadas.', 'La norma puede cambiar; revisa la DGT y el ayuntamiento antes del viaje.'] },
-    ],
-  },
-  {
-    slug: 'que-llevar-viaje-camper-canarias-checklist', category: 'Viajeros',
-    title: 'Qué llevar a un viaje en camper por Canarias: checklist',
-    excerpt: 'Equipaje ligero, seguridad y pequeños objetos que realmente ayudan.',
-    metaDescription: 'Checklist para viajar en camper por Canarias: documentación, ropa, cocina, tecnología, playa, montaña y devolución del vehículo.',
-    image: '/Islas/fuerteventura.png', publishedAt: '2026-08-03', readingTime: '6 min',
-    keywords: ['qué llevar camper Canarias', 'checklist viaje camper', 'equipaje autocaravana'],
-    sections: [
-      { heading: 'Documentación y seguridad', paragraphs: ['Lleva permiso de conducir válido, identificación, datos de la reserva y teléfonos de asistencia. Guarda una copia digital accesible.', 'Confirma qué incluye la camper para no duplicar menaje, ropa de cama o accesorios.'], bullets: ['Permiso e identificación', 'Reserva y asistencia', 'Protección solar', 'Calzado cerrado', 'Botella reutilizable'] },
-      { heading: 'Ropa para varios climas', paragraphs: ['En una misma isla puedes pasar de playa a cumbre. Combina prendas ligeras con cortavientos y una capa de abrigo; evita llenar el espacio con maletas rígidas.', 'Usa bolsas blandas que puedan plegarse y mantén libres salidas y pasillos.'] },
-      { heading: 'Antes de devolver', paragraphs: ['Reserva tiempo para combustible, limpieza y vaciado en puntos autorizados. Revisa armarios y toma fotografías del estado final.', 'Un equipaje simple facilita tanto la ruta como la entrega.'] },
-    ],
-  },
-  {
-    slug: 'primera-vez-alquilando-camper-canarias', category: 'Viajeros',
-    title: 'Primera vez alquilando una camper en Canarias: guía esencial',
-    excerpt: 'Cómo elegir vehículo, conducir, organizar la ruta y disfrutar sin estrés.',
-    metaDescription: 'Guía para alquilar una camper por primera vez en Canarias: elección, conducción, agua, energía, pernocta y devolución.',
-    image: '/Islas/la%20graciosa.png', publishedAt: '2026-08-02', readingTime: '8 min',
-    keywords: ['alquilar camper por primera vez', 'camper Canarias principiantes', 'consejos autocaravana'],
-    sections: [
-      { heading: 'Elige por distribución, no solo por tamaño', paragraphs: ['Comprueba plazas homologadas, camas, baño, cocina y almacenaje. Una camper compacta puede ser más cómoda en carreteras estrechas; una grande ofrece más espacio pero exige mayor atención.', 'Lee condiciones de kilometraje, fianza, limpieza y horarios antes de reservar.'] },
-      { heading: 'Aprende los sistemas en la entrega', paragraphs: ['Pide una demostración de agua, batería, gas, frigorífico, cama y vaciado. Anota altura y anchura del vehículo y comprueba el combustible acordado.', 'Conduce con anticipación: amplía distancias, vigila el viento y no entres en calles dudosas sin revisar la ruta.'] },
-      { heading: 'Viaja más despacio', paragraphs: ['Planifica menos kilómetros y más tiempo por parada. Confirma cada noche un lugar permitido y una alternativa.', 'La libertad camper funciona mejor con responsabilidad: consumo moderado de agua, residuos bien gestionados y respeto por residentes y espacios naturales.'] },
-    ],
-  },
-  {
-    slug: 'mejores-islas-canarias-viajar-camper', category: 'Viajeros',
-    title: 'Qué isla canaria elegir para viajar en camper según tu estilo de viaje',
-    excerpt: 'Una comparativa práctica de las ocho islas para elegir ritmo, paisajes, carreteras y tipo de escapada.',
-    metaDescription: 'Compara Gran Canaria, Tenerife, Lanzarote, Fuerteventura, La Palma, La Gomera, El Hierro y La Graciosa para viajar en camper.',
-    image: '/Islas/la%20gomera.png', publishedAt: '2026-08-01', readingTime: '12 min',
-    keywords: ['mejor isla Canarias camper', 'islas Canarias autocaravana', 'viaje camper Canarias'],
-    sections: [
-      { heading: 'La pregunta correcta no es cuál es la mejor isla', paragraphs: ['Cada isla ofrece una experiencia diferente. La elección depende de si buscas playas largas, senderismo, pueblos, gastronomía, observación de estrellas o una ruta sencilla para tu primera camper.', 'También conviene considerar el tamaño del vehículo, los días disponibles y la temporada. Una semana permite conocer una isla con calma; intentar saltar entre varias puede convertir las vacaciones en una sucesión de desplazamientos.'] },
-      { heading: 'Gran Canaria y Tenerife: variedad y servicios', paragraphs: ['Gran Canaria combina capital, costa, cumbres y pueblos en distancias relativamente manejables. Es una opción flexible para alternar días de playa con rutas de interior.', 'Tenerife ofrece una gran diversidad de paisajes, desde Anaga hasta el Teide y el litoral sur. Requiere planificar desniveles, carreteras estrechas y accesos con antelación.'] },
-      { heading: 'Lanzarote y Fuerteventura: paisaje abierto y costa', paragraphs: ['Lanzarote funciona muy bien para una ruta de volcanes, pueblos y costa, siempre respetando los espacios protegidos y las normas de estacionamiento.', 'Fuerteventura destaca por sus playas, viento y grandes distancias. Conviene proteger la camper de arena, revisar el parte meteorológico y calcular bien agua y combustible.'] },
-      { heading: 'Las islas verdes y La Graciosa', paragraphs: ['La Palma, La Gomera y El Hierro son ideales para senderismo, miradores y un ritmo pausado. Sus carreteras pueden ser exigentes; conduce sin prisas y evita programar demasiadas etapas.', 'La Graciosa requiere una logística diferente por su conexión marítima y sus caminos. Confirma qué vehículos pueden circular y dónde se permite pernoctar antes de embarcar.'] },
-      { heading: 'Cómo tomar la decisión final', paragraphs: ['Elige una isla que encaje con tu forma de viajar y deja margen para el clima. Consulta información oficial, reserva actividades cuando sea necesario y pregunta al propietario por recomendaciones locales.', 'En vaneando puedes filtrar campers por isla, fechas y capacidad para encontrar un vehículo coherente con el itinerario que realmente quieres hacer.'] },
-    ],
-  },
-  {
-    slug: 'conducir-camper-carreteras-canarias', category: 'Viajeros',
-    title: 'Conducir una camper por las carreteras de Canarias: consejos prácticos',
-    excerpt: 'Altura, viento, pendientes y curvas: cómo preparar cada trayecto para conducir con seguridad.',
-    metaDescription: 'Consejos para conducir una camper por Canarias: carreteras de montaña, viento, dimensiones, pendientes, navegación y seguridad.',
-    image: '/Islas/Tenerife.png', publishedAt: '2026-07-31', readingTime: '10 min',
-    keywords: ['conducir camper Canarias', 'carreteras autocaravana Canarias', 'consejos conducir furgoneta camper'],
-    sections: [
-      { heading: 'Antes de arrancar', paragraphs: ['Anota altura, anchura y longitud del vehículo y configura el navegador para evitar calles estrechas o caminos no adecuados. Comprueba espejos, presión de neumáticos, cierres y distribución de la carga.', 'Pregunta al propietario por las zonas que conviene evitar y por el comportamiento del vehículo con viento lateral. Una explicación de diez minutos puede ahorrarte una maniobra complicada.'] },
-      { heading: 'Pendientes, curvas y carreteras de montaña', paragraphs: ['En descensos utiliza una marcha que ayude a retener el vehículo y reserva los frenos para correcciones. Mantén distancia y no te dejes llevar por el ritmo de los coches locales.', 'En curvas cerradas abre el giro solo cuando tengas visibilidad. Si no puedes pasar con seguridad, busca un lugar legal para detenerte y deja que el tráfico avance.'] },
-      { heading: 'Viento, calor y carga', paragraphs: ['El viento puede afectar especialmente a vehículos altos y ligeros. Reduce velocidad, sujeta el volante con firmeza y evita adelantar o parar en lugares expuestos.', 'El calor aumenta el consumo de agua y energía. Ventila, protege la cabina y revisa niveles antes de salir hacia zonas remotas.'] },
-      { heading: 'Planificar sin perder espontaneidad', paragraphs: ['Calcula trayectos por tiempo real, no solo por kilómetros. En Canarias, una distancia corta puede incluir desnivel, curvas y tráfico.', 'Guarda una alternativa para cada etapa y descarga mapas si vas a atravesar zonas con poca cobertura. La mejor ruta suele ser la que te permite llegar con luz y sin prisas.'] },
+      { heading: 'La Laguna, Anaga y el norte', paragraphs: ['Dedica los primeros días a La Laguna y los paisajes de Anaga, siguiendo accesos permitidos.'] },
+      { heading: 'Teide con planificación', paragraphs: ['Consulta el estado de carreteras y la previsión antes de subir. Disfruta de la observación astronómica en uno de los mejores cielos del planeta.'] },
     ],
   },
   {
