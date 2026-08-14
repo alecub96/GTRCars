@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
 import { DollarSign, Landmark, CreditCard, Clock, ShieldCheck, ArrowUpRight, Receipt, FileText, Sparkles, Building2, CheckCircle2 } from 'lucide-react';
+import StripeConnectOnboarding from '@/components/StripeConnectOnboarding';
 
 const DEFAULT_FINANCE = {
   gross: 0,
@@ -17,6 +18,7 @@ export default function OwnerFinancePage() {
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [showBankSetup, setShowBankSetup] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -41,6 +43,7 @@ export default function OwnerFinancePage() {
   return (
     <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]">
       <Navbar />
+      {showBankSetup && <StripeConnectOnboarding onClose={() => setShowBankSetup(false)} />}
 
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
         {/* CABECERA DE FINANZAS */}
@@ -58,13 +61,14 @@ export default function OwnerFinancePage() {
           </div>
 
           <div className="flex items-center space-x-3">
-            <Link
-              href="/api/stripe/connect"
-              className="inline-flex items-center space-x-2 bg-[#13322E] hover:bg-[#254842] text-white px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider shadow-md transition-all"
+            <button
+              type="button"
+              onClick={() => setShowBankSetup(true)}
+              className="inline-flex items-center space-x-2 bg-[#13322E] hover:bg-[#254842] text-white px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider shadow-md transition-all cursor-pointer"
             >
               <Landmark className="w-4 h-4 text-[#16B8AA]" />
               <span>Configurar Cuenta Bancaria (IBAN)</span>
-            </Link>
+            </button>
           </div>
         </div>
 
