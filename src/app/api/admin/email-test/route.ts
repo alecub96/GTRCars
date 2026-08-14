@@ -1,18 +1,18 @@
 import { NextResponse } from 'next/server';
-import { getCurrentUser } from '@/lib/auth';
+import { requireAdmin } from '@/lib/admin';
 import { getEmailConfiguration, sendEmailTest } from '@/lib/email';
 import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 
 export async function GET() {
-  const user = await getCurrentUser();
-  if (!user || user.role !== 'ADMIN') return NextResponse.json({ error: 'Acceso restringido' }, { status: 403 });
+  const user = await requireAdmin();
+  if (!user) return NextResponse.json({ error: 'Acceso restringido' }, { status: 403 });
   return NextResponse.json({ success: true, configuration: getEmailConfiguration() });
 }
 
 export async function POST(request: Request) {
   try {
-    const user = await getCurrentUser();
-    if (!user || user.role !== 'ADMIN') return NextResponse.json({ error: 'Acceso restringido' }, { status: 403 });
+    const user = await requireAdmin();
+    if (!user) return NextResponse.json({ error: 'Acceso restringido' }, { status: 403 });
 
     let target = user.email;
     try {

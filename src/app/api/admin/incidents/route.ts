@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
-import { getCurrentUser } from '@/lib/auth';
+import { requireAdmin } from '@/lib/admin';
 import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 
 const updateSchema = z.object({
@@ -10,17 +10,10 @@ const updateSchema = z.object({
   resolution: z.string().trim().max(5000).optional(),
 });
 
-async function requireAdmin() {
-  const user = await getCurrentUser();
-  if (!user) return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
-  if (user.role !== 'ADMIN') return NextResponse.json({ error: 'Acceso restringido' }, { status: 403 });
-  return null;
-}
-
 export async function GET() {
   try {
-    const authError = await requireAdmin();
-    if (authError) return authError;
+    const user = await requireAdmin();
+    if (!user) return NextResponse.json({ error: 'Acceso restringido' }, { status: 403 });
     const incidents = await prisma.incident.findMany({
       include: {
         booking: {
@@ -46,8 +39,8 @@ export async function GET() {
 
 export async function PATCH(request: Request) {
   try {
-    const authError = await requireAdmin();
-    if (authError) return authError;
+    const user = await requireAdmin();
+    if (!user) return NextResponse.json({ error: 'Acceso restringido' }, { status: 403 });
     const parsed = updateSchema.safeParse(await request.json());
     if (!parsed.success) return NextResponse.json({ error: 'Revisa el estado y la resolución' }, { status: 400 });
     if (['RESOLVED', 'REJECTED'].includes(parsed.data.status) && !parsed.data.resolution) {

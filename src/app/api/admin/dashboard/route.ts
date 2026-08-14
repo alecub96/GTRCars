@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { getCurrentUser } from '@/lib/auth';
+import { requireAdmin } from '@/lib/admin';
 import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 
 export async function GET() {
   try {
-    const user = await getCurrentUser();
-    if (!user) return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
-    if (user.role !== 'ADMIN') return NextResponse.json({ error: 'Acceso restringido' }, { status: 403 });
+    const user = await requireAdmin();
+    if (!user) return NextResponse.json({ error: 'Acceso restringido' }, { status: 403 });
+
     const bookings = await prisma.booking.findMany({
       include: {
         vehicle: { select: { title: true, island: true } },
@@ -18,12 +18,12 @@ export async function GET() {
       orderBy: { createdAt: 'desc' },
     });
 
-    const paidBookings = bookings.filter((b) => b.payments.some((payment) => payment.status === 'SUCCEEDED'));
-    const totalVolume = paidBookings.reduce((sum, b) => sum + b.totalAmount, 0);
-    const totalPlatformCommission = paidBookings.reduce((sum, b) => sum + (b.travelerFee + b.ownerFee), 0);
+    const paidBookings = bookings.filter((b: any) => b.payments.some((payment: any) => payment.status === 'SUCCEEDED'));
+    const totalVolume = paidBookings.reduce((sum: number, b: any) => sum + b.totalAmount, 0);
+    const totalPlatformCommission = paidBookings.reduce((sum: number, b: any) => sum + (b.travelerFee + b.ownerFee), 0);
     const totalOwnerPayoutsPending = paidBookings
-      .filter((b) => b.status === 'CONFIRMED' || b.status === 'COMPLETED')
-      .reduce((sum, b) => sum + b.ownerPayout, 0);
+      .filter((b: any) => b.status === 'CONFIRMED' || b.status === 'COMPLETED')
+      .reduce((sum: number, b: any) => sum + b.ownerPayout, 0);
 
     return NextResponse.json({
       success: true,
@@ -33,9 +33,9 @@ export async function GET() {
         totalPlatformCommission,
         totalOwnerPayoutsPending,
         stripeConfigured: Boolean(process.env.STRIPE_SECRET_KEY && !process.env.STRIPE_SECRET_KEY.includes('mock')),
-        connectedOwners: new Set(bookings.filter((booking) => booking.owner.stripeAccountId).map((booking) => booking.owner.email)).size,
+        connectedOwners: new Set(bookings.filter((booking: any) => booking.owner.stripeAccountId).map((booking: any) => booking.owner.email)).size,
       },
-      payouts: paidBookings.map((b) => ({
+      payouts: paidBookings.map((b: any) => ({
         bookingId: b.id,
         bookingCode: b.code,
         vehicleTitle: b.vehicle.title,

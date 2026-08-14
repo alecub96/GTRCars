@@ -1,12 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { getCurrentUser } from '@/lib/auth';
+import { requireAdmin } from '@/lib/admin';
 import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
-
-async function requireAdmin() {
-  const user = await getCurrentUser();
-  return user?.role === 'ADMIN' ? user : null;
-}
 
 export async function GET(request: Request) {
   try {
