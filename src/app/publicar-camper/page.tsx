@@ -43,9 +43,9 @@ export default function PublishCamperPage() {
     fetch('/api/auth/me')
       .then((response) => response.json())
       .then((data) => {
-        const isOwner = data.user?.role === 'OWNER' || data.user?.role === 'ADMIN';
-        setAuthorized(isOwner);
-        if (!isOwner) window.location.href = data.user ? '/cuenta' : '/';
+        const isLoggedIn = Boolean(data.user);
+        setAuthorized(isLoggedIn);
+        if (!isLoggedIn) window.location.href = '/';
       })
       .catch(() => {
         setAuthorized(false);

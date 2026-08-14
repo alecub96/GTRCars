@@ -10,8 +10,13 @@ export async function POST(request: Request) {
   try {
     const user = await getCurrentUser();
     if (!user) return NextResponse.json({ error: 'Debes iniciar sesión para publicar una camper' }, { status: 401 });
+
+    // Si el usuario publica un anuncio pero su rol en la BD sigue en TRAVELER, se actualiza automaticamente a OWNER
     if (user.role !== 'OWNER' && user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Debes estar en Modo Propietario para publicar anuncios.' }, { status: 403 });
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { role: 'OWNER' },
+      }).catch((err) => console.warn('Auto role promotion warning:', err));
     }
 
     const ownerId = user.id;
