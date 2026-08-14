@@ -21,15 +21,15 @@ const ISLAND_HERO_IMAGES: Record<string, string> = {
   'La Graciosa': '/Islas/la%20graciosa.webp',
 };
 
-const ISLAND_IMAGE_OFFSETS: Record<string, string> = {
-  'Gran Canaria': '50% 50%',
-  'Tenerife': '50% 50%',
-  'Lanzarote': '50% 45%',
-  'Fuerteventura': '50% 42%',
-  'La Palma': '50% 50%',
-  'La Gomera': '50% 50%',
-  'El Hierro': '50% 50%',
-  'La Graciosa': '50% 50%',
+const ISLAND_CARD_LANDSCAPES: Record<string, string> = {
+  'Gran Canaria': 'https://images.unsplash.com/photo-1544644181-1484b3fdfc62?w=800&auto=format&fit=crop&q=80',
+  'Tenerife': 'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&auto=format&fit=crop&q=80',
+  'Lanzarote': 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop&q=80',
+  'Fuerteventura': 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800&auto=format&fit=crop&q=80',
+  'La Palma': 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&auto=format&fit=crop&q=80',
+  'La Gomera': 'https://images.unsplash.com/photo-1511497584788-876761465586?w=800&auto=format&fit=crop&q=80',
+  'El Hierro': 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&auto=format&fit=crop&q=80',
+  'La Graciosa': 'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800&auto=format&fit=crop&q=80',
 };
 interface HeroSectionProps {
   initialVehicles: any[];
@@ -357,12 +357,11 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-[#1C2826] via-[#13322E] to-[#0D211E]" />
                 <img
-                  src={ISLAND_HERO_IMAGES[isla.name] || ISLAND_HERO_IMAGES['Gran Canaria']}
+                  src={ISLAND_CARD_LANDSCAPES[isla.name] || ISLAND_CARD_LANDSCAPES['Gran Canaria']}
                   alt={`Alquiler camper en ${isla.name}`}
                   loading="lazy"
                   decoding="async"
-                  style={{ objectPosition: ISLAND_IMAGE_OFFSETS[isla.name] || '50% 50%', transformOrigin: '50% 50%' }}
-                  className="absolute inset-0 h-full w-full object-cover scale-[3.5] sm:scale-[3.6] transition-transform duration-700 group-hover:scale-[3.9]"
+                  className="absolute inset-0 h-full w-full object-cover scale-100 transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10" />
                 <div className="absolute bottom-5 left-5 right-5 text-white">
