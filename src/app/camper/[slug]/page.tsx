@@ -16,10 +16,21 @@ interface CamperDetailPageProps {
 
 export async function generateMetadata({ params }: CamperDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const vehicle = await prisma.vehicle.findUnique({ where: { slug }, select: { title: true, description: true, island: true, municipality: true, status: true, photos: { take: 1, orderBy: { orderIndex: 'asc' } } } }).catch(() => null);
+  const vehicle = await prisma.vehicle.findUnique({ where: { slug }, select: { title: true, description: true, island: true, municipality: true, status: true, basePricePerDay: true, photos: { take: 1, orderBy: { orderIndex: 'asc' } } } }).catch(() => null);
   if (!vehicle) return {};
-  const description = `${vehicle.description.slice(0, 125)} Alquiler en ${vehicle.municipality}, ${vehicle.island}.`;
-  return { title: `${vehicle.title} en ${vehicle.island}`, description, alternates: { canonical: `/camper/${slug}` }, robots: vehicle.status === 'ACTIVE' ? { index: true, follow: true } : { index: false, follow: false }, openGraph: { title: vehicle.title, description, url: `/camper/${slug}`, images: vehicle.photos[0]?.url ? [vehicle.photos[0].url] : [] } };
+  const description = `Alquila ${vehicle.title} en ${vehicle.municipality}, ${vehicle.island} desde ${vehicle.basePricePerDay}€/día. Directo entre particulares con fianza protegida e identidad verificada.`;
+  return {
+    title: `${vehicle.title} en ${vehicle.island} desde ${vehicle.basePricePerDay}€/día | vaneando.`,
+    description,
+    alternates: { canonical: `https://vaneando.com/camper/${slug}` },
+    robots: vehicle.status === 'ACTIVE' ? { index: true, follow: true } : { index: false, follow: false },
+    openGraph: {
+      title: `${vehicle.title} en ${vehicle.island}`,
+      description,
+      url: `https://vaneando.com/camper/${slug}`,
+      images: vehicle.photos[0]?.url ? [vehicle.photos[0].url] : [],
+    },
+  };
 }
 
 export default async function CamperDetailPage({ params }: CamperDetailPageProps) {
@@ -52,12 +63,51 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
     featured.vehicleIds.has(vehicle.id) ||
     featured.subscriptionOwnerIds.has(vehicle.owner.id)
   ));
-  const jsonLd = { '@context': 'https://schema.org', '@type': 'Product', name: vehicle.title, description: vehicle.description, image: vehicle.photos.map((photo) => photo.url), brand: { '@type': 'Brand', name: vehicle.brand }, offers: { '@type': 'Offer', priceCurrency: 'EUR', price: vehicle.basePricePerDay, availability: 'https://schema.org/InStock', url: `https://vaneando.com/camper/${vehicle.slug}` }, aggregateRating: vehicle.reviews.length ? { '@type': 'AggregateRating', ratingValue: avgRating, reviewCount: vehicle.reviews.length } : undefined };
+
+  const jsonLdVehicleProduct = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: vehicle.title,
+    description: vehicle.description,
+    image: vehicle.photos.map((photo) => photo.url),
+    brand: { '@type': 'Brand', name: vehicle.brand || 'vaneando.' },
+    category: vehicle.vehicleType || 'Camper',
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: 'EUR',
+      price: vehicle.basePricePerDay,
+      availability: 'https://schema.org/InStock',
+      url: `https://vaneando.com/camper/${vehicle.slug}`,
+      itemCondition: 'https://schema.org/UsedCondition',
+      seller: {
+        '@type': 'Person',
+        name: `${vehicle.owner.firstName} ${vehicle.owner.lastName}`,
+      },
+    },
+    ...(vehicle.reviews.length ? {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: avgRating,
+        reviewCount: vehicle.reviews.length,
+      },
+    } : {}),
+  };
+
+  const jsonLdBreadcrumb = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: 'https://vaneando.com' },
+      { '@type': 'ListItem', position: 2, name: vehicle.island, item: `https://vaneando.com/buscar?island=${encodeURIComponent(vehicle.island)}` },
+      { '@type': 'ListItem', position: 3, name: vehicle.title, item: `https://vaneando.com/camper/${vehicle.slug}` },
+    ],
+  };
 
   return (
     <div className="min-h-screen bg-[#F7F6F2] text-[#1C2826]">
       <VehicleViewTracker vehicleId={vehicle.id} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdVehicleProduct) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdBreadcrumb) }} />
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

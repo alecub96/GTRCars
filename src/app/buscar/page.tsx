@@ -7,6 +7,7 @@ import { Star, MapPin, Filter, SlidersHorizontal, ShieldCheck, ChevronRight } fr
 import VehicleViewTracker from '@/components/VehicleViewTracker';
 import { getFeaturedAudience } from '@/lib/featured';
 
+import type { Metadata } from 'next';
 import VehicleTypeSlider from '@/components/VehicleTypeSlider';
 import { VEHICLE_TYPES_CONFIG } from '@/lib/vehicle-types';
 
@@ -21,6 +22,24 @@ interface SearchPageProps {
     startDate?: string;
     endDate?: string;
   }>;
+}
+
+export async function generateMetadata({ searchParams }: SearchPageProps): Promise<Metadata> {
+  const params = await searchParams;
+  const islandName = params.island ? params.island : 'las Islas Canarias';
+  const typeObj = VEHICLE_TYPES_CONFIG.find((v) => v.id === params.vehicleType);
+  const typeLabel = typeObj ? typeObj.label : 'campers y autocaravanas';
+
+  return {
+    title: `Alquiler de ${typeLabel} en ${islandName} barato entre particulares | vaneando.`,
+    description: `Busca y compara entre ${typeLabel} disponibles en ${islandName}. Alquiler directamente a propietarios particulares verificados, con seguro y sin comisiones ocultas. Ahorra hasta el 60% frente a un hotel.`,
+    alternates: { canonical: `https://vaneando.com/buscar${params.island ? `?island=${encodeURIComponent(params.island)}` : ''}` },
+    openGraph: {
+      title: `Alquiler de ${typeLabel} en ${islandName} | vaneando.`,
+      description: `Compara precios y disponibilidad de ${typeLabel} en ${islandName}. Reserva con fianza protegida e identidades verificadas.`,
+      url: `https://vaneando.com/buscar`,
+    },
+  };
 }
 
 const ISLAND_HERO_IMAGES: Record<string, string> = {
@@ -92,9 +111,38 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     }
   }
 
+  const jsonLdSearchResults = {
+    '@context': 'https://schema.org',
+    '@type': 'SearchResultsPage',
+    name: `Alquiler de campers y autocaravanas ${selectedIsland ? `en ${selectedIsland}` : 'en Canarias'}`,
+    url: `https://vaneando.com/buscar`,
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: vehicles.length,
+      itemListElement: vehicles.map((vehicle, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        url: `https://vaneando.com/camper/${vehicle.slug}`,
+        name: vehicle.title,
+      })),
+    },
+  };
+
+  const jsonLdBreadcrumb = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: 'https://vaneando.com' },
+      { '@type': 'ListItem', position: 2, name: 'Buscador de Campers', item: 'https://vaneando.com/buscar' },
+      ...(selectedIsland ? [{ '@type': 'ListItem', position: 3, name: selectedIsland, item: `https://vaneando.com/buscar?island=${encodeURIComponent(selectedIsland)}` }] : []),
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-[#F7F6F2] text-[#1C2826]">
       <Navbar />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdSearchResults) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdBreadcrumb) }} />
 
       {/* CABECERA BUSCADOR CON FONDO DE LA ISLA SELECCIONADA Y SLIDER DE VEHICULOS */}
       <section className="relative z-10 min-h-[340px] flex items-center justify-center overflow-hidden px-4 py-12 border-b border-[#E9E1D2]">
@@ -110,7 +158,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
         <div className="relative z-10 max-w-7xl mx-auto w-full text-center sm:text-left px-4 space-y-4">
           <h1 className="font-serif text-3xl sm:text-5xl font-bold text-white tracking-tight drop-shadow-md">
-            Alquiler de Campers y Autocaravanas {selectedIsland ? `en ${selectedIsland}` : ''}
+            Alquiler de Campers y Autocaravanas {selectedIsland ? `en ${selectedIsland}` : 'en Canarias'}
           </h1>
           <p className="text-sm sm:text-base text-white/90 font-medium max-w-xl drop-shadow">
             {vehicles.length} vehículos listos para explorar {selectedIsland || 'las Islas Canarias'} sobre ruedas
@@ -306,6 +354,36 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           </div>
 
         </div>
+
+        {/* SECCIÓN SEO ENRIQUECIDA AL PIE DEL BUSCADOR */}
+        <section className="mt-20 border-t border-[#E9E1D2] pt-12 space-y-8 text-[#13322E]">
+          <div className="max-w-4xl mx-auto text-center space-y-3">
+            <span className="text-[11px] font-black uppercase tracking-[0.25em] text-[#16B8AA] bg-[#16B8AA]/10 px-4 py-1.5 rounded-full inline-block">
+              La Plataforma Oficial nº 1 de Canarias
+            </span>
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold">
+              Alquiler de Campers en Gran Canaria, Tenerife y las 8 Islas
+            </h2>
+            <p className="text-sm text-[#6B726E] font-medium leading-relaxed">
+              Vaneando es el marketplace nativo de las Islas Canarias que conecta a viajeros con propietarios particulares verificados para vivir aventuras inolvidables sobre ruedas.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto pt-4 text-xs font-medium text-[#6B726E]">
+            <div className="bg-white p-6 rounded-3xl border border-[#E9E1D2] shadow-sm">
+              <h3 className="font-serif text-lg font-bold text-[#13322E] mb-2">Ahorra hasta un 60% frente a un hotel</h3>
+              <p className="leading-relaxed">Al combinar transporte y alojamiento en un solo vehículo y cocinar a bordo, ahorras más de 1.000€ a la semana frente al coste habitual de hotel + coche de alquiler en Canarias.</p>
+            </div>
+            <div className="bg-white p-6 rounded-3xl border border-[#E9E1D2] shadow-sm">
+              <h3 className="font-serif text-lg font-bold text-[#13322E] mb-2">Vehículos Locales Verificados</h3>
+              <p className="leading-relaxed">Todas las furgonetas camperizadas, autocaravanas, caravanas y 4x4 cuentan con seguro, fianza custodiada y revisión de identidad DNI/NIE de propietarios e inquilinos.</p>
+            </div>
+            <div className="bg-white p-6 rounded-3xl border border-[#E9E1D2] shadow-sm">
+              <h3 className="font-serif text-lg font-bold text-[#13322E] mb-2">Entrega en Aeropuerto LPA y TFN/TFS</h3>
+              <p className="leading-relaxed">Recoge tu vehículo directamente al aterrizar en el Aeropuerto de Gran Canaria (LPA), Tenerife Norte (TFN), Tenerife Sur (TFS), Lanzarote (ACE) o Fuerteventura (FUE).</p>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
   );
