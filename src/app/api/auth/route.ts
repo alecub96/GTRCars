@@ -124,9 +124,10 @@ export async function POST(request: Request) {
     }
 
     return authResponse({ error: 'Acción no válida' }, 400);
-  } catch (error) {
+  } catch (error: any) {
     console.error('API Auth Error:', error);
     if (isDatabaseUnavailable(error)) return databaseUnavailableResponse(error);
-    return authResponse({ error: 'Error interno del servidor' }, 500);
+    const detail = error?.message || String(error || 'Error interno del servidor');
+    return authResponse({ error: 'Error interno del servidor', debug: detail }, 500);
   }
 }
