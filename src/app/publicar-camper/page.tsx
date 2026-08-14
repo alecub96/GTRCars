@@ -159,7 +159,7 @@ export default function PublishCamperPage() {
         }
       }
 
-      router.push('/propietario?anuncio=creado');
+      window.location.href = '/propietario?anuncio=creado';
     } catch (err: any) {
       setError(err.message || 'No se pudo enviar el anuncio a revisión.');
     } finally {

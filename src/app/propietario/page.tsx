@@ -23,6 +23,12 @@ export default function OwnerDashboardPage() {
   const [serviceError, setServiceError] = useState('');
 
   useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.search.includes('anuncio=creado')) {
+      setMsg('🎉 ¡Tu furgoneta camper ha sido enviada a revisión con éxito! Ya aparece en tu lista de anuncios abajo en estado "Pendiente de revisión".');
+    }
+  }, []);
+
+  useEffect(() => {
     fetch('/api/auth/me')
       .then(async (res) => { const data = await res.json(); if (!res.ok) throw new Error(data.error || 'No se pudo comprobar la sesión'); return data; })
       .then(async (data) => {
@@ -182,9 +188,20 @@ export default function OwnerDashboardPage() {
                     alt={v.title}
                     className="w-full h-44 object-cover rounded-2xl mb-4"
                   />
-                  <span className="text-[10px] font-black uppercase text-[#16B8AA] tracking-wider block mb-1">
-                    {v.island} • {v.municipality}
-                  </span>
+                  <div className="flex items-center justify-between gap-2 mb-2">
+                    <span className="text-[10px] font-black uppercase text-[#16B8AA] tracking-wider">
+                      {v.island} • {v.municipality}
+                    </span>
+                    <span
+                      className={`text-[9px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full ${
+                        v.status === 'PENDING_REVIEW'
+                          ? 'bg-amber-100 text-amber-900 border border-amber-200'
+                          : 'bg-emerald-100 text-emerald-900 border border-emerald-200'
+                      }`}
+                    >
+                      {v.status === 'PENDING_REVIEW' ? '⏳ Pendiente de revisión' : '✅ Activo'}
+                    </span>
+                  </div>
                   <h4 className="font-serif text-xl font-bold text-[#13322E] mb-2 line-clamp-1">{v.title}</h4>
                   <p className="text-xs text-[#6B726E] font-medium mb-4">{v.basePricePerDay}€ / día</p>
                 </div>

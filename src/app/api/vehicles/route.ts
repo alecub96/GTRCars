@@ -10,10 +10,19 @@ export async function GET(request: Request) {
     const island = searchParams.get('island');
     const minPassengers = searchParams.get('passengers');
 
-    const whereClause: any = {};
     const currentUser = await getCurrentUser();
-    if (currentUser?.role === 'OWNER') whereClause.ownerId = currentUser.id;
-    else whereClause.status = 'ACTIVE';
+    const whereClause: any = {};
+
+    if (currentUser) {
+      // Si el usuario está logueado, ve los anuncios ACTIVE del público Y TODOS sus propios anuncios (incluso en revisión PENDING_REVIEW)
+      whereClause.OR = [
+        { status: 'ACTIVE' },
+        { ownerId: currentUser.id },
+      ];
+    } else {
+      whereClause.status = 'ACTIVE';
+    }
+
     if (island) whereClause.island = island;
     if (minPassengers) whereClause.passengers = { gte: Number(minPassengers) };
 
@@ -32,32 +41,26 @@ export async function GET(request: Request) {
       isFeatured: featured.ownerIds.has(vehicle.ownerId) || featured.vehicleIds.has(vehicle.id) || featured.subscriptionOwnerIds.has(vehicle.ownerId),
     }));
 
-    // Usuario destacado: mérito (20 reseñas de 5 estrellas) o suscripción activa.
     const now = new Date();
     const activeFeaturedVehicles = featuredVehicles.filter((vehicle) => vehicle.isFeatured);
     const standardVehicles = featuredVehicles.filter((vehicle) => !vehicle.isFeatured);
 
-    // 2. Rotación diaria justa entre anuncios destacados.
-    // Utilizamos el día actual del año (1-365) como semilla de rotación
     const dayOfYear = Math.floor(
       (now.getTime() - new Date(now.getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24)
     );
 
     const rotatedFeaturedVehicles = [...activeFeaturedVehicles].sort((a, b) => {
-      // Determinación pseudo-aleatoria rotativa diaria por ID de vehículo y día del año
       const hashA = (a.id.charCodeAt(0) + dayOfYear) % 100;
       const hashB = (b.id.charCodeAt(0) + dayOfYear) % 100;
       return hashB - hashA;
     });
 
-    // 3. ORDENAR ANUNCIOS ESTÁNDAR POR VALORACIÓN Y CERCANÍA (estrellas y fecha)
     const sortedStandardVehicles = [...standardVehicles].sort((a, b) => {
       const avgA = a.reviews.length > 0 ? a.reviews.reduce((s, r) => s + r.rating, 0) / a.reviews.length : 0;
       const avgB = b.reviews.length > 0 ? b.reviews.reduce((s, r) => s + r.rating, 0) / b.reviews.length : 0;
       return avgB - avgA;
     });
 
-    // 4. COMBINAR: los destacados aparecen primero, seguidos del resto por valoración.
     const finalSortedVehicles = [...rotatedFeaturedVehicles, ...sortedStandardVehicles];
 
     return NextResponse.json({ success: true, vehicles: finalSortedVehicles });
