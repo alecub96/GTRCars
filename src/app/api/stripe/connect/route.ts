@@ -16,7 +16,11 @@ export async function POST() {
     if (!accountId) {
       const account = await stripe.accounts.create({ type: 'express', email: user.email, capabilities: { card_payments: { requested: true }, transfers: { requested: true } } });
       accountId = account.id;
-      await prisma.user.update({ where: { id: user.id }, data: { stripeAccountId: accountId } });
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { stripeAccountId: accountId },
+        select: { id: true, stripeAccountId: true },
+      });
     }
     const accountSession = await stripe.accountSessions.create({
       account: accountId,

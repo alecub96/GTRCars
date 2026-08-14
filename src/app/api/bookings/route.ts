@@ -137,11 +137,12 @@ export async function POST(request: Request) {
           status: vehicle.bookingType === 'INSTANT_BOOKING' ? 'OWNER_ACCEPTED' : 'REQUESTED',
           depositStatus: 'PENDING',
           extras: {
-            create: chosenExtras.map((e) => ({
-              vehicleExtraId: vehicle.extras.find((ve) => ve.extraId === e.id)!.id,
-              name: e.name,
-              price: e.price,
-            })),
+            create: chosenExtras
+              .map((e) => {
+                const found = vehicle.extras.find((ve) => ve.extraId === e.id);
+                return found ? { vehicleExtraId: found.id, name: e.name, price: e.price } : null;
+              })
+              .filter((item): item is { vehicleExtraId: string; name: string; price: number } => Boolean(item)),
           },
         },
           });

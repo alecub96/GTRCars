@@ -24,6 +24,13 @@ export async function POST(request: Request) {
     const updatedUser = await prisma.user.update({
       where: { id: sessionUser.id },
       data: { role: targetRole },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        role: true,
+      },
     });
 
     const token = signToken({

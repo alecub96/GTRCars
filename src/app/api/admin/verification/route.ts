@@ -35,7 +35,11 @@ export async function PATCH(request: Request) {
     : statuses.some((item) => item.status === 'REJECTED')
       ? 'REJECTED'
       : 'VERIFIED';
-  await prisma.user.update({ where: { id: document.userId }, data: { verification } });
+  await prisma.user.update({
+    where: { id: document.userId },
+    data: { verification },
+    select: { id: true, verification: true },
+  });
   return NextResponse.json({ success: true, document });
  } catch (error) {
    if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
