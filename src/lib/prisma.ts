@@ -9,13 +9,33 @@ const databaseUrl = isSupportedDatabaseUrl(configuredDatabaseUrl)
   ? configuredDatabaseUrl
   : 'mysql://invalid:invalid@127.0.0.1:3306/vaneando_missing_configuration';
 
-const url = new URL(databaseUrl);
+function parseDatabaseUrl(connectionString: string) {
+  const match = connectionString.match(/^(?:mysql|mariadb):\/\/(?:([^:@]+)(?::([^@]*))?@)?([^:\/]+)(?::(\d+))?\/(.+)$/i);
+  if (!match) {
+    return {
+      host: '127.0.0.1',
+      port: 3306,
+      user: 'invalid',
+      password: 'invalid',
+      database: 'vaneando_invalid',
+    };
+  }
+  return {
+    user: decodeURIComponent(match[1] || ''),
+    password: decodeURIComponent(match[2] || ''),
+    host: match[3] || '127.0.0.1',
+    port: match[4] ? Number(match[4]) : 3306,
+    database: decodeURIComponent((match[5] || '').split('?')[0]),
+  };
+}
+
+const parsed = parseDatabaseUrl(databaseUrl);
 const adapter = new PrismaMariaDb({
-  host: url.hostname,
-  port: url.port ? Number(url.port) : 3306,
-  user: decodeURIComponent(url.username),
-  password: decodeURIComponent(url.password),
-  database: decodeURIComponent(url.pathname.replace(/^\//, '')),
+  host: parsed.host,
+  port: parsed.port,
+  user: parsed.user,
+  password: parsed.password,
+  database: parsed.database,
   connectionLimit: 5,
   connectTimeout: 10_000,
   acquireTimeout: 10_000,
