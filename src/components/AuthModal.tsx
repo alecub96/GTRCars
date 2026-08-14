@@ -115,19 +115,34 @@ export default function AuthModal() {
 
   return (
     <>
-      {roleNotice && <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-[#13322E]/55 p-4 backdrop-blur-sm"><div className="w-full max-w-sm rounded-[32px] bg-white p-8 text-center shadow-2xl"><CheckCircle2 className="mx-auto mb-4 h-14 w-14 text-[#16B8AA]" /><span className="text-[10px] font-black uppercase tracking-[.25em] text-[#16B8AA]">Modo actualizado</span><h2 className="mt-2 font-serif text-3xl font-bold text-[#13322E]">Ahora estás en modo {roleNotice === 'OWNER' ? 'propietario' : 'viajero'}</h2><p className="mt-3 text-sm text-[#6B726E]">{roleNotice === 'OWNER' ? 'Puedes gestionar tus campers, reservas, calendario y finanzas.' : 'Puedes explorar campers, solicitar fechas y gestionar tus viajes.'}</p></div></div>}
+      {roleNotice && (
+        <div className="fixed inset-0 z-[100000] overflow-y-auto bg-[#13322E]/70 p-4 backdrop-blur-md flex items-center justify-center">
+          <div className="my-auto w-full max-w-sm rounded-[32px] bg-white p-8 text-center shadow-2xl border border-[#E9E1D2] relative animate-fade-in">
+            <CheckCircle2 className="mx-auto mb-4 h-14 w-14 text-[#16B8AA]" />
+            <span className="text-[10px] font-black uppercase tracking-[.25em] text-[#16B8AA]">Modo actualizado</span>
+            <h2 className="mt-2 font-serif text-3xl font-bold text-[#13322E]">
+              Ahora estás en modo {roleNotice === 'OWNER' ? 'propietario' : 'viajero'}
+            </h2>
+            <p className="mt-3 text-sm text-[#6B726E] font-medium leading-relaxed">
+              {roleNotice === 'OWNER'
+                ? 'Puedes gestionar tus campers, reservas, calendario y finanzas.'
+                : 'Puedes explorar campers, solicitar fechas y gestionar tus viajes.'}
+            </p>
+          </div>
+        </div>
+      )}
       {user ? (
         /* MENÚ DESPLEGABLE DE PERFIL CON BOTÓN DE CONMUTACIÓN DE MODO Y ACCESO A MENSAJES */
         <div className="relative">
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full bg-[#F4F9F8] text-[#13322E] border border-[#E9E1D2] hover:bg-[#E9E1D2] transition-all shadow-sm"
+            className="inline-flex items-center space-x-1.5 sm:space-x-2 text-xs font-bold uppercase tracking-wider px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full bg-[#F4F9F8] text-[#13322E] border border-[#E9E1D2] hover:bg-[#E9E1D2] transition-all shadow-sm shrink-0 cursor-pointer"
           >
-            <div className="w-6 h-6 rounded-full bg-[#16B8AA] text-white flex items-center justify-center text-[10px] font-black uppercase">
+            <div className="w-6 h-6 rounded-full bg-[#16B8AA] text-white flex items-center justify-center text-[10px] font-black uppercase shrink-0">
               {user.firstName ? user.firstName[0] : 'U'}
             </div>
-            <span>{user.firstName}</span>
-            <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-[#16B8AA]/10 text-[#16B8AA]">
+            <span className="hidden sm:inline">{user.firstName}</span>
+            <span className="hidden sm:inline-block text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-[#16B8AA]/10 text-[#16B8AA]">
               {user.role === 'ADMIN' ? 'Administrador' : user.role === 'OWNER' ? 'Modo Propietario' : 'Modo Viajero'}
             </span>
           </button>

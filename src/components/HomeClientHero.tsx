@@ -347,23 +347,27 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                   setSelectedIsland(isla.name);
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className={`group flex flex-col items-center justify-between p-6 rounded-3xl transition-all duration-300 text-center ${
-                  selectedIsland === isla.name
-                    ? 'bg-[#16B8AA]/10 border-2 border-[#16B8AA] shadow-md scale-105'
-                    : 'bg-[#FAF7F0] border border-[#E9E1D2] hover:bg-white hover:border-[#16B8AA] hover:shadow-xl hover:-translate-y-1'
-                }`}
+                className="group flex flex-col items-center justify-center p-2 transition-all duration-300 text-center cursor-pointer bg-transparent border-0"
               >
-                <div className="relative w-full h-40 sm:h-48 flex items-center justify-center p-2">
+                <div className="relative w-full h-40 sm:h-48 flex items-center justify-center">
                   <img
                     src={ISLAND_HERO_IMAGES[isla.name] || ISLAND_HERO_IMAGES['Gran Canaria']}
                     alt={`Alquiler camper en ${isla.name}`}
                     loading="lazy"
                     decoding="async"
-                    className="max-h-full max-w-full object-contain filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.18)] group-hover:scale-110 transition-transform duration-500"
+                    className={`max-h-full max-w-full object-contain transition-all duration-500 group-hover:scale-110 ${
+                      selectedIsland === isla.name ? 'scale-105 brightness-105' : 'opacity-90 hover:opacity-100'
+                    }`}
                   />
                 </div>
-                <div className="mt-4">
-                  <h3 className={`font-serif text-xl sm:text-2xl font-bold transition-colors ${selectedIsland === isla.name ? 'text-[#16B8AA]' : 'text-[#13322E] group-hover:text-[#16B8AA]'}`}>
+                <div className="mt-3">
+                  <h3
+                    className={`font-serif text-xl sm:text-2xl font-bold transition-colors ${
+                      selectedIsland === isla.name
+                        ? 'text-[#16B8AA] underline decoration-[#16B8AA] decoration-2 underline-offset-4'
+                        : 'text-[#13322E] group-hover:text-[#16B8AA]'
+                    }`}
+                  >
                     {isla.name}
                   </h3>
                 </div>
