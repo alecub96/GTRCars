@@ -38,7 +38,10 @@ export async function POST(request: Request) {
         return authResponse({ error: 'El nombre o los apellidos son demasiado largos' }, 400);
       }
 
-      const existingUser = await prisma.user.findUnique({ where: { email: normalizedEmail } });
+      const existingUser = await prisma.user.findUnique({
+        where: { email: normalizedEmail },
+        select: { id: true, email: true },
+      });
       if (existingUser) {
         return authResponse({ error: 'El correo electrónico ya está registrado' }, 400);
       }
@@ -53,6 +56,7 @@ export async function POST(request: Request) {
           lastName: cleanLastName,
           role: userRole,
         },
+        select: { id: true, email: true, firstName: true, lastName: true, role: true },
       });
 
       const token = signToken({ userId: user.id, email: user.email, role: userRole as any });
@@ -83,7 +87,10 @@ export async function POST(request: Request) {
         return authResponse({ error: 'Email y contraseña requeridos' }, 400);
       }
 
-      let user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
+      let user = await prisma.user.findUnique({
+        where: { email: normalizedEmail },
+        select: { id: true, email: true, passwordHash: true, firstName: true, lastName: true, role: true },
+      });
       if (!user) {
         await bcrypt.compare(password, DUMMY_PASSWORD_HASH);
         return authResponse({ error: 'Credenciales inválidas' }, 401);
