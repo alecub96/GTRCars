@@ -99,7 +99,7 @@ export default function MainSearchWidget({ selectedIsland, onIslandChange, selec
           className={`w-full p-3 rounded-2xl transition-all flex items-center space-x-3 text-left border cursor-pointer ${
             isIslandOpen
               ? 'bg-white border-[#16B8AA] ring-4 ring-[#16B8AA]/10 shadow-sm'
-              : 'border-transparent hover:bg-[#F8FAFC] hover:border-[#E9E1D2]'
+              : 'border-[#E9E1D2] sm:border-transparent bg-[#FAF7F0] sm:bg-transparent hover:bg-[#F8FAFC]'
           }`}
         >
           <MapPin className="w-5 h-5 text-[#16B8AA] shrink-0" />
@@ -151,7 +151,7 @@ export default function MainSearchWidget({ selectedIsland, onIslandChange, selec
       </div>
 
       {/* 2. FECHAS */}
-      <div className="p-3 rounded-2xl hover:bg-[#F8FAFC] transition-colors flex items-center space-x-3 border border-transparent hover:border-[#E9E1D2]">
+      <div className="p-3 rounded-2xl bg-[#FAF7F0] sm:bg-transparent border border-[#E9E1D2] sm:border-transparent hover:bg-[#F8FAFC] transition-colors flex items-center space-x-3">
         <DateRangeCalendar variant="popover" startDate={startDate} endDate={endDate} onChange={(start, end) => { setStartDate(start); setEndDate(end); }} />
       </div>
 
@@ -166,7 +166,7 @@ export default function MainSearchWidget({ selectedIsland, onIslandChange, selec
           className={`w-full p-3 rounded-2xl transition-all flex items-center space-x-3 text-left border cursor-pointer ${
             isPassengersOpen
               ? 'bg-white border-[#16B8AA] ring-4 ring-[#16B8AA]/10 shadow-sm'
-              : 'border-transparent hover:bg-[#F8FAFC] hover:border-[#E9E1D2]'
+              : 'border-[#E9E1D2] sm:border-transparent bg-[#FAF7F0] sm:bg-transparent hover:bg-[#F8FAFC]'
           }`}
         >
           <Users className="w-5 h-5 text-[#16B8AA] shrink-0" />

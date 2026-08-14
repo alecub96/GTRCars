@@ -51,7 +51,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
             alt={`Camper viajando por ${selectedIsland}`}
             decoding="async"
             fetchPriority="high"
-            className="absolute inset-0 h-full w-full scale-[1.02] object-contain object-center brightness-[0.88] transition-transform duration-1000"
+            className="absolute inset-0 h-full w-full scale-[1.02] object-cover object-center brightness-[0.88] transition-transform duration-1000"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#F7F6F2] via-black/25 to-black/55" />
         </div>
@@ -66,7 +66,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
             <span className="italic font-semibold font-serif text-[#F2CC8F] drop-shadow-[0_3px_10px_rgba(0,0,0,0.9)]">el viaje.</span>
           </h1>
 
-          <p className="mb-6 text-sm sm:text-base text-white/95 max-w-2xl mx-auto font-medium leading-relaxed drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">
+          <p className="mb-6 text-xs sm:text-base text-white/95 max-w-2xl mx-auto font-medium leading-relaxed drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)] px-2">
             Libertad absoluta para despertar frente al Atlántico en <strong className="font-extrabold text-[#F2CC8F] underline decoration-[#16B8AA] decoration-2 underline-offset-4">{selectedIsland}</strong>.
           </p>
 
