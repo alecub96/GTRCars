@@ -88,15 +88,15 @@ export default function VehicleTypeSlider({
   };
 
   return (
-    <div className="relative max-w-4xl mx-auto w-full max-w-full overflow-hidden my-3 px-1 sm:px-8">
+    <div className="relative max-w-4xl mx-auto w-full max-w-full my-3 px-2 sm:px-10">
       {/* BOTÓN DESPLAZAMIENTO IZQUIERDA */}
       <button
         type="button"
         onClick={() => scroll('left')}
         aria-label="Desplazar a la izquierda"
-        className="hidden sm:flex absolute -left-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-white/95 backdrop-blur-md shadow-lg border border-[#E9E1D2] items-center justify-center text-[#13322E] hover:bg-[#16B8AA] hover:text-white transition-all"
+        className="hidden sm:flex absolute left-0.5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-white shadow-xl border border-[#E9E1D2] items-center justify-center text-[#13322E] hover:bg-[#16B8AA] hover:text-white transition-all cursor-pointer"
       >
-        <ChevronLeft className="w-4 h-4" />
+        <ChevronLeft className="w-5 h-5" />
       </button>
 
       {/* CONTENEDOR SLIDER HORIZONTAL CON ARRASTRE Y TÁCTIL */}
@@ -151,9 +151,9 @@ export default function VehicleTypeSlider({
         type="button"
         onClick={() => scroll('right')}
         aria-label="Desplazar a la derecha"
-        className="hidden sm:flex absolute -right-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/95 backdrop-blur-md shadow-lg border border-[#E9E1D2] items-center justify-center text-[#13322E] hover:bg-[#16B8AA] hover:text-white transition-all"
+        className="hidden sm:flex absolute right-0.5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-white shadow-xl border border-[#E9E1D2] items-center justify-center text-[#13322E] hover:bg-[#16B8AA] hover:text-white transition-all cursor-pointer"
       >
-        <ChevronRight className="w-4 h-4" />
+        <ChevronRight className="w-5 h-5" />
       </button>
     </div>
   );

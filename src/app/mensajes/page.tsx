@@ -109,18 +109,12 @@ export default function ChatPage() {
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
-        {/* BANNER INFORMATIVO DE TIEMPO REAL Y BLINDAJE DE MENSAJERÍA */}
-        <div className="bg-[#13322E] text-white p-4 rounded-3xl mb-6 flex items-center justify-between shadow-md">
-          <div className="flex items-center space-x-3 text-xs font-medium">
-            <Lock className="w-5 h-5 text-[#16B8AA] shrink-0" />
-            <span>
-              <strong>Chat protegido:</strong> Los mensajes se actualizan automáticamente. Por tu seguridad, no está permitido compartir datos de contacto externos (teléfonos, emails o webs de terceros).
-            </span>
-          </div>
-          <div className="hidden sm:flex items-center space-x-1.5 text-[10px] font-black uppercase tracking-widest bg-[#16B8AA]/20 text-[#16B8AA] px-3 py-1 rounded-full border border-[#16B8AA]/30">
-            <span className="w-2 h-2 rounded-full bg-[#16B8AA] animate-pulse" />
-            <span>Actualización automática</span>
-          </div>
+        {/* AVISO DE MENSAJERÍA PROTEGIDA */}
+        <div className="bg-[#13322E] text-white p-4 rounded-2xl mb-6 flex items-center space-x-3 text-xs font-medium shadow-sm">
+          <Lock className="w-4 h-4 text-[#16B8AA] shrink-0" />
+          <span>
+            <strong>Chat del alquiler:</strong> Por seguridad, mantén las comunicaciones dentro de la plataforma y evita compartir datos de contacto externos.
+          </span>
         </div>
 
         <div className="bg-white rounded-3xl border border-[#E9E1D2] shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-3 h-[650px]">

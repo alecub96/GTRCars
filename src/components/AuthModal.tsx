@@ -235,30 +235,47 @@ export default function AuthModal() {
         /* BOTÓN Y MODAL DE INICIO DE SESIÓN / REGISTRO */
         <>
           <button
-            onClick={() => setIsOpen(true)}
-            className="inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full bg-[#16B8AA] text-white hover:bg-[#0F766E] transition-all shadow-sm"
+            onClick={() => { setMode('register'); setIsOpen(true); }}
+            className="inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full bg-[#16B8AA] text-white hover:bg-[#0F766E] transition-all shadow-sm cursor-pointer"
           >
             <User className="w-4 h-4" />
-            <span>Acceder</span>
+            <span>Acceder / Registrarse</span>
           </button>
 
           {isOpen && (
-            <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
-              <div className="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-8 relative shadow-2xl animate-fade-in my-auto">
+            <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md overflow-y-auto">
+              <div className="bg-white border border-[#E9E1D2] rounded-3xl max-w-md w-full p-8 relative shadow-2xl animate-fade-in my-auto">
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="absolute top-5 right-5 p-2 rounded-full hover:bg-slate-100 transition-colors text-slate-500"
+                  className="absolute top-5 right-5 p-2 rounded-full hover:bg-slate-100 transition-colors text-slate-500 cursor-pointer"
                 >
                   <X className="w-5 h-5" />
                 </button>
 
-                <div className="text-center mb-6">
-                  <span className="text-[10px] font-black uppercase tracking-[0.25em] text-[#16B8AA]">
-                    NOMAD CANARIAS
-                  </span>
-                  <h3 className="font-serif text-3xl font-bold text-[#13322E] mt-1">
-                    {mode === 'login' ? 'Iniciar Sesión' : mode === 'register' ? 'Crear Cuenta' : 'Recuperar Contraseña'}
-                  </h3>
+                {/* PESTAÑAS DE REGISTRO E INICIO DE SESIÓN */}
+                <div className="flex border-b border-[#E9E1D2] mb-6">
+                  <button
+                    type="button"
+                    onClick={() => { setMode('register'); setError(''); setSuccessMessage(''); }}
+                    className={`flex-1 py-3 text-xs font-black uppercase tracking-wider transition-all border-b-2 cursor-pointer ${
+                      mode === 'register'
+                        ? 'border-[#16B8AA] text-[#16B8AA]'
+                        : 'border-transparent text-[#6B726E] hover:text-[#13322E]'
+                    }`}
+                  >
+                    Crear Cuenta
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setMode('login'); setError(''); setSuccessMessage(''); }}
+                    className={`flex-1 py-3 text-xs font-black uppercase tracking-wider transition-all border-b-2 cursor-pointer ${
+                      mode === 'login'
+                        ? 'border-[#16B8AA] text-[#16B8AA]'
+                        : 'border-transparent text-[#6B726E] hover:text-[#13322E]'
+                    }`}
+                  >
+                    Iniciar Sesión
+                  </button>
                 </div>
 
                 {error && (
@@ -280,7 +297,7 @@ export default function AuthModal() {
                         <button
                           type="button"
                           onClick={() => setRole('TRAVELER')}
-                          className={`py-2 rounded-xl text-xs font-black uppercase tracking-wider border transition-all ${
+                          className={`py-2 rounded-xl text-xs font-black uppercase tracking-wider border transition-all cursor-pointer ${
                             role === 'TRAVELER'
                               ? 'bg-[#16B8AA] text-white border-[#16B8AA]'
                               : 'bg-slate-50 text-slate-600 border-slate-200'
@@ -291,7 +308,7 @@ export default function AuthModal() {
                         <button
                           type="button"
                           onClick={() => setRole('OWNER')}
-                          className={`py-2 rounded-xl text-xs font-black uppercase tracking-wider border transition-all ${
+                          className={`py-2 rounded-xl text-xs font-black uppercase tracking-wider border transition-all cursor-pointer ${
                             role === 'OWNER'
                               ? 'bg-[#16B8AA] text-white border-[#16B8AA]'
                               : 'bg-slate-50 text-slate-600 border-slate-200'
@@ -354,7 +371,7 @@ export default function AuthModal() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-3.5 rounded-full bg-[#13322E] text-white font-black text-xs uppercase tracking-widest hover:bg-[#254842] transition-colors shadow-md mt-2 flex items-center justify-center space-x-2"
+                    className="w-full py-3.5 rounded-full bg-[#13322E] text-white font-black text-xs uppercase tracking-widest hover:bg-[#254842] transition-colors shadow-md mt-2 flex items-center justify-center space-x-2 cursor-pointer disabled:opacity-50"
                   >
                     {mode === 'login' ? <LogIn className="w-4 h-4" /> : <UserPlus className="w-4 h-4" />}
                     <span>{loading ? 'Procesando...' : mode === 'login' ? 'INICIAR SESIÓN' : mode === 'register' ? 'CREAR CUENTA' : 'ENVIAR ENLACE'}</span>
@@ -362,27 +379,13 @@ export default function AuthModal() {
                 </form>
 
                 <div className="mt-6 text-center text-xs text-slate-500 font-medium">
-                  {mode === 'login' ? (
-                    <div className="space-y-2">
-                      <p>
-                        ¿No tienes cuenta aún?{' '}
-                        <button onClick={() => setMode('register')} className="font-bold text-[#16B8AA] hover:underline">
-                          Regístrate aquí
-                        </button>
-                      </p>
-                      <button onClick={() => { setMode('forgot'); setError(''); setSuccessMessage(''); }} className="font-bold text-[#16B8AA] hover:underline">
-                        ¿Has olvidado tu contraseña?
-                      </button>
-                    </div>
-                  ) : mode === 'register' ? (
-                    <p>
-                      ¿Ya tienes cuenta?{' '}
-                      <button onClick={() => setMode('login')} className="font-bold text-[#16B8AA] hover:underline">
-                        Inicia sesión aquí
-                      </button>
-                    </p>
-                  ) : (
-                    <button onClick={() => { setMode('login'); setError(''); setSuccessMessage(''); }} className="font-bold text-[#16B8AA] hover:underline">
+                  {mode === 'login' && (
+                    <button onClick={() => { setMode('forgot'); setError(''); setSuccessMessage(''); }} className="font-bold text-[#16B8AA] hover:underline cursor-pointer">
+                      ¿Has olvidado tu contraseña?
+                    </button>
+                  )}
+                  {mode === 'forgot' && (
+                    <button onClick={() => { setMode('login'); setError(''); setSuccessMessage(''); }} className="font-bold text-[#16B8AA] hover:underline cursor-pointer">
                       Volver a iniciar sesión
                     </button>
                   )}

@@ -170,62 +170,92 @@ export default function OwnerDashboardPage() {
         <OwnerAvailabilityCalendar vehicles={vehicles} />
 
         <div className="space-y-6">
-          <h3 className="font-serif text-2xl font-bold text-[#13322E]">Mis Anuncios Publicados</h3>
+          <div className="flex items-center justify-between">
+            <h3 className="font-serif text-2xl font-bold text-[#13322E]">Mis Anuncios Publicados</h3>
+            {vehicles.length > 0 && (
+              <Link
+                href="/publicar-camper"
+                className="inline-flex items-center space-x-1.5 text-xs font-bold text-[#16B8AA] hover:underline"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Añadir otra camper</span>
+              </Link>
+            )}
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {vehicles.map((v) => (
-              <div key={v.id} className="bg-white rounded-3xl p-6 border border-[#E9E1D2] shadow-sm flex flex-col justify-between relative overflow-hidden">
-                {v.isFeatured && (
-                  <div className="absolute top-4 right-4 bg-[#D97706] text-white text-[9px] font-black uppercase tracking-wider px-3 py-1 rounded-full flex items-center space-x-1 shadow-sm">
-                    <BadgeCheck className="w-3 h-3" />
-                    <span>USUARIO DESTACADO</span>
-                  </div>
-                )}
-
-                <div>
-                  <img
-                    src={v.photos?.[0]?.url || 'https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=800'}
-                    alt={v.title}
-                    className="w-full h-44 object-cover rounded-2xl mb-4"
-                  />
-                  <div className="flex items-center justify-between gap-2 mb-2">
-                    <span className="text-[10px] font-black uppercase text-[#16B8AA] tracking-wider">
-                      {v.island} • {v.municipality}
-                    </span>
-                    <span
-                      className={`text-[9px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full ${
-                        v.status === 'PENDING_REVIEW'
-                          ? 'bg-amber-100 text-amber-900 border border-amber-200'
-                          : 'bg-emerald-100 text-emerald-900 border border-emerald-200'
-                      }`}
-                    >
-                      {v.status === 'PENDING_REVIEW' ? '⏳ Pendiente de revisión' : '✅ Activo'}
-                    </span>
-                  </div>
-                  <h4 className="font-serif text-xl font-bold text-[#13322E] mb-2 line-clamp-1">{v.title}</h4>
-                  <p className="text-xs text-[#6B726E] font-medium mb-4">{v.basePricePerDay}€ / día</p>
-                </div>
-
-                <div className="pt-4 border-t border-[#E9E1D2] space-y-3">
-                  {!v.isFeatured ? (
-                    <button
-                      onClick={() => handleActivateFeatured(v.id)}
-                      disabled={featuredLoading === v.id}
-                      className="w-full py-3 rounded-full bg-[#D97706] text-white font-black text-xs uppercase tracking-widest hover:bg-[#B45309] transition-all flex items-center justify-center space-x-2 shadow-md"
-                    >
-                      <BadgeCheck className="w-4 h-4" />
-                      <span>{featuredLoading === v.id ? 'Activando...' : 'ACTIVAR USUARIO DESTACADO (2,99€/MES)'}</span>
-                    </button>
-                  ) : (
-                    <div className="py-2.5 px-4 rounded-full bg-amber-50 text-amber-900 border border-amber-200 text-center text-xs font-bold flex items-center justify-center space-x-2">
-                      <Sparkles className="w-4 h-4 text-[#D97706]" />
-                      <span>Usuario destacado activo</span>
+          {vehicles.length === 0 ? (
+            <div className="rounded-3xl border border-[#E9E1D2] bg-white p-8 sm:p-12 text-center shadow-sm">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#FAF7F0] text-[#16B8AA] mb-4">
+                <Plus className="h-7 w-7" />
+              </div>
+              <h4 className="font-serif text-2xl font-bold text-[#13322E]">No has publicado anuncios aún</h4>
+              <p className="mt-2 text-sm text-[#6B726E] max-w-md mx-auto font-medium">
+                Comienza a alquilar tu furgoneta camper o autocaravana en Canarias y rentabilízala de forma totalmente segura.
+              </p>
+              <Link
+                href="/publicar-camper"
+                className="mt-6 inline-flex items-center space-x-2 rounded-full bg-[#16B8AA] px-7 py-3.5 text-xs font-black uppercase tracking-widest text-white hover:bg-[#0F766E] transition-all shadow-md"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Publicar mi primer anuncio</span>
+              </Link>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {vehicles.map((v) => (
+                <div key={v.id} className="bg-white rounded-3xl p-6 border border-[#E9E1D2] shadow-sm flex flex-col justify-between relative overflow-hidden">
+                  {v.isFeatured && (
+                    <div className="absolute top-4 right-4 bg-[#D97706] text-white text-[9px] font-black uppercase tracking-wider px-3 py-1 rounded-full flex items-center space-x-1 shadow-sm">
+                      <BadgeCheck className="w-3 h-3" />
+                      <span>USUARIO DESTACADO</span>
                     </div>
                   )}
+
+                  <div>
+                    <img
+                      src={v.photos?.[0]?.url || 'https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=800'}
+                      alt={v.title}
+                      className="w-full h-44 object-cover rounded-2xl mb-4"
+                    />
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <span className="text-[10px] font-black uppercase text-[#16B8AA] tracking-wider">
+                        {v.island} • {v.municipality}
+                      </span>
+                      <span
+                        className={`text-[9px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full ${
+                          v.status === 'PENDING_REVIEW'
+                            ? 'bg-amber-100 text-amber-900 border border-amber-200'
+                            : 'bg-emerald-100 text-emerald-900 border border-emerald-200'
+                        }`}
+                      >
+                        {v.status === 'PENDING_REVIEW' ? '⏳ Pendiente de revisión' : '✅ Activo'}
+                      </span>
+                    </div>
+                    <h4 className="font-serif text-xl font-bold text-[#13322E] mb-2 line-clamp-1">{v.title}</h4>
+                    <p className="text-xs text-[#6B726E] font-medium mb-4">{v.basePricePerDay}€ / día</p>
+                  </div>
+
+                  <div className="pt-4 border-t border-[#E9E1D2] space-y-3">
+                    {!v.isFeatured ? (
+                      <button
+                        onClick={() => handleActivateFeatured(v.id)}
+                        disabled={featuredLoading === v.id}
+                        className="w-full py-3 rounded-full bg-[#D97706] text-white font-black text-xs uppercase tracking-widest hover:bg-[#B45309] transition-all flex items-center justify-center space-x-2 shadow-md cursor-pointer disabled:opacity-50"
+                      >
+                        <BadgeCheck className="w-4 h-4" />
+                        <span>{featuredLoading === v.id ? 'Activando...' : 'ACTIVAR USUARIO DESTACADO (2,99€/MES)'}</span>
+                      </button>
+                    ) : (
+                      <div className="py-2.5 px-4 rounded-full bg-amber-50 text-amber-900 border border-amber-200 text-center text-xs font-bold flex items-center justify-center space-x-2">
+                        <Sparkles className="w-4 h-4 text-[#D97706]" />
+                        <span>Usuario destacado activo</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </main>
     </div>
