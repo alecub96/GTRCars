@@ -118,7 +118,7 @@ export default function MainSearchWidget({ selectedIsland, onIslandChange, selec
 
         {/* DESPLEGABLE FLOTANTE DE ISLAS */}
         {isIslandOpen && (
-          <div className="absolute top-full left-0 mt-2 w-full sm:w-72 bg-white rounded-2xl shadow-2xl border border-[#E9E1D2] p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="absolute top-full left-0 mt-2 w-[calc(100vw-48px)] max-w-xs sm:w-72 bg-white rounded-2xl shadow-2xl border border-[#E9E1D2] p-2 z-[99999] animate-in fade-in slide-in-from-top-2 duration-200">
             <div className="px-3 py-2 border-b border-[#E9E1D2]/60 mb-1 flex items-center justify-between">
               <span className="text-[10px] font-black uppercase tracking-wider text-[#16B8AA]">Selecciona tu Isla</span>
               <Sparkles className="w-3.5 h-3.5 text-[#16B8AA]" />
@@ -185,7 +185,7 @@ export default function MainSearchWidget({ selectedIsland, onIslandChange, selec
 
         {/* DESPLEGABLE FLOTANTE DE VIAJEROS CON CONTADORES */}
         {isPassengersOpen && (
-          <div className="absolute top-full right-0 mt-2 w-full sm:w-80 bg-white rounded-2xl shadow-2xl border border-[#E9E1D2] p-4 z-50 animate-in fade-in slide-in-from-top-2 duration-200 text-[#13322E]">
+          <div className="absolute top-full left-0 sm:left-auto sm:right-0 mt-2 w-[calc(100vw-48px)] max-w-xs sm:w-80 bg-white rounded-2xl shadow-2xl border border-[#E9E1D2] p-4 z-[99999] animate-in fade-in slide-in-from-top-2 duration-200 text-[#13322E]">
             <div className="space-y-4">
               {/* ADULTOS */}
               <div className="flex items-center justify-between">
