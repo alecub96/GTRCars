@@ -62,7 +62,7 @@ export default function AdminEmailDiagnostics() {
             <Mail className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="font-serif text-2xl font-bold text-[#13322E]">Correo Transaccional SMTP</h2>
+            <h2 className="text-2xl font-bold tracking-tight text-[#13322E]">Correo Transaccional SMTP</h2>
             <p className="text-xs text-[#6B726E] font-medium mt-0.5">
               {checking
                 ? 'Comprobando servidor de correo Hostinger...'

@@ -112,7 +112,7 @@ export default function AdminIncidentQueue() {
         <div className="flex items-start gap-3">
           <div className="rounded-2xl bg-amber-50 p-3 text-amber-700"><Scale className="h-5 w-5" /></div>
           <div>
-            <h2 className="font-serif text-2xl font-bold">Incidencias y disputas</h2>
+            <h2 className="text-2xl font-bold tracking-tight">Incidencias y disputas</h2>
             <p className="text-sm text-[#6B726E]">Revisa pruebas, pide información y deja una resolución trazable.</p>
           </div>
         </div>
@@ -141,7 +141,7 @@ export default function AdminIncidentQueue() {
                     <span className="rounded-full bg-amber-50 px-2.5 py-1 text-[10px] font-black uppercase text-amber-800">{statusLabels[incident.status] || incident.status}</span>
                     <span className="rounded-full bg-[#F7F6F2] px-2.5 py-1 text-[10px] font-black uppercase text-[#6B726E]">{incident.type}</span>
                   </div>
-                  <h3 className="mt-2 font-serif text-xl font-bold">{incident.booking.vehicle.title}</h3>
+                  <h3 className="mt-2 text-xl font-bold tracking-tight">{incident.booking.vehicle.title}</h3>
                   <p className="mt-1 text-xs text-[#6B726E]">
                     Viajero: {incident.booking.traveler.firstName} {incident.booking.traveler.lastName} · Propietario: {incident.booking.owner.firstName} {incident.booking.owner.lastName}
                   </p>

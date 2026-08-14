@@ -60,7 +60,7 @@ export default function AdminVehicleQueue() {
           <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#D97706]">
             Control de Calidad
           </span>
-          <h2 className="font-serif text-2xl font-bold text-[#13322E]">Moderación de Anuncios</h2>
+          <h2 className="text-2xl font-bold tracking-tight text-[#13322E]">Moderación de Anuncios</h2>
           <p className="text-xs text-[#6B726E] mt-0.5 font-medium">
             Aprueba o rechaza publicaciones de campers para que aparezcan públicamente en Canarias.
           </p>
@@ -191,7 +191,7 @@ export default function AdminVehicleQueue() {
                       </span>
                     </div>
 
-                    <h4 className="font-serif text-lg font-bold text-[#13322E] line-clamp-1">{v.title}</h4>
+                    <h4 className="text-lg font-bold text-[#13322E] line-clamp-1">{v.title}</h4>
                     <p className="text-xs text-[#6B726E] font-medium">
                       Propietario: <strong className="text-[#13322E]">{v.owner?.firstName} {v.owner?.lastName}</strong> ({v.owner?.email})
                     </p>

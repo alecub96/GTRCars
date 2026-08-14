@@ -55,7 +55,7 @@ export default function AdminPage() {
             <span className="text-[11px] font-black uppercase tracking-[0.25em] text-[#D97706]">
               PANEL DE CONTROL ADMINISTRADOR
             </span>
-            <h1 className="font-serif text-3xl sm:text-4xl font-bold mt-1">
+            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mt-1">
               Pasarela de Liquidaciones & Comisiones
             </h1>
           </div>
@@ -67,7 +67,7 @@ export default function AdminPage() {
         </div>
 
         <section className="mb-8 flex flex-col gap-4 rounded-3xl border border-[#E9E1D2] bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-4"><div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#13322E] text-[#16B8AA]"><UserRound className="h-6 w-6" /></div><div><p className="text-[10px] font-black uppercase tracking-[.2em] text-[#16B8AA]">Perfil administrador</p><h2 className="font-serif text-2xl font-bold">Tu cuenta y preferencias</h2><p className="text-sm text-[#6B726E]">Gestiona tu perfil, seguridad y sesiones desde un espacio separado del panel financiero.</p></div></div>
+          <div className="flex items-center gap-4"><div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#13322E] text-[#16B8AA]"><UserRound className="h-6 w-6" /></div><div><p className="text-[10px] font-black uppercase tracking-[.2em] text-[#16B8AA]">Perfil administrador</p><h2 className="text-2xl font-bold tracking-tight">Tu cuenta y preferencias</h2><p className="text-sm text-[#6B726E]">Gestiona tu perfil, seguridad y sesiones desde un espacio separado del panel financiero.</p></div></div>
           <Link href="/perfil" className="rounded-full border border-[#13322E] px-5 py-3 text-center text-xs font-bold uppercase tracking-wider text-[#13322E]">Abrir mi perfil</Link>
         </section>
 
@@ -80,7 +80,7 @@ export default function AdminPage() {
             <span className="text-xs font-black uppercase tracking-wider text-[#6B726E]">
               Volumen Total Recaudado (Viajeros)
             </span>
-            <h3 className="font-serif text-3xl font-bold text-[#13322E] mt-1">
+            <h3 className="text-3xl font-extrabold text-[#13322E] mt-1 tracking-tight">
               {data?.metrics?.totalVolume ? `${data.metrics.totalVolume.toFixed(2)}€` : '0.00€'}
             </h3>
             <p className="text-[11px] text-[#6B726E] mt-2">Solo pagos confirmados por Stripe; las solicitudes aún no cuentan como ingresos.</p>
@@ -93,7 +93,7 @@ export default function AdminPage() {
             <span className="text-xs font-black uppercase tracking-wider text-[#6B726E]">
               Tu Comisión Neta Ganada (4.5% + 10%)
             </span>
-            <h3 className="font-serif text-3xl font-bold text-[#16B8AA] mt-1">
+            <h3 className="text-3xl font-extrabold text-[#16B8AA] mt-1 tracking-tight">
               {data?.metrics?.totalPlatformCommission ? `${data.metrics.totalPlatformCommission.toFixed(2)}€` : '0.00€'}
             </h3>
             <p className="text-[11px] text-[#6B726E] mt-2">Comisiones de reservas cuyo pago ya se ha confirmado.</p>
@@ -106,7 +106,7 @@ export default function AdminPage() {
             <span className="text-xs font-black uppercase tracking-wider text-[#6B726E]">
               Total Pendiente de Transferir a Propietarios
             </span>
-            <h3 className="font-serif text-3xl font-bold text-[#D97706] mt-1">
+            <h3 className="text-3xl font-extrabold text-[#D97706] mt-1 tracking-tight">
               {data?.metrics?.totalOwnerPayoutsPending ? `${data.metrics.totalOwnerPayoutsPending.toFixed(2)}€` : '0.00€'}
             </h3>
             <p className="text-[11px] text-[#6B726E] mt-2">Importe de reservas pagadas pendiente de liquidación.</p>
@@ -121,7 +121,7 @@ export default function AdminPage() {
         {/* TABLA DE RESERVAS Y LIQUIDACIÓN POR PROPIETARIO */}
         <div className="bg-white rounded-3xl border border-[#E9E1D2] shadow-sm overflow-hidden">
           <div className="p-6 border-b border-[#E9E1D2]">
-            <h3 className="font-serif text-xl font-bold">Pagos confirmados y liquidaciones</h3>
+            <h3 className="text-xl font-bold tracking-tight">Pagos confirmados y liquidaciones</h3>
             <p className="mt-1 text-sm text-[#6B726E]">Esta tabla solo muestra reservas con un pago confirmado. Desde «Ver reserva» puedes revisar el contrato, el estado y las acciones disponibles para administración.</p>
           </div>
 
