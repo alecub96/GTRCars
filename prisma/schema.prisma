@@ -119,6 +119,8 @@ model User {
   verification     VerificationStatus @default(UNVERIFIED)
   stripeCustomerId String?
   stripeAccountId  String?
+  iban             String?
+  bankHolder       String?
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @updatedAt
 
