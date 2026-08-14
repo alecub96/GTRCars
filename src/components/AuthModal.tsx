@@ -51,7 +51,8 @@ export default function AuthModal() {
 
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || 'Ocurrió un error');
+        const message = data.debug ? `${data.error || 'Ocurrió un error'} (${data.debug})` : (data.error || 'Ocurrió un error');
+        throw new Error(message);
       }
 
       if (isForgotPassword) {
