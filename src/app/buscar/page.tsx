@@ -87,6 +87,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   let vehicles: any[] = [];
   let databaseUnavailable = false;
   try {
+    const { ensureDbSchema } = await import('@/lib/prisma-ensure-schema');
+    await ensureDbSchema();
+
     const databaseVehicles = await prisma.vehicle.findMany({
       where: whereClause,
       select: {

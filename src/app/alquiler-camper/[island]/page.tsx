@@ -34,6 +34,9 @@ export default async function SeoIslandPage({ params }: SeoIslandPageProps) {
   let databaseUnavailable = false;
 
   try {
+    const { ensureDbSchema } = await import('@/lib/prisma-ensure-schema');
+    await ensureDbSchema();
+
     locationData = await prisma.seoLocation.findUnique({ where: { slug: island } });
     vehicles = await prisma.vehicle.findMany({
       where: { status: 'ACTIVE', island: locationData?.island || fallbackName },
