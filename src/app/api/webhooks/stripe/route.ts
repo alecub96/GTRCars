@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { prisma } from '@/lib/prisma';
-import { sendBookingStatusEmail } from '@/lib/email';
+import { sendBookingStatusEmail, sendPaymentInvoiceEmail } from '@/lib/email';
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY || '';
 
@@ -44,6 +44,26 @@ async function confirmBookingPayment(bookingId: string, paymentIntentId: string 
   });
 
   if (result) {
+    const totalDays = Math.max(1, Math.round((new Date(result.endDate).getTime() - new Date(result.startDate).getTime()) / (1000 * 60 * 60 * 24)));
+    const totalAmount = (result as any).totalPrice || 0;
+    const serviceFee = Math.round(totalAmount * 0.12 * 100) / 100;
+    const baseAmount = Math.round((totalAmount - serviceFee) * 100) / 100;
+    const taxAmount = Math.round(totalAmount * 0.07 * 100) / 100;
+
+    await sendPaymentInvoiceEmail(result.traveler.email, result.traveler.firstName, {
+      invoiceNumber: `FACT-${new Date().getFullYear()}-${result.code}`,
+      bookingCode: result.code,
+      vehicleTitle: result.vehicle.title,
+      startDate: new Date(result.startDate).toLocaleDateString('es-ES'),
+      endDate: new Date(result.endDate).toLocaleDateString('es-ES'),
+      totalDays,
+      baseAmount,
+      serviceFee,
+      taxAmount,
+      totalAmount,
+      reservationId: result.id,
+    }).catch((error) => console.error('Invoice email error:', error));
+
     await sendBookingStatusEmail(result.traveler.email, result.traveler.firstName, {
       code: result.code,
       status: 'CONFIRMED',
