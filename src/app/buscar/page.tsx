@@ -154,7 +154,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             key={selectedIsland || 'all'}
             src={activeIslandImage}
             alt={selectedIsland || 'Islas Canarias'}
-            className="absolute inset-0 h-full w-full scale-[1.02] object-contain object-center brightness-[0.88] transition-transform duration-700"
+            className="absolute inset-0 m-auto max-h-[70%] max-w-[70%] scale-[0.70] object-contain object-center brightness-[0.88] transition-all duration-700"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#F7F6F2] via-black/30 to-black/60" />
         </div>
