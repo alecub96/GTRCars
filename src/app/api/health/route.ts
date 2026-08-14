@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
   const database = await checkDatabaseHealth();
   const databaseUrl = getDatabaseUrl();
-  const databaseProvider = isSupportedDatabaseUrl(databaseUrl) ? 'mysql' : databaseUrl ? 'incompatible' : 'missing';
+  const databaseProvider = isSupportedDatabaseUrl(databaseUrl) ? 'postgresql' : databaseUrl ? 'incompatible' : 'missing';
   const email = getEmailConfiguration();
   const configuration = {
     email: { status: email.configured ? 'configured' : 'missing', missing: email.missing },
