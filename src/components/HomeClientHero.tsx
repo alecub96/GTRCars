@@ -20,6 +20,17 @@ const ISLAND_HERO_IMAGES: Record<string, string> = {
   'El Hierro': '/Islas/el%20hierro.webp',
   'La Graciosa': '/Islas/la%20graciosa.webp',
 };
+
+const ISLAND_IMAGE_OFFSETS: Record<string, string> = {
+  'Gran Canaria': '50% 50%',
+  'Tenerife': '50% 50%',
+  'Lanzarote': '50% 45%',
+  'Fuerteventura': '50% 42%',
+  'La Palma': '50% 50%',
+  'La Gomera': '50% 50%',
+  'El Hierro': '50% 50%',
+  'La Graciosa': '50% 50%',
+};
 interface HeroSectionProps {
   initialVehicles: any[];
 }
@@ -350,7 +361,8 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                   alt={`Alquiler camper en ${isla.name}`}
                   loading="lazy"
                   decoding="async"
-                  className="absolute inset-0 h-full w-full object-cover scale-[3.5] sm:scale-[3.6] object-center transition-transform duration-700 group-hover:scale-[3.9]"
+                  style={{ objectPosition: ISLAND_IMAGE_OFFSETS[isla.name] || '50% 50%', transformOrigin: '50% 50%' }}
+                  className="absolute inset-0 h-full w-full object-cover scale-[3.5] sm:scale-[3.6] transition-transform duration-700 group-hover:scale-[3.9]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10" />
                 <div className="absolute bottom-5 left-5 right-5 text-white">
