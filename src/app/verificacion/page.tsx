@@ -24,20 +24,32 @@ export default function IdentityVerificationPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!fileFront || !fileBack) {
+      setError('Por favor selecciona ambos archivos (Anverso y Reverso)');
+      return;
+    }
     setLoading(true);
     setError('');
-    const data = new FormData(e.currentTarget);
+
+    const data = new FormData();
     data.set('documentType', documentType);
     data.set('documentNumber', documentNumber);
     data.set('drivingLicense', drivingLicense);
     data.set('licenseExpDate', licenseExpDate);
+    data.set('fileFront', fileFront);
+    data.set('fileBack', fileBack);
+
     try {
       const response = await fetch('/api/verification', { method: 'POST', body: data });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || 'No se pudieron enviar los documentos');
       setSubmitted(true);
       setVerificationStatus('PENDING');
-    } catch (err: any) { setError(err.message); } finally { setLoading(false); }
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -144,27 +156,67 @@ export default function IdentityVerificationPage() {
                 <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E]">
                   Adjuntar Documentos en Foto / PDF
                 </label>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 rounded-2xl border-2 border-dashed border-[#CBD5E1] text-center bg-[#F8FAFC]">
-                    <Upload className="w-6 h-6 mx-auto text-[#16B8AA] mb-2" />
-                    <span className="block text-xs font-bold text-[#13322E]">Anverso DNI / Permiso</span>
-                    <input name="fileFront" type="file" accept="image/jpeg,image/png,application/pdf" required className="mt-2 text-[10px] text-[#6B726E]" />
-                  </div>
-                  <div className="p-4 rounded-2xl border-2 border-dashed border-[#CBD5E1] text-center bg-[#F8FAFC]">
-                    <Upload className="w-6 h-6 mx-auto text-[#16B8AA] mb-2" />
-                    <span className="block text-xs font-bold text-[#13322E]">Reverso Documento</span>
-                    <input name="fileBack" type="file" accept="image/jpeg,image/png,application/pdf" required className="mt-2 text-[10px] text-[#6B726E]" />
-                  </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  
+                  <label className={`relative p-5 rounded-2xl border-2 border-dashed cursor-pointer transition-all text-center flex flex-col items-center justify-center ${fileFront ? 'border-[#16B8AA] bg-[#F0FDFA]' : 'border-[#CBD5E1] bg-[#F8FAFC] hover:bg-[#F1F5F9]'}`}>
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/png,application/pdf"
+                      className="hidden"
+                      onChange={(e) => setFileFront(e.target.files?.[0] || null)}
+                    />
+                    {fileFront ? (
+                      <>
+                        <CheckCircle2 className="w-8 h-8 text-[#16B8AA] mb-2" />
+                        <span className="text-xs font-bold text-[#13322E] truncate max-w-[200px]">{fileFront.name}</span>
+                        <span className="text-[10px] text-[#6B726E] mt-0.5">{(fileFront.size / 1024 / 1024).toFixed(2)} MB · Clic para cambiar</span>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-8 h-8 text-[#16B8AA] mb-2" />
+                        <span className="block text-xs font-bold text-[#13322E]">Anverso DNI / Permiso</span>
+                        <span className="block text-[10px] text-[#6B726E] mt-1">Formatos JPG, PNG o PDF (Máx. 5 MB)</span>
+                      </>
+                    )}
+                  </label>
+
+                  <label className={`relative p-5 rounded-2xl border-2 border-dashed cursor-pointer transition-all text-center flex flex-col items-center justify-center ${fileBack ? 'border-[#16B8AA] bg-[#F0FDFA]' : 'border-[#CBD5E1] bg-[#F8FAFC] hover:bg-[#F1F5F9]'}`}>
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/png,application/pdf"
+                      className="hidden"
+                      onChange={(e) => setFileBack(e.target.files?.[0] || null)}
+                    />
+                    {fileBack ? (
+                      <>
+                        <CheckCircle2 className="w-8 h-8 text-[#16B8AA] mb-2" />
+                        <span className="text-xs font-bold text-[#13322E] truncate max-w-[200px]">{fileBack.name}</span>
+                        <span className="text-[10px] text-[#6B726E] mt-0.5">{(fileBack.size / 1024 / 1024).toFixed(2)} MB · Clic para cambiar</span>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-8 h-8 text-[#16B8AA] mb-2" />
+                        <span className="block text-xs font-bold text-[#13322E]">Reverso Documento</span>
+                        <span className="block text-[10px] text-[#6B726E] mt-1">Formatos JPG, PNG o PDF (Máx. 5 MB)</span>
+                      </>
+                    )}
+                  </label>
+
                 </div>
               </div>
 
-              {error && <p className="text-sm font-bold text-red-600">{error}</p>}
+              {error && (
+                <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-xs font-bold text-red-700">
+                  {error}
+                </div>
+              )}
+              
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 rounded-full bg-[#16B8AA] text-white font-black text-xs uppercase tracking-widest hover:bg-[#0F766E] transition-all shadow-md"
+                className="w-full py-4 rounded-full bg-[#16B8AA] text-white font-black text-xs uppercase tracking-widest hover:bg-[#0F766E] transition-all shadow-md disabled:bg-slate-300"
               >
-                ENVIAR DOCUMENTOS A VERIFICACIÓN
+                {loading ? 'ENVIANDO DOCUMENTOS...' : 'ENVIAR DOCUMENTOS A VERIFICACIÓN'}
               </button>
             </form>
           )}

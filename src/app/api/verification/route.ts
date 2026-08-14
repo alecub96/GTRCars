@@ -29,7 +29,11 @@ export async function POST(request: Request) {
     await prisma.$transaction([
       prisma.document.create({ data: { userId: user.id, type: `${documentType}_FRONT`, fileUrl: frontUrl, status: 'PENDING', notes: `Documento terminado en ${documentNumber.slice(-4)}; permiso terminado en ${drivingLicense.slice(-4)}; caducidad: ${licenseExpDate}` } }),
       prisma.document.create({ data: { userId: user.id, type: `${documentType}_BACK`, fileUrl: backUrl, status: 'PENDING' } }),
-      prisma.user.update({ where: { id: user.id }, data: { verification: 'PENDING' } }),
+      prisma.user.update({
+        where: { id: user.id },
+        data: { verification: 'PENDING' },
+        select: { id: true, verification: true },
+      }),
     ]);
     return NextResponse.json({ success: true });
   } catch (error) {
