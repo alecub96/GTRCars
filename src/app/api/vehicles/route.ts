@@ -4,8 +4,12 @@ import { getCurrentUser } from '@/lib/auth';
 import { getFeaturedAudience } from '@/lib/featured';
 import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 
+import { ensureDbSchema } from '@/lib/prisma-ensure-schema';
+
 export async function GET(request: Request) {
   try {
+    await ensureDbSchema();
+
     const { searchParams } = new URL(request.url);
     const island = searchParams.get('island');
     const minPassengers = searchParams.get('passengers');
