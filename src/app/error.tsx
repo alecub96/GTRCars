@@ -17,7 +17,8 @@ export default function ErrorPage({ error, reset }: { error: Error & { digest?: 
           <button type="button" onClick={reset} className="flex items-center gap-2 rounded-full bg-[#16B8AA] px-5 py-3 text-xs font-bold text-white"><RotateCcw className="h-4 w-4" />Reintentar</button>
           <Link href="/" className="flex items-center gap-2 rounded-full border border-[#E9E1D2] px-5 py-3 text-xs font-bold"><Home className="h-4 w-4" />Volver al inicio</Link>
         </div>
-        {error.digest && <p className="mt-6 text-[10px] text-[#6B726E]">Referencia: {error.digest}</p>}
+        {error.message && <p className="mt-4 rounded-xl bg-amber-50 p-3 text-xs font-mono text-amber-900 border border-amber-200">{error.message}</p>}
+        {error.digest && <p className="mt-4 text-[10px] text-[#6B726E]">Referencia: {error.digest}</p>}
       </section>
     </main>
   );
