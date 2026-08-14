@@ -169,7 +169,7 @@ export default function OwnerDashboardPage() {
 
                 <div>
                   <img
-                    src={v.photos[0]?.url || 'https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=800'}
+                    src={v.photos?.[0]?.url || 'https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=800'}
                     alt={v.title}
                     className="w-full h-44 object-cover rounded-2xl mb-4"
                   />
