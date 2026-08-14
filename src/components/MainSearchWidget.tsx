@@ -86,7 +86,7 @@ export default function MainSearchWidget({ selectedIsland, onIslandChange, selec
   return (
     <form
       onSubmit={handleSearch}
-      className="bg-white/95 backdrop-blur-xl rounded-[28px] p-3 sm:p-4 shadow-2xl border border-[#E9E1D2] max-w-4xl w-full grid grid-cols-1 md:grid-cols-4 gap-2 text-[#13322E] relative z-30"
+      className="bg-white/95 backdrop-blur-xl rounded-[28px] p-3 sm:p-4 shadow-2xl border border-[#E9E1D2] max-w-4xl w-full max-w-full grid grid-cols-1 md:grid-cols-4 gap-2 text-[#13322E] relative z-30"
     >
       {/* 1. SELECCIONAR ISLA PERSONALIZADO */}
       <div ref={islandRef} className="relative w-full">

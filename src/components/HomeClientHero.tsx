@@ -39,11 +39,11 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
   const currentHeroImage = ISLAND_HERO_IMAGES[selectedIsland] || ISLAND_HERO_IMAGES['Gran Canaria'];
 
   return (
-    <div className="min-h-screen bg-[#F4EFE7] text-[#13322E] font-sans antialiased selection:bg-[#b88a55] selection:text-white">
+    <div className="min-h-screen bg-[#F4EFE7] text-[#13322E] font-sans antialiased selection:bg-[#b88a55] selection:text-white overflow-x-hidden w-full max-w-full">
       <Navbar />
 
       {/* 1. HERO CON CAMBIO DINÁMICO DE IMAGEN DE FONDO SEGÚN LA ISLA */}
-      <section className="relative z-20 min-h-[85vh] flex items-center justify-center overflow-visible px-4 py-10 transition-all duration-700">
+      <section className="relative z-20 min-h-[85vh] flex items-center justify-center overflow-hidden px-3 sm:px-4 py-10 transition-all duration-700 w-full max-w-full">
         <div className="absolute inset-0 z-0">
           <img
             key={selectedIsland}
@@ -56,7 +56,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-[#F7F6F2] via-black/25 to-black/55" />
         </div>
 
-        <div className="relative z-10 max-w-5xl mx-auto text-center px-4 -mt-4">
+        <div className="relative z-10 max-w-5xl mx-auto text-center px-2 sm:px-4 -mt-4 w-full max-w-full">
           <span className="inline-block px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-bold uppercase tracking-[0.25em] mb-4 border border-white/30 shadow-md">
             CANARIAS SOBRE RUEDAS
           </span>

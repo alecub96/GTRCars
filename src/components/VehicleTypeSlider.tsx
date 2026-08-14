@@ -88,7 +88,7 @@ export default function VehicleTypeSlider({
   };
 
   return (
-    <div className="relative max-w-4xl mx-auto w-full my-3 px-2 sm:px-8">
+    <div className="relative max-w-4xl mx-auto w-full max-w-full overflow-hidden my-3 px-1 sm:px-8">
       {/* BOTÓN DESPLAZAMIENTO IZQUIERDA */}
       <button
         type="button"
