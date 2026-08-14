@@ -9,12 +9,21 @@ export async function GET() {
   return NextResponse.json({ success: true, configuration: getEmailConfiguration() });
 }
 
-export async function POST() {
+export async function POST(request: Request) {
   try {
     const user = await getCurrentUser();
     if (!user || user.role !== 'ADMIN') return NextResponse.json({ error: 'Acceso restringido' }, { status: 403 });
-    await sendEmailTest(user.email);
-    return NextResponse.json({ success: true, message: `Correo de prueba enviado a ${user.email}` });
+
+    let target = user.email;
+    try {
+      const body = await request.json();
+      if (body?.email && typeof body.email === 'string' && body.email.includes('@')) {
+        target = body.email.trim();
+      }
+    } catch (_) {}
+
+    await sendEmailTest(target);
+    return NextResponse.json({ success: true, message: `Correo de prueba enviado con éxito a ${target}` });
   } catch (error) {
     console.error('Admin Email Test Error:', error);
     if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
