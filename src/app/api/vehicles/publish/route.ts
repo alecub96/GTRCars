@@ -10,9 +10,11 @@ export async function POST(request: Request) {
   try {
     const user = await getCurrentUser();
     if (!user) return NextResponse.json({ error: 'Debes iniciar sesión para publicar una camper' }, { status: 401 });
-    if (user.role !== 'OWNER') return NextResponse.json({ error: 'Solo los propietarios pueden publicar campers' }, { status: 403 });
-    const ownerId = user.id;
+    if (user.role !== 'OWNER' && user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Debes estar en Modo Propietario para publicar anuncios.' }, { status: 403 });
+    }
 
+    const ownerId = user.id;
     if (!ownerId) return NextResponse.json({ error: 'Propietario no válido' }, { status: 401 });
 
     const body = await request.json();
@@ -47,19 +49,64 @@ export async function POST(request: Request) {
     } = body;
 
     const clean = {
-      title: typeof title === 'string' ? title.trim() : '', brand: typeof brand === 'string' ? brand.trim() : '', model: typeof model === 'string' ? model.trim() : '',
-      municipality: typeof municipality === 'string' ? municipality.trim() : '', description: typeof description === 'string' ? description.trim() : '', rules: typeof rules === 'string' ? rules.trim() : '',
+      title: typeof title === 'string' ? title.trim() : '',
+      brand: typeof brand === 'string' ? brand.trim() : '',
+      model: typeof model === 'string' ? model.trim() : '',
+      municipality: typeof municipality === 'string' ? municipality.trim() : '',
+      description: typeof description === 'string' ? description.trim() : '',
+      rules: typeof rules === 'string' ? rules.trim() : '',
     };
-    const numeric = { year: Number(year), passengers: Number(passengers), beds: Number(beds), doors: Number(doors), basePricePerDay: Number(basePricePerDay), includedKmPerDay: Number(includedKmPerDay), extraKmPrice: Number(extraKmPrice), securityDeposit: Number(securityDeposit), cleaningFee: Number(cleaningFee), minDays: Number(minDays), maxDays: Number(maxDays) };
+
+    const numeric = {
+      year: Number(year),
+      passengers: Number(passengers),
+      beds: Number(beds),
+      doors: Number(doors),
+      basePricePerDay: Number(basePricePerDay),
+      includedKmPerDay: Number(includedKmPerDay),
+      extraKmPrice: Number(extraKmPrice),
+      securityDeposit: Number(securityDeposit),
+      cleaningFee: Number(cleaningFee),
+      minDays: Number(minDays),
+      maxDays: Number(maxDays),
+    };
+
     const currentYear = new Date().getFullYear();
-    if (!clean.title || clean.title.length > 120 || clean.brand.length < 2 || clean.brand.length > 60 || clean.model.length < 1 || clean.model.length > 80 || !VEHICLE_TYPES.has(vehicleType) || !ISLANDS.has(island) || clean.municipality.length < 2 || clean.municipality.length > 100 || clean.description.length < 80 || clean.description.length > 5_000 || clean.rules.length < 10 || clean.rules.length > 3_000) {
-      return NextResponse.json({ error: 'Revisa los datos, la descripción y las normas del vehículo' }, { status: 400 });
+
+    // VALIDACIONES ESPECÍFICAS Y CLARAS
+    if (!clean.title || clean.title.length < 5) {
+      return NextResponse.json({ error: 'El título del anuncio debe tener al menos 5 caracteres.' }, { status: 400 });
     }
-    if (!Number.isInteger(numeric.year) || numeric.year < 1970 || numeric.year > currentYear + 1 || !Number.isInteger(numeric.passengers) || numeric.passengers < 1 || numeric.passengers > 12 || !Number.isInteger(numeric.beds) || numeric.beds < 1 || numeric.beds > 12 || !Number.isInteger(numeric.doors) || numeric.doors < 1 || numeric.doors > 10 || numeric.basePricePerDay < 10 || numeric.basePricePerDay > 2_000 || numeric.includedKmPerDay < 0 || numeric.includedKmPerDay > 2_000 || numeric.extraKmPrice < 0 || numeric.extraKmPrice > 20 || numeric.securityDeposit < 0 || numeric.securityDeposit > 20_000 || numeric.cleaningFee < 0 || numeric.cleaningFee > 1_000 || !Number.isInteger(numeric.minDays) || !Number.isInteger(numeric.maxDays) || numeric.minDays < 1 || numeric.maxDays < numeric.minDays || numeric.maxDays > 365) {
-      return NextResponse.json({ error: 'Revisa capacidades, año, precios y duración de las reservas' }, { status: 400 });
+    if (!clean.brand || clean.brand.length < 2) {
+      return NextResponse.json({ error: 'Introduce la marca del vehículo (ejemplo: Volkswagen, Fiat, Mercedes).' }, { status: 400 });
     }
-    if (!['MANUAL', 'AUTOMATIC'].includes(transmission) || !['DIESEL', 'GASOLINE', 'HYBRID', 'ELECTRIC'].includes(fuelType) || !['REQUEST_TO_BOOK', 'INSTANT_BOOKING'].includes(bookingType) || !['FLEXIBLE', 'MODERATE', 'STRICT'].includes(cancellationPolicy)) {
-      return NextResponse.json({ error: 'La configuración del anuncio no es válida' }, { status: 400 });
+    if (!clean.model || clean.model.length < 1) {
+      return NextResponse.json({ error: 'Introduce el modelo de la furgoneta (ejemplo: California, Ducato).' }, { status: 400 });
+    }
+    if (!VEHICLE_TYPES.has(vehicleType)) {
+      return NextResponse.json({ error: 'Selecciona un tipo de vehículo válido.' }, { status: 400 });
+    }
+    if (!ISLANDS.has(island)) {
+      return NextResponse.json({ error: 'Selecciona una isla de Canarias válida.' }, { status: 400 });
+    }
+    if (!clean.municipality || clean.municipality.length < 2) {
+      return NextResponse.json({ error: 'Introduce el municipio donde se encuentra el vehículo.' }, { status: 400 });
+    }
+    if (!clean.description || clean.description.length < 40) {
+      return NextResponse.json({
+        error: `La descripción de la camper es demasiado corta (mínimo 40 caracteres, actualmente tienes ${clean.description.length}).`,
+      }, { status: 400 });
+    }
+    if (!clean.rules || clean.rules.length < 10) {
+      return NextResponse.json({
+        error: `Las normas de uso son demasiado cortas (mínimo 10 caracteres, actualmente tienes ${clean.rules.length}).`,
+      }, { status: 400 });
+    }
+    if (numeric.basePricePerDay < 10 || numeric.basePricePerDay > 2000) {
+      return NextResponse.json({ error: 'El precio por día debe estar entre 10€ y 2000€.' }, { status: 400 });
+    }
+    if (numeric.securityDeposit < 0 || numeric.securityDeposit > 20000) {
+      return NextResponse.json({ error: 'La fianza introducida no es válida.' }, { status: 400 });
     }
 
     const slugBase = clean.title.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 80) || 'vehiculo';
@@ -73,25 +120,25 @@ export async function POST(request: Request) {
         brand: clean.brand,
         model: clean.model,
         vehicleType,
-        year: numeric.year,
+        year: numeric.year || currentYear,
         island,
         municipality: clean.municipality,
-        passengers: numeric.passengers,
-        beds: numeric.beds,
-        doors: numeric.doors,
-        transmission,
-        fuelType,
+        passengers: numeric.passengers || 2,
+        beds: numeric.beds || 2,
+        doors: numeric.doors || 4,
+        transmission: transmission || 'MANUAL',
+        fuelType: fuelType || 'DIESEL',
         fuelConsumption: fuelConsumption || null,
         basePricePerDay: numeric.basePricePerDay,
-        includedKmPerDay: numeric.includedKmPerDay,
-        extraKmPrice: numeric.extraKmPrice,
+        includedKmPerDay: numeric.includedKmPerDay || 150,
+        extraKmPrice: numeric.extraKmPrice || 0.25,
         unlimitedMileage: Boolean(unlimitedMileage),
-        securityDeposit: numeric.securityDeposit,
-        cleaningFee: numeric.cleaningFee,
-        minDays: numeric.minDays,
-        maxDays: numeric.maxDays,
-        bookingType,
-        cancellationPolicy,
+        securityDeposit: numeric.securityDeposit || 500,
+        cleaningFee: numeric.cleaningFee || 30,
+        minDays: numeric.minDays || 2,
+        maxDays: numeric.maxDays || 30,
+        bookingType: bookingType || 'REQUEST_TO_BOOK',
+        cancellationPolicy: cancellationPolicy || 'MODERATE',
         addressApprox: addressApprox || null,
         description: clean.description,
         rules: clean.rules,
@@ -108,6 +155,6 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('API Publish Vehicle Error:', error);
     if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
-    return NextResponse.json({ error: 'Error al publicar camper' }, { status: 500 });
+    return NextResponse.json({ error: 'No se pudo guardar el anuncio. Inténtalo de nuevo.' }, { status: 500 });
   }
 }
