@@ -26,12 +26,21 @@ export default function OwnerDashboardPage() {
     fetch('/api/auth/me')
       .then(async (res) => { const data = await res.json(); if (!res.ok) throw new Error(data.error || 'No se pudo comprobar la sesión'); return data; })
       .then(async (data) => {
-        const isOwner = data.user?.role === 'OWNER';
-        setAuthorized(isOwner);
-        if (!isOwner) {
-          router.replace(data.user ? '/cuenta' : '/');
+        if (!data.user) {
+          window.location.href = '/';
           return;
         }
+
+        // Si el usuario accede al panel de propietario pero su rol es TRAVELER, lo promocionamos a OWNER
+        if (data.user.role !== 'OWNER' && data.user.role !== 'ADMIN') {
+          await fetch('/api/auth/switch-role', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ targetRole: 'OWNER' }),
+          }).catch(() => {});
+        }
+
+        setAuthorized(true);
 
         const [vehiclesResponse, bookingsResponse] = await Promise.all([
           fetch('/api/vehicles'),

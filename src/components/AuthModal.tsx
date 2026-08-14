@@ -90,10 +90,8 @@ export default function AuthModal() {
       setRoleNotice(targetRole);
 
       setTimeout(() => {
-        if (targetRole === 'TRAVELER') router.push('/cuenta');
-        else router.push('/propietario');
-        router.refresh();
-      }, 1200);
+        window.location.href = targetRole === 'TRAVELER' ? '/cuenta' : '/propietario';
+      }, 700);
     } catch (err: any) {
       setSwitchError(err.message || 'No se pudo cambiar de modo');
     } finally {
