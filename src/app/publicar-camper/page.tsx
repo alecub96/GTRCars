@@ -8,13 +8,12 @@ import { BusFront, CarFront, Caravan, CheckCircle2, Mountain, Ship, Truck, Van }
 
 const EQUIPMENT = ['Aire acondicionado', 'Calefacción', 'Ducha interior', 'WC', 'Cocina', 'Frigorífico', 'Agua caliente', 'Placa solar', 'Toldo', 'Portabicicletas', 'Menaje', 'Ropa de cama'];
 const VEHICLE_TYPES = [
-  { value: 'CAMPER', label: 'Camper', icon: Van },
-  { value: 'CAMPER_GRAN_VOLUMEN', label: 'Camper de gran volumen', icon: Truck },
-  { value: 'TURISMO_CAMPERIZADO', label: 'Turismo camperizado', icon: CarFront },
+  { value: 'TURISMO_CAMPERIZADO', label: 'Camper Pequeña', icon: CarFront },
+  { value: 'CAMPER_GRAN_VOLUMEN', label: 'Camper Gran Volumen', icon: Truck },
   { value: 'CARAVANA', label: 'Caravana', icon: Caravan },
   { value: 'AUTOCARAVANA', label: 'Autocaravana', icon: BusFront },
-  { value: '4X4_CAMPERIZADO', label: '4x4 camperizado', icon: Mountain },
-  { value: 'BARCO', label: 'Barco', icon: Ship },
+  { value: '4X4_CAMPERIZADO', label: '4x4 Camper', icon: Mountain },
+  { value: 'BARCO', label: 'Barco / Velero', icon: Ship },
 ] as const;
 
 export default function PublishCamperPage() {
@@ -38,7 +37,7 @@ export default function PublishCamperPage() {
     title: '',
     brand: '',
     model: '',
-    vehicleType: 'CAMPER',
+    vehicleType: 'TURISMO_CAMPERIZADO',
     year: new Date().getFullYear(),
     island: 'Gran Canaria',
     municipality: 'Las Palmas de Gran Canaria',

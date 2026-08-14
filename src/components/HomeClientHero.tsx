@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import MainSearchWidget from '@/components/MainSearchWidget';
+import VehicleTypeSlider from '@/components/VehicleTypeSlider';
 import { CANARY_ISLANDS } from '@/lib/pricing';
 import { Star, ChevronRight, MapPin, ShieldCheck, HeartHandshake, KeyRound } from 'lucide-react';
 import VehicleViewTracker from '@/components/VehicleViewTracker';
@@ -25,6 +26,7 @@ interface HeroSectionProps {
 
 export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
   const [selectedIsland, setSelectedIsland] = useState<string>('Gran Canaria');
+  const [selectedVehicleType, setSelectedVehicleType] = useState<string>('');
   const [role, setRole] = useState<string | null>(null);
 
   useEffect(() => {
@@ -41,7 +43,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
       <Navbar />
 
       {/* 1. HERO CON CAMBIO DINÁMICO DE IMAGEN DE FONDO SEGÚN LA ISLA */}
-      <section className="relative z-20 min-h-[85vh] flex items-center justify-center overflow-visible px-4 py-16 transition-all duration-700">
+      <section className="relative z-20 min-h-[85vh] flex items-center justify-center overflow-visible px-4 py-10 transition-all duration-700">
         <div className="absolute inset-0 z-0">
           <img
             key={selectedIsland}
@@ -49,23 +51,23 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
             alt={`Camper viajando por ${selectedIsland}`}
             decoding="async"
             fetchPriority="high"
-            className="absolute inset-0 h-full w-full scale-[0.78] object-contain object-center brightness-[0.82] transition-transform duration-1000"
+            className="absolute inset-0 h-full w-full scale-[1.02] object-contain object-center brightness-[0.88] transition-transform duration-1000"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#F7F6F2] via-black/20 to-black/50" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#F7F6F2] via-black/25 to-black/55" />
         </div>
 
-        <div className="relative z-10 max-w-5xl mx-auto text-center px-4">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-bold uppercase tracking-[0.25em] mb-6 border border-white/30">
+        <div className="relative z-10 max-w-5xl mx-auto text-center px-4 -mt-4">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-bold uppercase tracking-[0.25em] mb-4 border border-white/30 shadow-md">
             CANARIAS SOBRE RUEDAS
           </span>
 
-          <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl font-bold text-white tracking-tight leading-[1.1] mb-4">
+          <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl font-bold text-white tracking-tight leading-[1.1] mb-6 drop-shadow-lg">
             Donde empieza <br />
-            <span className="italic font-normal font-serif text-[#d2a36e]">el viaje.</span>
+            <span className="italic font-semibold font-serif text-[#F2CC8F] drop-shadow-[0_3px_10px_rgba(0,0,0,0.9)]">el viaje.</span>
           </h1>
 
-          <p className="text-base sm:text-lg text-white/90 max-w-2xl mx-auto font-medium leading-relaxed mb-8">
-            Libertad absoluta para despertar frente al Atlántico en <strong className="font-extrabold text-white">{selectedIsland}</strong>.
+          <p className="mb-6 text-sm sm:text-base text-white/95 max-w-2xl mx-auto font-medium leading-relaxed drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">
+            Libertad absoluta para despertar frente al Atlántico en <strong className="font-extrabold text-[#F2CC8F] underline decoration-[#16B8AA] decoration-2 underline-offset-4">{selectedIsland}</strong>.
           </p>
 
           {role === 'OWNER' ? (
@@ -74,28 +76,40 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
               <Link href="/propietario" className="rounded-full bg-[#16B8AA] px-6 py-3 text-xs font-black uppercase tracking-widest text-white transition hover:bg-[#0F766E]">Ir al panel de propietario</Link>
             </div>
           ) : (
-            <MainSearchWidget
-              selectedIsland={selectedIsland}
-              onIslandChange={(newIsland) => setSelectedIsland(newIsland)}
-            />
+            <div className="space-y-6 relative">
+              <MainSearchWidget
+                selectedIsland={selectedIsland}
+                onIslandChange={(newIsland) => setSelectedIsland(newIsland)}
+                selectedVehicleType={selectedVehicleType}
+                onVehicleTypeChange={(newType) => setSelectedVehicleType(newType)}
+              />
+              <div className="pt-2">
+                <VehicleTypeSlider
+                  selectedType={selectedVehicleType}
+                  onSelectType={(newType) => setSelectedVehicleType(newType)}
+                  showAllOption={true}
+                />
+              </div>
+            </div>
           )}
         </div>
       </section>
 
       {/* 2. CAMPERS DESTACADAS CON DISEÑO LIMPIO */}
       <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-12">
           <div>
-            <span className="text-[11px] font-black uppercase tracking-widest text-[#D97706]">VEHÍCULOS VERIFICADOS</span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#13322E] mt-1">Campers y Autocaravanas Destacadas</h2>
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#13322E]">Campers y Autocaravanas Destacadas</h2>
           </div>
-          {role !== 'OWNER' && <Link
-            href="/buscar"
-            className="hidden sm:flex items-center space-x-2 text-xs font-black uppercase tracking-widest text-[#16B8AA] hover:text-[#0F766E] transition-colors"
-          >
-            <span>Ver todas las campers</span>
-            <ChevronRight className="w-4 h-4" />
-          </Link>}
+          {role !== 'OWNER' && (
+            <Link
+              href="/buscar"
+              className="hidden sm:inline-flex items-center space-x-2 text-xs font-black uppercase tracking-widest bg-[#16B8AA] text-white px-5 py-3 rounded-full hover:bg-[#0F766E] transition-all shadow-md"
+            >
+              <span>Ver todas las campers</span>
+              <ChevronRight className="w-4 h-4" />
+            </Link>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -161,8 +175,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
       <section className="py-16 bg-white border-t border-[#E9E1D2]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <span className="text-[11px] font-black tracking-[0.2em] uppercase text-[#D97706]">DESTINOS AUTÉNTICOS</span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#13322E] mt-1">Explora las 8 Islas Canarias</h2>
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#13322E]">Explora las ocho islas canarias</h2>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
@@ -170,7 +183,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
               <button
                 key={isla.id}
                 onClick={() => setSelectedIsland(isla.name)}
-                className={`group relative h-40 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border bg-[#F7F6F2] text-left sm:h-48 ${
+                className={`group relative h-48 sm:h-56 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border text-left ${
                   selectedIsland === isla.name ? 'ring-4 ring-[#16B8AA] border-transparent' : 'border-[#E9E1D2]'
                 }`}
               >
@@ -179,15 +192,11 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                   alt={`Alquiler camper en ${isla.name}`}
                   loading="lazy"
                   decoding="async"
-                  className="h-full w-full object-contain p-4 sm:p-5 transition-transform duration-500 group-hover:scale-105"
+                  className="absolute inset-0 h-full w-full object-cover scale-125 transition-transform duration-500 group-hover:scale-135"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <div className="flex items-center space-x-1.5 text-xs text-[#F2CC8F] font-bold mb-0.5">
-                    <MapPin className="w-3.5 h-3.5" />
-                    <span>{isla.airport}</span>
-                  </div>
-                  <h3 className="font-serif text-xl font-bold tracking-tight">{isla.name}</h3>
+                  <h3 className="font-serif text-xl sm:text-2xl font-bold tracking-tight">{isla.name}</h3>
                 </div>
               </button>
             ))}

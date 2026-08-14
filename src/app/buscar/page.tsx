@@ -7,9 +7,13 @@ import { Star, MapPin, Filter, SlidersHorizontal, ShieldCheck, ChevronRight } fr
 import VehicleViewTracker from '@/components/VehicleViewTracker';
 import { getFeaturedAudience } from '@/lib/featured';
 
+import VehicleTypeSlider from '@/components/VehicleTypeSlider';
+import { VEHICLE_TYPES_CONFIG } from '@/lib/vehicle-types';
+
 interface SearchPageProps {
   searchParams: Promise<{
     island?: string;
+    vehicleType?: string;
     minPrice?: string;
     maxPrice?: string;
     passengers?: string;
@@ -19,9 +23,22 @@ interface SearchPageProps {
   }>;
 }
 
+const ISLAND_HERO_IMAGES: Record<string, string> = {
+  'Gran Canaria': '/Islas/gran%20canaria.webp',
+  'Tenerife': '/Islas/Tenerife.webp',
+  'Lanzarote': '/Islas/lanzarote.webp',
+  'Fuerteventura': '/Islas/fuerteventura.webp',
+  'La Palma': '/Islas/la%20palma.webp',
+  'La Gomera': '/Islas/la%20gomera.webp',
+  'El Hierro': '/Islas/el%20hierro.webp',
+  'La Graciosa': '/Islas/la%20graciosa.webp',
+};
+
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const params = await searchParams;
   const selectedIsland = params.island || '';
+  const vehicleType = params.vehicleType || '';
+  const activeIslandImage = ISLAND_HERO_IMAGES[selectedIsland] || ISLAND_HERO_IMAGES['Gran Canaria'];
   const passengers = params.passengers ? parseInt(params.passengers) : undefined;
   const minPrice = params.minPrice ? parseFloat(params.minPrice) : undefined;
   const maxPrice = params.maxPrice ? parseFloat(params.maxPrice) : undefined;
@@ -31,6 +48,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
   const whereClause: any = { status: 'ACTIVE' };
   if (selectedIsland) whereClause.island = selectedIsland;
+  if (vehicleType) whereClause.vehicleType = vehicleType;
   if (passengers) whereClause.passengers = { gte: passengers };
   if (minPrice || maxPrice) {
     whereClause.basePricePerDay = {};
@@ -78,18 +96,31 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     <div className="min-h-screen bg-[#F7F6F2] text-[#1C2826]">
       <Navbar />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        {/* CABECERA BUSCADOR */}
-        <div className="mb-8 border-b border-[#E9E1D2] pb-6 flex flex-col md:flex-row md:items-end justify-between">
-          <div>
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E07A5F]">
-              {selectedIsland ? selectedIsland : 'Todas las Islas Canarias'}
-            </span>
-            <h1 className="font-serif text-3xl sm:text-4xl font-normal mt-1">
-              Alquiler de Campers y Autocaravanas ({vehicles.length})
-            </h1>
-          </div>
+      {/* CABECERA BUSCADOR CON FONDO DE LA ISLA SELECCIONADA Y SLIDER DE VEHICULOS */}
+      <section className="relative z-10 min-h-[340px] flex items-center justify-center overflow-hidden px-4 py-12 border-b border-[#E9E1D2]">
+        <div className="absolute inset-0 z-0">
+          <img
+            key={selectedIsland || 'all'}
+            src={activeIslandImage}
+            alt={selectedIsland || 'Islas Canarias'}
+            className="absolute inset-0 h-full w-full scale-[1.02] object-contain object-center brightness-[0.88] transition-transform duration-700"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#F7F6F2] via-black/30 to-black/60" />
         </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto w-full text-center sm:text-left px-4 space-y-4">
+          <h1 className="font-serif text-3xl sm:text-5xl font-bold text-white tracking-tight drop-shadow-md">
+            Alquiler de Campers y Autocaravanas {selectedIsland ? `en ${selectedIsland}` : ''}
+          </h1>
+          <p className="text-sm sm:text-base text-white/90 font-medium max-w-xl drop-shadow">
+            {vehicles.length} vehículos listos para explorar {selectedIsland || 'las Islas Canarias'} sobre ruedas
+          </p>
+
+          <VehicleTypeSlider selectedType={vehicleType} />
+        </div>
+      </section>
+
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
         {/* CONTENIDOR FILTROS + RESULTADOS */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -115,6 +146,21 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                   <option value="">Todas las Islas</option>
                   {CANARY_ISLANDS.map((is) => (
                     <option key={is.id} value={is.name}>{is.name}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* FILTRO TIPO VEHÍCULO */}
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-[#6B726E] mb-2">Tipo de Vehículo</label>
+                <select
+                  name="vehicleType"
+                  defaultValue={vehicleType}
+                  className="w-full p-3 rounded-xl border border-[#E9E1D2] bg-[#F7F6F2] font-medium text-[#13322E]"
+                >
+                  <option value="">Todos los tipos</option>
+                  {VEHICLE_TYPES_CONFIG.map((vt) => (
+                    <option key={vt.id} value={vt.id}>{vt.label}</option>
                   ))}
                 </select>
               </div>

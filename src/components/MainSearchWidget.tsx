@@ -9,9 +9,11 @@ import DateRangeCalendar from '@/components/DateRangeCalendar';
 interface MainSearchWidgetProps {
   selectedIsland?: string;
   onIslandChange?: (newIsland: string) => void;
+  selectedVehicleType?: string;
+  onVehicleTypeChange?: (newType: string) => void;
 }
 
-export default function MainSearchWidget({ selectedIsland, onIslandChange }: MainSearchWidgetProps) {
+export default function MainSearchWidget({ selectedIsland, onIslandChange, selectedVehicleType, onVehicleTypeChange }: MainSearchWidgetProps) {
   const [islandInternal, setIslandInternal] = useState('Gran Canaria');
   const [passengers, setPassengers] = useState(2);
   const [startDate, setStartDate] = useState('');
@@ -31,6 +33,7 @@ export default function MainSearchWidget({ selectedIsland, onIslandChange }: Mai
     e.preventDefault();
     const params = new URLSearchParams();
     if (activeIsland) params.set('island', activeIsland);
+    if (selectedVehicleType) params.set('vehicleType', selectedVehicleType);
     if (passengers) params.set('passengers', passengers.toString());
     if (startDate) params.set('startDate', startDate);
     if (endDate) params.set('endDate', endDate);
@@ -41,7 +44,7 @@ export default function MainSearchWidget({ selectedIsland, onIslandChange }: Mai
   return (
     <form
       onSubmit={handleSearch}
-      className="bg-white/95 backdrop-blur-md rounded-3xl p-4 sm:p-5 shadow-xl border border-[#E9E1D2] max-w-4xl w-full grid grid-cols-1 md:grid-cols-4 gap-3 text-[#13322E]"
+      className="bg-white/90 backdrop-blur-md rounded-3xl p-4 sm:p-5 shadow-xl border border-[#E9E1D2] max-w-4xl w-full grid grid-cols-1 md:grid-cols-4 gap-3 text-[#13322E]"
     >
       {/* SELECCIONAR ISLA */}
       <div className="p-3 rounded-2xl hover:bg-[#F8FAFC] transition-colors flex items-center space-x-3 border border-transparent hover:border-[#E9E1D2]">
@@ -89,10 +92,11 @@ export default function MainSearchWidget({ selectedIsland, onIslandChange }: Mai
       {/* BOTÓN BUSCAR */}
       <button
         type="submit"
-        className="h-full py-4 px-6 rounded-2xl bg-[#16B8AA] text-white hover:bg-[#0F766E] transition-all font-black text-xs uppercase tracking-widest flex items-center justify-center space-x-2 shadow-lg group"
+        style={{ backgroundColor: '#16B8AA', color: '#FFFFFF' }}
+        className="h-full py-4 px-6 rounded-2xl !bg-[#16B8AA] !text-white hover:!bg-[#0F766E] transition-all font-black text-xs uppercase tracking-widest flex items-center justify-center space-x-2 shadow-lg group cursor-pointer"
       >
         <Search className="w-4 h-4 text-white group-hover:scale-110 transition-transform" />
-        <span>BUSCAR CAMPER</span>
+        <span className="text-white font-black">BUSCAR CAMPER</span>
       </button>
     </form>
   );
