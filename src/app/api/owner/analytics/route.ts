@@ -23,7 +23,26 @@ export async function GET() {
   const impressions = views.filter((view) => view.event === 'IMPRESSION');
   const countries = Object.entries(detailViews.reduce<Record<string, number>>((result, view) => { const key = view.country || 'No disponible'; result[key] = (result[key] || 0) + 1; return result; }, {})).sort((a, b) => b[1] - a[1]);
   const paid = bookings.filter((booking) => activeStatuses.includes(booking.status));
-  return NextResponse.json({ success: true, stats: { impressions: impressions.length, views: detailViews.length, requests: bookings.length, confirmed: paid.length, conversion: detailViews.length ? Number(((bookings.length / detailViews.length) * 100).toFixed(1)) : 0, countries, perVehicle }, finance: { gross: paid.reduce((sum, booking) => sum + booking.totalAmount, 0), platformFees: paid.reduce((sum, booking) => sum + booking.ownerFee, 0), net: paid.reduce((sum, booking) => sum + booking.ownerPayout, 0), pending: bookings.filter((booking) => ['REQUESTED', 'OWNER_ACCEPTED', 'PAYMENT_PENDING'].includes(booking.status)).reduce((sum, booking) => sum + booking.ownerPayout, 0) } });
+  return NextResponse.json({
+    success: true,
+    stats: {
+      impressions: impressions.length,
+      views: detailViews.length,
+      requests: bookings.length,
+      confirmed: paid.length,
+      conversion: detailViews.length ? Number(((bookings.length / detailViews.length) * 100).toFixed(1)) : 0,
+      countries,
+      perVehicle,
+    },
+    finance: {
+      gross: paid.reduce((sum, booking) => sum + (booking.totalAmount || 0), 0),
+      platformFees: paid.reduce((sum, booking) => sum + (booking.ownerFee || 0), 0),
+      net: paid.reduce((sum, booking) => sum + (booking.ownerPayout || 0), 0),
+      pending: bookings
+        .filter((booking) => ['REQUESTED', 'OWNER_ACCEPTED', 'PAYMENT_PENDING'].includes(booking.status))
+        .reduce((sum, booking) => sum + (booking.ownerPayout || 0), 0),
+    },
+  });
  } catch (error) {
    console.error('Owner analytics error:', error);
    if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();

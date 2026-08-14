@@ -184,7 +184,7 @@ export default function AuthModal() {
                   className="flex items-center space-x-2.5 p-2.5 rounded-2xl hover:bg-slate-50 transition-colors"
                 >
                   <Truck className="w-4 h-4 text-[#16B8AA]" />
-                  <span>Panel de mis Campers</span>
+                  <span>Panel de propietario</span>
                 </Link>}
 
                 {user.role === 'ADMIN' && (
