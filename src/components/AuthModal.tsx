@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import { User, X, LogIn, UserPlus, LogOut, ShieldCheck, Truck, KeyRound, RefreshCw, Compass, Mail, UserCircle, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
@@ -20,9 +21,11 @@ export default function AuthModal() {
   const [user, setUser] = useState<any>(null);
   const [roleNotice, setRoleNotice] = useState<'TRAVELER' | 'OWNER' | null>(null);
   const [switchError, setSwitchError] = useState('');
+  const [mounted, setMounted] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
+    setMounted(true);
     fetch('/api/auth/me')
       .then((res) => res.json())
       .then((data) => {
@@ -32,6 +35,17 @@ export default function AuthModal() {
       })
       .catch(() => {});
   }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -242,9 +256,9 @@ export default function AuthModal() {
             <span>Acceder / Registrarse</span>
           </button>
 
-          {isOpen && (
-            <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md overflow-y-auto">
-              <div className="bg-white border border-[#E9E1D2] rounded-3xl max-w-md w-full p-8 relative shadow-2xl animate-fade-in my-auto">
+          {isOpen && mounted && createPortal(
+            <div className="fixed inset-0 z-[999999] overflow-y-auto bg-black/65 backdrop-blur-sm p-4 sm:p-6 flex min-h-full items-center justify-center">
+              <div className="relative w-full max-w-md bg-white border border-[#E9E1D2] rounded-3xl p-6 sm:p-8 shadow-2xl animate-fade-in my-auto text-left">
                 <button
                   onClick={() => setIsOpen(false)}
                   className="absolute top-5 right-5 p-2 rounded-full hover:bg-slate-100 transition-colors text-slate-500 cursor-pointer"
@@ -391,7 +405,8 @@ export default function AuthModal() {
                   )}
                 </div>
               </div>
-            </div>
+            </div>,
+            document.body
           )}
         </>
       )}
