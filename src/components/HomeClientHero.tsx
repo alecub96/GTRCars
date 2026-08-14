@@ -340,20 +340,22 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
               <button
                 key={isla.id}
                 onClick={() => setSelectedIsland(isla.name)}
-                className={`group relative h-48 sm:h-56 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border text-left ${
-                  selectedIsland === isla.name ? 'ring-4 ring-[#16B8AA] border-transparent' : 'border-[#E9E1D2]'
+                className={`group relative h-52 sm:h-64 rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 border text-left bg-[#13322E] ${
+                  selectedIsland === isla.name ? 'ring-4 ring-[#16B8AA] border-transparent scale-[1.02]' : 'border-[#E9E1D2]/20 hover:scale-[1.02]'
                 }`}
               >
+                <div className="absolute inset-0 bg-gradient-to-br from-[#1C2826] via-[#13322E] to-[#0D211E]" />
                 <img
                   src={ISLAND_HERO_IMAGES[isla.name] || ISLAND_HERO_IMAGES['Gran Canaria']}
                   alt={`Alquiler camper en ${isla.name}`}
                   loading="lazy"
                   decoding="async"
-                  className="absolute inset-0 h-full w-full object-cover scale-125 transition-transform duration-500 group-hover:scale-135"
+                  className="absolute inset-0 h-full w-full object-cover scale-[1.75] object-center transition-transform duration-700 group-hover:scale-[1.95]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-                <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <h3 className="font-serif text-xl sm:text-2xl font-bold tracking-tight">{isla.name}</h3>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10" />
+                <div className="absolute bottom-5 left-5 right-5 text-white">
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#16B8AA] block mb-1">Islas Canarias</span>
+                  <h3 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-white drop-shadow-md">{isla.name}</h3>
                 </div>
               </button>
             ))}
