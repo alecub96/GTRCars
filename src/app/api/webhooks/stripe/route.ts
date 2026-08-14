@@ -44,8 +44,11 @@ async function confirmBookingPayment(bookingId: string, paymentIntentId: string 
   });
 
   if (result) {
-    const totalDays = Math.max(1, Math.round((new Date(result.endDate).getTime() - new Date(result.startDate).getTime()) / (1000 * 60 * 60 * 24)));
-    const totalAmount = (result as any).totalPrice || 0;
+    const b = result as any;
+    const startDateObj = b.startDate ? new Date(b.startDate) : new Date();
+    const endDateObj = b.endDate ? new Date(b.endDate) : new Date();
+    const totalDays = Math.max(1, Math.round((endDateObj.getTime() - startDateObj.getTime()) / (1000 * 60 * 60 * 24)));
+    const totalAmount = Number(b.totalPrice || 0);
     const serviceFee = Math.round(totalAmount * 0.12 * 100) / 100;
     const baseAmount = Math.round((totalAmount - serviceFee) * 100) / 100;
     const taxAmount = Math.round(totalAmount * 0.07 * 100) / 100;
@@ -54,8 +57,8 @@ async function confirmBookingPayment(bookingId: string, paymentIntentId: string 
       invoiceNumber: `FACT-${new Date().getFullYear()}-${result.code}`,
       bookingCode: result.code,
       vehicleTitle: result.vehicle.title,
-      startDate: new Date(result.startDate).toLocaleDateString('es-ES'),
-      endDate: new Date(result.endDate).toLocaleDateString('es-ES'),
+      startDate: startDateObj.toLocaleDateString('es-ES'),
+      endDate: endDateObj.toLocaleDateString('es-ES'),
       totalDays,
       baseAmount,
       serviceFee,
