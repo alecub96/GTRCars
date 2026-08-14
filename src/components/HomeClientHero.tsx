@@ -20,17 +20,6 @@ const ISLAND_HERO_IMAGES: Record<string, string> = {
   'El Hierro': '/Islas/el%20hierro.webp',
   'La Graciosa': '/Islas/la%20graciosa.webp',
 };
-
-const ISLAND_POSITION_CLASSES: Record<string, string> = {
-  'Gran Canaria': '-translate-y-[56%] scale-[2.4]',
-  'Tenerife': '-translate-y-[60%] scale-[2.5]',
-  'Lanzarote': '-translate-y-[62%] scale-[2.5]',
-  'Fuerteventura': '-translate-y-[64%] scale-[2.5]',
-  'La Palma': '-translate-y-[58%] scale-[2.4]',
-  'La Gomera': '-translate-y-[56%] scale-[2.4]',
-  'El Hierro': '-translate-y-[58%] scale-[2.4]',
-  'La Graciosa': '-translate-y-[64%] scale-[2.5]',
-};
 interface HeroSectionProps {
   initialVehicles: any[];
 }
@@ -340,35 +329,43 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
       </section>
 
       {/* 6. EXPLORAR POR ISLA */}
-      <section className="py-16 bg-white border-t border-[#E9E1D2]">
+      <section className="py-20 bg-white border-t border-[#E9E1D2]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#13322E]">Explora las ocho islas canarias</h2>
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <span className="text-xs font-black uppercase tracking-[0.25em] text-[#16B8AA]">Archipiélago Canario</span>
+            <h2 className="font-serif text-3xl sm:text-5xl font-bold text-[#13322E] mt-2 mb-3">Explora las ocho islas canarias</h2>
+            <p className="text-sm text-[#6B726E] font-medium leading-relaxed">
+              Haz clic en cualquier isla para seleccionar sus furgonetas camperizadas y autocaravanas disponibles.
+            </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8 max-w-6xl mx-auto">
             {CANARY_ISLANDS.map((isla) => (
               <button
                 key={isla.id}
-                onClick={() => setSelectedIsland(isla.name)}
-                className={`group relative h-52 sm:h-64 rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 border text-left bg-[#13322E] ${
-                  selectedIsland === isla.name ? 'ring-4 ring-[#16B8AA] border-transparent scale-[1.02]' : 'border-[#E9E1D2]/20 hover:scale-[1.02]'
+                onClick={() => {
+                  setSelectedIsland(isla.name);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className={`group flex flex-col items-center justify-between p-6 rounded-3xl transition-all duration-300 text-center ${
+                  selectedIsland === isla.name
+                    ? 'bg-[#16B8AA]/10 border-2 border-[#16B8AA] shadow-md scale-105'
+                    : 'bg-[#FAF7F0] border border-[#E9E1D2] hover:bg-white hover:border-[#16B8AA] hover:shadow-xl hover:-translate-y-1'
                 }`}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-[#1C2826] via-[#13322E] to-[#0D211E]" />
-                <img
-                  src={ISLAND_HERO_IMAGES[isla.name] || ISLAND_HERO_IMAGES['Gran Canaria']}
-                  alt={`Alquiler camper en ${isla.name}`}
-                  loading="lazy"
-                  decoding="async"
-                  className={`absolute left-1/2 top-1/2 -translate-x-1/2 h-[220%] w-[220%] max-w-none object-cover transition-transform duration-700 group-hover:scale-[2.8] ${
-                    ISLAND_POSITION_CLASSES[isla.name] || '-translate-y-[60%] scale-[2.5]'
-                  }`}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10" />
-                <div className="absolute bottom-5 left-5 right-5 text-white">
-                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#16B8AA] block mb-1">Islas Canarias</span>
-                  <h3 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-white drop-shadow-md">{isla.name}</h3>
+                <div className="relative w-full h-40 sm:h-48 flex items-center justify-center p-2">
+                  <img
+                    src={ISLAND_HERO_IMAGES[isla.name] || ISLAND_HERO_IMAGES['Gran Canaria']}
+                    alt={`Alquiler camper en ${isla.name}`}
+                    loading="lazy"
+                    decoding="async"
+                    className="max-h-full max-w-full object-contain filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.18)] group-hover:scale-110 transition-transform duration-500"
+                  />
+                </div>
+                <div className="mt-4">
+                  <h3 className={`font-serif text-xl sm:text-2xl font-bold transition-colors ${selectedIsland === isla.name ? 'text-[#16B8AA]' : 'text-[#13322E] group-hover:text-[#16B8AA]'}`}>
+                    {isla.name}
+                  </h3>
                 </div>
               </button>
             ))}
@@ -380,8 +377,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
       <section className="py-20 bg-[#F7F6F2] border-t border-[#E9E1D2]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-xs font-black uppercase tracking-[0.25em] text-[#D97706]">Comunidad Vaneando</span>
-            <h2 className="font-serif text-3xl sm:text-5xl font-bold text-[#13322E] mt-2 mb-4">
+            <h2 className="font-serif text-3xl sm:text-5xl font-bold text-[#13322E] mb-4">
               Vuestras opiniones: una historia sobre ruedas
             </h2>
             <p className="text-sm text-[#6B726E] font-medium leading-relaxed">

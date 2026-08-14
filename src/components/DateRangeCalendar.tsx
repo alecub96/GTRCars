@@ -47,9 +47,9 @@ function Month({ month, startDate, endDate, blocked, onSelect }: { month: Date; 
               }}
               className={`relative aspect-square rounded-full text-xs font-bold transition-all ${
                 selected
-                  ? 'z-10 bg-[#16B8AA] text-white shadow-md ring-4 ring-[#16B8AA]/15'
+                  ? 'z-10 bg-[#16B8AA] text-white shadow-md ring-4 ring-[#16B8AA]/25 scale-105 font-black'
                   : inRange
-                  ? 'rounded-none bg-[#CCFBF1] text-[#13322E]'
+                  ? 'bg-[#16B8AA]/25 text-[#13322E] font-extrabold border border-[#16B8AA]/40 rounded-full'
                   : isBlocked
                   ? 'cursor-not-allowed bg-amber-100 text-amber-800 line-through'
                   : disabled
@@ -77,9 +77,17 @@ export default function DateRangeCalendar({ startDate, endDate, onChange, blocke
   }, []);
 
   const select = (value: string) => {
-    if (!startDate || endDate || value <= startDate) onChange(value, '');
-    else { onChange(startDate, value); if (variant === 'popover') setTimeout(() => setOpen(false), 180); }
+    if (!startDate || endDate || value <= startDate) {
+      onChange(value, '');
+    } else {
+      onChange(startDate, value);
+      // NO cerrarmos automáticamente el popover para dar al usuario control de confirmación
+    }
   };
+
+  const calculatedNights = Boolean(startDate && endDate)
+    ? Math.max(0, Math.round((new Date(`${endDate}T00:00:00`).getTime() - new Date(`${startDate}T00:00:00`).getTime()) / (1000 * 60 * 60 * 24)))
+    : 0;
 
   const calendarModal = (
     <div
@@ -88,15 +96,15 @@ export default function DateRangeCalendar({ startDate, endDate, onChange, blocke
       onClick={() => setOpen(false)}
     >
       <div
-        className="relative z-[1000000] w-[min(740px,calc(100vw-32px))] rounded-[28px] border border-[#E9E1D2] bg-white p-5 text-[#13322E] shadow-2xl"
+        className="relative z-[1000000] w-[min(740px,calc(100vw-32px))] rounded-[28px] border border-[#E9E1D2] bg-white p-6 text-[#13322E] shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-5 flex items-center justify-between border-b border-[#E9E1D2] pb-4">
           <div>
-            <span className="text-[10px] font-black uppercase tracking-[.18em] text-[#16B8AA]">Elige tu viaje</span>
-            <p className="text-xs text-[#6B726E]">Selecciona entrega y devolución</p>
+            <span className="text-[10px] font-black uppercase tracking-[.18em] text-[#16B8AA]">Selecciona Fechas</span>
+            <p className="text-xs text-[#6B726E] font-medium">Elige días de entrega y devolución de tu camper</p>
           </div>
-          <div className="flex gap-1">
+          <div className="flex items-center gap-2">
             <button type="button" aria-label="Mes anterior" onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1))} className="rounded-full border border-[#E9E1D2] p-2 hover:bg-[#F7F6F2]">
               <ChevronLeft className="h-4 w-4" />
             </button>
@@ -114,13 +122,31 @@ export default function DateRangeCalendar({ startDate, endDate, onChange, blocke
             <Month month={new Date(month.getFullYear(), month.getMonth() + 1, 1)} startDate={startDate} endDate={endDate} blocked={blocked} onSelect={select} />
           </div>
         </div>
-        <div className="mt-5 flex items-center justify-between rounded-2xl bg-[#F7F6F2] p-3">
-          <div className="flex items-center gap-3 text-xs">
-            <span><small className="block text-[#6B726E]">Entrega</small><strong>{pretty(startDate)}</strong></span>
-            <span className="text-[#16B8AA]">→</span>
-            <span><small className="block text-[#6B726E]">Devolución</small><strong>{pretty(endDate)}</strong></span>
+        <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl bg-[#F7F6F2] p-4 border border-[#E9E1D2]">
+          <div className="flex items-center gap-4 text-xs font-medium">
+            <div><small className="block text-[#6B726E] font-bold text-[10px] uppercase tracking-wider">Entrega</small><strong className="text-sm font-serif text-[#13322E]">{pretty(startDate)}</strong></div>
+            <span className="text-[#16B8AA] font-bold">→</span>
+            <div><small className="block text-[#6B726E] font-bold text-[10px] uppercase tracking-wider">Devolución</small><strong className="text-sm font-serif text-[#13322E]">{pretty(endDate)}</strong></div>
+            {calculatedNights > 0 && (
+              <span className="bg-[#16B8AA]/10 text-[#16B8AA] border border-[#16B8AA]/30 px-3 py-1 rounded-full font-black text-xs">
+                {calculatedNights} {calculatedNights === 1 ? 'noche' : 'noches'}
+              </span>
+            )}
           </div>
-          {(startDate || endDate) && <button type="button" onClick={() => onChange('', '')} className="text-xs font-bold text-[#0F766E]">Borrar fechas</button>}
+          <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
+            {(startDate || endDate) && (
+              <button type="button" onClick={() => onChange('', '')} className="text-xs font-bold text-[#6B726E] hover:text-[#13322E] hover:underline">
+                Borrar fechas
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="bg-[#16B8AA] hover:bg-[#0F766E] text-white px-6 py-2.5 rounded-full font-black text-xs uppercase tracking-wider shadow-md transition-all cursor-pointer"
+            >
+              Aplicar Fechas
+            </button>
+          </div>
         </div>
       </div>
     </div>
