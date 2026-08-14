@@ -7,10 +7,11 @@ function getMariaDbCredentials() {
   const envUrl = process.env.VANEANDO_DATABASE_URL?.trim() || process.env.DATABASE_URL?.trim() || '';
   const match = envUrl.match(/^(?:mysql|mariadb):\/\/(?:([^:@]+)(?::([^@]*))?@)?([^:\/]+)(?::(\d+))?\/(.+)$/i);
   if (match) {
+    const rawHost = match[3] || '127.0.0.1';
     return {
       user: decodeURIComponent(match[1] || ''),
       password: decodeURIComponent(match[2] || ''),
-      host: match[3] || '127.0.0.1',
+      host: rawHost.toLowerCase() === 'localhost' ? '127.0.0.1' : rawHost,
       port: match[4] ? Number(match[4]) : 3306,
       database: decodeURIComponent((match[5] || '').split('?')[0]),
     };
