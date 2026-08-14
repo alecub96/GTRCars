@@ -350,7 +350,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                   alt={`Alquiler camper en ${isla.name}`}
                   loading="lazy"
                   decoding="async"
-                  className="absolute inset-0 h-full w-full object-cover scale-[1.75] object-center transition-transform duration-700 group-hover:scale-[1.95]"
+                  className="absolute inset-0 h-full w-full object-cover scale-[3.5] sm:scale-[3.6] object-center transition-transform duration-700 group-hover:scale-[3.9]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10" />
                 <div className="absolute bottom-5 left-5 right-5 text-white">
