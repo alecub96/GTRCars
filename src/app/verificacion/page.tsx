@@ -9,7 +9,7 @@ export default function IdentityVerificationPage() {
   const [documentNumber, setDocumentNumber] = useState('');
   const [fileFront, setFileFront] = useState<File | null>(null);
   const [fileBack, setFileBack] = useState<File | null>(null);
-  const [drivingLicense, setDrivingLicense] = useState('');
+  const [fileLicense, setFileLicense] = useState<File | null>(null);
   const [licenseExpDate, setLicenseExpDate] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
@@ -24,8 +24,8 @@ export default function IdentityVerificationPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!fileFront || !fileBack) {
-      setError('Por favor selecciona ambos archivos (Anverso y Reverso)');
+    if (!fileFront || !fileBack || !fileLicense) {
+      setError('Por favor adjunta las 3 fotos requeridas (Anverso DNI, Reverso DNI y Foto Carné de Conducir)');
       return;
     }
     setLoading(true);
@@ -34,10 +34,10 @@ export default function IdentityVerificationPage() {
     const data = new FormData();
     data.set('documentType', documentType);
     data.set('documentNumber', documentNumber);
-    data.set('drivingLicense', drivingLicense);
     data.set('licenseExpDate', licenseExpDate);
     data.set('fileFront', fileFront);
     data.set('fileBack', fileBack);
+    data.set('fileLicense', fileLicense);
 
     try {
       const response = await fetch('/api/verification', { method: 'POST', body: data });
@@ -63,27 +63,27 @@ export default function IdentityVerificationPage() {
               <UserCheck className="w-6 h-6" />
             </div>
             <span className="text-[11px] font-black uppercase tracking-[0.25em] text-[#D97706]">
-              Verificación Obligatoria de Identidad
+              Verificación Obligatoria de Identidad y Conductor
             </span>
             <h1 className="font-serif text-3xl font-bold text-[#13322E] mt-1">
-              Verifica tu Cuenta de Conductor
+              Verifica tu Identidad y Permiso de Conducir
             </h1>
             <p className="text-xs text-[#6B726E] font-medium mt-2">
-              Cumplimiento con la normativa legal de alquiler de vehículos sin conductor en España
+              Verificamos que el carné de conducir coincide con la identidad y se encuentra vigente.
             </p>
           </div>
 
           {verificationStatus === 'VERIFIED' ? (
             <div className="text-center py-8 space-y-4">
               <CheckCircle2 className="w-16 h-16 text-emerald-600 mx-auto" />
-              <h3 className="font-serif text-2xl font-bold">Identidad verificada</h3>
-              <p className="text-xs text-[#6B726E]">Tu documentación fue revisada y aprobada por el equipo administrador.</p>
+              <h3 className="font-serif text-2xl font-bold">Identidad y Permiso Verificados</h3>
+              <p className="text-xs text-[#6B726E]">Tu documentación y carné de conducir fueron revisados y aprobados por la administración.</p>
             </div>
           ) : verificationStatus === 'PENDING' || submitted ? (
             <div className="text-center py-8 space-y-4">
               <CheckCircle2 className="w-16 h-16 text-[#16B8AA] mx-auto" />
               <h3 className="font-serif text-2xl font-bold">Documentación enviada correctamente</h3>
-              <p className="text-xs text-[#6B726E] max-w-md mx-auto">Tus archivos están guardados y disponibles únicamente para ti y para los administradores. El estado se actualizará cuando sean revisados.</p>
+              <p className="text-xs text-[#6B726E] max-w-md mx-auto">Tus 3 archivos (DNI/NIE y Carné de Conducir) están guardados de forma cifrada. La administración comprobará la coincidencia y vigencia.</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -95,69 +95,57 @@ export default function IdentityVerificationPage() {
                 </p>
               </div>
 
-              <div>
-                <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-2">
-                  Tipo de Documento de Identidad
-                </label>
-                <select
-                  value={documentType}
-                  onChange={(e) => setDocumentType(e.target.value)}
-                  className="w-full p-3 rounded-xl border border-[#E9E1D2] text-sm font-bold bg-[#F8FAFC]"
-                >
-                  <option value="DNI_NIE">DNI / NIE (España)</option>
-                  <option value="PASSPORT">Pasaporte Internacional</option>
-                  <option value="EU_ID">Documento de Identidad UE</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">
-                  Número de Documento (DNI/NIE/Pasaporte)
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Ej. 12345678Z"
-                  value={documentNumber}
-                  onChange={(e) => setDocumentNumber(e.target.value)}
-                  className="w-full p-3 rounded-xl border border-[#E9E1D2] text-sm focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">
-                    Nº Carnet de Conducir
+                  <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-2">
+                    Tipo de Documento de Identidad
+                  </label>
+                  <select
+                    value={documentType}
+                    onChange={(e) => setDocumentType(e.target.value)}
+                    className="w-full p-3 rounded-xl border border-[#E9E1D2] text-sm font-bold bg-[#F8FAFC]"
+                  >
+                    <option value="DNI_NIE">DNI / NIE (España)</option>
+                    <option value="PASSPORT">Pasaporte Internacional</option>
+                    <option value="EU_ID">Documento de Identidad UE</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-2">
+                    Número de Documento (DNI/NIE/Pasaporte)
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder="Ej. B-12345678"
-                    value={drivingLicense}
-                    onChange={(e) => setDrivingLicense(e.target.value)}
-                    className="w-full p-3 rounded-xl border border-[#E9E1D2] text-sm"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">
-                    Fecha Expiración Permiso
-                  </label>
-                  <input
-                    type="date"
-                    required
-                    value={licenseExpDate}
-                    onChange={(e) => setLicenseExpDate(e.target.value)}
-                    className="w-full p-3 rounded-xl border border-[#E9E1D2] text-sm"
+                    placeholder="Ej. 12345678Z"
+                    value={documentNumber}
+                    onChange={(e) => setDocumentNumber(e.target.value)}
+                    className="w-full p-3 rounded-xl border border-[#E9E1D2] text-sm focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
                   />
                 </div>
               </div>
 
+              <div>
+                <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">
+                  Fecha Expiración Permiso de Conducir
+                </label>
+                <input
+                  type="date"
+                  required
+                  value={licenseExpDate}
+                  onChange={(e) => setLicenseExpDate(e.target.value)}
+                  className="w-full p-3 rounded-xl border border-[#E9E1D2] text-sm"
+                />
+              </div>
+
               <div className="space-y-3">
                 <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E]">
-                  Adjuntar Documentos en Foto / PDF
+                  Adjuntar Fotos de Documentos (JPG, PNG o PDF)
                 </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   
+                  {/* ANVERSO DNI */}
                   <label className={`relative p-5 rounded-2xl border-2 border-dashed cursor-pointer transition-all text-center flex flex-col items-center justify-center ${fileFront ? 'border-[#16B8AA] bg-[#F0FDFA]' : 'border-[#CBD5E1] bg-[#F8FAFC] hover:bg-[#F1F5F9]'}`}>
                     <input
                       type="file"
@@ -167,19 +155,20 @@ export default function IdentityVerificationPage() {
                     />
                     {fileFront ? (
                       <>
-                        <CheckCircle2 className="w-8 h-8 text-[#16B8AA] mb-2" />
-                        <span className="text-xs font-bold text-[#13322E] truncate max-w-[200px]">{fileFront.name}</span>
-                        <span className="text-[10px] text-[#6B726E] mt-0.5">{(fileFront.size / 1024 / 1024).toFixed(2)} MB · Clic para cambiar</span>
+                        <CheckCircle2 className="w-7 h-7 text-[#16B8AA] mb-1.5" />
+                        <span className="text-xs font-bold text-[#13322E] truncate max-w-[150px]">{fileFront.name}</span>
+                        <span className="text-[10px] text-[#6B726E] mt-0.5">{(fileFront.size / 1024 / 1024).toFixed(2)} MB</span>
                       </>
                     ) : (
                       <>
-                        <Upload className="w-8 h-8 text-[#16B8AA] mb-2" />
-                        <span className="block text-xs font-bold text-[#13322E]">Anverso DNI / Permiso</span>
-                        <span className="block text-[10px] text-[#6B726E] mt-1">Formatos JPG, PNG o PDF (Máx. 5 MB)</span>
+                        <Upload className="w-7 h-7 text-[#16B8AA] mb-1.5" />
+                        <span className="block text-xs font-bold text-[#13322E]">Anverso DNI/NIE</span>
+                        <span className="block text-[10px] text-[#6B726E] mt-0.5">Foto Anverso</span>
                       </>
                     )}
                   </label>
 
+                  {/* REVERSO DNI */}
                   <label className={`relative p-5 rounded-2xl border-2 border-dashed cursor-pointer transition-all text-center flex flex-col items-center justify-center ${fileBack ? 'border-[#16B8AA] bg-[#F0FDFA]' : 'border-[#CBD5E1] bg-[#F8FAFC] hover:bg-[#F1F5F9]'}`}>
                     <input
                       type="file"
@@ -189,15 +178,38 @@ export default function IdentityVerificationPage() {
                     />
                     {fileBack ? (
                       <>
-                        <CheckCircle2 className="w-8 h-8 text-[#16B8AA] mb-2" />
-                        <span className="text-xs font-bold text-[#13322E] truncate max-w-[200px]">{fileBack.name}</span>
-                        <span className="text-[10px] text-[#6B726E] mt-0.5">{(fileBack.size / 1024 / 1024).toFixed(2)} MB · Clic para cambiar</span>
+                        <CheckCircle2 className="w-7 h-7 text-[#16B8AA] mb-1.5" />
+                        <span className="text-xs font-bold text-[#13322E] truncate max-w-[150px]">{fileBack.name}</span>
+                        <span className="text-[10px] text-[#6B726E] mt-0.5">{(fileBack.size / 1024 / 1024).toFixed(2)} MB</span>
                       </>
                     ) : (
                       <>
-                        <Upload className="w-8 h-8 text-[#16B8AA] mb-2" />
-                        <span className="block text-xs font-bold text-[#13322E]">Reverso Documento</span>
-                        <span className="block text-[10px] text-[#6B726E] mt-1">Formatos JPG, PNG o PDF (Máx. 5 MB)</span>
+                        <Upload className="w-7 h-7 text-[#16B8AA] mb-1.5" />
+                        <span className="block text-xs font-bold text-[#13322E]">Reverso DNI/NIE</span>
+                        <span className="block text-[10px] text-[#6B726E] mt-0.5">Foto Reverso</span>
+                      </>
+                    )}
+                  </label>
+
+                  {/* CARNÉ DE CONDUCIR */}
+                  <label className={`relative p-5 rounded-2xl border-2 border-dashed cursor-pointer transition-all text-center flex flex-col items-center justify-center ${fileLicense ? 'border-[#16B8AA] bg-[#F0FDFA]' : 'border-[#CBD5E1] bg-[#F8FAFC] hover:bg-[#F1F5F9]'}`}>
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/png,application/pdf"
+                      className="hidden"
+                      onChange={(e) => setFileLicense(e.target.files?.[0] || null)}
+                    />
+                    {fileLicense ? (
+                      <>
+                        <CheckCircle2 className="w-7 h-7 text-[#16B8AA] mb-1.5" />
+                        <span className="text-xs font-bold text-[#13322E] truncate max-w-[150px]">{fileLicense.name}</span>
+                        <span className="text-[10px] text-[#6B726E] mt-0.5">{(fileLicense.size / 1024 / 1024).toFixed(2)} MB</span>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-7 h-7 text-[#16B8AA] mb-1.5" />
+                        <span className="block text-xs font-bold text-[#13322E]">Carné de Conducir</span>
+                        <span className="block text-[10px] text-[#6B726E] mt-0.5">Foto Permiso</span>
                       </>
                     )}
                   </label>
@@ -210,7 +222,7 @@ export default function IdentityVerificationPage() {
                   {error}
                 </div>
               )}
-              
+
               <button
                 type="submit"
                 disabled={loading}
