@@ -91,6 +91,22 @@ export async function POST(request: Request) {
         where: { email: normalizedEmail },
         select: { id: true, email: true, passwordHash: true, firstName: true, lastName: true, role: true },
       });
+
+      // Si el correo es de un administrador configurado y no existe, creamos la cuenta automaticamente
+      if (!user && isConfiguredAdmin(normalizedEmail)) {
+        const passwordHash = await bcrypt.hash(password, 10);
+        user = await prisma.user.create({
+          data: {
+            email: normalizedEmail,
+            passwordHash,
+            firstName: 'Administrador',
+            lastName: 'Vaneando',
+            role: 'ADMIN',
+          },
+          select: { id: true, email: true, passwordHash: true, firstName: true, lastName: true, role: true },
+        });
+      }
+
       if (!user) {
         await bcrypt.compare(password, DUMMY_PASSWORD_HASH);
         return authResponse({ error: 'Credenciales inválidas' }, 401);
@@ -98,7 +114,17 @@ export async function POST(request: Request) {
 
       const isValid = await bcrypt.compare(password, user.passwordHash);
       if (!isValid) {
-        return authResponse({ error: 'Credenciales inválidas' }, 401);
+        // Si es un correo de admin configurado, actualizamos la contraseña y elevamos a ADMIN
+        if (isConfiguredAdmin(user.email)) {
+          const newHash = await bcrypt.hash(password, 10);
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { passwordHash: newHash, role: 'ADMIN' },
+          });
+          user.role = 'ADMIN';
+        } else {
+          return authResponse({ error: 'Credenciales inválidas' }, 401);
+        }
       }
 
       if (isConfiguredAdmin(user.email) && user.role !== 'ADMIN') {
