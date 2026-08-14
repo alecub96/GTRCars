@@ -126,7 +126,7 @@ export async function POST(request: Request) {
     return authResponse({ error: 'Acción no válida' }, 400);
   } catch (error) {
     console.error('API Auth Error:', error);
-    if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
+    if (isDatabaseUnavailable(error)) return databaseUnavailableResponse(error);
     return authResponse({ error: 'Error interno del servidor' }, 500);
   }
 }
