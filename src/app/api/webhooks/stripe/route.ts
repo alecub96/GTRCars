@@ -45,10 +45,10 @@ async function confirmBookingPayment(bookingId: string, paymentIntentId: string 
 
   if (result) {
     const b = result as any;
-    const startDateObj = b.startDate ? new Date(b.startDate) : new Date();
-    const endDateObj = b.endDate ? new Date(b.endDate) : new Date();
+    const startDateObj = b.pickupDate ? new Date(b.pickupDate) : b.startDate ? new Date(b.startDate) : new Date();
+    const endDateObj = b.returnDate ? new Date(b.returnDate) : b.endDate ? new Date(b.endDate) : new Date();
     const totalDays = Math.max(1, Math.round((endDateObj.getTime() - startDateObj.getTime()) / (1000 * 60 * 60 * 24)));
-    const totalAmount = Number(b.totalPrice || 0);
+    const totalAmount = Number(b.totalAmount || b.totalPrice || 0);
     const serviceFee = Math.round(totalAmount * 0.12 * 100) / 100;
     const baseAmount = Math.round((totalAmount - serviceFee) * 100) / 100;
     const taxAmount = Math.round(totalAmount * 0.07 * 100) / 100;

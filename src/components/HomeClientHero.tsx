@@ -12,7 +12,7 @@ import Image from 'next/image';
 
 const ISLAND_HERO_IMAGES: Record<string, string> = {
   'Gran Canaria': '/Islas/gran%20canaria.webp',
-  'Tenerife': '/Islas/Tenerife.webp',
+  'Tenerife': '/Islas/tenerife.webp',
   'Lanzarote': '/Islas/lanzarote.webp',
   'Fuerteventura': '/Islas/fuerteventura.webp',
   'La Palma': '/Islas/la%20palma.webp',
