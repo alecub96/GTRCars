@@ -91,12 +91,12 @@ export const REALISTIC_CANARIAN_CAMPERS: DemoCamperItem[] = [
       email: 'yeray.santana@vaneando.canarias',
     },
     photos: [
-      { id: 'p1-1', url: '/anuncios/1/foto-1.webp', orderIndex: 0 },
-      { id: 'p1-2', url: '/anuncios/1/foto-2.png', orderIndex: 1 },
-      { id: 'p1-3', url: '/anuncios/1/foto-3.png', orderIndex: 2 },
-      { id: 'p1-4', url: '/anuncios/1/foto-4.png', orderIndex: 3 },
-      { id: 'p1-5', url: '/anuncios/1/foto-5.png', orderIndex: 4 },
-      { id: 'p1-6', url: '/anuncios/1/foto-6.png', orderIndex: 5 },
+      { id: 'p1-1', url: '/Anuncios/1/foto-1.webp', orderIndex: 0 },
+      { id: 'p1-2', url: '/Anuncios/1/foto-2.png', orderIndex: 1 },
+      { id: 'p1-3', url: '/Anuncios/1/foto-3.png', orderIndex: 2 },
+      { id: 'p1-4', url: '/Anuncios/1/foto-4.png', orderIndex: 3 },
+      { id: 'p1-5', url: '/Anuncios/1/foto-5.png', orderIndex: 4 },
+      { id: 'p1-6', url: '/Anuncios/1/foto-6.png', orderIndex: 5 },
     ],
     features: [
       { id: 'f1-1', name: 'Techo elevable con cama doble' },
@@ -124,7 +124,7 @@ export const REALISTIC_CANARIAN_CAMPERS: DemoCamperItem[] = [
     ],
   },
 
-  // ANUNCIO 2: BASADO EN LA CARPETA public/anuncios/2/
+  // ANUNCIO 2: BASADO EN LA CARPETA public/Anuncios/2/
   {
     id: 'anuncio-real-2',
     slug: 'fiat-ducato-maxi-gran-volumen-l3h2-tenerife',
@@ -168,11 +168,11 @@ export const REALISTIC_CANARIAN_CAMPERS: DemoCamperItem[] = [
       email: 'ayoze.tenerife@vaneando.canarias',
     },
     photos: [
-      { id: 'p2-1', url: '/anuncios/2/foto-1.png', orderIndex: 0 },
-      { id: 'p2-2', url: '/anuncios/2/foto-2.png', orderIndex: 1 },
-      { id: 'p2-3', url: '/anuncios/2/foto-3.png', orderIndex: 2 },
-      { id: 'p2-4', url: '/anuncios/2/foto-4.png', orderIndex: 3 },
-      { id: 'p2-5', url: '/anuncios/2/foto-5.png', orderIndex: 4 },
+      { id: 'p2-1', url: '/Anuncios/2/foto-1.png', orderIndex: 0 },
+      { id: 'p2-2', url: '/Anuncios/2/foto-2.png', orderIndex: 1 },
+      { id: 'p2-3', url: '/Anuncios/2/foto-3.png', orderIndex: 2 },
+      { id: 'p2-4', url: '/Anuncios/2/foto-4.png', orderIndex: 3 },
+      { id: 'p2-5', url: '/Anuncios/2/foto-5.png', orderIndex: 4 },
     ],
     features: [
       { id: 'f2-1', name: 'Baño interior completo con ducha de agua caliente' },
@@ -200,7 +200,7 @@ export const REALISTIC_CANARIAN_CAMPERS: DemoCamperItem[] = [
     ],
   },
 
-  // ANUNCIO 3: BASADO EN LA CARPETA public/anuncios/3/
+  // ANUNCIO 3: BASADO EN LA CARPETA public/Anuncios/3/
   {
     id: 'anuncio-real-3',
     slug: 'toyota-proace-nomad-camper-fuerteventura',
@@ -244,9 +244,9 @@ export const REALISTIC_CANARIAN_CAMPERS: DemoCamperItem[] = [
       email: 'guacimara.fuerteventura@vaneando.canarias',
     },
     photos: [
-      { id: 'p3-1', url: '/anuncios/3/foto-1.png', orderIndex: 0 },
-      { id: 'p3-2', url: '/anuncios/3/foto-2.png', orderIndex: 1 },
-      { id: 'p3-3', url: '/anuncios/3/foto-3.png', orderIndex: 2 },
+      { id: 'p3-1', url: '/Anuncios/3/foto-1.png', orderIndex: 0 },
+      { id: 'p3-2', url: '/Anuncios/3/foto-2.png', orderIndex: 1 },
+      { id: 'p3-3', url: '/Anuncios/3/foto-3.png', orderIndex: 2 },
     ],
     features: [
       { id: 'f3-1', name: 'Cama camper confortable 190x135cm' },
