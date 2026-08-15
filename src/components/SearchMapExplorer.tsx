@@ -20,6 +20,7 @@ import {
   Bed,
 } from 'lucide-react';
 import FavoriteButton from './FavoriteButton';
+import RealCanaryMapExplorer from './RealCanaryMapExplorer';
 
 export interface VehicleSearchItem {
   id: string;
@@ -234,127 +235,14 @@ export default function SearchMapExplorer({
         </div>
       </div>
 
-      {/* VISTA 1: SOLO MAPA O VISTA DIVIDIDA */}
+      {/* VISTA 1: SOLO MAPA O VISTA DIVIDIDA CON MAPA REAL */}
       {(viewMode === 'map' || viewMode === 'split') && (
-        <div className={`relative bg-[#E5E3DF] rounded-3xl border border-[#E9E1D2] overflow-hidden shadow-inner ${viewMode === 'split' ? 'h-[620px]' : 'h-[75vh] min-h-[500px]'}`}>
-          
-          {/* MAPA INTERACTIVO CON FONDO SATELITAL / TOPOGRÁFICO DE CANARIAS */}
-          <div className="absolute inset-0 bg-[radial-gradient(#16b8aa_1px,transparent_1px)] [background-size:16px_16px] bg-[#EBE7DF]">
-            <div className="absolute inset-0 opacity-15 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#13322E] via-transparent to-transparent" />
-            
-            {/* LÍNEAS DE COSTA / SILUETA DE ISLA REPRESENTATIVA */}
-            <div className="absolute inset-0 flex items-center justify-center opacity-30 pointer-events-none">
-              <Compass className="w-96 h-96 text-[#13322E]" />
-            </div>
-          </div>
-
-          {/* CONTROLES FLOTANTES EN EL MAPA */}
-          <div className="absolute top-4 left-4 z-30 flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={() => setShowPois(!showPois)}
-              className={`px-3 py-1.5 rounded-full text-xs font-bold shadow-md transition-all flex items-center space-x-1.5 cursor-pointer ${
-                showPois
-                  ? 'bg-[#13322E] text-white'
-                  : 'bg-white text-[#13322E] border border-[#E9E1D2]'
-              }`}
-            >
-              <Tent className="w-3.5 h-3.5 text-[#16B8AA]" />
-              <span>{showPois ? 'Ocultar Puntos Camper' : 'Ver Puntos Camper (⛺ 🏖️)'}</span>
-            </button>
-          </div>
-
-          {/* MARCADORES DE PUNTOS CAMPER (POIS) */}
-          {showPois && CAMPER_POIS.map((poi) => {
-            const { x, y } = getCoordinatesPercent(poi.lat, poi.lng);
-            return (
-              <div
-                key={poi.id}
-                style={{ left: `${x}%`, top: `${y}%` }}
-                className="absolute -translate-x-1/2 -translate-y-1/2 z-10 group cursor-pointer"
-              >
-                <div className="w-6 h-6 rounded-full bg-white shadow-md border border-[#E9E1D2] flex items-center justify-center text-xs hover:scale-125 transition-transform">
-                  {poi.category === 'acampada' ? '⛺' : '🏖️'}
-                </div>
-                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block bg-[#13322E] text-white text-[10px] font-bold px-2 py-1 rounded-md whitespace-nowrap shadow-lg z-40">
-                  {poi.name}
-                </div>
-              </div>
-            );
-          })}
-
-          {/* MARCADORES DE VEHÍCULOS CON PRECIO (ESTILO IDEALISTA) */}
-          {mappedVehicles.map((v) => {
-            const { x, y } = getCoordinatesPercent(v.mapLat, v.mapLng);
-            const isSelected = activeVehicle?.id === v.id;
-
-            return (
-              <div
-                key={v.id}
-                style={{ left: `${x}%`, top: `${y}%` }}
-                onClick={() => setActiveVehicle(v)}
-                className={`absolute -translate-x-1/2 -translate-y-1/2 z-20 cursor-pointer transition-all duration-300 ${
-                  isSelected ? 'scale-110 z-40' : 'hover:scale-105'
-                }`}
-              >
-                {/* BADGE DE PRECIO INTERACTIVO */}
-                <div
-                  className={`px-3 py-1.5 rounded-full font-black text-xs shadow-lg border flex items-center space-x-1 transition-all ${
-                    isSelected
-                      ? 'bg-[#13322E] text-white border-white ring-4 ring-[#16B8AA]/40'
-                      : v.isFeatured
-                      ? 'bg-[#D97706] text-white border-white'
-                      : 'bg-white text-[#13322E] border-[#E9E1D2] hover:bg-[#16B8AA] hover:text-white'
-                  }`}
-                >
-                  <span>{v.basePricePerDay}€</span>
-                  <span className="text-[9px] opacity-80 font-normal">/día</span>
-                </div>
-              </div>
-            );
-          })}
-
-          {/* CARD FLOTANTE DEL VEHÍCULO SELECCIONADO EN EL MAPA */}
-          {activeVehicle && (
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-sm bg-white rounded-3xl p-4 shadow-2xl border border-[#E9E1D2] animate-in slide-in-from-bottom-4">
-              <button
-                type="button"
-                onClick={() => setActiveVehicle(null)}
-                className="absolute top-3 right-3 w-7 h-7 rounded-full bg-[#FAF7F0] text-[#13322E] flex items-center justify-center hover:bg-slate-200"
-              >
-                <X className="w-4 h-4" />
-              </button>
-
-              <div className="flex space-x-3">
-                <img
-                  src={activeVehicle.photos?.[0]?.url || 'https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=400'}
-                  alt={activeVehicle.title}
-                  className="w-28 h-24 object-cover rounded-2xl border border-[#E9E1D2] shrink-0"
-                />
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center space-x-1 text-[10px] font-black uppercase text-[#16B8AA] tracking-wider">
-                    <MapPin className="w-3 h-3 shrink-0" />
-                    <span className="truncate">{activeVehicle.municipality}, {activeVehicle.island}</span>
-                  </div>
-                  <h4 className="font-bold text-sm text-[#13322E] truncate mt-0.5">
-                    {activeVehicle.title}
-                  </h4>
-                  <div className="flex items-center space-x-2 text-xs text-[#6B726E] mt-1">
-                    <span className="font-bold text-[#16B8AA] text-sm">{activeVehicle.basePricePerDay}€ <span className="text-[10px] font-normal text-[#6B726E]">/ día</span></span>
-                    <span>•</span>
-                    <span>{activeVehicle.passengers || 2} plazas</span>
-                  </div>
-                  <Link
-                    href={`/camper/${activeVehicle.slug}`}
-                    className="mt-2 inline-flex items-center space-x-1 text-xs font-bold text-[#16B8AA] hover:underline"
-                  >
-                    <span>Ver ficha completa</span>
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
-              </div>
-            </div>
-          )}
+        <div className="w-full">
+          <RealCanaryMapExplorer
+            vehicles={vehicles}
+            selectedIsland={selectedIsland}
+            heightClass={viewMode === 'split' ? 'h-[620px]' : 'h-[75vh] min-h-[500px]'}
+          />
         </div>
       )}
 

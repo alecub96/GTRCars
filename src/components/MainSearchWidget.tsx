@@ -287,8 +287,7 @@ export default function MainSearchWidget({ selectedIsland, onIslandChange, selec
             const params = new URLSearchParams();
             if (activeIsland) params.set('island', activeIsland);
             if (selectedVehicleType) params.set('vehicleType', selectedVehicleType);
-            params.set('view', 'map');
-            router.push(`/buscar?${params.toString()}`);
+            router.push(`/mapa?${params.toString()}`);
           }}
           className="flex-1 py-3 px-4 rounded-2xl bg-[#13322E] text-white hover:bg-[#1f4e48] transition-all font-black text-xs uppercase tracking-wider flex items-center justify-center space-x-1.5 shadow-md cursor-pointer border border-white/20"
         >

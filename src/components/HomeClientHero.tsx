@@ -76,7 +76,17 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
               <Link href="/propietario" className="rounded-full bg-[#16B8AA] px-6 py-3 text-xs font-black uppercase tracking-widest text-white transition hover:bg-[#0F766E]">Ir al panel de propietario</Link>
             </div>
           ) : (
-            <div className="space-y-6 relative">
+            <div className="space-y-4 relative">
+              <div className="flex justify-center">
+                <Link
+                  href={`/mapa?island=${encodeURIComponent(selectedIsland)}`}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#13322E]/80 hover:bg-[#16B8AA] backdrop-blur-md text-white text-xs font-black uppercase tracking-wider transition-all border border-white/30 shadow-xl hover:scale-105"
+                >
+                  <span>🗺️ Ver Mapa Interactivo de {selectedIsland}</span>
+                  <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full">Pines & Precios</span>
+                </Link>
+              </div>
+
               <MainSearchWidget
                 selectedIsland={selectedIsland}
                 onIslandChange={(newIsland) => setSelectedIsland(newIsland)}
