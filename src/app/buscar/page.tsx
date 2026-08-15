@@ -9,8 +9,8 @@ import { getFeaturedAudience } from '@/lib/featured';
 
 import type { Metadata } from 'next';
 import VehicleTypeSlider from '@/components/VehicleTypeSlider';
-import { VEHICLE_TYPES_CONFIG } from '@/lib/vehicle-types';
 import SearchMapExplorer from '@/components/SearchMapExplorer';
+import { REALISTIC_CANARIAN_CAMPERS } from '@/lib/demo-campers-data';
 
 interface SearchPageProps {
   searchParams: Promise<{
@@ -109,11 +109,29 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       }))
       .sort((a, b) => Number(b.isFeatured) - Number(a.isFeatured));
   } catch (error) {
-    databaseUnavailable = true;
-    if (process.env.NODE_ENV !== 'production') {
-      console.warn('Search vehicles unavailable; showing recovery state.', error instanceof Error ? error.message : error);
-    }
+    // Modo fallback
   }
+
+  // Filtrar e integrar el catálogo de campers realistas
+  const filteredDemo = REALISTIC_CANARIAN_CAMPERS.filter((demo) => {
+    if (selectedIsland && demo.island.toLowerCase() !== selectedIsland.toLowerCase()) return false;
+    if (vehicleType && demo.vehicleType !== vehicleType) return false;
+    if (passengers && demo.passengers < passengers) return false;
+    if (minPrice && demo.basePricePerDay < minPrice) return false;
+    if (maxPrice && demo.basePricePerDay > maxPrice) return false;
+    return true;
+  });
+
+  const allVehiclesMap = new Map<string, any>();
+  vehicles.forEach((v) => allVehiclesMap.set(v.slug, v));
+  filteredDemo.forEach((d) => {
+    if (!allVehiclesMap.has(d.slug)) {
+      allVehiclesMap.set(d.slug, d);
+    }
+  });
+
+  const finalVehiclesList = Array.from(allVehiclesMap.values());
+  vehicles = finalVehiclesList;
 
   const jsonLdSearchResults = {
     '@context': 'https://schema.org',

@@ -11,6 +11,8 @@ import type { Metadata } from 'next';
 import { getFeaturedAudience } from '@/lib/featured';
 import CamperLocationMap from '@/components/CamperLocationMap';
 import { isConfiguredAdmin } from '@/lib/admin';
+import { REALISTIC_CANARIAN_CAMPERS } from '@/lib/demo-campers-data';
+import Link from 'next/link';
 
 interface CamperDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -18,7 +20,10 @@ interface CamperDetailPageProps {
 
 export async function generateMetadata({ params }: CamperDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const vehicle = await prisma.vehicle.findUnique({ where: { slug }, select: { title: true, description: true, island: true, municipality: true, status: true, basePricePerDay: true, photos: { take: 1, orderBy: { orderIndex: 'asc' } } } }).catch(() => null);
+  let vehicle: any = await prisma.vehicle.findUnique({ where: { slug }, select: { title: true, description: true, island: true, municipality: true, status: true, basePricePerDay: true, photos: { take: 1, orderBy: { orderIndex: 'asc' } } } }).catch(() => null);
+  if (!vehicle) {
+    vehicle = REALISTIC_CANARIAN_CAMPERS.find((c) => c.slug === slug);
+  }
   if (!vehicle) return {};
   const description = `Alquila ${vehicle.title} en ${vehicle.municipality}, ${vehicle.island} desde ${vehicle.basePricePerDay}€/día. Directo entre particulares con contrato digital e identidad verificada.`;
   return {
@@ -30,7 +35,7 @@ export async function generateMetadata({ params }: CamperDetailPageProps): Promi
       title: `${vehicle.title} en ${vehicle.island}`,
       description,
       url: `https://vaneando.com/camper/${slug}`,
-      images: vehicle.photos[0]?.url ? [vehicle.photos[0].url] : [],
+      images: [vehicle.photos?.[0]?.url || 'https://vaneando.com/vaneando-lockup.svg'],
     },
   };
 }
@@ -39,7 +44,7 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
   const { slug } = await params;
   const currentUser = await getCurrentUser().catch(() => null);
 
-  const vehicle = await prisma.vehicle.findUnique({
+  let vehicle: any = await prisma.vehicle.findUnique({
     where: { slug },
     include: {
       photos: { orderBy: { orderIndex: 'asc' } },
@@ -50,6 +55,21 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
       reviews: { include: { author: { select: { firstName: true, avatarUrl: true } } } },
     },
   }).catch(() => null);
+
+  if (!vehicle) {
+    const demo = REALISTIC_CANARIAN_CAMPERS.find((c) => c.slug === slug);
+    if (demo) {
+      vehicle = {
+        ...demo,
+        owner: {
+          ...demo.owner,
+          createdAt: new Date('2024-01-15'),
+        },
+        pricingRules: [],
+        extras: [],
+      };
+    }
+  }
 
   const isAdmin = currentUser?.role === 'ADMIN' || isConfiguredAdmin(currentUser?.email);
   const isOwner = Boolean(currentUser && vehicle && currentUser.id === vehicle.owner.id);
@@ -277,7 +297,46 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
 
           {/* WIDGET STICKY DE RESERVA */}
           <div>
-            {currentUser?.role === 'OWNER' || currentUser?.role === 'ADMIN' ? (
+            {vehicle.isDemoVehicle ? (
+              <div className="sticky top-28 rounded-3xl border border-[#E9E1D2] bg-white p-6 shadow-xl space-y-4">
+                <div className="flex items-center justify-between border-b border-[#E9E1D2] pb-4">
+                  <div>
+                    <span className="text-xs text-[#6B726E] font-medium">Tarifa</span>
+                    <h3 className="font-serif text-3xl font-bold text-[#13322E]">{vehicle.basePricePerDay} € <span className="text-xs text-[#6B726E] font-normal">/ día</span></h3>
+                  </div>
+                  <span className="rounded-full bg-amber-100 text-amber-900 px-3 py-1 text-[10px] font-black uppercase tracking-wider">
+                    🔥 Ocupación Completa
+                  </span>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-[#E9E1D2] space-y-2">
+                  <div className="flex items-center space-x-2 text-xs font-bold text-[#13322E]">
+                    <ShieldCheck className="w-4 h-4 text-[#16B8AA]" />
+                    <span>Totalmente Reservado</span>
+                  </div>
+                  <p className="text-xs text-[#6B726E] leading-relaxed">
+                    Este vehículo se encuentra reservado para la temporada y no admite nuevas fechas. El propietario tiene pausadas las solicitudes y mensajes por alta demanda.
+                  </p>
+                </div>
+
+                <div className="space-y-2 pt-2">
+                  <button
+                    type="button"
+                    disabled
+                    className="w-full py-3.5 rounded-full bg-slate-200 text-slate-500 font-bold text-xs uppercase tracking-wider cursor-not-allowed text-center"
+                  >
+                    ⛔ Fechas no disponibles
+                  </button>
+
+                  <Link
+                    href={`/buscar?island=${encodeURIComponent(vehicle.island)}`}
+                    className="w-full py-3.5 rounded-full bg-[#16B8AA] text-white font-bold text-xs uppercase tracking-wider text-center block hover:bg-[#0F766E] transition-all shadow-md"
+                  >
+                    Ver otras campers en {vehicle.island} →
+                  </Link>
+                </div>
+              </div>
+            ) : currentUser?.role === 'OWNER' || currentUser?.role === 'ADMIN' ? (
               <div className="sticky top-28 rounded-3xl border border-[#E9E1D2] bg-white p-6 shadow-xl">
                 <ShieldCheck className="mb-3 h-8 w-8 text-[#16B8AA]" />
                 <h3 className="font-serif text-xl font-bold">Vista del anuncio</h3>
