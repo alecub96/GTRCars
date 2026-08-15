@@ -100,9 +100,9 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-6 text-center sm:text-left">
           <div className="flex items-center justify-center space-x-3 mx-auto sm:mx-0">
             <div className="flex -space-x-2">
-              <img className="w-10 h-10 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" alt="Viajero Vaneando" />
-              <img className="w-10 h-10 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" alt="Viajero Vaneando" />
-              <img className="w-10 h-10 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" alt="Viajero Vaneando" />
+              <img className="w-10 h-10 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Viajero Vaneando" width={40} height={40} loading="lazy" />
+              <img className="w-10 h-10 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80" alt="Viajero Vaneando" width={40} height={40} loading="lazy" />
+              <img className="w-10 h-10 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80" alt="Viajero Vaneando" width={40} height={40} loading="lazy" />
             </div>
             <div>
               <div className="flex items-center space-x-1 justify-center sm:justify-start">
