@@ -127,11 +127,15 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  verification: {
+    google: 'b_aBYmH5fbwoMGeDcDbEHlOhekFHl1pZoVNhw2dfufE',
+  },
   icons: {
     icon: '/vaneando-icon.svg',
     apple: '/vaneando-icon.svg',
   },
   other: {
+    'google-site-verification': 'b_aBYmH5fbwoMGeDcDbEHlOhekFHl1pZoVNhw2dfufE',
     'geo.region': 'ES-CN',
     'geo.placename': 'Canary Islands, Spain',
     'geo.position': '28.291564;-16.629130',
