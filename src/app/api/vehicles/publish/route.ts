@@ -171,6 +171,25 @@ export async function POST(request: Request) {
       }
     }
 
+    // CREACIÓN DE REGLAS DE PRECIOS POR TEMPORADA / FECHAS
+    if (Array.isArray(body.pricingRules) && body.pricingRules.length > 0) {
+      const validRules = body.pricingRules
+        .filter((r: any) => r && r.startDate && r.endDate && Number(r.pricePerDay) > 0)
+        .map((r: any) => ({
+          vehicleId: vehicle.id,
+          name: typeof r.name === 'string' && r.name.trim() ? r.name.trim() : 'Tarifa especial',
+          startDate: new Date(r.startDate),
+          endDate: new Date(r.endDate),
+          pricePerDay: Number(r.pricePerDay),
+        }));
+
+      if (validRules.length > 0) {
+        await prisma.pricingRule.createMany({
+          data: validRules,
+        }).catch((err) => console.warn('Non-fatal pricing rule creation warning:', err));
+      }
+    }
+
     return NextResponse.json({ success: true, vehicle });
   } catch (error: any) {
     console.error('API Publish Vehicle Error:', error);

@@ -270,15 +270,31 @@ export default function MainSearchWidget({ selectedIsland, onIslandChange, selec
         )}
       </div>
 
-      {/* 4. BOTÓN BUSCAR */}
-      <button
-        type="submit"
-        style={{ backgroundColor: '#16B8AA', color: '#FFFFFF' }}
-        className="h-full py-4 px-6 rounded-2xl !bg-[#16B8AA] !text-white hover:!bg-[#0F766E] transition-all font-black text-xs uppercase tracking-widest flex items-center justify-center space-x-2 shadow-lg group cursor-pointer"
-      >
-        <Search className="w-4 h-4 text-white group-hover:scale-110 transition-transform" />
-        <span className="text-white font-black">BUSCAR CAMPER</span>
-      </button>
+      {/* 4. BOTONES: BUSCAR Y BUSCAR EN EL MAPA */}
+      <div className="flex flex-col sm:flex-row md:flex-col gap-2 h-full">
+        <button
+          type="submit"
+          style={{ backgroundColor: '#16B8AA', color: '#FFFFFF' }}
+          className="flex-1 py-3 px-4 rounded-2xl !bg-[#16B8AA] !text-white hover:!bg-[#0F766E] transition-all font-black text-xs uppercase tracking-wider flex items-center justify-center space-x-1.5 shadow-lg group cursor-pointer"
+        >
+          <Search className="w-4 h-4 text-white group-hover:scale-110 transition-transform" />
+          <span className="text-white font-black">BUSCAR</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            const params = new URLSearchParams();
+            if (activeIsland) params.set('island', activeIsland);
+            if (selectedVehicleType) params.set('vehicleType', selectedVehicleType);
+            params.set('view', 'map');
+            router.push(`/buscar?${params.toString()}`);
+          }}
+          className="flex-1 py-3 px-4 rounded-2xl bg-[#13322E] text-white hover:bg-[#1f4e48] transition-all font-black text-xs uppercase tracking-wider flex items-center justify-center space-x-1.5 shadow-md cursor-pointer border border-white/20"
+        >
+          <span>🗺️ Ver Mapa</span>
+        </button>
+      </div>
     </form>
   );
 }

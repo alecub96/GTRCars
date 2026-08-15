@@ -86,6 +86,45 @@ export default function PublishCamperPage() {
     features: [] as string[],
   });
 
+  // GESTIÓN DE TARIFAS POR TEMPORADA / FECHAS PERSONALIZADAS
+  const [pricingRules, setPricingRules] = useState<Array<{ id: string; name: string; startDate: string; endDate: string; pricePerDay: number }>>([]);
+  const [ruleName, setRuleName] = useState('');
+  const [ruleStart, setRuleStart] = useState('');
+  const [ruleEnd, setRuleEnd] = useState('');
+  const [rulePrice, setRulePrice] = useState<number>(55);
+
+  const handleAddPricingRule = () => {
+    if (!ruleStart || !ruleEnd) {
+      setError('Selecciona las fechas de inicio y fin para la tarifa especial.');
+      return;
+    }
+    if (new Date(ruleEnd) <= new Date(ruleStart)) {
+      setError('La fecha de fin debe ser posterior a la de inicio.');
+      return;
+    }
+    if (rulePrice < 10) {
+      setError('El precio de la tarifa especial debe ser al menos de 10€/día.');
+      return;
+    }
+    setError('');
+    const newRule = {
+      id: Math.random().toString(36).substring(7),
+      name: ruleName.trim() || 'Tarifa de temporada',
+      startDate: ruleStart,
+      endDate: ruleEnd,
+      pricePerDay: Number(rulePrice),
+    };
+    setPricingRules([...pricingRules, newRule]);
+    setRuleName('');
+    setRuleStart('');
+    setRuleEnd('');
+    setRulePrice(formData.basePricePerDay ? Math.round(formData.basePricePerDay * 1.2) : 60);
+  };
+
+  const handleRemovePricingRule = (id: string) => {
+    setPricingRules(pricingRules.filter((r) => r.id !== id));
+  };
+
   // HELPER PARA EVITAR CEROS A LA IZQUIERDA EN NÚMEROS (Ej. 065 -> 65)
   const handleNumberInput = (field: keyof typeof formData, rawVal: string) => {
     const cleanStr = rawVal.replace(/^0+(?=\d)/, '');
@@ -120,8 +159,12 @@ export default function PublishCamperPage() {
       setError('El precio por día debe ser de al menos 10€.');
       return false;
     }
-    if (formData.description.trim().length < 40) {
-      setError(`La descripción debe tener al menos 40 caracteres (llevas ${formData.description.trim().length}/40).`);
+    if (formData.securityDeposit < 0) {
+      setError('La fianza no puede ser negativa.');
+      return false;
+    }
+    if (!formData.description || formData.description.trim().length < 20) {
+      setError('Escribe una descripción de al menos 20 caracteres.');
       return false;
     }
     if (formData.rules.trim().length < 10) {
@@ -146,7 +189,15 @@ export default function PublishCamperPage() {
       const res = await fetch('/api/vehicles/publish', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          pricingRules: pricingRules.map((r) => ({
+            name: r.name,
+            startDate: r.startDate,
+            endDate: r.endDate,
+            pricePerDay: r.pricePerDay,
+          })),
+        }),
       });
 
       const data = await res.json();
@@ -490,6 +541,125 @@ export default function PublishCamperPage() {
                       className="w-full p-3.5 rounded-xl border border-[#E9E1D2] text-base font-bold text-[#13322E] focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
                     />
                   </div>
+                </div>
+
+                {/* MODULO INTERACTIVO DE TARIFAS POR FECHAS Y TEMPORADA */}
+                <div className="p-5 rounded-2xl bg-[#FAF7F0] border border-[#E9E1D2] space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="text-sm font-bold text-[#13322E] flex items-center gap-1.5">
+                        <span>📅 Tarifas Especiales según Fechas / Temporada</span>
+                      </h4>
+                      <p className="text-[11px] text-[#6B726E] mt-0.5">
+                        Personaliza el precio por día para períodos de alta demanda (ej: Semana Santa, Verano, Fines de semana).
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* FORMULARIO PARA AÑADIR NUEVA TARIFA */}
+                  <div className="bg-white p-4 rounded-xl border border-[#E9E1D2] space-y-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
+                      <div className="sm:col-span-2">
+                        <label className="block text-[10px] font-black uppercase tracking-wider text-[#6B726E] mb-1">
+                          Nombre / Motivo
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Ej. Alta demanda / Semana Santa"
+                          value={ruleName}
+                          onChange={(e) => setRuleName(e.target.value)}
+                          className="w-full p-2.5 rounded-lg border border-[#E9E1D2] text-xs font-medium"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-black uppercase tracking-wider text-[#6B726E] mb-1">
+                          Desde
+                        </label>
+                        <input
+                          type="date"
+                          value={ruleStart}
+                          onChange={(e) => setRuleStart(e.target.value)}
+                          className="w-full p-2.5 rounded-lg border border-[#E9E1D2] text-xs font-medium"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-black uppercase tracking-wider text-[#6B726E] mb-1">
+                          Hasta
+                        </label>
+                        <input
+                          type="date"
+                          value={ruleEnd}
+                          onChange={(e) => setRuleEnd(e.target.value)}
+                          className="w-full p-2.5 rounded-lg border border-[#E9E1D2] text-xs font-medium"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between gap-3 pt-1">
+                      <div className="flex items-center gap-2">
+                        <label className="text-xs font-black uppercase tracking-wider text-[#13322E]">
+                          Precio en estas fechas:
+                        </label>
+                        <div className="flex items-center gap-1">
+                          <input
+                            type="number"
+                            min="10"
+                            value={rulePrice || ''}
+                            onChange={(e) => setRulePrice(Number(e.target.value))}
+                            className="w-20 p-2 rounded-lg border border-[#E9E1D2] text-xs font-black text-[#16B8AA] text-center"
+                          />
+                          <span className="text-xs font-bold text-[#6B726E]">€/día</span>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={handleAddPricingRule}
+                        className="px-4 py-2 rounded-lg bg-[#13322E] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#16B8AA] transition-colors cursor-pointer"
+                      >
+                        + Añadir Tarifa
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* LISTA DE TARIFAS CONFIGURADAS */}
+                  {pricingRules.length > 0 ? (
+                    <div className="space-y-2 pt-1">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-[#6B726E] block">
+                        Tarifas especiales programadas ({pricingRules.length}):
+                      </span>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {pricingRules.map((r) => (
+                          <div
+                            key={r.id}
+                            className="p-3 bg-white rounded-xl border border-[#E9E1D2] flex items-center justify-between text-xs shadow-sm"
+                          >
+                            <div>
+                              <span className="font-bold text-[#13322E] block">{r.name}</span>
+                              <span className="text-[10px] text-[#6B726E]">
+                                {new Date(r.startDate).toLocaleDateString()} al {new Date(r.endDate).toLocaleDateString()}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                              <span className="font-extrabold text-[#16B8AA] text-sm">{r.pricePerDay} €/día</span>
+                              <button
+                                type="button"
+                                onClick={() => handleRemovePricingRule(r.id)}
+                                className="text-red-500 hover:text-red-700 font-bold text-xs p-1"
+                                title="Eliminar tarifa"
+                              >
+                                ✕
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-[11px] text-[#6B726E] italic">
+                      No has añadido tarifas de temporada. Se aplicará el precio base de {formData.basePricePerDay || 0}€/día durante todo el año.
+                    </p>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">

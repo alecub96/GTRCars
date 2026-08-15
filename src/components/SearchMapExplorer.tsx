@@ -42,6 +42,7 @@ export interface VehicleSearchItem {
 interface SearchMapExplorerProps {
   vehicles: VehicleSearchItem[];
   selectedIsland?: string;
+  initialViewMode?: 'grid' | 'map' | 'split';
 }
 
 const ISLAND_COORDINATES: Record<string, { lat: number; lng: number; zoom: number; bounds: { minLat: number; maxLat: number; minLng: number; maxLng: number } }> = {
@@ -102,11 +103,10 @@ const ISLAND_COORDINATES: Record<string, { lat: number; lng: number; zoom: numbe
 };
 
 const MUNICIPALITY_FALLBACK: Record<string, { lat: number; lng: number }> = {
-  'Las Palmas de Gran Canaria': { lat: 28.1235, lng: -15.4363 },
+  'Las Palmas de Gran Canaria': { lat: 28.1248, lng: -15.4300 },
+  'Telde': { lat: 27.9950, lng: -15.4180 },
   'San Bartolomé de Tirajana': { lat: 27.7606, lng: -15.5860 },
   'Maspalomas': { lat: 27.7606, lng: -15.5860 },
-  'Telde': { lat: 27.9940, lng: -15.4162 },
-  'Agüimes': { lat: 27.9042, lng: -15.4461 },
   'Gáldar': { lat: 28.1470, lng: -15.6540 },
   'Arucas': { lat: 28.1180, lng: -15.5220 },
   'Santa Cruz de Tenerife': { lat: 28.4636, lng: -16.2518 },

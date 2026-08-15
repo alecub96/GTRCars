@@ -295,7 +295,11 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 <p className="text-sm text-[#6B726E]">Prueba a cambiar la isla o reducir las restricciones de precio y viajeros.</p>
               </div>
             ) : (
-              <SearchMapExplorer vehicles={vehicles} selectedIsland={selectedIsland} />
+              <SearchMapExplorer
+                vehicles={vehicles}
+                selectedIsland={selectedIsland}
+                initialViewMode={params.view === 'map' ? 'map' : 'grid'}
+              />
             )}
           </div>
 
