@@ -10,6 +10,7 @@ import { Star, MapPin, Users, Bed, ShieldCheck, Check, Fuel, Settings2, Compass 
 import type { Metadata } from 'next';
 import { getFeaturedAudience } from '@/lib/featured';
 import CamperLocationMap from '@/components/CamperLocationMap';
+import { isConfiguredAdmin } from '@/lib/admin';
 
 interface CamperDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -50,7 +51,10 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
     },
   }).catch(() => null);
 
-  if (!vehicle || (vehicle.status !== 'ACTIVE' && currentUser?.role !== 'ADMIN' && currentUser?.id !== vehicle.owner.id)) {
+  const isAdmin = currentUser?.role === 'ADMIN' || isConfiguredAdmin(currentUser?.email);
+  const isOwner = Boolean(currentUser && vehicle && currentUser.id === vehicle.owner.id);
+
+  if (!vehicle || (vehicle.status !== 'ACTIVE' && !isAdmin && !isOwner)) {
     notFound();
   }
 
@@ -106,6 +110,14 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
 
   return (
     <div className="min-h-screen bg-[#F7F6F2] text-[#1C2826]">
+      {vehicle.status !== 'ACTIVE' && (
+        <div className="bg-[#D97706] text-white text-xs font-bold py-2.5 px-4 text-center sticky top-0 z-50 shadow-md flex items-center justify-center space-x-2">
+          <ShieldCheck className="w-4 h-4" />
+          <span>
+            ⚠️ Modo Vista Previa ({vehicle.status === 'PENDING_REVIEW' ? 'Pendiente de moderación' : vehicle.status === 'DRAFT' ? 'Borrador' : 'Rechazado'}) — Solo visible para ti y la administración.
+          </span>
+        </div>
+      )}
       <VehicleViewTracker vehicleId={vehicle.id} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdVehicleProduct) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdBreadcrumb) }} />

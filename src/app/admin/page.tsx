@@ -25,7 +25,7 @@ export default function AdminPage() {
         return auth;
       })
       .then((auth) => {
-        const adminEmails = ['admin@vaneando.com', 'vaneando@vaneando.com', 'alecub96@gmail.com'];
+        const adminEmails = ['admin@vaneando.com', 'vaneando@vaneando.com', 'alecub96@gmail.com', 'alecub96@hotmail.com'];
         const isAdmin = auth.user?.role === 'ADMIN' || adminEmails.includes(auth.user?.email?.toLowerCase());
         setAuthorized(isAdmin);
         return isAdmin ? fetch('/api/admin/dashboard') : null;

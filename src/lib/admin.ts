@@ -5,6 +5,7 @@ const DEFAULT_ADMIN_EMAILS = [
   'admin@vaneando.com',
   'vaneando@vaneando.com',
   'alecub96@gmail.com',
+  'alecub96@hotmail.com',
 ];
 
 export function getConfiguredAdminEmails() {
