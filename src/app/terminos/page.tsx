@@ -1,7 +1,7 @@
 import Navbar from '@/components/Navbar';
 
 const items = [
-  ['1. Qué es Vaneando', 'Vaneando es una plataforma que facilita el contacto entre viajeros y propietarios o empresas que ofrecen campers. Salvo que se indique expresamente lo contrario, Vaneando no es propietario del vehículo ni parte del contrato de alquiler entre ambas partes.'],
+  ['1. Qué es Vaneando (Intermediario Tecnológico)', 'Vaneando es única y exclusivamente una plataforma tecnológica e intermediaria que facilita el contacto y la comunicación entre viajeros y propietarios particulares de vehículos camperizados en Canarias. Vaneando no es propietario de los vehículos, no presta servicios de transporte ni de alquiler, ni es parte en ningún caso de los contratos de alquiler celebrados directa y exclusivamente entre los particulares.'],
   ['2. Registro y cuentas', 'Debes facilitar información veraz, mantener tus credenciales seguras y utilizar una cuenta por persona. El acceso puede suspenderse si detectamos fraude, suplantación, documentación irregular o incumplimientos de estas condiciones.'],
   ['3. Anuncios y disponibilidad', 'El propietario responde de la exactitud del anuncio, fotografías, equipamiento, precio, calendario, documentación y seguro del vehículo. Vaneando puede revisar, ocultar o retirar anuncios que no cumplan los requisitos de la plataforma.'],
   ['4. Solicitudes y reservas', 'Una solicitud no es una reserva confirmada hasta que el propietario la acepta y se cumplen las condiciones mostradas en el proceso. Las fechas, importes, fianza, extras y políticas de cancelación quedan recogidos en el resumen y contrato de cada reserva.'],

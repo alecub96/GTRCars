@@ -273,14 +273,17 @@ export default function DigitalContractViewer({
             {/* ENCABEZADO FORMAL DEL DOCUMENTO */}
             <div className="text-center border-b border-[#E9E1D2] pb-6 space-y-2">
               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#16B8AA]">
-                CONTRATO DE ARRENDAMIENTO DE VEHÍCULO SIN CONDUCTOR
+                CONTRATO PARTICULAR DE ARRENDAMIENTO DE VEHÍCULO SIN CONDUCTOR
               </span>
               <h3 className="text-xl font-bold text-[#13322E]">
-                CONTRATO PARTICULAR DE ALQUILER DE FURGONETA CAMPER / AUTOCARAVANA
+                CONTRATO PRIVADO ENTRE PARTICULARES
               </h3>
               <p className="text-[11px] text-[#6B726E]">
-                Expedido y registrado electrónicamente en la plataforma Vaneando (Canarias, España)
+                El presente contrato se celebra de forma directa y exclusiva entre las partes particulares abajo firmantes.
               </p>
+              <div className="p-3 bg-amber-50/80 border border-amber-200/80 rounded-xl text-[10px] text-amber-900 font-medium text-center">
+                ⚖️ <strong>Aviso legal:</strong> Vaneando actúa únicamente como intermediario tecnológico para facilitar la puesta en contacto y la firma digital. Vaneando no es propietario del vehículo, no es parte del contrato de alquiler ni asume responsabilidades derivadas del uso, seguro o fianza acordada entre los particulares.
+              </div>
             </div>
 
             {/* PARTES CONTRATANTES */}
@@ -367,9 +370,16 @@ export default function DigitalContractViewer({
               </div>
 
               <div>
-                <strong className="block text-[#13322E] mb-1">QUINTA. Ley aplicable y firma eIDAS.</strong>
+                <strong className="block text-[#13322E] mb-1">QUINTA. Naturaleza del contrato e intermediación.</strong>
                 <p className="text-[#52605B]">
-                  Este contrato se rige por la Ley 16/1987 de Ordenación de Transportes Terrestres y el Código Civil español. Las firmas electrónicas quedan registradas con sello temporal, IP y hash criptográfico con plena validez legal conforme al Reglamento eIDAS (UE Nº 910/2014).
+                  Las partes reconocen expresamente que el presente contrato se celebra única y exclusivamente entre el Arrendador particular y el Arrendatario particular. La plataforma Vaneando actúa como mero intermediario tecnológico de comunicación y gestión sin ostentar la condición de parte arrendadora, propietaria o aseguradora.
+                </p>
+              </div>
+
+              <div>
+                <strong className="block text-[#13322E] mb-1">SEXTA. Ley aplicable y firma eIDAS.</strong>
+                <p className="text-[#52605B]">
+                  Este contrato se rige por el Código Civil español y la normativa mercantil aplicable. Las firmas electrónicas quedan registradas con sello temporal, IP y hash criptográfico con plena validez legal conforme al Reglamento eIDAS (UE Nº 910/2014).
                 </p>
               </div>
             </div>

@@ -87,6 +87,21 @@ export default function SecurityPage() {
       {/* CONTENIDO PRINCIPAL */}
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-16">
         
+        {/* AVISO IMPORTANTE DE INTERMEDIACIÓN TECNOLÓGICA */}
+        <div className="bg-amber-50/80 border border-amber-200 p-6 rounded-3xl flex flex-col sm:flex-row items-start sm:items-center gap-4 text-amber-950">
+          <div className="w-10 h-10 rounded-2xl bg-[#D97706] text-white flex items-center justify-center font-black shrink-0 text-base">
+            ⚖️
+          </div>
+          <div className="space-y-1 text-xs leading-relaxed">
+            <strong className="block text-sm font-bold text-amber-950">
+              Vaneando es exclusivamente una plataforma tecnológica intermediaria
+            </strong>
+            <p className="text-amber-900/90 font-medium">
+              Todos los contratos de alquiler, seguros del vehículo y acuerdos de fianza se celebran <strong>directa y exclusivamente entre particulares (viajero y propietario)</strong>. Vaneando no es propietario de los vehículos, no presta servicios de alquiler ni forma parte del contrato suscrito entre las partes.
+            </p>
+          </div>
+        </div>
+
         {/* 2. PILARES CLAVE */}
         <section className="space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-2">
