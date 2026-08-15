@@ -105,7 +105,7 @@ export default function AuthModal() {
 
       setTimeout(() => {
         window.location.href = targetRole === 'TRAVELER' ? '/cuenta' : '/propietario';
-      }, 700);
+      }, 1000);
     } catch (err: any) {
       setSwitchError(err.message || 'No se pudo cambiar de modo');
     } finally {
@@ -128,18 +128,24 @@ export default function AuthModal() {
   return (
     <>
       {roleNotice && (
-        <div className="fixed inset-0 z-[100000] overflow-y-auto bg-[#13322E]/70 p-4 backdrop-blur-md flex items-center justify-center">
-          <div className="my-auto w-full max-w-sm rounded-[32px] bg-white p-8 text-center shadow-2xl border border-[#E9E1D2] relative animate-fade-in">
-            <CheckCircle2 className="mx-auto mb-4 h-14 w-14 text-[#16B8AA]" />
-            <span className="text-[10px] font-black uppercase tracking-[.25em] text-[#16B8AA]">Modo actualizado</span>
-            <h2 className="mt-2 font-serif text-3xl font-bold text-[#13322E]">
-              Ahora estás en modo {roleNotice === 'OWNER' ? 'propietario' : 'viajero'}
-            </h2>
-            <p className="mt-3 text-sm text-[#6B726E] font-medium leading-relaxed">
-              {roleNotice === 'OWNER'
-                ? 'Puedes gestionar tus campers, reservas, calendario y finanzas.'
-                : 'Puedes explorar campers, solicitar fechas y gestionar tus viajes.'}
-            </p>
+        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[999999] w-[92%] max-w-md pointer-events-auto animate-in slide-in-from-bottom-8 fade-in duration-300">
+          <div className="rounded-3xl bg-[#13322E] text-white p-5 shadow-[0_20px_50px_rgba(0,0,0,0.35)] border border-[#16B8AA]/40 flex items-center space-x-4">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#16B8AA]/20 text-[#16B8AA]">
+              <CheckCircle2 className="h-7 w-7" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#16B8AA] block">
+                Modo actualizado
+              </span>
+              <h3 className="text-base font-bold text-white tracking-tight">
+                Ahora estás en modo {roleNotice === 'OWNER' ? 'propietario' : 'viajero'}
+              </h3>
+              <p className="text-xs text-[#A0AEC0] font-medium truncate mt-0.5">
+                {roleNotice === 'OWNER'
+                  ? 'Gestiona tus campers, calendario y finanzas.'
+                  : 'Explora campers y gestiona tus viajes.'}
+              </p>
+            </div>
           </div>
         </div>
       )}
