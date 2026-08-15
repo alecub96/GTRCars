@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { CheckCircle2, XCircle, ExternalLink, RefreshCw, AlertCircle, ShieldCheck, Eye } from 'lucide-react';
+import { CheckCircle2, XCircle, ExternalLink, RefreshCw, AlertCircle, ShieldCheck, Eye, Trash2 } from 'lucide-react';
 
 export default function AdminVehicleQueue() {
   const [vehicles, setVehicles] = useState<any[]>([]);
@@ -48,6 +48,28 @@ export default function AdminVehicleQueue() {
       await loadVehicles();
     } catch (err: any) {
       setFeedback({ type: 'error', message: err.message || 'No se pudo actualizar el anuncio' });
+    } finally {
+      setProcessingId(null);
+    }
+  };
+
+  const deleteVehicle = async (vehicleId: string) => {
+    if (!window.confirm('¿Seguro que quieres eliminar este anuncio de prueba definitivamente?')) return;
+    setProcessingId(vehicleId);
+    setFeedback(null);
+
+    try {
+      const response = await fetch(`/api/admin/vehicles?id=${vehicleId}`, {
+        method: 'DELETE',
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'No se pudo eliminar el anuncio');
+
+      setFeedback({ type: 'success', message: data.message || 'Anuncio eliminado con éxito' });
+      await loadVehicles();
+    } catch (err: any) {
+      setFeedback({ type: 'error', message: err.message || 'No se pudo eliminar el anuncio' });
     } finally {
       setProcessingId(null);
     }
@@ -233,6 +255,17 @@ export default function AdminVehicleQueue() {
                       <span>{isProcessing ? 'Rechazando...' : 'Rechazar'}</span>
                     </button>
                   )}
+
+                  <button
+                    type="button"
+                    disabled={isProcessing}
+                    onClick={() => deleteVehicle(v.id)}
+                    title="Eliminar anuncio permanentemente"
+                    className="inline-flex items-center space-x-1 px-3 py-2 rounded-full text-slate-400 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-200 text-xs font-bold transition-all cursor-pointer disabled:opacity-50"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span className="hidden sm:inline">Eliminar</span>
+                  </button>
                 </div>
               </div>
             );

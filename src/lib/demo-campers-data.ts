@@ -91,12 +91,12 @@ export const REALISTIC_CANARIAN_CAMPERS: DemoCamperItem[] = [
       email: 'yeray.santana@vaneando.canarias',
     },
     photos: [
-      { id: 'p1-1', url: '/anuncios/1/foto-1.png', orderIndex: 0 },
+      { id: 'p1-1', url: '/anuncios/1/foto-1.webp', orderIndex: 0 },
       { id: 'p1-2', url: '/anuncios/1/foto-2.png', orderIndex: 1 },
       { id: 'p1-3', url: '/anuncios/1/foto-3.png', orderIndex: 2 },
       { id: 'p1-4', url: '/anuncios/1/foto-4.png', orderIndex: 3 },
       { id: 'p1-5', url: '/anuncios/1/foto-5.png', orderIndex: 4 },
-      { id: 'p1-6', url: '/anuncios/1/foto-6.webp', orderIndex: 5 },
+      { id: 'p1-6', url: '/anuncios/1/foto-6.png', orderIndex: 5 },
     ],
     features: [
       { id: 'f1-1', name: 'Techo elevable con cama doble' },

@@ -68,3 +68,29 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ error: error?.message || 'No se pudo actualizar el estado del anuncio' }, { status: 500 });
   }
 }
+
+export async function DELETE(request: Request) {
+  try {
+    if (!await requireAdmin()) return NextResponse.json({ error: 'No autorizado como administrador' }, { status: 403 });
+
+    const { searchParams } = new URL(request.url);
+    const vehicleId = searchParams.get('id');
+
+    if (!vehicleId) {
+      return NextResponse.json({ error: 'ID de vehículo no especificado' }, { status: 400 });
+    }
+
+    await prisma.vehicle.delete({
+      where: { id: vehicleId },
+    });
+
+    return NextResponse.json({
+      success: true,
+      message: 'Anuncio eliminado de la base de datos con éxito.',
+    });
+  } catch (error: any) {
+    console.error('API Admin Vehicles Delete Error:', error);
+    if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
+    return NextResponse.json({ error: error?.message || 'No se pudo eliminar el anuncio' }, { status: 500 });
+  }
+}
