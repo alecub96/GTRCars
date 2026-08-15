@@ -51,7 +51,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
             alt={`Camper viajando por ${selectedIsland}`}
             decoding="async"
             fetchPriority="high"
-            className="absolute inset-0 m-auto max-h-[70%] max-w-[70%] scale-[0.70] object-contain object-center brightness-[0.88] transition-transform duration-1000"
+            className="absolute inset-0 m-auto max-h-[88%] max-w-[88%] scale-[0.88] sm:scale-[0.92] object-contain object-center brightness-[0.88] transition-transform duration-1000"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#F7F6F2] via-black/25 to-black/55" />
         </div>
