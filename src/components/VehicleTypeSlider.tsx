@@ -88,17 +88,7 @@ export default function VehicleTypeSlider({
   };
 
   return (
-    <div className="relative max-w-4xl mx-auto w-full max-w-full my-3 px-2 sm:px-10">
-      {/* BOTÓN DESPLAZAMIENTO IZQUIERDA */}
-      <button
-        type="button"
-        onClick={() => scroll('left')}
-        aria-label="Desplazar a la izquierda"
-        className="hidden sm:flex absolute left-0.5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-white shadow-xl border border-[#E9E1D2] items-center justify-center text-[#13322E] hover:bg-[#16B8AA] hover:text-white transition-all cursor-pointer"
-      >
-        <ChevronLeft className="w-5 h-5" />
-      </button>
-
+    <div className="relative max-w-5xl mx-auto w-full my-3 px-2">
       {/* CONTENEDOR SLIDER HORIZONTAL CON ARRASTRE Y TÁCTIL */}
       <div
         ref={sliderRef}
@@ -106,14 +96,14 @@ export default function VehicleTypeSlider({
         onMouseLeave={handleMouseLeave}
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
-        className="flex items-center gap-2.5 sm:gap-3 overflow-x-auto scroll-smooth py-2 px-1 no-scrollbar cursor-grab active:cursor-grabbing select-none touch-pan-x"
+        className="flex items-center justify-center flex-wrap gap-2.5 sm:gap-3 overflow-x-auto py-2 px-1 no-scrollbar cursor-grab active:cursor-grabbing select-none touch-pan-x"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {showAllOption && (
           <button
             type="button"
             onClick={() => handleSelect('')}
-            className={`flex items-center space-x-2 px-4 py-2.5 rounded-2xl border text-xs font-bold shrink-0 transition-all shadow-sm ${
+            className={`flex items-center space-x-2 px-4 py-2.5 rounded-2xl border text-xs font-bold shrink-0 transition-all shadow-sm cursor-pointer ${
               !currentType
                 ? 'border-[#16B8AA] bg-[#16B8AA] text-white ring-2 ring-[#16B8AA]/30'
                 : 'border-white/50 bg-white/95 text-[#13322E] hover:bg-white hover:border-[#16B8AA]'
@@ -133,7 +123,7 @@ export default function VehicleTypeSlider({
               key={id}
               type="button"
               onClick={() => handleSelect(id)}
-              className={`flex items-center space-x-2.5 px-4 py-2.5 rounded-2xl border text-xs font-bold shrink-0 transition-all shadow-md ${
+              className={`flex items-center space-x-2.5 px-4 py-2.5 rounded-2xl border text-xs font-bold shrink-0 transition-all shadow-md cursor-pointer ${
                 isActive
                   ? 'border-[#16B8AA] bg-[#16B8AA] text-white ring-2 ring-[#16B8AA]/30'
                   : 'border-white/60 bg-white/95 text-[#13322E] hover:bg-white hover:border-[#16B8AA]'
@@ -145,16 +135,6 @@ export default function VehicleTypeSlider({
           );
         })}
       </div>
-
-      {/* BOTÓN DESPLAZAMIENTO DERECHA */}
-      <button
-        type="button"
-        onClick={() => scroll('right')}
-        aria-label="Desplazar a la derecha"
-        className="hidden sm:flex absolute right-0.5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-white shadow-xl border border-[#E9E1D2] items-center justify-center text-[#13322E] hover:bg-[#16B8AA] hover:text-white transition-all cursor-pointer"
-      >
-        <ChevronRight className="w-5 h-5" />
-      </button>
     </div>
   );
 }
