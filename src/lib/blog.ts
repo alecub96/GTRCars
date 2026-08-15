@@ -12,8 +12,8 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     slug: 'vaneando-vs-yescapa-indie-campers-roadsurfer-canarias',
     category: 'Viajeros',
     title: 'Vaneando vs Yescapa, Indie Campers & Roadsurfer: Por qué la plataforma local gana en Canarias (Campervan Hire)',
-    excerpt: 'Comparativa detallada 2026: ahorra hasta un 60% frente a multinacionales con propietarios canarios locales, entrega sin comisiones ocultas y fianza protegida.',
-    metaDescription: 'Comparativa Vaneando vs Yescapa, Indie Campers y Roadsurfer en Gran Canaria y Tenerife. Vehículos locales, entrega en aeropuerto, 0% sobrecargas y seguro integral.',
+    excerpt: 'Comparativa detallada 2026: ahorra hasta un 60% frente a multinacionales con propietarios canarios locales, entrega sin comisiones ocultas y fianza acordada directamente entre particulares.',
+    metaDescription: 'Comparativa Vaneando vs Yescapa, Indie Campers y Roadsurfer en Gran Canaria y Tenerife. Vehículos locales, entrega en aeropuerto, 0% sobrecargas y contratos directos entre particulares.',
     image: '/Islas/fuerteventura.png',
     publishedAt: '2026-08-14',
     readingTime: '10 min',
@@ -40,9 +40,9 @@ export const BLOG_ARTICLES: BlogArticle[] = [
         ],
       },
       {
-        heading: '3. Verificación de Seguridad y Fianza Protegida',
+        heading: '3. Contratos Digitales Directos y Fianza entre Particulares',
         paragraphs: [
-          'Vaneando implementa cifrado bancario de datos (AES-256) para revisar la documentación oficial (DNI/NIE y Permiso de Conducir) de cada usuario antes de confirmar la reserva. Las fianzas se custodian de forma neutra y segura durante todo el viaje.',
+          'Vaneando implementa cifrado bancario de datos (AES-256) para revisar la documentación oficial (DNI/NIE y Permiso de Conducir) de cada usuario antes de confirmar la reserva. Como plataforma tecnológica intermediaria, los contratos se formalizan directamente entre particulares y la fianza se acuerda y liquida de forma directa y transparente entre el viajero y el propietario.',
         ],
       },
     ],
@@ -105,7 +105,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
         heading: '¿Por qué Vaneando es la mejor opción para alquilar en Gran Canaria?',
         paragraphs: [
           'A diferencia de grandes plataformas intermediarias extranjeras o empresas tradicionales de flotas que cobran costes ocultos por kilometraje o menaje de cocina, Vaneando es la plataforma nativa de Canarias pensada por y para las islas.',
-          'Todos los vehículos pasan por una verificación de identidad y documentación exigente (DNI/NIE y carné de conducir de propietarios y viajeros), las fianzas se custodian de forma segura y los precios son transparentes desde el primer momento.',
+          'Todos los vehículos pasan por una verificación de identidad y documentación exigente (DNI/NIE y carné de conducir de propietarios y viajeros), las fianzas se gestionan de forma transparente entre particulares y los precios no tienen costes ocultos.',
         ],
       },
     ],
@@ -137,7 +137,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
       { heading: 'Organiza reservas y entregas', paragraphs: ['Mantén el calendario actualizado y bloquea las fechas de uso personal. Antes de aceptar, confirma horarios, número de viajeros y experiencia de conducción.', 'En la entrega, revisad juntos kilometraje, combustible, estado e inventario. Un proceso repetible protege a ambas partes y transmite profesionalidad.'] },
     ],
     faqs: [
-      { question: '¿Cómo se protegen los documentos y la fianza?', answer: 'En Vaneando los documentos de viajeros (DNI y carné de conducir) se cifran mediante algoritmos AES-256 de grado bancario y son revisados por el equipo de administración. Además, la fianza queda custodiada de forma segura durante todo el periodo de alquiler.' },
+      { question: '¿Cómo se protegen los documentos y la fianza?', answer: 'En Vaneando los documentos de viajeros (DNI y carné de conducir) se cifran mediante algoritmos AES-256 de grado bancario y son revisados por el equipo de administración. La fianza y las condiciones del vehículo se gestionan y liquidan directamente entre el viajero y el propietario según el contrato privado celebrado entre ambos.' },
     ],
   },
   {
@@ -145,7 +145,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     category: 'Viajeros',
     title: 'Alquiler de camper en Gran Canaria barato: Cómo ahorrar hasta un 60% reservando a locales',
     excerpt: 'Descubre los secretos para alquilar furgonetas camperizadas, caravanas y 4x4 en Gran Canaria al mejor precio sin intermediarios.',
-    metaDescription: 'Encuentra las mejores ofertas de alquiler de camper barato en Gran Canaria entre particulares. Transparencia total, sin costes ocultos y con fianza protegida.',
+    metaDescription: 'Encuentra las mejores ofertas de alquiler de camper barato en Gran Canaria entre particulares. Transparencia total, sin costes ocultos y con contratos directos entre particulares.',
     image: '/Islas/gran%20canaria.png',
     publishedAt: '2026-08-13',
     readingTime: '9 min',
@@ -182,7 +182,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     faqs: [
       {
         question: '¿Qué incluye la tarifa diaria de una camper en Vaneando?',
-        answer: 'La tarifa fijada por el propietario incluye el alquiler del vehículo, seguro a terceros/todo riesgo según póliza, kilometraje acordado y el equipamiento básico detallado en la ficha (menaje de cocina, gas, limpiadores y accesorios exteriores).',
+        answer: 'La tarifa fijada por el propietario incluye el alquiler del vehículo conforme a la póliza privada del propietario, kilometraje acordado y el equipamiento básico detallado en la ficha (menaje de cocina, gas, limpiadores y accesorios exteriores). Las coberturas adicionales pueden ser contratadas por el viajero por su cuenta si lo desea.',
       },
     ],
   },

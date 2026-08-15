@@ -96,7 +96,7 @@ export default function OwnerFinancePage() {
               <strong className="font-serif text-3xl sm:text-4xl text-[#13322E]">
                 {loading ? '0.00 €' : `${Number(finance.platformFees || 0).toFixed(2)} €`}
               </strong>
-              <span className="block text-[11px] text-[#6B726E] font-medium mt-1">Gestión y seguro Vaneando</span>
+              <span className="block text-[11px] text-[#6B726E] font-medium mt-1">Servicio de intermediación y gestión Vaneando</span>
             </div>
           </div>
 

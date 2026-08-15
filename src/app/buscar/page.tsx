@@ -33,11 +33,11 @@ export async function generateMetadata({ searchParams }: SearchPageProps): Promi
 
   return {
     title: `Alquiler de ${typeLabel} en ${islandName} barato entre particulares | vaneando.`,
-    description: `Busca y compara entre ${typeLabel} disponibles en ${islandName}. Alquiler directamente a propietarios particulares verificados, con seguro y sin comisiones ocultas. Ahorra hasta el 60% frente a un hotel.`,
+    description: `Busca y compara entre ${typeLabel} disponibles en ${islandName}. Alquiler directamente a propietarios particulares verificados, con contratos directos y sin comisiones ocultas. Ahorra hasta el 60% frente a un hotel.`,
     alternates: { canonical: `https://vaneando.com/buscar${params.island ? `?island=${encodeURIComponent(params.island)}` : ''}` },
     openGraph: {
       title: `Alquiler de ${typeLabel} en ${islandName} | vaneando.`,
-      description: `Compara precios y disponibilidad de ${typeLabel} en ${islandName}. Reserva con fianza protegida e identidades verificadas.`,
+      description: `Compara precios y disponibilidad de ${typeLabel} en ${islandName}. Reserva con contratos directos entre particulares e identidades verificadas.`,
       url: `https://vaneando.com/buscar`,
     },
   };
@@ -304,7 +304,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             </div>
             <div className="bg-white p-6 rounded-3xl border border-[#E9E1D2] shadow-sm">
               <h3 className="font-serif text-lg font-bold text-[#13322E] mb-2">Vehículos Locales Verificados</h3>
-              <p className="leading-relaxed">Todas las furgonetas camperizadas, autocaravanas, caravanas y 4x4 cuentan con seguro, fianza custodiada y revisión de identidad DNI/NIE de propietarios e inquilinos.</p>
+              <p className="leading-relaxed">Todas las furgonetas camperizadas, autocaravanas, caravanas y 4x4 cuentan con la póliza del propietario particular, fianza acordada directamente entre las partes y revisión de identidad DNI/NIE de propietarios e inquilinos.</p>
             </div>
             <div className="bg-white p-6 rounded-3xl border border-[#E9E1D2] shadow-sm">
               <h3 className="font-serif text-lg font-bold text-[#13322E] mb-2">Entrega en Aeropuerto LPA y TFN/TFS</h3>

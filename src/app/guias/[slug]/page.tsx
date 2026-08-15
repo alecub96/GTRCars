@@ -188,7 +188,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
             <span className="text-xs uppercase tracking-widest text-[#F2CC8F] font-black">¿Listo para vivir la experiencia sobre ruedas?</span>
             <h3 className="font-serif text-2xl sm:text-4xl font-bold">Encuentra la camper perfecta en las 8 Islas Canarias</h3>
             <p className="text-sm text-white/80 max-w-xl mx-auto font-medium leading-relaxed">
-              Alquila directamente a propietarios locales verificados, con fianza protegida, atención cercana y hasta un 60% de ahorro frente a un hotel tradicional.
+              Alquila directamente a propietarios locales verificados, con contratos privados entre particulares, atención cercana y hasta un 60% de ahorro frente a un hotel tradicional.
             </p>
             <div className="pt-4">
               <Link href="/buscar" className="inline-block bg-[#16B8AA] hover:bg-[#0F766E] text-white font-black text-xs uppercase tracking-widest px-8 py-4 rounded-2xl transition-all shadow-lg hover:scale-105">

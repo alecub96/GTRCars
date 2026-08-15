@@ -128,7 +128,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-12">
           <div>
             <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#13322E]">Campers y Autocaravanas Destacadas en Canarias</h2>
-            <p className="text-xs text-[#6B726E] font-medium mt-1">Vehículos revisados, equipados con cocina y fianza custodiada.</p>
+            <p className="text-xs text-[#6B726E] font-medium mt-1">Vehículos revisados, equipados con cocina y fianza gestionada directamente entre particulares.</p>
           </div>
           {role !== 'OWNER' && (
             <Link
@@ -462,7 +462,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
               ¿Tienes una camper en las islas? Alquila con total confianza
             </h2>
             <p className="text-white/80 font-medium text-base sm:text-lg mb-8 leading-relaxed">
-              Rentabiliza tu furgoneta o autocaravana de forma totalmente segura cuando no la estés utilizando. Cubrimos el seguro a todo riesgo y la verificación de viajeros.
+              Rentabiliza tu furgoneta o autocaravana con total tranquilidad cuando no la estés utilizando. Plataforma con verificación de identidad, contratos digitales entre particulares y gestión de calendario.
             </p>
 
             <div className="grid grid-cols-3 gap-4 mb-8 text-left text-xs">
@@ -517,7 +517,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
             </p>
             <div className="flex items-center space-x-3 text-xs text-white/70">
               <span className="bg-white/10 px-3 py-1 rounded-full border border-white/10">💳 Pagos Seguros SSL</span>
-              <span className="bg-white/10 px-3 py-1 rounded-full border border-white/10">🛡️ Fianza Custodiada</span>
+              <span className="bg-white/10 px-3 py-1 rounded-full border border-white/10">⚖️ Fianza entre Particulares</span>
             </div>
           </div>
 

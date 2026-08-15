@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: SeoIslandPageProps): Promise<
     alternates: { canonical: `https://vaneando.com/alquiler-camper/${island}` },
     openGraph: {
       title: `Alquiler de campers en ${name} barato entre particulares`,
-      description: `Explora ${name} en camper con propietarios locales verificados. Transparencia total, seguro y fianza protegida.`,
+      description: `Explora ${name} en camper con propietarios locales verificados. Transparencia total, contratos privados y fianza acordada entre particulares.`,
       url: `https://vaneando.com/alquiler-camper/${island}`,
       images: [`https://vaneando.com/Islas/${name.toLowerCase()}.png`],
     },
