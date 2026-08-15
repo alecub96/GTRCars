@@ -1,12 +1,27 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { MapPin, Compass, Tent, Waves, Droplets, Mountain, Navigation, Info, ShieldCheck, ChevronRight } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  MapPin,
+  Tent,
+  Waves,
+  Droplets,
+  Mountain,
+  Layers,
+  ZoomIn,
+  ZoomOut,
+  ShieldCheck,
+  Navigation,
+  Info,
+} from 'lucide-react';
 
 interface CamperLocationMapProps {
   island: string;
   municipality: string;
   vehicleTitle?: string;
+  latitude?: number | null;
+  longitude?: number | null;
+  addressApprox?: string | null;
 }
 
 interface POI {
@@ -20,8 +35,60 @@ interface POI {
   facilities?: string[];
 }
 
+const MUNICIPALITY_COORDINATES: Record<string, { lat: number; lng: number }> = {
+  // Gran Canaria
+  'San Bartolomé de Tirajana': { lat: 27.7600, lng: -15.5800 },
+  'Maspalomas': { lat: 27.7600, lng: -15.5860 },
+  'Las Palmas de Gran Canaria': { lat: 28.1235, lng: -15.4363 },
+  'Telde': { lat: 27.9940, lng: -15.4180 },
+  'Agüimes': { lat: 27.9040, lng: -15.4460 },
+  'Agaete': { lat: 28.1000, lng: -15.7000 },
+  'Mogán': { lat: 27.8800, lng: -15.7200 },
+  'Arucas': { lat: 28.1180, lng: -15.5220 },
+  'Gáldar': { lat: 28.1440, lng: -15.6540 },
+  'Santa Brígida': { lat: 28.0330, lng: -15.4980 },
+  'Tejeda': { lat: 27.9950, lng: -15.6140 },
+
+  // Tenerife
+  'Santa Cruz de Tenerife': { lat: 28.4636, lng: -16.2518 },
+  'San Cristóbal de La Laguna': { lat: 28.4870, lng: -16.3150 },
+  'Arona': { lat: 28.0990, lng: -16.6800 },
+  'Adeje': { lat: 28.1220, lng: -16.7260 },
+  'Puerto de la Cruz': { lat: 28.4160, lng: -16.5450 },
+  'Granadilla de Abona': { lat: 28.1250, lng: -16.5760 },
+  'Los Cristianos': { lat: 28.0520, lng: -16.7170 },
+  'La Orotava': { lat: 28.3900, lng: -16.5230 },
+
+  // Fuerteventura
+  'Puerto del Rosario': { lat: 28.5004, lng: -13.8627 },
+  'La Oliva': { lat: 28.6100, lng: -13.9290 },
+  'Corralejo': { lat: 28.7300, lng: -13.8680 },
+  'Pájara': { lat: 28.3500, lng: -14.1070 },
+  'Costa Calma': { lat: 28.1600, lng: -14.2270 },
+
+  // Lanzarote
+  'Arrecife': { lat: 28.9630, lng: -13.5477 },
+  'Teguise': { lat: 29.0600, lng: -13.5600 },
+  'Tías': { lat: 28.9530, lng: -13.6500 },
+  'Yaiza': { lat: 28.9500, lng: -13.7660 },
+  'Playa Blanca': { lat: 28.8650, lng: -13.8300 },
+
+  // La Palma
+  'Santa Cruz de La Palma': { lat: 28.6835, lng: -17.7646 },
+  'Los Llanos de Aridane': { lat: 28.6580, lng: -17.9180 },
+  'El Paso': { lat: 28.6500, lng: -17.8800 },
+
+  // La Gomera
+  'San Sebastián de La Gomera': { lat: 28.0916, lng: -17.1133 },
+  'Valle Gran Rey': { lat: 28.1240, lng: -17.3330 },
+
+  // El Hierro
+  'Valverde': { lat: 27.8090, lng: -17.9150 },
+  'Frontera': { lat: 27.7540, lng: -18.0100 },
+};
+
 const CANARY_POIS: POI[] = [
-  // GRAN CANARIA
+  // Gran Canaria
   {
     id: 'gc-1',
     name: 'Presa de las Niñas',
@@ -30,7 +97,7 @@ const CANARY_POIS: POI[] = [
     lat: 27.9152,
     lng: -15.6741,
     description: 'Área de acampada oficial con barbacoas, agua potable y zona recreativa entre pinares.',
-    facilities: ['Agua potable', 'Mesas y sombras', 'Fuego controlado', 'W.C.']
+    facilities: ['Agua potable', 'Mesas y sombras', 'Fuego controlado', 'W.C.'],
   },
   {
     id: 'gc-2',
@@ -40,7 +107,7 @@ const CANARY_POIS: POI[] = [
     lat: 28.0315,
     lng: -15.6881,
     description: 'Zona de acampada en la cumbre con vistas espectaculares al Teide y atardeceres únicos.',
-    facilities: ['Vistas panorámicas', 'Senderos', 'Mesas de picnic']
+    facilities: ['Vistas panorámicas', 'Senderos', 'Mesas de picnic'],
   },
   {
     id: 'gc-3',
@@ -48,393 +115,395 @@ const CANARY_POIS: POI[] = [
     category: 'playa',
     island: 'Gran Canaria',
     lat: 27.8421,
-    lng: -15.3955,
-    description: 'Playa y zona habitual de estacionamiento camper para amantes del windsurf y tranquilidad.',
-    facilities: ['Acceso directo a playa', 'Zona de parking amplio']
+    lng: -15.4052,
+    description: 'Playa y zona habitual de estacionamiento camper para windsurf y pernocta tranquila.',
+    facilities: ['Camping cercano', 'Acceso directo a playa', 'Duchas'],
   },
   {
     id: 'gc-4',
-    name: 'Punto Limpio / Área Camper El Sebadal',
-    category: 'agua',
+    name: 'Playa de Las Canteras (Aparcamiento)',
+    category: 'playa',
     island: 'Gran Canaria',
-    lat: 28.1450,
-    lng: -15.4210,
-    description: 'Punto autorizado de vaciado de aguas grises/negras y repostaje de agua limpia.',
-    facilities: ['Vaciado de aguas', 'Toma de agua limpia']
+    lat: 28.1380,
+    lng: -15.4430,
+    description: 'Punto estratégico en Las Palmas para disfrutar del paseo marítimo y surf en la Cícer.',
+    facilities: ['Servicios urbanos', 'Restaurantes', 'Duchas públicas'],
   },
-  {
-    id: 'gc-5',
-    name: 'Mirador del Pico de las Nieves',
-    category: 'mirador',
-    island: 'Gran Canaria',
-    lat: 27.9622,
-    lng: -15.5701,
-    description: 'El punto más alto de Gran Canaria con vistas a los roques principales y cumbre.',
-    facilities: ['Fotografía', 'Aparcamiento']
-  },
-
-  // TENERIFE
+  // Tenerife
   {
     id: 'tf-1',
-    name: 'Zona Recreativa Chío (Guía de Isora)',
-    category: 'acampada',
+    name: 'El Médano (Playa Sur)',
+    category: 'playa',
     island: 'Tenerife',
-    lat: 28.2110,
-    lng: -16.7450,
-    description: 'Zona de acampada oficial con servicios bajo el pinar de la corona forestal.',
-    facilities: ['Agua no tratada', 'Barbacoas', 'Baños públicos']
+    lat: 28.0450,
+    lng: -16.5360,
+    description: 'Punto de encuentro camper por excelencia en Tenerife sur. Ideal para deportes de viento.',
+    facilities: ['Duchas en paseo', 'Ambiente nómada', 'Supermercados'],
   },
   {
     id: 'tf-2',
-    name: 'Playa de El Médano / La Tejita',
-    category: 'playa',
+    name: 'Área Recreativa Las Raíces',
+    category: 'acampada',
     island: 'Tenerife',
-    lat: 28.0402,
-    lng: -16.5391,
-    description: 'Punto de encuentro clásico de la comunidad camper en el sur de Tenerife.',
-    facilities: ['Deportes de viento', 'Chiringuitos', 'Ambiente nómada']
+    lat: 28.4230,
+    lng: -16.3680,
+    description: 'Zona boscosa en la subida al Teide con mesas, agua y permisos del Cabildo.',
+    facilities: ['Agua potable', 'Fogones', 'Baños'],
   },
-  {
-    id: 'tf-3',
-    name: 'Área de Servicio Chafiras',
-    category: 'agua',
-    island: 'Tenerife',
-    lat: 28.0280,
-    lng: -16.6020,
-    description: 'Estación con servicio especial de llenado de depósito de agua y punto limpio.',
-    facilities: ['Agua a presión', 'Gasolinera 24h']
-  },
-  {
-    id: 'tf-4',
-    name: 'Mirador de Chipeque (Esperanza)',
-    category: 'mirador',
-    island: 'Tenerife',
-    lat: 28.3750,
-    lng: -16.4820,
-    description: 'Impresionante mar de nubes con el Teide al fondo al atardecer.',
-    facilities: ['Fotografía nocturna', 'Vistas Teide']
-  },
-
-  // LANZAROTE
-  {
-    id: 'lz-1',
-    name: 'Playa de Famara',
-    category: 'playa',
-    island: 'Lanzarote',
-    lat: 29.1120,
-    lng: -13.5650,
-    description: 'Extensa playa salvaje bajo los riscos de Famara, meca del surf.',
-    facilities: ['Surf', 'Aparcamiento de tierra amplio']
-  },
-  {
-    id: 'lz-2',
-    name: 'Papagayo (Costa Papagayo)',
-    category: 'playa',
-    island: 'Lanzarote',
-    lat: 28.8410,
-    lng: -13.7880,
-    description: 'Cala de aguas turquesas en el Monumento Natural de Los Ajaches.',
-    facilities: ['Aguas cristalinas', 'Entorno protegido']
-  },
-  {
-    id: 'lz-3',
-    name: 'Mirador del Río',
-    category: 'mirador',
-    island: 'Lanzarote',
-    lat: 29.2140,
-    lng: -13.4810,
-    description: 'Vistas espectaculares hacia la isla de La Graciosa.',
-    facilities: ['Vistas panorámicas']
-  },
-
-  // FUERTEVENTURA
+  // Fuerteventura
   {
     id: 'fv-1',
-    name: 'Playa de Cofete',
+    name: 'Dunas de Corralejo',
     category: 'playa',
     island: 'Fuerteventura',
-    lat: 28.1120,
-    lng: -14.3750,
-    description: 'Kilómetros de costa virgen en el Parque Natural de Jandía.',
-    facilities: ['Naturaleza virgen', 'Ruta 4x4']
+    lat: 28.6920,
+    lng: -13.8430,
+    description: 'Vistas panorámicas a Isla de Lobos y aguas turquesas.',
+    facilities: ['Acceso fácil', 'Vistas directas a Lobos'],
   },
+  // Lanzarote
   {
-    id: 'fv-2',
-    name: 'Punto Camper Puerto del Rosario',
-    category: 'agua',
-    island: 'Fuerteventura',
-    lat: 28.5010,
-    lng: -13.8630,
-    description: 'Punto de servicio para autocaravanas y campers con punto de agua.',
-    facilities: ['Toma de agua', 'Vaciado']
-  },
-
-  // LA PALMA, LA GOMERA, EL HIERRO
-  {
-    id: 'lp-1',
-    name: 'El Junco (Puntagorda)',
-    category: 'acampada',
-    island: 'La Palma',
-    lat: 28.7910,
-    lng: -17.9750,
-    description: 'Zona arbolada en el noroeste de La Palma apta para pernoctar.',
-    facilities: ['Naturaleza', 'Tranquilidad']
-  },
-  {
-    id: 'lg-1',
-    name: 'El Cedro (Parque Garajonay)',
-    category: 'acampada',
-    island: 'La Gomera',
-    lat: 28.1290,
-    lng: -17.2150,
-    description: 'Área recreativa y camping rodeado de laurisilva milenaria.',
-    facilities: ['Senderos laurisilva', 'Agua']
-  },
-  {
-    id: 'eh-1',
-    name: 'Hoya del Morcillo',
-    category: 'acampada',
-    island: 'El Hierro',
-    lat: 27.7020,
-    lng: -17.9850,
-    description: 'Única zona de acampada oficial en El Hierro rodeada de pinos.',
-    facilities: ['Baños', 'Barbacoas', 'Agua']
+    id: 'lz-1',
+    name: 'Caleta de Famara',
+    category: 'playa',
+    island: 'Lanzarote',
+    lat: 29.1150,
+    lng: -13.5620,
+    description: 'Meca del surf en Canarias con el imponente Risco de Famara como telón de fondo.',
+    facilities: ['Escuelas de surf', 'Atardeceres mágicos', 'Pueblo marinero'],
   },
 ];
-
-const MUNICIPALITY_COORDS: Record<string, { lat: number; lng: number }> = {
-  'Las Palmas de Gran Canaria': { lat: 28.1235, lng: -15.4363 },
-  'San Bartolomé de Tirajana': { lat: 27.7606, lng: -15.5860 },
-  'Maspalomas': { lat: 27.7606, lng: -15.5860 },
-  'Telde': { lat: 27.9940, lng: -15.4162 },
-  'Agüimes': { lat: 27.9042, lng: -15.4461 },
-  'Gáldar': { lat: 28.1470, lng: -15.6540 },
-  'Arucas': { lat: 28.1180, lng: -15.5220 },
-  'Santa Cruz de Tenerife': { lat: 28.4636, lng: -16.2518 },
-  'San Cristóbal de La Laguna': { lat: 28.4874, lng: -16.3159 },
-  'Adeje': { lat: 28.1200, lng: -16.7300 },
-  'Arona': { lat: 28.1000, lng: -16.6800 },
-  'Puerto de la Cruz': { lat: 28.4160, lng: -16.5500 },
-  'Arrecife': { lat: 28.9630, lng: -13.5470 },
-  'Tías': { lat: 28.9500, lng: -13.6500 },
-  'Yaiza': { lat: 28.9550, lng: -13.7660 },
-  'Puerto del Rosario': { lat: 28.5000, lng: -13.8600 },
-  'La Oliva': { lat: 28.6830, lng: -13.9300 },
-  'Pájara': { lat: 28.3500, lng: -14.1000 },
-  'Santa Cruz de La Palma': { lat: 28.6830, lng: -17.7640 },
-  'Los Llanos de Aridane': { lat: 28.6580, lng: -17.9180 },
-  'San Sebastián de La Gomera': { lat: 28.0910, lng: -17.1130 },
-  'Valverde': { lat: 27.8080, lng: -17.9150 },
-};
-
-const ISLAND_CENTERS: Record<string, { lat: number; lng: number }> = {
-  'Gran Canaria': { lat: 27.9600, lng: -15.5800 },
-  'Tenerife': { lat: 28.2915, lng: -16.6291 },
-  'Lanzarote': { lat: 29.0469, lng: -13.5899 },
-  'Fuerteventura': { lat: 28.3587, lng: -14.0536 },
-  'La Palma': { lat: 28.6835, lng: -17.8339 },
-  'La Gomera': { lat: 28.1173, lng: -17.2250 },
-  'El Hierro': { lat: 27.7470, lng: -18.0163 },
-  'La Graciosa': { lat: 29.2500, lng: -13.5000 },
-};
 
 export default function CamperLocationMap({
   island,
   municipality,
-  vehicleTitle = 'Esta furgoneta camper',
+  vehicleTitle = 'Camper',
+  latitude,
+  longitude,
+  addressApprox,
 }: CamperLocationMapProps) {
-  const [activeCategory, setActiveCategory] = useState<'todos' | 'acampada' | 'playa' | 'agua' | 'mirador'>('todos');
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<any>(null);
+  const [activeCategory, setActiveCategory] = useState<string>('todos');
   const [selectedPoi, setSelectedPoi] = useState<POI | null>(null);
+  const [mapType, setMapType] = useState<'streets' | 'satellite'>('streets');
+  const [leafletReady, setLeafletReady] = useState(false);
 
-  // Obtener centro de la ubicación aproximada
-  const defaultCenter = MUNICIPALITY_COORDS[municipality] || ISLAND_CENTERS[island] || ISLAND_CENTERS['Gran Canaria'];
-  
-  // Filtrar POIs por la isla elegida o cercanas
-  const islandPois = CANARY_POIS.filter(
-    (poi) => poi.island.toLowerCase() === island.toLowerCase()
-  );
-  
-  const displayPois = activeCategory === 'todos'
-    ? islandPois
-    : islandPois.filter((p) => p.category === activeCategory);
+  // Calcular centro exacto del vehículo / municipio
+  const vehicleCoords = React.useMemo(() => {
+    if (latitude && longitude) {
+      return { lat: latitude, lng: longitude };
+    }
+    const fromMap = MUNICIPALITY_COORDINATES[municipality];
+    if (fromMap) return fromMap;
+
+    // Fallbacks por isla
+    if (island === 'Gran Canaria') return { lat: 27.9500, lng: -15.5500 };
+    if (island === 'Tenerife') return { lat: 28.3000, lng: -16.5500 };
+    if (island === 'Fuerteventura') return { lat: 28.4000, lng: -14.0500 };
+    if (island === 'Lanzarote') return { lat: 29.0200, lng: -13.6000 };
+    if (island === 'La Palma') return { lat: 28.6800, lng: -17.8300 };
+    if (island === 'La Gomera') return { lat: 28.1100, lng: -17.2200 };
+    return { lat: 27.7500, lng: -18.0100 };
+  }, [latitude, longitude, municipality, island]);
+
+  // Cargar Leaflet dinámicamente
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    if ((window as any).L) {
+      setLeafletReady(true);
+      return;
+    }
+
+    if (!document.getElementById('leaflet-css')) {
+      const link = document.createElement('link');
+      link.id = 'leaflet-css';
+      link.rel = 'stylesheet';
+      link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      document.head.appendChild(link);
+    }
+
+    if (!document.getElementById('leaflet-js')) {
+      const script = document.createElement('script');
+      script.id = 'leaflet-js';
+      script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+      script.async = true;
+      script.onload = () => setLeafletReady(true);
+      document.body.appendChild(script);
+    } else {
+      setLeafletReady(true);
+    }
+  }, []);
+
+  // Inicializar Leaflet Map
+  useEffect(() => {
+    if (!leafletReady || !mapContainerRef.current || mapInstanceRef.current) return;
+
+    const L = (window as any).L;
+    if (!L) return;
+
+    const map = L.map(mapContainerRef.current, {
+      center: [vehicleCoords.lat, vehicleCoords.lng],
+      zoom: 12,
+      zoomControl: false,
+      attributionControl: false,
+      scrollWheelZoom: false,
+    });
+
+    const streetLayer = L.tileLayer(
+      'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+      { maxZoom: 19, subdomains: 'abcd' }
+    );
+    streetLayer.addTo(map);
+
+    // 1. CÍRCULO DE RADIO APROXIMADO DE RECOGIDA (1.5 km)
+    L.circle([vehicleCoords.lat, vehicleCoords.lng], {
+      radius: 1800,
+      color: '#16B8AA',
+      fillColor: '#16B8AA',
+      fillOpacity: 0.15,
+      weight: 2,
+      dashArray: '6, 6',
+    }).addTo(map);
+
+    // 2. PIN PRINCIPAL DE LA CAMPER
+    const camperPinIcon = L.divIcon({
+      className: 'custom-camper-detail-pin',
+      html: `
+        <div style="
+          position: relative;
+          transform: translate(-50%, -50%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        ">
+          <div style="
+            position: absolute;
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background-color: rgba(22, 184, 170, 0.35);
+            animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+          "></div>
+          <div style="
+            position: relative;
+            background-color: #13322E;
+            color: #ffffff;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+            border: 3px solid #ffffff;
+          ">
+            🚐
+          </div>
+        </div>
+      `,
+      iconSize: [54, 54],
+      iconAnchor: [27, 27],
+    });
+
+    const camperMarker = L.marker([vehicleCoords.lat, vehicleCoords.lng], { icon: camperPinIcon }).addTo(map);
+    camperMarker.bindTooltip(
+      `<b>Zona de entrega</b><br>${municipality} (${island})`,
+      { permanent: true, direction: 'top', offset: [0, -20] }
+    );
+
+    // 3. POIS CERCANOS EN LA ISLA
+    const islandPois = CANARY_POIS.filter((p) => p.island.toLowerCase() === island.toLowerCase());
+    islandPois.forEach((poi) => {
+      const poiIcon = L.divIcon({
+        className: 'custom-poi-pin',
+        html: `
+          <div style="
+            background: #ffffff;
+            border: 1px solid #E9E1D2;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.18);
+            cursor: pointer;
+            transform: translate(-50%, -50%);
+          ">
+            ${poi.category === 'acampada' ? '⛺' : '🏖️'}
+          </div>
+        `,
+        iconSize: [30, 30],
+        iconAnchor: [15, 15],
+      });
+
+      const m = L.marker([poi.lat, poi.lng], { icon: poiIcon }).addTo(map);
+      m.on('click', () => setSelectedPoi(poi));
+      m.bindTooltip(`<b>${poi.name}</b>`, { direction: 'top', offset: [0, -10] });
+    });
+
+    mapInstanceRef.current = map;
+
+    return () => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
+    };
+  }, [leafletReady, vehicleCoords, island, municipality]);
+
+  // Cambiar capa Satélite / Calles
+  useEffect(() => {
+    if (!mapInstanceRef.current) return;
+    const L = (window as any).L;
+    if (!L) return;
+
+    mapInstanceRef.current.eachLayer((layer: any) => {
+      if (layer instanceof L.TileLayer) {
+        mapInstanceRef.current.removeLayer(layer);
+      }
+    });
+
+    const tileUrl =
+      mapType === 'satellite'
+        ? 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+        : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
+
+    const newLayer = L.tileLayer(tileUrl, { maxZoom: 19, subdomains: 'abcd' });
+    newLayer.addTo(mapInstanceRef.current);
+    newLayer.bringToBack();
+  }, [mapType]);
+
+  const handleZoom = (delta: number) => {
+    if (mapInstanceRef.current) {
+      mapInstanceRef.current.setZoom(mapInstanceRef.current.getZoom() + delta);
+    }
+  };
+
+  const recenterMap = () => {
+    if (mapInstanceRef.current) {
+      mapInstanceRef.current.flyTo([vehicleCoords.lat, vehicleCoords.lng], 13, { duration: 0.8 });
+    }
+  };
+
+  const islandPois = CANARY_POIS.filter((p) => p.island.toLowerCase() === island.toLowerCase());
 
   return (
-    <div className="bg-white rounded-3xl border border-[#E9E1D2] p-6 sm:p-8 shadow-sm space-y-6">
-      
-      {/* ENCABEZADO Y EXPLICACIÓN DE ZONA APROXIMADA */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#E9E1D2]">
+    <div className="space-y-4 pt-6 border-t border-[#E9E1D2]">
+      {/* CABECERA CON UBICACIÓN CLARA */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <div className="inline-flex items-center space-x-2 text-[10px] font-black uppercase tracking-[0.2em] text-[#16B8AA] mb-1">
-            <Compass className="w-3.5 h-3.5" />
-            <span>Mapa de Recogida & Puntos Camper</span>
-          </div>
-          <h3 className="text-2xl font-bold text-[#13322E] tracking-tight">
-            Ubicación aproximada y mapa del viajero
+          <h3 className="font-serif text-2xl font-bold text-[#13322E] flex items-center space-x-2">
+            <MapPin className="w-6 h-6 text-[#16B8AA]" />
+            <span>Zona de recogida y pernocta</span>
           </h3>
-          <p className="text-xs text-[#6B726E] font-medium mt-1">
-            Por privacidad del propietario, se indica una <strong>zona aproximada de entrega (~1.5 km)</strong> en {municipality} ({island}). La dirección exacta se facilita tras confirmar la reserva.
+          <p className="text-xs text-[#6B726E] font-medium mt-0.5">
+            Ubicación aproximada en <strong>{municipality} ({island})</strong> por motivos de privacidad.
           </p>
         </div>
 
-        <div className="flex items-center space-x-2 bg-[#FAF7F0] border border-[#E9E1D2] px-4 py-2.5 rounded-2xl shrink-0">
-          <ShieldCheck className="w-4 h-4 text-[#16B8AA]" />
-          <span className="text-xs font-bold text-[#13322E]">{municipality}</span>
+        {/* CONTROLES DE CAPAS */}
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={recenterMap}
+            className="px-3 py-1.5 rounded-xl bg-white border border-[#E9E1D2] text-xs font-bold text-[#13322E] shadow-sm hover:bg-[#FAF7F0] flex items-center gap-1.5 cursor-pointer"
+          >
+            <Navigation className="w-3.5 h-3.5 text-[#16B8AA]" />
+            <span>Centrar en la camper</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setMapType(mapType === 'streets' ? 'satellite' : 'streets')}
+            className="p-1.5 rounded-xl bg-white border border-[#E9E1D2] text-[#13322E] shadow-sm hover:bg-[#FAF7F0] cursor-pointer"
+            title="Cambiar a Satélite / Calles"
+          >
+            <Layers className="w-4 h-4 text-[#16B8AA]" />
+          </button>
         </div>
       </div>
 
-      {/* BOTONES DE FILTRO DE PUNTOS D INTERÉS CAMPER */}
-      <div className="flex flex-wrap items-center gap-2">
-        <button
-          type="button"
-          onClick={() => setActiveCategory('todos')}
-          className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer ${
-            activeCategory === 'todos'
-              ? 'bg-[#13322E] text-white shadow-sm'
-              : 'bg-[#F7F6F2] text-[#6B726E] hover:bg-slate-100'
-          }`}
-        >
-          <Compass className="w-3.5 h-3.5 text-[#16B8AA]" />
-          <span>Ver Todo ({islandPois.length})</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveCategory('acampada')}
-          className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer ${
-            activeCategory === 'acampada'
-              ? 'bg-[#16B8AA] text-white shadow-sm'
-              : 'bg-[#F7F6F2] text-[#6B726E] hover:bg-slate-100'
-          }`}
-        >
-          <Tent className="w-3.5 h-3.5" />
-          <span>⛺ Acampada / Camping</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveCategory('playa')}
-          className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer ${
-            activeCategory === 'playa'
-              ? 'bg-[#0F766E] text-white shadow-sm'
-              : 'bg-[#F7F6F2] text-[#6B726E] hover:bg-slate-100'
-          }`}
-        >
-          <Waves className="w-3.5 h-3.5" />
-          <span>🏖️ Playas Camper</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveCategory('agua')}
-          className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer ${
-            activeCategory === 'agua'
-              ? 'bg-[#D97706] text-white shadow-sm'
-              : 'bg-[#F7F6F2] text-[#6B726E] hover:bg-slate-100'
-          }`}
-        >
-          <Droplets className="w-3.5 h-3.5" />
-          <span>💧 Agua & Servicios</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveCategory('mirador')}
-          className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer ${
-            activeCategory === 'mirador'
-              ? 'bg-[#254842] text-white shadow-sm'
-              : 'bg-[#F7F6F2] text-[#6B726E] hover:bg-slate-100'
-          }`}
-        >
-          <Mountain className="w-3.5 h-3.5" />
-          <span>🌅 Miradores</span>
-        </button>
+      {/* AVISO DE PRIVACIDAD Y ENTREGA LIMPIO */}
+      <div className="p-3.5 bg-[#FAF7F0] rounded-2xl border border-[#E9E1D2] flex items-start space-x-3 text-xs text-[#13322E]">
+        <Info className="w-4 h-4 text-[#16B8AA] shrink-0 mt-0.5" />
+        <p className="leading-relaxed">
+          <strong>Punto de encuentro:</strong> Se recoge habitualmente en <strong>{municipality}</strong> ({addressApprox || 'zona centro o aeropuerto previa coordinación'}). La dirección exacta o entrega directa en el aeropuerto se facilita al confirmar la reserva con el propietario.
+        </p>
       </div>
 
-      {/* CONTENEDOR DEL MAPA INTERACTIVO Y VISTA PREVIA */}
-      <div className="relative rounded-3xl overflow-hidden border border-[#E9E1D2] bg-[#E5E3DF] min-h-[380px] flex flex-col justify-between p-6">
-        
-        {/* Iframe del mapa centrado en el municipio con vista satélite/callejero */}
-        <iframe
-          title={`Mapa zona aproximada ${municipality}`}
-          width="100%"
-          height="100%"
-          className="absolute inset-0 w-full h-full border-0 brightness-[0.96] contrast-[1.02]"
-          loading="lazy"
-          src={`https://maps.google.com/maps?q=${encodeURIComponent(
-            `${municipality}, ${island}, Canarias, España`
-          )}&t=&z=12&ie=UTF8&iwloc=&output=embed`}
-        />
+      {/* MAPA INTERACTIVO REAL */}
+      <div className="relative rounded-3xl overflow-hidden border border-[#E9E1D2] bg-[#E5E3DF] h-[400px] shadow-md">
+        <div ref={mapContainerRef} className="absolute inset-0 w-full h-full z-0" />
 
-        {/* OVERLAY DE ZONA DE RECOGIDA APROXIMADA */}
-        <div className="relative z-10 self-start max-w-sm bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-[#E9E1D2] shadow-xl space-y-2">
-          <div className="flex items-center space-x-2">
-            <span className="flex h-3 w-3 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#16B8AA] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-[#16B8AA]"></span>
-            </span>
-            <span className="text-xs font-extrabold text-[#13322E] uppercase tracking-wider">
-              Zona de entrega de {vehicleTitle}
-            </span>
-          </div>
-          <p className="text-[11px] text-[#6B726E] leading-relaxed font-medium">
-            Entorno de <strong>{municipality} ({island})</strong>. Se concreta la ubicación exacta o entrega en aeropuerto al confirmar.
-          </p>
+        {/* CONTROLES DE ZOOM */}
+        <div className="absolute right-4 bottom-4 z-20 flex flex-col gap-1.5">
+          <button
+            type="button"
+            onClick={() => handleZoom(1)}
+            className="w-9 h-9 rounded-xl bg-white/95 backdrop-blur-md border border-[#E9E1D2] text-[#13322E] shadow-lg flex items-center justify-center hover:bg-white cursor-pointer"
+          >
+            <ZoomIn className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => handleZoom(-1)}
+            className="w-9 h-9 rounded-xl bg-white/95 backdrop-blur-md border border-[#E9E1D2] text-[#13322E] shadow-lg flex items-center justify-center hover:bg-white cursor-pointer"
+          >
+            <ZoomOut className="w-4 h-4" />
+          </button>
         </div>
 
-        {/* TARJETA INFORMATIVA DE POI SELECCIONADO SI EXISTE */}
+        {/* TARJETA INFORMATIVA DE POI SELECCIONADO EN EL MAPA */}
         {selectedPoi && (
-          <div className="relative z-10 self-end max-w-md bg-white p-5 rounded-2xl border border-[#16B8AA] shadow-2xl space-y-2 animate-fade-in w-full">
+          <div className="absolute bottom-4 left-4 right-14 z-30 max-w-sm bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-[#16B8AA] shadow-2xl space-y-1.5 animate-in slide-in-from-bottom-2">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-black uppercase tracking-wider text-[#16B8AA]">
-                {selectedPoi.category === 'acampada' ? '⛺ Zona de Acampada' : selectedPoi.category === 'playa' ? '🏖️ Playa Pernocta' : selectedPoi.category === 'agua' ? '💧 Punto de Agua' : '🌅 Mirador'}
+                {selectedPoi.category === 'acampada' ? '⛺ Zona de Acampada' : '🏖️ Playa de Pernocta'}
               </span>
               <button
+                type="button"
                 onClick={() => setSelectedPoi(null)}
-                className="text-xs font-bold text-slate-400 hover:text-slate-700"
+                className="text-xs font-bold text-slate-400 hover:text-slate-700 cursor-pointer"
               >
-                ✕ Cerrar
+                ✕
               </button>
             </div>
             <h4 className="font-bold text-sm text-[#13322E]">{selectedPoi.name}</h4>
-            <p className="text-xs text-[#6B726E] font-medium leading-relaxed">{selectedPoi.description}</p>
-            {selectedPoi.facilities && (
-              <div className="flex flex-wrap gap-1.5 pt-1">
-                {selectedPoi.facilities.map((fac, i) => (
-                  <span key={i} className="text-[9px] font-bold bg-[#FAF7F0] text-[#13322E] border border-[#E9E1D2] px-2 py-0.5 rounded-full">
-                    {fac}
-                  </span>
-                ))}
-              </div>
-            )}
+            <p className="text-xs text-[#6B726E] leading-relaxed">{selectedPoi.description}</p>
           </div>
         )}
       </div>
 
-      {/* TARJETAS DE PUNTOS INTERESANTES CAMPER CERCANOS EN ESTA ISLA */}
+      {/* LUGARES DE INTERÉS CAMPER RECOMENDADOS */}
       {islandPois.length > 0 && (
         <div className="space-y-3 pt-2">
           <h4 className="text-xs font-black uppercase tracking-wider text-[#6B726E]">
-            Lugares de interés camper destacados en {island}
+            Lugares de interés camper cercanos en {island}
           </h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {displayPois.map((poi) => (
+            {islandPois.map((poi) => (
               <div
                 key={poi.id}
-                onClick={() => setSelectedPoi(poi)}
-                className={`p-4 rounded-2xl border transition-all cursor-pointer text-left space-y-1.5 ${
-                  selectedPoi?.id === poi.id
-                    ? 'border-[#16B8AA] bg-[#FAF7F0] ring-2 ring-[#16B8AA]/20'
-                    : 'border-[#E9E1D2] bg-white hover:border-[#16B8AA]'
-                }`}
+                onClick={() => {
+                  setSelectedPoi(poi);
+                  if (mapInstanceRef.current) {
+                    mapInstanceRef.current.flyTo([poi.lat, poi.lng], 13, { duration: 0.8 });
+                  }
+                }}
+                className="p-3.5 bg-white rounded-2xl border border-[#E9E1D2] hover:border-[#16B8AA] transition-all cursor-pointer shadow-sm hover:shadow group"
               >
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#16B8AA]">
-                    {poi.category === 'acampada' ? '⛺ Acampada' : poi.category === 'playa' ? '🏖️ Playa' : poi.category === 'agua' ? '💧 Agua/Vaciado' : '🌅 Mirador'}
-                  </span>
-                  <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+                <div className="flex items-center space-x-1.5 text-[10px] font-black uppercase text-[#16B8AA] mb-1">
+                  <span>{poi.category === 'acampada' ? '⛺ Acampada' : '🏖️ Playa'}</span>
                 </div>
-                <h5 className="text-xs font-bold text-[#13322E] line-clamp-1">{poi.name}</h5>
-                <p className="text-[11px] text-[#6B726E] font-medium line-clamp-2 leading-relaxed">
+                <h5 className="font-bold text-sm text-[#13322E] group-hover:text-[#16B8AA] transition-colors line-clamp-1">
+                  {poi.name}
+                </h5>
+                <p className="text-xs text-[#6B726E] line-clamp-2 mt-0.5 leading-relaxed">
                   {poi.description}
                 </p>
               </div>
@@ -442,7 +511,6 @@ export default function CamperLocationMap({
           </div>
         </div>
       )}
-
     </div>
   );
 }

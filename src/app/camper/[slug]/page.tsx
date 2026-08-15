@@ -244,6 +244,9 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
               island={vehicle.island}
               municipality={vehicle.municipality}
               vehicleTitle={vehicle.title}
+              latitude={vehicle.latitude}
+              longitude={vehicle.longitude}
+              addressApprox={vehicle.addressApprox}
             />
 
             {/* PROPIETARIO */}
