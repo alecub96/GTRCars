@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 
 const smtpPassword = process.env.SMTP_PASSWORD || 'Vaneando2026!Smtp';
-const smtpUser = process.env.SMTP_USER || 'hola@vaneando.com';
+const smtpUser = process.env.SMTP_USER || 'contacto@vaneando.com';
 const smtpHost = process.env.SMTP_HOST || 'smtp.hostinger.com';
 const smtpPort = Number(process.env.SMTP_PORT || 465);
 const smtpSecure = process.env.SMTP_SECURE !== 'false';
@@ -88,7 +88,7 @@ function renderEmailLayout({
     </div>
     <div class="footer">
       <p><strong>vaneando.com</strong> — La plataforma nº1 de alquiler de campers en las Islas Canarias.</p>
-      <p>¿Tienes alguna duda? Contáctanos en <a href="mailto:hola@vaneando.com">hola@vaneando.com</a></p>
+      <p>¿Tienes alguna duda? Contáctanos en <a href="mailto:contacto@vaneando.com">contacto@vaneando.com</a></p>
       <p style="margin-top:12px;font-size:11px;color:#A0AEC0;">
         Las Palmas de Gran Canaria / Santa Cruz de Tenerife · España<br>
         Pagos 100% Seguros · Verificación de Propietarios Locales

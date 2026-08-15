@@ -68,7 +68,7 @@ export default function AdminEmailDiagnostics() {
                 ? 'Comprobando servidor de correo Hostinger...'
                 : configuration?.configured
                 ? `Activo y configurado como ${configuration.user} en ${configuration.host}:${configuration.port}`
-                : `Variables SMTP activadas. Remitente: ${configuration?.from || 'hola@vaneando.com'}`}
+                : `Variables SMTP activadas. Remitente: ${configuration?.from || 'contacto@vaneando.com'}`}
             </p>
           </div>
         </div>
@@ -104,7 +104,7 @@ export default function AdminEmailDiagnostics() {
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
         <input
           type="email"
-          placeholder="Introduce correo para recibir prueba (ej. hola@vaneando.com)"
+          placeholder="Introduce correo para recibir prueba (ej. contacto@vaneando.com)"
           value={targetEmail}
           onChange={(e) => setTargetEmail(e.target.value)}
           className="p-3.5 rounded-xl border border-[#E9E1D2] text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#16B8AA] flex-1"
