@@ -50,7 +50,7 @@ export default function OwnerDashboardPage() {
         setAuthorized(true);
 
         const [vehiclesResponse, bookingsResponse] = await Promise.all([
-          fetch('/api/vehicles'),
+          fetch('/api/vehicles?owner=me'),
           fetch('/api/bookings'),
         ]);
         const [vehiclesData, bookingsData] = await Promise.all([
@@ -239,6 +239,13 @@ export default function OwnerDashboardPage() {
                   </div>
 
                   <div className="pt-4 border-t border-[#E9E1D2] space-y-3">
+                    <Link
+                      href={`/camper/${v.slug}`}
+                      target="_blank"
+                      className="w-full py-2.5 rounded-full border border-[#E9E1D2] bg-[#FAF7F0] hover:bg-[#13322E] hover:text-white text-[#13322E] font-bold text-xs transition-all flex items-center justify-center space-x-1.5 shadow-sm"
+                    >
+                      <span>Ver Ficha del Anuncio</span>
+                    </Link>
                     {!v.isFeatured ? (
                       <button
                         onClick={() => handleActivateFeatured(v.id)}

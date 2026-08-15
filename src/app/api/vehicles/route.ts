@@ -13,16 +13,16 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const island = searchParams.get('island');
     const minPassengers = searchParams.get('passengers');
+    const ownerOnly = searchParams.get('owner') === 'me' || searchParams.get('mine') === 'true';
 
     const currentUser = await getCurrentUser();
     const whereClause: any = {};
 
-    if (currentUser) {
-      // Si el usuario está logueado, ve los anuncios ACTIVE del público Y TODOS sus propios anuncios (incluso en revisión PENDING_REVIEW)
-      whereClause.OR = [
-        { status: 'ACTIVE' },
-        { ownerId: currentUser.id },
-      ];
+    if (ownerOnly) {
+      if (!currentUser) {
+        return NextResponse.json({ error: 'Debes iniciar sesión' }, { status: 401 });
+      }
+      whereClause.ownerId = currentUser.id;
     } else {
       whereClause.status = 'ACTIVE';
     }
