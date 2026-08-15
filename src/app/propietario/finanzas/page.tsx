@@ -206,7 +206,7 @@ export default function OwnerFinancePage() {
               <h3 className="font-serif text-xl font-bold text-[#13322E]">Garantía de Cobro y Transferencia</h3>
             </div>
             <p className="text-xs text-[#6B726E] leading-relaxed font-medium">
-              Vaneando retiene de forma segura el importe de la reserva y lo transfiere automáticamente a tu cuenta bancaria (IBAN) <strong>24 horas después de la entrega de llaves (check-in)</strong> del vehículo.
+              Vaneando retiene de forma segura el importe de la reserva y lo transfiere a tu cuenta bancaria (IBAN) en un plazo de 7 días hábiles después de que finalice el periodo de alquiler.
             </p>
           </div>
 

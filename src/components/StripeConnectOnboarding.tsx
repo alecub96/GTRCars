@@ -153,7 +153,7 @@ export default function StripeConnectOnboarding({ onClose }: { onClose: () => vo
         <div className="mt-6 pt-5 border-t border-[#E9E1D2] text-[11px] text-[#6B726E] font-medium leading-relaxed flex items-start space-x-2">
           <Lock className="w-4 h-4 text-[#16B8AA] shrink-0 mt-0.5" />
           <span>
-            Tus datos bancarios quedan encriptados con seguridad SSL de nivel bancario. Las transferencias netas se emitirán automáticamente 24 horas después de la entrega de llaves de cada reserva.
+            Tus datos bancarios quedan encriptados con seguridad SSL de nivel bancario. Las transferencias netas se emitirán automáticamente en un plazo de 7 días hábiles después de que finalice el periodo de alquiler.
           </span>
         </div>
       </div>
