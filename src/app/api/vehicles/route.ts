@@ -23,6 +23,7 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: 'Debes iniciar sesión' }, { status: 401 });
       }
       whereClause.ownerId = currentUser.id;
+      // No filtrar por estado: el propietario debe ver sus campers en PENDING_REVIEW, ACTIVE, REJECTED, etc.
     } else {
       whereClause.status = 'ACTIVE';
     }
@@ -67,10 +68,13 @@ export async function GET(request: Request) {
 
     const finalSortedVehicles = [...rotatedFeaturedVehicles, ...sortedStandardVehicles];
 
-    return NextResponse.json({ success: true, vehicles: finalSortedVehicles });
+    return NextResponse.json(
+      { success: true, vehicles: finalSortedVehicles },
+      { headers: { 'Cache-Control': 'no-store, max-age=0' } }
+    );
   } catch (error) {
     console.error('API Vehicles Search Error:', error);
     if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
-    return NextResponse.json({ error: 'Error al buscar vehículos' }, { status: 500 });
+    return NextResponse.json({ error: 'Error al buscar vehículos' }, { status: 500, headers: { 'Cache-Control': 'no-store' } });
   }
 }
