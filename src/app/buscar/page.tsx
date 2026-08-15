@@ -9,6 +9,7 @@ import { getFeaturedAudience } from '@/lib/featured';
 
 import type { Metadata } from 'next';
 import VehicleTypeSlider from '@/components/VehicleTypeSlider';
+import { VEHICLE_TYPES_CONFIG } from '@/lib/vehicle-types';
 import SearchMapExplorer from '@/components/SearchMapExplorer';
 import { REALISTIC_CANARIAN_CAMPERS } from '@/lib/demo-campers-data';
 
@@ -22,6 +23,7 @@ interface SearchPageProps {
     sort?: string;
     startDate?: string;
     endDate?: string;
+    view?: string;
   }>;
 }
 

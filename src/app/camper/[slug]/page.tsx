@@ -94,7 +94,7 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
     '@type': 'Product',
     name: vehicle.title,
     description: vehicle.description,
-    image: vehicle.photos.map((photo) => photo.url),
+    image: (vehicle.photos || []).map((photo: any) => photo.url),
     brand: { '@type': 'Brand', name: vehicle.brand || 'vaneando.' },
     category: vehicle.vehicleType || 'Camper',
     offers: {

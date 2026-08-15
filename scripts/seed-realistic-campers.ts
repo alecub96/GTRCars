@@ -507,10 +507,30 @@ async function main() {
           });
         }
 
+        // Crear booking histórico completado para la reseña
+        const mockBooking = await prisma.booking.create({
+          data: {
+            code: `VAN-${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
+            vehicleId: vehicle.id,
+            travelerId: reviewer.id,
+            ownerId: owner.id,
+            pickupDate: new Date('2024-05-10T10:00:00.000Z'),
+            returnDate: new Date('2024-05-15T18:00:00.000Z'),
+            totalDays: 5,
+            basePrice: camperData.basePricePerDay * 5,
+            totalAmount: camperData.basePricePerDay * 5 + 30,
+            pricingSnapshot: JSON.stringify({ basePrice: camperData.basePricePerDay }),
+            status: 'COMPLETED',
+          },
+        });
+
         await prisma.review.create({
           data: {
+            bookingId: mockBooking.id,
             vehicleId: vehicle.id,
             authorId: reviewer.id,
+            subjectId: owner.id,
+            subjectRole: 'OWNER',
             rating: rev.rating,
             comment: rev.comment,
           },
