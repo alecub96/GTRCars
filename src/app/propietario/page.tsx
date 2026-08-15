@@ -49,17 +49,20 @@ export default function OwnerDashboardPage() {
 
         setAuthorized(true);
 
-        const [vehiclesResponse, bookingsResponse] = await Promise.all([
-          fetch('/api/vehicles?owner=me'),
-          fetch('/api/bookings'),
-        ]);
-        const [vehiclesData, bookingsData] = await Promise.all([
-          vehiclesResponse.json(),
-          bookingsResponse.json(),
-        ]);
-        setVehicles(vehiclesData.vehicles || []);
-        setBookings(bookingsData.bookings || []);
-        setLoading(false);
+        fetch('/api/vehicles?owner=me')
+          .then((res) => res.json())
+          .then((data) => {
+            if (data?.vehicles) setVehicles(data.vehicles);
+          })
+          .catch((err) => console.error('Error cargando furgonetas:', err));
+
+        fetch('/api/bookings')
+          .then((res) => res.json())
+          .then((data) => {
+            if (data?.bookings) setBookings(data.bookings);
+          })
+          .catch((err) => console.error('Error cargando reservas:', err))
+          .finally(() => setLoading(false));
       })
       .catch((error: Error) => {
         setServiceError(error.message);
