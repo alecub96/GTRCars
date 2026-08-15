@@ -341,12 +341,19 @@ export default function DigitalContractViewer({
               <div>
                 <strong className="block text-[#13322E] mb-1">SEGUNDA. Precio, fianza y liquidación.</strong>
                 <p className="text-[#52605B]">
-                  El precio total del alquiler asciende a <strong>{booking.totalAmount} €</strong>. La fianza fijada en <strong>{booking.depositAmount} €</strong> se bloquea temporalmente en custodia segura de Stripe sin abonarse al propietario. La fianza responde de daños menores, falta de combustible, limpieza deficiente o kilometraje excedido. La transferencia del saldo neto al propietario se realiza en un plazo de 7 días hábiles tras finalizar el viaje.
+                  El precio total del alquiler asciende a <strong>{booking.totalAmount} €</strong>. La fianza fijada en <strong>{booking.depositAmount} €</strong> se gestiona y liquida directamente entre el Arrendatario (viajero) y el Arrendador (propietario particular). La fianza responde de eventuales daños menores, falta de combustible, limpieza deficiente o kilometraje excedido. El pago neto del alquiler se transfiere al propietario en un plazo de 7 días hábiles tras finalizar el viaje.
                 </p>
               </div>
 
               <div>
-                <strong className="block text-[#13322E] mb-1">TERCERA. Kilometraje y combustible.</strong>
+                <strong className="block text-[#13322E] mb-1">TERCERA. Seguro del vehículo y coberturas.</strong>
+                <p className="text-[#52605B]">
+                  El vehículo cuenta con la póliza de seguro contratada por su propietario particular. En caso de que el Arrendatario desee coberturas adicionales o un seguro específico de viaje, deberá contratarlo por su cuenta de forma independiente.
+                </p>
+              </div>
+
+              <div>
+                <strong className="block text-[#13322E] mb-1">CUARTA. Kilometraje y combustible.</strong>
                 <p className="text-[#52605B]">
                   Se incluye un límite de <strong>{booking.vehicle?.includedKmPerDay || 0} km/día</strong>. El exceso se abonará a razón de <strong>{booking.vehicle?.extraKmPrice || 0} € por km adicional</strong>. El vehículo se devolverá con el mismo nivel de combustible acreditado en el Check-in digital.
                 </p>
@@ -446,7 +453,7 @@ export default function DigitalContractViewer({
                 className="mt-0.5 h-4 w-4 rounded border-slate-300 text-[#16B8AA] focus:ring-[#16B8AA]"
               />
               <span className="text-xs font-medium text-[#13322E]">
-                Comprendo la retención de la fianza de <strong>{booking.depositAmount} €</strong> y las condiciones de liquidación en 7 días hábiles tras finalizar el viaje.
+                Comprendo la fianza de <strong>{booking.depositAmount} €</strong> a acordar y gestionar directamente entre cliente y propietario, y el cobro del alquiler en 7 días hábiles tras finalizar el viaje.
               </span>
             </label>
 

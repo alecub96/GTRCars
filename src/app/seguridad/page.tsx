@@ -3,48 +3,45 @@ import Navbar from '@/components/Navbar';
 import Link from 'next/link';
 import {
   ShieldCheck,
-  Lock,
   CheckCircle2,
   FileText,
-  AlertTriangle,
   LifeBuoy,
   Scale,
   Car,
   FileCheck2,
   Users2,
-  Clock,
   HelpCircle,
-  Building2,
   PhoneCall,
-  Sparkles,
+  UserCheck,
+  Handshake,
 } from 'lucide-react';
 
 export const metadata = {
-  title: 'Seguridad, Coberturas y Garantías Legales | vaneando.',
-  description: 'Información legal, coberturas de seguro de alquiler, gestión de fianzas protegidas, verificación de identidad y protocolo de asistencia 24h en Canarias.',
+  title: 'Seguridad, Seguros y Gestión de Fianzas | vaneando.',
+  description: 'Condiciones de uso, seguro del vehículo particular, gestión directa de fianza entre viajero y propietario, y verificación de identidad en Canarias.',
 };
 
 export default function SecurityPage() {
   const faqs = [
     {
-      q: '¿Qué cubre el seguro durante el periodo de alquiler?',
-      a: 'Cada vehículo camperizado o autocaravana publicado en Vaneando cuenta con póliza de seguro en vigor adaptada al alquiler con cobertura en la Comunidad Autónoma de Canarias. Cubre Responsabilidad Civil Obligatoria y Complementaria, Asistencia en Carretera 24/7 en las 8 islas, seguro de ocupantes y daños propios sujetos a la franquicia fijada por el propietario.',
+      q: '¿Cómo funciona el seguro del vehículo durante el alquiler?',
+      a: 'Cada vehículo camperizado publicado en Vaneando cuenta con la póliza de seguro contratada por su propietario particular. Si el viajero desea disponer de un seguro adicional o cobertura específica para su viaje, deberá contratarlo por su cuenta de forma independiente.',
     },
     {
-      q: '¿Cómo se gestiona y protege la fianza de la camper?',
-      a: 'La fianza no se ingresa en la cuenta personal del propietario. Se realiza una preautorización bancaria custodiada de forma segura mediante pasarela financiera certificada por el Banco de España (Stripe). Tras completar el Check-out digital sin incidencias, la retención se libera automáticamente.',
+      q: '¿Cómo se gestiona y abona la fianza del alquiler?',
+      a: 'La fianza se gestiona y liquida directamente entre el viajero y el propietario particular. Vaneando no cobra, retiene ni custodia el importe de la fianza en la plataforma. El importe estipulado en la ficha del vehículo es acordado y administrado de forma directa entre ambas partes.',
     },
     {
-      q: '¿Es válido el seguro para trasladar la camper entre islas en Ferry?',
-      a: 'Sí. Las pólizas contratadas cubren la circulación y asistencia en carretera en todo el archipiélago canario (Gran Canaria, Tenerife, Lanzarote, Fuerteventura, La Palma, La Gomera, El Hierro y La Graciosa), siempre que el cruce marítimo se efectúe en navieras oficiales (Fred. Olsen Express o Naviera Armas).',
+      q: '¿Qué ocurre en caso de pequeños desperfectos o daños?',
+      a: 'Los eventuales desperfectos o costes no cubiertos por la póliza propia del vehículo son asumidos por el viajero con cargo a la fianza acordada directamente con el propietario, según lo estipulado entre ambas partes en el momento del Check-in y Check-out.',
     },
     {
-      q: '¿Qué requisitos debe cumplir el conductor para estar cubierto?',
-      a: 'Tener al menos 21 años (o 25 según especifique el propietario en la ficha del vehículo), disponer de permiso de conducir Clase B en vigor con un mínimo de 2 años de antigüedad y haber completado la verificación de identidad digital (DNI/Pasaporte) en Vaneando antes del check-in.',
+      q: '¿Qué requisitos debe cumplir el conductor?',
+      a: 'Disponer de permiso de conducir Clase B en vigor con la antigüedad requerida por el propietario y haber completado la verificación de identidad (DNI/Pasaporte) en Vaneando.',
     },
     {
-      q: '¿Qué ocurre en caso de siniestro, avería o daños menores?',
-      a: 'Dispones del servicio de asistencia 24 horas y del acta digital de entrega y devolución. Ante cualquier eventualidad, las partes registran la incidencia en la plataforma adjuntando fotos y evidencias. Nuestro equipo legal evalúa el caso con criterios transparentes conforme a la normativa vigente.',
+      q: '¿Cómo se formaliza la entrega del vehículo?',
+      a: 'Propietario y viajero revisan juntos el estado de la camper, kilometraje, nivel de combustible e inventario mediante el Acta Digital de entrega y devolución disponible en la plataforma.',
     },
   ];
 
@@ -59,225 +56,152 @@ export default function SecurityPage() {
         <div className="relative z-10 max-w-5xl mx-auto text-center space-y-6">
           <div className="inline-flex items-center space-x-2 bg-[#16B8AA]/20 border border-[#16B8AA]/40 text-[#16B8AA] px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-[0.2em]">
             <ShieldCheck className="w-4 h-4" />
-            <span>Marco Legal & Cobertura Garantizada</span>
+            <span>Condiciones de Alquiler y Transparencia</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight max-w-4xl mx-auto">
-            Seguridad, Pólizas de Seguro y Garantías en Canarias
+            Seguridad, Seguros y Gestión de Fianzas
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 font-medium max-w-2xl mx-auto leading-relaxed">
-            Transparencia total para viajeros y propietarios. Conoce las coberturas obligatorias, la custodia regulada de fianzas, la verificación de conductores y la asistencia 24/7 en el archipiélago.
+            Información clara y transparente para viajeros y propietarios. Consulta cómo funciona el seguro del particular, la gestión directa de fianzas entre partes y el acta digital de revisión.
           </p>
 
           <div className="pt-4 flex flex-wrap items-center justify-center gap-3 text-xs font-bold">
             <span className="bg-white/10 px-4 py-2 rounded-full border border-white/20 flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#16B8AA]" /> Póliza de Alquiler en Canarias
+              <Car className="w-4 h-4 text-[#16B8AA]" /> Seguro del Particular
             </span>
             <span className="bg-white/10 px-4 py-2 rounded-full border border-white/20 flex items-center gap-2">
-              <Lock className="w-4 h-4 text-[#16B8AA]" /> Custodia Segura de Fianza
+              <Handshake className="w-4 h-4 text-[#16B8AA]" /> Fianza Directa Particular - Propietario
             </span>
             <span className="bg-white/10 px-4 py-2 rounded-full border border-white/20 flex items-center gap-2">
-              <PhoneCall className="w-4 h-4 text-[#16B8AA]" /> Asistencia en Carretera 24h
+              <UserCheck className="w-4 h-4 text-[#16B8AA]" /> Verificación de Identidad
             </span>
             <span className="bg-white/10 px-4 py-2 rounded-full border border-white/20 flex items-center gap-2">
-              <FileCheck2 className="w-4 h-4 text-[#16B8AA]" /> Contrato Digital Verificado
+              <FileCheck2 className="w-4 h-4 text-[#16B8AA]" /> Acta Digital de Entrega
             </span>
           </div>
         </div>
       </section>
 
-      {/* CONTENIDO PRINCIPAL A TODO ANCHO */}
+      {/* CONTENIDO PRINCIPAL */}
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-16">
         
-        {/* 2. PILARES DE SEGURIDAD LEGAL */}
+        {/* 2. PILARES CLAVE */}
         <section className="space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-2">
             <span className="text-xs font-black uppercase tracking-[0.25em] text-[#16B8AA]">
-              REGLAMENTO Y PROTECCIÓN
+              NORMAS Y CONDICIONES DE ALQUILER
             </span>
             <h2 className="text-3xl font-extrabold text-[#13322E] tracking-tight">
-              Los 4 Pilares de la Garantía Vaneando
+              ¿Cómo se organiza la seguridad en Vaneando?
             </h2>
             <p className="text-sm text-[#6B726E] font-medium">
-              Todo alquiler celebrado en la plataforma cumple con la normativa civil y mercantil aplicable al transporte sin conductor.
+              Relación transparente entre viajero y propietario particular para el uso de campers en Canarias.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* PILAR 1: COBERTURA DE SEGURO */}
+            {/* PILAR 1: SEGURO DEL VEHÍCULO */}
             <div className="bg-white p-8 rounded-3xl border border-[#E9E1D2] shadow-sm space-y-4 hover:border-[#16B8AA] transition-colors">
               <div className="w-12 h-12 rounded-2xl bg-[#16B8AA]/10 text-[#16B8AA] flex items-center justify-center font-bold">
                 <Car className="w-6 h-6" />
               </div>
               <h3 className="text-xl font-bold text-[#13322E] tracking-tight">
-                1. Seguro Específico para Alquiler Camper
+                1. Seguro del Propietario Particular
               </h3>
               <p className="text-xs text-[#6B726E] leading-relaxed font-medium">
-                Cada camper o autocaravana en Vaneando cuenta con una póliza contratada en regla adaptada al alquiler de vehículos entre particulares. La póliza garantiza la cobertura de daños a terceros, auxilio en carretera y protección contra siniestros durante todas las fechas reservadas.
+                Cada vehículo mantiene la póliza de seguro que tenga contratada su propietario particular. Si el viajero desea contratar una cobertura adicional o seguro específico de viaje, debe realizarlo por su cuenta de forma independiente antes o durante el alquiler.
               </p>
               <ul className="space-y-2 pt-2 border-t border-[#E9E1D2]/60 text-xs font-bold text-[#13322E]">
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-[#16B8AA] shrink-0" />
-                  <span>Responsabilidad Civil Ilimitada según legislación de tráfico.</span>
+                  <span>El vehículo circula bajo la póliza contratada por su propietario.</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-[#16B8AA] shrink-0" />
-                  <span>Asistencia mecánica, grúa y rescate 24/7 en las 8 Islas Canarias.</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#16B8AA] shrink-0" />
-                  <span>Protección para conductor y acompañantes ante imprevistos.</span>
+                  <span>Seguro adicional a cargo del viajero si desea mayor cobertura.</span>
                 </li>
               </ul>
             </div>
 
-            {/* PILAR 2: CUSTODIA REGULADA DE FIANZA */}
+            {/* PILAR 2: GESTIÓN DIRECTA DE FIANZA */}
             <div className="bg-white p-8 rounded-3xl border border-[#E9E1D2] shadow-sm space-y-4 hover:border-[#16B8AA] transition-colors">
               <div className="w-12 h-12 rounded-2xl bg-amber-50 text-[#D97706] flex items-center justify-center font-bold">
-                <Lock className="w-6 h-6" />
+                <Handshake className="w-6 h-6" />
               </div>
               <h3 className="text-xl font-bold text-[#13322E] tracking-tight">
-                2. Custodia Segura de la Fianza (Preautorización)
+                2. Gestión Directa de la Fianza
               </h3>
               <p className="text-xs text-[#6B726E] leading-relaxed font-medium">
-                Para evitar abusos y garantizar imparcialidad, el dinero de la fianza <strong>nunca se ingresa en la cuenta personal del propietario</strong> durante la reserva. Se mantiene retenido mediante una preautorización segura supervisada por entidades de pago autorizadas por el Banco de España.
+                La fianza estipulada en el anuncio se acuerda y gestiona directamente entre el viajero y el propietario particular. Vaneando no retiene ni deposita el importe de la fianza en la plataforma; responde de los eventuales daños o desperfectos según lo pactado por ambas partes.
               </p>
               <ul className="space-y-2 pt-2 border-t border-[#E9E1D2]/60 text-xs font-bold text-[#13322E]">
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-[#D97706] shrink-0" />
-                  <span>Bloqueo bancario temporal sin transferencia inmediata.</span>
+                  <span>Acuerdo y liquidación directa entre cliente y propietario.</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-[#D97706] shrink-0" />
-                  <span>Liberación automática tras el Check-out digital sin averías.</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#D97706] shrink-0" />
-                  <span>Resolución de arbitraje transparente en caso de partes de dañado.</span>
+                  <span>Sin intermediación ni retención de saldo de fianza en Vaneando.</span>
                 </li>
               </ul>
             </div>
 
-            {/* PILAR 3: VERIFICACIÓN DE CONDUCTORES */}
+            {/* PILAR 3: VERIFICACIÓN DE IDENTIDAD */}
             <div className="bg-white p-8 rounded-3xl border border-[#E9E1D2] shadow-sm space-y-4 hover:border-[#16B8AA] transition-colors">
               <div className="w-12 h-12 rounded-2xl bg-[#13322E] text-[#16B8AA] flex items-center justify-center font-bold">
                 <Users2 className="w-6 h-6" />
               </div>
               <h3 className="text-xl font-bold text-[#13322E] tracking-tight">
-                3. Identidad y Permisos Verificados
+                3. Identidad y Registro de Conductores
               </h3>
               <p className="text-xs text-[#6B726E] leading-relaxed font-medium">
-                Todos los viajeros que conducen una camper en Vaneando superan un proceso de verificación documental obligatoria antes de iniciar el viaje. Esto asegura que la persona al volante cuenta con la licencia necesaria y cumple con los requisitos de edad del seguro.
+                Para dar seguridad a ambas partes, Vaneando requiere la verificación documental del conductor (DNI/Pasaporte y carnet de conducir en vigor) previa al inicio del viaje.
               </p>
               <ul className="space-y-2 pt-2 border-t border-[#E9E1D2]/60 text-xs font-bold text-[#13322E]">
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-[#16B8AA] shrink-0" />
-                  <span>Validación de DNI/Pasaporte y Permiso de Conducir Clase B.</span>
+                  <span>Verificación oficial de identidad de viajeros y propietarios.</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-[#16B8AA] shrink-0" />
-                  <span>Registro de conductores autorizados en el contrato de alquiler.</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#16B8AA] shrink-0" />
-                  <span>Control de antigüedad de carnet (mínimo 2 años requeridos).</span>
+                  <span>Control de permiso Clase B y requisitos de antigüedad.</span>
                 </li>
               </ul>
             </div>
 
-            {/* PILAR 4: FIRMA Y ACTA DIGITAL */}
+            {/* PILAR 4: ACTA DIGITAL */}
             <div className="bg-white p-8 rounded-3xl border border-[#E9E1D2] shadow-sm space-y-4 hover:border-[#16B8AA] transition-colors">
               <div className="w-12 h-12 rounded-2xl bg-[#0F766E]/10 text-[#0F766E] flex items-center justify-center font-bold">
                 <FileCheck2 className="w-6 h-6" />
               </div>
               <h3 className="text-xl font-bold text-[#13322E] tracking-tight">
-                4. Contrato Digital y Acta de Check-in/out
+                4. Acta Digital de Entrega y Devolución
               </h3>
               <p className="text-xs text-[#6B726E] leading-relaxed font-medium">
-                El proceso de entrega y devolución queda blindado legalmente mediante el Acta Digital. Ambas partes revisan y aceptan con sello temporal el estado exterior, interior, fotos, kilometraje e inventario de accesorios antes de iniciar la ruta.
+                Propietario y viajero documentan el estado de la camper, fotografías, nivel de combustible e inventario a la entrega (Check-in) y devolución (Check-out) desde la plataforma.
               </p>
               <ul className="space-y-2 pt-2 border-t border-[#E9E1D2]/60 text-xs font-bold text-[#13322E]">
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-[#0F766E] shrink-0" />
-                  <span>Firma electrónica con validez jurídica según Reglamento eIDAS (UE).</span>
+                  <span>Registro de fotos e inspección visual en la entrega y devolución.</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-[#0F766E] shrink-0" />
-                  <span>Registro fotográfico geolocalizado en el check-in y devolución.</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#0F766E] shrink-0" />
-                  <span>Evidencia fehaciente ante reclamaciones o desacuerdos.</span>
+                  <span>Constancia fehaciente del estado del vehículo para ambas partes.</span>
                 </li>
               </ul>
             </div>
           </div>
         </section>
 
-        {/* 3. PASO A PASO EN CASO DE INCIDENCIA EN CARRETERA */}
-        <section className="bg-white rounded-3xl border border-[#E9E1D2] p-8 sm:p-12 shadow-sm space-y-8">
-          <div className="border-b border-[#E9E1D2] pb-6">
-            <span className="text-xs font-black uppercase tracking-[0.25em] text-[#D97706]">
-              ASISTENCIA Y PROTOCOLO DÍA A DÍA
-            </span>
-            <h2 className="text-3xl font-extrabold text-[#13322E] tracking-tight mt-1">
-              ¿Qué hacer si ocurre una incidencia durante el viaje?
-            </h2>
-            <p className="text-sm text-[#6B726E] font-medium mt-2">
-              En caso de avería fortuita, pinchazo o accidente en carretera, el protocolo Vaneando garantiza respuesta inmediata en cualquier isla de Canarias.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="p-6 rounded-2xl bg-[#FAF7F0] border border-[#E9E1D2] space-y-3">
-              <span className="w-8 h-8 rounded-full bg-[#13322E] text-white text-xs font-black flex items-center justify-center">
-                1
-              </span>
-              <h4 className="font-bold text-sm text-[#13322E]">1. Contacta con Asistencia</h4>
-              <p className="text-xs text-[#6B726E] font-medium leading-relaxed">
-                Llama al teléfono de asistencia 24h indicado en el contrato digital de tu reserva para solicitar grúa o asistencia técnica in situ.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-[#FAF7F0] border border-[#E9E1D2] space-y-3">
-              <span className="w-8 h-8 rounded-full bg-[#13322E] text-white text-xs font-black flex items-center justify-center">
-                2
-              </span>
-              <h4 className="font-bold text-sm text-[#13322E]">2. Avisa al Propietario</h4>
-              <p className="text-xs text-[#6B726E] font-medium leading-relaxed">
-                Comunica lo ocurrido a través de la mensajería oficial de Vaneando para mantener informado al propietario en todo momento.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-[#FAF7F0] border border-[#E9E1D2] space-y-3">
-              <span className="w-8 h-8 rounded-full bg-[#13322E] text-white text-xs font-black flex items-center justify-center">
-                3
-              </span>
-              <h4 className="font-bold text-sm text-[#13322E]">3. Rellena el Parte</h4>
-              <p className="text-xs text-[#6B726E] font-medium leading-relaxed">
-                Si ha intervenido otro vehículo, completa el Parte Europeo de Accidente que encontrarás en la guantera de la camper.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-[#FAF7F0] border border-[#E9E1D2] space-y-3">
-              <span className="w-8 h-8 rounded-full bg-[#13322E] text-white text-xs font-black flex items-center justify-center">
-                4
-              </span>
-              <h4 className="font-bold text-sm text-[#13322E]">4. Tramitación Vaneando</h4>
-              <p className="text-xs text-[#6B726E] font-medium leading-relaxed">
-                El equipo de soporte y mediación gestiona la tramitación del siniestro y la devolución o regularización del saldo con total claridad.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* 4. PREGUNTAS FRECUENTES DE SEGURO Y GARANTÍAS (FAQ) */}
+        {/* 3. PREGUNTAS FRECUENTES (FAQ) */}
         <section className="space-y-8">
           <div className="flex items-center space-x-3 border-b border-[#E9E1D2] pb-4">
             <HelpCircle className="w-6 h-6 text-[#16B8AA]" />
             <h2 className="text-2xl font-extrabold text-[#13322E] tracking-tight">
-              Preguntas Frecuentes sobre Seguro y Seguridad Legal
+              Preguntas Frecuentes sobre Seguro y Fianza
             </h2>
           </div>
 
@@ -299,15 +223,15 @@ export default function SecurityPage() {
           </div>
         </section>
 
-        {/* 5. BANNER FINAL DE ATENCIÓN Y CONTACTO LEGAL */}
+        {/* 4. BANNER FINAL */}
         <section className="bg-[#13322E] text-white rounded-3xl p-8 sm:p-12 text-center space-y-6 relative overflow-hidden shadow-xl">
           <div className="relative z-10 max-w-2xl mx-auto space-y-4">
             <Scale className="w-10 h-10 text-[#16B8AA] mx-auto opacity-90" />
             <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              ¿Tienes alguna duda legal o sobre la póliza de un vehículo?
+              ¿Tienes alguna otra duda sobre tu reserva?
             </h3>
             <p className="text-xs sm:text-sm text-slate-300 font-medium leading-relaxed">
-              Nuestro equipo de soporte y atención al cliente está disponible para orientarte antes de reservar o publicar tu camper en Canarias.
+              Consulta nuestros Términos y Condiciones o contacta con el equipo de soporte Vaneando.
             </p>
             <div className="pt-2 flex flex-wrap items-center justify-center gap-4">
               <Link
@@ -315,14 +239,14 @@ export default function SecurityPage() {
                 className="inline-flex items-center space-x-2 bg-[#16B8AA] hover:bg-[#0F766E] text-white font-black text-xs uppercase tracking-widest px-8 py-4 rounded-full transition-all shadow-md"
               >
                 <LifeBuoy className="w-4 h-4" />
-                <span>Contactar con Soporte Vaneando</span>
+                <span>Contactar con Soporte</span>
               </Link>
               <Link
                 href="/terminos"
                 className="inline-flex items-center space-x-2 border border-white/30 hover:bg-white/10 text-white font-bold text-xs uppercase tracking-wider px-6 py-4 rounded-full transition-all"
               >
                 <FileText className="w-4 h-4" />
-                <span>Ver Términos y Condiciones completas</span>
+                <span>Ver Términos y Condiciones</span>
               </Link>
             </div>
           </div>
