@@ -9,7 +9,7 @@ import AdminVehicleQueue from '@/components/AdminVehicleQueue';
 import AdminLogin from '@/components/AdminLogin';
 import AdminIncidentQueue from '@/components/AdminIncidentQueue';
 import AdminRefundButton from '@/components/AdminRefundButton';
-import AdminHeader from '@/components/AdminHeader';
+import Navbar from '@/components/Navbar';
 
 export default function AdminPage() {
   const [data, setData] = useState<any>(null);
@@ -41,13 +41,13 @@ export default function AdminPage() {
       });
   }, []);
 
-  if (serviceError) return <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]"><AdminHeader /><main className="mx-auto max-w-xl px-4 py-20"><div className="rounded-3xl border border-amber-200 bg-white p-8 text-center shadow-sm"><ShieldCheck className="mx-auto h-10 w-10 text-amber-600" /><h1 className="mt-4 font-serif text-3xl font-bold">Administración temporalmente no disponible</h1><p className="mt-3 text-sm text-[#6B726E]">{serviceError}</p><button type="button" onClick={() => window.location.reload()} className="mt-6 rounded-full bg-[#13322E] px-5 py-3 text-xs font-bold uppercase tracking-wider text-white">Reintentar conexión</button></div></main></div>;
+  if (serviceError) return <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]"><Navbar /><main className="mx-auto max-w-xl px-4 py-20"><div className="rounded-3xl border border-amber-200 bg-white p-8 text-center shadow-sm"><ShieldCheck className="mx-auto h-10 w-10 text-amber-600" /><h1 className="mt-4 font-serif text-3xl font-bold">Administración temporalmente no disponible</h1><p className="mt-3 text-sm text-[#6B726E]">{serviceError}</p><button type="button" onClick={() => window.location.reload()} className="mt-6 rounded-full bg-[#13322E] px-5 py-3 text-xs font-bold uppercase tracking-wider text-white">Reintentar conexión</button></div></main></div>;
   if (authorized === null) return <div className="min-h-screen bg-[#F7F6F2]" />;
   if (authorized === false) return <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]"><AdminLogin /></div>;
 
   return (
     <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]">
-      <AdminHeader />
+      <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 pb-6 border-b border-[#E9E1D2]">
