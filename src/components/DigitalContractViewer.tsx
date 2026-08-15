@@ -1,20 +1,24 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   FileText,
   CheckCircle2,
   Printer,
-  Download,
-  PenTool,
   ShieldCheck,
-  Calendar,
-  User,
-  Car,
-  DollarSign,
+  Camera,
+  UploadCloud,
+  Check,
   AlertTriangle,
   Lock,
   X,
+  Gauge,
+  Droplets,
+  Fuel,
+  Sparkles,
+  Layers,
+  HelpCircle,
+  Eye,
 } from 'lucide-react';
 
 interface ContractViewerProps {
@@ -23,12 +27,30 @@ interface ContractViewerProps {
   onSigned?: () => void;
 }
 
+interface InspectionPhoto {
+  tag: string;
+  label: string;
+  url: string;
+  notes?: string;
+}
+
+const DEFAULT_PHOTO_SLOTS = [
+  { tag: 'FRONT', label: 'Frontal y Parabrisas' },
+  { tag: 'REAR', label: 'Parte Trasera y Matrícula' },
+  { tag: 'LEFT_LOW', label: 'Lateral Izquierdo Bajo' },
+  { tag: 'LEFT_HIGH', label: 'Lateral Izquierdo Alto' },
+  { tag: 'RIGHT_LOW', label: 'Lateral Derecho Bajo' },
+  { tag: 'RIGHT_HIGH', label: 'Lateral Derecho Alto' },
+  { tag: 'INTERIOR_CAMPER', label: 'Interior y Camperización (Cocina/Cama)' },
+  { tag: 'DASHBOARD', label: 'Cuadro de Mandos / Cuentakilómetros' },
+];
+
 export default function DigitalContractViewer({
   booking,
   viewerRole,
   onSigned,
 }: ContractViewerProps) {
-  const [activeTab, setActiveTab] = useState<'view' | 'sign'>('view');
+  const [activeTab, setActiveTab] = useState<'inspection' | 'view' | 'sign'>('inspection');
   const [signatureType, setSignatureType] = useState<'draw' | 'type'>('type');
   const [typedName, setTypedName] = useState('');
   const [drawnSignature, setDrawnSignature] = useState<string | null>(null);
@@ -41,6 +63,53 @@ export default function DigitalContractViewer({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+
+  // Estado de la Ficha de Comprobación (Inspección)
+  const existingCheckIn = booking.checkIn || {};
+  const [odometer, setOdometer] = useState<string>(
+    existingCheckIn.odometer ? String(existingCheckIn.odometer) : '85000'
+  );
+  const [fuelLevel, setFuelLevel] = useState<string>(existingCheckIn.fuelLevel || 'FULL');
+  const [waterLevel, setWaterLevel] = useState<string>(existingCheckIn.waterLevel || 'FULL');
+  const [cleanliness, setCleanliness] = useState<string>(existingCheckIn.cleanliness || 'EXCELLENT');
+  const [notes, setNotes] = useState<string>(existingCheckIn.notes || '');
+  
+  const [inspectionChecks, setInspectionChecks] = useState({
+    exteriorBody: true,
+    lights: true,
+    tires: true,
+    interiorFurniture: true,
+    kitchenGas: true,
+    waterPump: true,
+    fridge: true,
+    auxBattery: true,
+  });
+
+  const [photos, setPhotos] = useState<InspectionPhoto[]>(() => {
+    if (existingCheckIn.photos && Array.isArray(existingCheckIn.photos) && existingCheckIn.photos.length > 0) {
+      return existingCheckIn.photos.map((p: any) => ({
+        tag: p.tag,
+        label: DEFAULT_PHOTO_SLOTS.find((s) => s.tag === p.tag)?.label || p.tag,
+        url: p.url,
+      }));
+    }
+    return [
+      {
+        tag: 'FRONT',
+        label: 'Frontal y Parabrisas',
+        url: 'https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=600&auto=format&fit=crop&q=80',
+      },
+      {
+        tag: 'INTERIOR_CAMPER',
+        label: 'Interior y Camperización',
+        url: 'https://images.unsplash.com/photo-1510312305653-8ed496efae75?w=600&auto=format&fit=crop&q=80',
+      },
+    ];
+  });
+
+  const [uploadingSlot, setUploadingSlot] = useState<string | null>(null);
+  const [savingInspection, setSavingInspection] = useState(false);
+  const [inspectionSaved, setInspectionSaved] = useState(Boolean(booking.checkIn));
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -103,6 +172,56 @@ export default function DigitalContractViewer({
     setDrawnSignature(null);
   };
 
+  // Subida de fotografías de comprobación
+  const handlePhotoUpload = (tag: string, label: string, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingSlot(tag);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const base64Url = event.target?.result as string;
+      setPhotos((prev) => {
+        const filtered = prev.filter((p) => p.tag !== tag);
+        return [...filtered, { tag, label, url: base64Url }];
+      });
+      setUploadingSlot(null);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Guardar Ficha de Comprobación
+  const handleSaveInspection = async () => {
+    setSavingInspection(true);
+    setError('');
+    try {
+      const response = await fetch(`/api/bookings/${booking.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'save-inspection',
+          odometer: Number(odometer) || 0,
+          fuelLevel,
+          waterLevel,
+          cleanliness,
+          notes,
+          photos,
+          inspectionChecks,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Error al guardar la comprobación');
+      
+      setInspectionSaved(true);
+      setActiveTab('view');
+    } catch (err: any) {
+      setError(err.message || 'No se pudo guardar la comprobación');
+    } finally {
+      setSavingInspection(false);
+    }
+  };
+
   const handleSign = async () => {
     setError('');
     if (!checks.terms || !checks.deposit || !checks.truthful) {
@@ -127,6 +246,15 @@ export default function DigitalContractViewer({
           acceptedTerms: checks.terms,
           acceptedPrivacy: checks.truthful,
           acceptedDeposit: checks.deposit,
+          inspectionData: {
+            odometer,
+            fuelLevel,
+            waterLevel,
+            cleanliness,
+            notes,
+            photos,
+            inspectionChecks,
+          },
         }),
       });
 
@@ -154,18 +282,18 @@ export default function DigitalContractViewer({
   return (
     <div className="bg-white rounded-3xl border border-[#E9E1D2] shadow-sm p-6 sm:p-8 space-y-6">
       
-      {/* CABECERA Y ESTADO DE LAS FIRMAS */}
+      {/* CABECERA Y ACCIONES */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#E9E1D2]">
         <div>
           <div className="inline-flex items-center space-x-2 text-[10px] font-black uppercase tracking-[0.25em] text-[#16B8AA] mb-1">
             <ShieldCheck className="w-3.5 h-3.5" />
-            <span>Validez Jurídica eIDAS UE 910/2014</span>
+            <span>Validez Jurídica eIDAS UE 910/2014 & Acta Digital</span>
           </div>
           <h2 className="text-2xl font-extrabold text-[#13322E] tracking-tight">
-            Contrato Digital de Alquiler de Vehículo Camper
+            Ficha de Comprobación y Contrato Digital
           </h2>
           <p className="text-xs text-[#6B726E] font-medium mt-1">
-            Código de reserva: <strong className="text-[#16B8AA] font-mono">{booking.code}</strong>
+            Código de reserva: <strong className="text-[#16B8AA] font-mono">{booking.code}</strong> • Vehículo: <strong className="text-[#13322E]">{booking.vehicle?.title}</strong>
           </p>
         </div>
 
@@ -180,95 +308,324 @@ export default function DigitalContractViewer({
         </div>
       </div>
 
-      {/* TARJETAS DE ESTADO DE FIRMAS */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {/* ESTADO VIAJERO */}
-        <div
-          className={`p-4 rounded-2xl border transition-all ${
-            travelerSigned
-              ? 'bg-emerald-50/80 border-emerald-200 text-emerald-900'
-              : 'bg-amber-50/80 border-amber-200 text-amber-900'
+      {/* PESTAÑAS PRINCIPALES */}
+      <div className="flex border-b border-[#E9E1D2] gap-2 overflow-x-auto">
+        <button
+          onClick={() => setActiveTab('inspection')}
+          className={`py-3 px-5 text-xs font-black uppercase tracking-wider border-b-2 transition-all cursor-pointer whitespace-nowrap flex items-center space-x-2 ${
+            activeTab === 'inspection'
+              ? 'border-[#16B8AA] text-[#16B8AA]'
+              : 'border-transparent text-[#6B726E] hover:text-[#13322E]'
           }`}
         >
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-black uppercase tracking-wider">Firma del Viajero</span>
-            {travelerSigned ? (
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-200 text-emerald-900 text-[9px] font-black uppercase">
-                ✅ FIRMADO
-              </span>
-            ) : (
-              <span className="px-2.5 py-0.5 rounded-full bg-amber-200 text-amber-900 text-[9px] font-black uppercase">
-                ⏳ PENDIENTE
-              </span>
-            )}
-          </div>
-          <p className="text-xs font-bold mt-2">
-            {booking.traveler?.firstName} {booking.traveler?.lastName}
-          </p>
-          <p className="text-[10px] text-slate-500 font-medium mt-0.5">
-            {travelerSigned ? `Firmado digitalmente el ${contract.signedAtTraveler ? dateFormatted(contract.signedAtTraveler) : 'fecha registrada'}` : 'Pendiente de aceptar y firmar'}
-          </p>
-        </div>
+          <Camera className="w-4 h-4" />
+          <span>1. Ficha de Comprobación y Fotos</span>
+        </button>
 
-        {/* ESTADO PROPIETARIO */}
-        <div
-          className={`p-4 rounded-2xl border transition-all ${
-            ownerSigned
-              ? 'bg-emerald-50/80 border-emerald-200 text-emerald-900'
-              : 'bg-amber-50/80 border-amber-200 text-amber-900'
-          }`}
-        >
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-black uppercase tracking-wider">Firma del Propietario</span>
-            {ownerSigned ? (
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-200 text-emerald-900 text-[9px] font-black uppercase">
-                ✅ FIRMADO
-              </span>
-            ) : (
-              <span className="px-2.5 py-0.5 rounded-full bg-amber-200 text-amber-900 text-[9px] font-black uppercase">
-                ⏳ PENDIENTE
-              </span>
-            )}
-          </div>
-          <p className="text-xs font-bold mt-2">
-            {booking.owner?.firstName} {booking.owner?.lastName}
-          </p>
-          <p className="text-[10px] text-slate-500 font-medium mt-0.5">
-            {ownerSigned ? `Firmado digitalmente el ${contract.signedAtOwner ? dateFormatted(contract.signedAtOwner) : 'fecha registrada'}` : 'Pendiente de aceptar y firmar'}
-          </p>
-        </div>
-      </div>
-
-      {/* PESTAÑAS: LEER CONTRATO / FIRMAR */}
-      <div className="flex border-b border-[#E9E1D2]">
         <button
           onClick={() => setActiveTab('view')}
-          className={`py-3 px-6 text-xs font-black uppercase tracking-wider border-b-2 transition-all cursor-pointer ${
+          className={`py-3 px-5 text-xs font-black uppercase tracking-wider border-b-2 transition-all cursor-pointer whitespace-nowrap flex items-center space-x-2 ${
             activeTab === 'view'
               ? 'border-[#16B8AA] text-[#16B8AA]'
               : 'border-transparent text-[#6B726E] hover:text-[#13322E]'
           }`}
         >
-          Documento Completo del Contrato
+          <FileText className="w-4 h-4" />
+          <span>2. Contrato Oficial + Fotos Adjuntas</span>
         </button>
+
         {!mySignatureDone && (
           <button
             onClick={() => setActiveTab('sign')}
-            className={`py-3 px-6 text-xs font-black uppercase tracking-wider border-b-2 transition-all cursor-pointer ${
+            className={`py-3 px-5 text-xs font-black uppercase tracking-wider border-b-2 transition-all cursor-pointer whitespace-nowrap flex items-center space-x-2 ${
               activeTab === 'sign'
                 ? 'border-[#16B8AA] text-[#16B8AA]'
                 : 'border-transparent text-[#6B726E] hover:text-[#13322E]'
             }`}
           >
-            ✍️ Firmar Contrato Ahora ({viewerRole === 'OWNER' ? 'Propietario' : 'Viajero'})
+            <span>✍️ 3. Firmar Contrato ({viewerRole === 'OWNER' ? 'Propietario' : 'Viajero'})</span>
           </button>
         )}
       </div>
 
-      {/* VISTA 1: TEXTO OFICIAL DEL CONTRATO (IMPRIMIBLE) */}
+      {/* PESTAÑA 1: FICHA DE COMPROBACIÓN DEL VEHÍCULO Y SUBIDA DE FOTOS */}
+      {activeTab === 'inspection' && (
+        <div className="space-y-6">
+          <div className="bg-[#FAF7F0] p-6 rounded-2xl border border-[#E9E1D2] space-y-4">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#16B8AA]">
+                  ACTA DE INSPECCIÓN DIGITAL
+                </span>
+                <h3 className="text-xl font-bold text-[#13322E] mt-1">
+                  Comprobación del Estado del Vehículo y Camperización
+                </h3>
+                <p className="text-xs text-[#6B726E] mt-1">
+                  Registra el kilometraje, niveles y fotografías de todos los ángulos del vehículo antes del inicio del viaje. Estas imágenes quedan incorporadas formalmente al contrato y sirven de prueba vinculante ante cualquier incidencia o devolución de fianza.
+                </p>
+              </div>
+            </div>
+
+            {/* PARÁMETROS BÁSICOS */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 bg-white p-4 rounded-xl border border-[#E9E1D2]">
+              <div>
+                <label className="block text-[10px] font-black uppercase text-[#6B726E] mb-1">
+                  Kilometraje Actual (km)
+                </label>
+                <div className="flex items-center space-x-2">
+                  <Gauge className="w-4 h-4 text-[#16B8AA]" />
+                  <input
+                    type="number"
+                    value={odometer}
+                    onChange={(e) => setOdometer(e.target.value)}
+                    className="w-full p-2 text-xs font-bold rounded-lg border border-[#E9E1D2] focus:ring-1 focus:ring-[#16B8AA] outline-none"
+                    placeholder="85000"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-black uppercase text-[#6B726E] mb-1">
+                  Nivel de Combustible
+                </label>
+                <div className="flex items-center space-x-2">
+                  <Fuel className="w-4 h-4 text-[#16B8AA]" />
+                  <select
+                    value={fuelLevel}
+                    onChange={(e) => setFuelLevel(e.target.value)}
+                    className="w-full p-2 text-xs font-bold rounded-lg border border-[#E9E1D2] focus:ring-1 focus:ring-[#16B8AA] outline-none bg-white"
+                  >
+                    <option value="FULL">Lleno (100%)</option>
+                    <option value="3/4">3/4 Depósito</option>
+                    <option value="1/2">1/2 Depósito</option>
+                    <option value="1/4">1/4 Depósito</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-black uppercase text-[#6B726E] mb-1">
+                  Depósito Agua Limpia
+                </label>
+                <div className="flex items-center space-x-2">
+                  <Droplets className="w-4 h-4 text-[#16B8AA]" />
+                  <select
+                    value={waterLevel}
+                    onChange={(e) => setWaterLevel(e.target.value)}
+                    className="w-full p-2 text-xs font-bold rounded-lg border border-[#E9E1D2] focus:ring-1 focus:ring-[#16B8AA] outline-none bg-white"
+                  >
+                    <option value="FULL">Lleno (100%)</option>
+                    <option value="1/2">50%</option>
+                    <option value="EMPTY">Vacío</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-black uppercase text-[#6B726E] mb-1">
+                  Estado de Limpieza
+                </label>
+                <div className="flex items-center space-x-2">
+                  <Sparkles className="w-4 h-4 text-[#16B8AA]" />
+                  <select
+                    value={cleanliness}
+                    onChange={(e) => setCleanliness(e.target.value)}
+                    className="w-full p-2 text-xs font-bold rounded-lg border border-[#E9E1D2] focus:ring-1 focus:ring-[#16B8AA] outline-none bg-white"
+                  >
+                    <option value="EXCELLENT">Excelente / Impecable</option>
+                    <option value="GOOD">Bueno</option>
+                    <option value="FAIR">Aceptable</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* CHECKLIST DE COMPONENTES */}
+            <div className="bg-white p-4 rounded-xl border border-[#E9E1D2] space-y-3">
+              <span className="text-[10px] font-black uppercase text-[#16B8AA] tracking-wider block">
+                Comprobación de Elementos y Camperización
+              </span>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-semibold text-[#13322E]">
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={inspectionChecks.exteriorBody}
+                    onChange={(e) => setInspectionChecks({ ...inspectionChecks, exteriorBody: e.target.checked })}
+                    className="rounded text-[#16B8AA] focus:ring-0"
+                  />
+                  <span>Chapa / Pintura</span>
+                </label>
+
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={inspectionChecks.lights}
+                    onChange={(e) => setInspectionChecks({ ...inspectionChecks, lights: e.target.checked })}
+                    className="rounded text-[#16B8AA] focus:ring-0"
+                  />
+                  <span>Luces y Faros</span>
+                </label>
+
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={inspectionChecks.tires}
+                    onChange={(e) => setInspectionChecks({ ...inspectionChecks, tires: e.target.checked })}
+                    className="rounded text-[#16B8AA] focus:ring-0"
+                  />
+                  <span>Neumáticos</span>
+                </label>
+
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={inspectionChecks.interiorFurniture}
+                    onChange={(e) => setInspectionChecks({ ...inspectionChecks, interiorFurniture: e.target.checked })}
+                    className="rounded text-[#16B8AA] focus:ring-0"
+                  />
+                  <span>Mobiliario y Cama</span>
+                </label>
+
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={inspectionChecks.kitchenGas}
+                    onChange={(e) => setInspectionChecks({ ...inspectionChecks, kitchenGas: e.target.checked })}
+                    className="rounded text-[#16B8AA] focus:ring-0"
+                  />
+                  <span>Cocina y Gas</span>
+                </label>
+
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={inspectionChecks.fridge}
+                    onChange={(e) => setInspectionChecks({ ...inspectionChecks, fridge: e.target.checked })}
+                    className="rounded text-[#16B8AA] focus:ring-0"
+                  />
+                  <span>Nevera</span>
+                </label>
+
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={inspectionChecks.waterPump}
+                    onChange={(e) => setInspectionChecks({ ...inspectionChecks, waterPump: e.target.checked })}
+                    className="rounded text-[#16B8AA] focus:ring-0"
+                  />
+                  <span>Bomba de Agua / Grifo</span>
+                </label>
+
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={inspectionChecks.auxBattery}
+                    onChange={(e) => setInspectionChecks({ ...inspectionChecks, auxBattery: e.target.checked })}
+                    className="rounded text-[#16B8AA] focus:ring-0"
+                  />
+                  <span>Batería Auxiliar / 12V</span>
+                </label>
+              </div>
+            </div>
+
+            {/* SUBIDA DE FOTOGRAFÍAS */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-black uppercase text-[#16B8AA] tracking-wider">
+                  Fotografías de Estado Obligatorias (Evidencias de Entrega)
+                </span>
+                <span className="text-[10px] text-[#6B726E] font-medium">
+                  {photos.length} fotos adjuntas
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                {DEFAULT_PHOTO_SLOTS.map((slot) => {
+                  const uploaded = photos.find((p) => p.tag === slot.tag);
+                  return (
+                    <div
+                      key={slot.tag}
+                      className="bg-white rounded-2xl p-3 border border-[#E9E1D2] flex flex-col justify-between space-y-2 relative overflow-hidden"
+                    >
+                      <span className="text-[10px] font-bold text-[#13322E] line-clamp-1">
+                        {slot.label}
+                      </span>
+
+                      {uploaded ? (
+                        <div className="relative group">
+                          <img
+                            src={uploaded.url}
+                            alt={slot.label}
+                            className="w-full h-28 object-cover rounded-xl border border-[#E9E1D2]"
+                          />
+                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center">
+                            <label className="cursor-pointer bg-white text-[#13322E] text-[10px] font-bold px-3 py-1.5 rounded-full shadow">
+                              Cambiar foto
+                              <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={(e) => handlePhotoUpload(slot.tag, slot.label, e)}
+                              />
+                            </label>
+                          </div>
+                        </div>
+                      ) : (
+                        <label className="h-28 border-2 border-dashed border-[#E9E1D2] rounded-xl flex flex-col items-center justify-center p-3 text-center cursor-pointer hover:border-[#16B8AA] transition-colors bg-[#FAF7F0]/50">
+                          <Camera className="w-6 h-6 text-[#16B8AA] mb-1" />
+                          <span className="text-[10px] font-bold text-[#13322E]">Subir foto</span>
+                          <span className="text-[8px] text-[#6B726E]">Cámara o galería</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => handlePhotoUpload(slot.tag, slot.label, e)}
+                          />
+                        </label>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* OBSERVACIONES ADICIONALES */}
+            <div>
+              <label className="block text-[10px] font-black uppercase text-[#6B726E] mb-1">
+                Observaciones o Desperfectos Previos Notificados
+              </label>
+              <textarea
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                rows={2}
+                placeholder="Ejemplo: Pequeño arañazo en aleta trasera derecha de 2cm. Todo el menaje de cocina completo y revisado."
+                className="w-full p-3 text-xs rounded-xl border border-[#E9E1D2] bg-white focus:ring-1 focus:ring-[#16B8AA] outline-none font-medium"
+              />
+            </div>
+
+            {/* BOTÓN GUARDAR COMPROBACIÓN */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
+              <p className="text-[10px] text-[#6B726E]">
+                Al guardar, la ficha y las fotos se integrarán automáticamente como el <strong>ANEXO I</strong> del contrato digital.
+              </p>
+              <button
+                type="button"
+                disabled={savingInspection}
+                onClick={handleSaveInspection}
+                className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-7 py-3 rounded-full bg-[#16B8AA] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#0F766E] transition-all shadow-md cursor-pointer disabled:opacity-50"
+              >
+                <CheckCircle2 className="w-4 h-4" />
+                <span>{savingInspection ? 'Guardando...' : 'Guardar y Adjuntar al Contrato'}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* PESTAÑA 2: DOCUMENTO COMPLETO DEL CONTRATO (CON ANEXO DE FOTOS E IMPRIMIBLE) */}
       {activeTab === 'view' && (
         <div className="space-y-6 printable-contract">
-          <div className="bg-[#FAF7F0] p-6 sm:p-8 rounded-2xl border border-[#E9E1D2] font-sans text-xs text-[#13322E] space-y-6 leading-relaxed max-h-[500px] overflow-y-auto">
+          <div className="bg-[#FAF7F0] p-6 sm:p-8 rounded-2xl border border-[#E9E1D2] font-sans text-xs text-[#13322E] space-y-6 leading-relaxed">
             
             {/* ENCABEZADO FORMAL DEL DOCUMENTO */}
             <div className="text-center border-b border-[#E9E1D2] pb-6 space-y-2">
@@ -363,13 +720,6 @@ export default function DigitalContractViewer({
               </div>
 
               <div>
-                <strong className="block text-[#13322E] mb-1">CUARTA. Inspección y Actas Digitales.</strong>
-                <p className="text-[#52605B]">
-                  Ambas partes se obligan a cumplimentar las Actas Digitales de Check-in (entrega) y Check-out (devolución) registrando fotografías del estado exterior, interior, panel de mando e inventario de accesorios.
-                </p>
-              </div>
-
-              <div>
                 <strong className="block text-[#13322E] mb-1">QUINTA. Naturaleza del contrato e intermediación.</strong>
                 <p className="text-[#52605B]">
                   Las partes reconocen expresamente que el presente contrato se celebra única y exclusivamente entre el Arrendador particular y el Arrendatario particular. La plataforma Vaneando actúa como mero intermediario tecnológico de comunicación y gestión sin ostentar la condición de parte arrendadora, propietaria o aseguradora.
@@ -381,6 +731,65 @@ export default function DigitalContractViewer({
                 <p className="text-[#52605B]">
                   Este contrato se rige por el Código Civil español y la normativa mercantil aplicable. Las firmas electrónicas quedan registradas con sello temporal, IP y hash criptográfico con plena validez legal conforme al Reglamento eIDAS (UE Nº 910/2014).
                 </p>
+              </div>
+            </div>
+
+            {/* ANEXO I: ACTA DE COMPROBACIÓN FOTOGRÁFICA Y ESTADO DEL VEHÍCULO */}
+            <div className="pt-6 border-t-2 border-[#E9E1D2] space-y-4 bg-white p-5 rounded-2xl border border-[#E9E1D2]">
+              <div className="text-center border-b border-[#E9E1D2] pb-3">
+                <span className="text-[10px] font-black uppercase text-[#16B8AA] tracking-widest">
+                  DOCUMENTO ANEXO AL CONTRATO
+                </span>
+                <h4 className="text-base font-bold text-[#13322E]">
+                  ANEXO I: ACTA DE COMPROBACIÓN FOTOGRÁFICA Y ESTADO DEL VEHÍCULO
+                </h4>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-[11px] bg-[#FAF7F0] p-3 rounded-xl">
+                <div>
+                  <span className="text-[#6B726E] block">Kilometraje Inicial:</span>
+                  <strong>{odometer} km</strong>
+                </div>
+                <div>
+                  <span className="text-[#6B726E] block">Combustible Entrega:</span>
+                  <strong>{fuelLevel === 'FULL' ? '100% (Lleno)' : fuelLevel}</strong>
+                </div>
+                <div>
+                  <span className="text-[#6B726E] block">Depósito Agua:</span>
+                  <strong>{waterLevel === 'FULL' ? '100% (Lleno)' : waterLevel}</strong>
+                </div>
+                <div>
+                  <span className="text-[#6B726E] block">Limpieza:</span>
+                  <strong>{cleanliness === 'EXCELLENT' ? 'Excelente' : cleanliness}</strong>
+                </div>
+              </div>
+
+              {notes && (
+                <div className="p-3 bg-[#FAF7F0] rounded-xl text-[11px]">
+                  <strong className="text-[#13322E] block mb-1">Observaciones registradas en entrega:</strong>
+                  <p className="text-[#52605B] italic">{notes}</p>
+                </div>
+              )}
+
+              {/* GALERÍA DE FOTOS ADJUNTAS AL CONTRATO */}
+              <div className="space-y-2 pt-2">
+                <strong className="block text-[11px] uppercase font-black text-[#13322E]">
+                  Fotografías de Evidencia Adjuntadas ({photos.length} imágenes registradas):
+                </strong>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                  {photos.map((p, idx) => (
+                    <div key={idx} className="space-y-1">
+                      <img
+                        src={p.url}
+                        alt={p.label}
+                        className="w-full h-24 object-cover rounded-lg border border-[#E9E1D2]"
+                      />
+                      <span className="text-[9px] font-bold text-[#13322E] block truncate">
+                        {p.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -415,7 +824,7 @@ export default function DigitalContractViewer({
         </div>
       )}
 
-      {/* VISTA 2: FORMULARIO DE FIRMA DIGITAL CON CANVAS Y CHECKBOXES */}
+      {/* PESTAÑA 3: FORMULARIO DE FIRMA DIGITAL CON CANVAS Y CHECKBOXES */}
       {activeTab === 'sign' && !mySignatureDone && (
         <div className="space-y-6 bg-[#FAF7F0] p-6 sm:p-8 rounded-2xl border border-[#E9E1D2]">
           
@@ -424,7 +833,7 @@ export default function DigitalContractViewer({
               Proceso de Firma Electrónica como {viewerRole === 'OWNER' ? 'Propietario' : 'Viajero'}
             </h3>
             <p className="text-xs text-[#6B726E] font-medium">
-              Por favor, confirma las cláusulas del alquiler y realiza tu firma a continuación.
+              Por favor, confirma las cláusulas del alquiler y la Ficha de Comprobación adjunta antes de realizar tu firma.
             </p>
           </div>
 
@@ -448,10 +857,10 @@ export default function DigitalContractViewer({
                 type="checkbox"
                 checked={checks.terms}
                 onChange={(e) => setChecks({ ...checks, terms: e.target.checked })}
-                className="mt-0.5 h-4 w-4 rounded border-slate-300 text-[#16B8AA] focus:ring-[#16B8AA]"
+                className="mt-0.5 rounded text-[#16B8AA] focus:ring-0"
               />
-              <span className="text-xs font-medium text-[#13322E]">
-                He leído y acepto íntegramente las cláusulas del Contrato Digital de Alquiler y las normas del vehículo.
+              <span className="text-xs text-[#13322E]">
+                He leído y acepto el contrato de alquiler privado entre particulares y la Ficha de Comprobación Fotográfica del vehículo (Anexo I).
               </span>
             </label>
 
@@ -460,10 +869,10 @@ export default function DigitalContractViewer({
                 type="checkbox"
                 checked={checks.deposit}
                 onChange={(e) => setChecks({ ...checks, deposit: e.target.checked })}
-                className="mt-0.5 h-4 w-4 rounded border-slate-300 text-[#16B8AA] focus:ring-[#16B8AA]"
+                className="mt-0.5 rounded text-[#16B8AA] focus:ring-0"
               />
-              <span className="text-xs font-medium text-[#13322E]">
-                Comprendo la fianza de <strong>{booking.depositAmount} €</strong> a acordar y gestionar directamente entre cliente y propietario, y el cobro del alquiler en 7 días hábiles tras finalizar el viaje.
+              <span className="text-xs text-[#13322E]">
+                Reconozco que la fianza de <strong>{booking.depositAmount} €</strong> se gestiona directamente entre el viajero y el propietario.
               </span>
             </label>
 
@@ -472,105 +881,99 @@ export default function DigitalContractViewer({
                 type="checkbox"
                 checked={checks.truthful}
                 onChange={(e) => setChecks({ ...checks, truthful: e.target.checked })}
-                className="mt-0.5 h-4 w-4 rounded border-slate-300 text-[#16B8AA] focus:ring-[#16B8AA]"
+                className="mt-0.5 rounded text-[#16B8AA] focus:ring-0"
               />
-              <span className="text-xs font-medium text-[#13322E]">
-                Declaro bajo mi responsabilidad que la información proporcionada y la documentación son veraces y en regla.
+              <span className="text-xs text-[#13322E]">
+                Confirmo la veracidad de los datos aportados y la validez legal de mi firma eIDAS.
               </span>
             </label>
           </div>
 
-          {/* MÉTODOS DE FIRMA: DIBUJAR O ESCRIBIR */}
+          {/* SELECTOR DE MÉTODO DE FIRMA: DIBUJAR O ESCRIBIR */}
           <div className="bg-white p-5 rounded-2xl border border-[#E9E1D2] space-y-4">
-            <div className="flex items-center justify-between border-b border-[#E9E1D2] pb-3">
-              <span className="text-xs font-black uppercase tracking-wider text-[#13322E]">
-                Elige tu método de firma
-              </span>
-              <div className="flex items-center space-x-2 text-xs font-bold">
-                <button
-                  type="button"
-                  onClick={() => setSignatureType('type')}
-                  className={`px-3 py-1.5 rounded-full cursor-pointer transition-all ${
-                    signatureType === 'type'
-                      ? 'bg-[#13322E] text-white'
-                      : 'bg-slate-100 text-slate-600'
-                  }`}
-                >
-                  Nombre Completo
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSignatureType('draw')}
-                  className={`px-3 py-1.5 rounded-full cursor-pointer transition-all ${
-                    signatureType === 'draw'
-                      ? 'bg-[#13322E] text-white'
-                      : 'bg-slate-100 text-slate-600'
-                  }`}
-                >
-                  Dibujar en Pantalla
-                </button>
-              </div>
+            <div className="flex items-center space-x-4 border-b border-[#E9E1D2] pb-3">
+              <button
+                type="button"
+                onClick={() => setSignatureType('type')}
+                className={`text-xs font-bold pb-1 cursor-pointer transition-colors ${
+                  signatureType === 'type'
+                    ? 'text-[#16B8AA] border-b-2 border-[#16B8AA]'
+                    : 'text-[#6B726E] hover:text-[#13322E]'
+                }`}
+              >
+                Escribir Nombre Completo
+              </button>
+              <button
+                type="button"
+                onClick={() => setSignatureType('draw')}
+                className={`text-xs font-bold pb-1 cursor-pointer transition-colors ${
+                  signatureType === 'draw'
+                    ? 'text-[#16B8AA] border-b-2 border-[#16B8AA]'
+                    : 'text-[#6B726E] hover:text-[#13322E]'
+                }`}
+              >
+                Dibujar Trazo / Firma
+              </button>
             </div>
 
             {signatureType === 'type' ? (
-              <div>
-                <label className="block text-[10px] font-black uppercase text-slate-500 mb-1">
-                  Escribe tu Nombre y Apellidos completos como firma jurídica
+              <div className="space-y-2">
+                <label className="block text-xs font-bold text-[#13322E]">
+                  Escribe tu nombre y apellidos tal y como aparecen en tu DNI / Pasaporte:
                 </label>
                 <input
                   type="text"
+                  placeholder="Ej: Alejandro González Barranco"
                   value={typedName}
                   onChange={(e) => setTypedName(e.target.value)}
-                  placeholder={
-                    viewerRole === 'OWNER'
-                      ? `${booking.owner?.firstName || ''} ${booking.owner?.lastName || ''}`
-                      : `${booking.traveler?.firstName || ''} ${booking.traveler?.lastName || ''}`
-                  }
-                  className="w-full p-3.5 rounded-xl border border-slate-200 bg-slate-50 text-base font-serif font-bold focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+                  className="w-full p-3.5 rounded-xl border border-[#E9E1D2] text-sm font-serif font-bold text-[#13322E] focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
                 />
               </div>
             ) : (
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="block text-[10px] font-black uppercase text-slate-500">
-                    Dibuja tu firma con el ratón o con el dedo en móvil
+                  <label className="text-xs font-bold text-[#13322E]">
+                    Dibuja tu firma en el recuadro con el dedo o ratón:
                   </label>
                   <button
                     type="button"
                     onClick={clearCanvas}
-                    className="text-xs font-bold text-red-600 hover:underline"
+                    className="text-[10px] text-red-600 font-bold hover:underline"
                   >
-                    Borrar y repetir
+                    Borrar firma
                   </button>
                 </div>
-                <div className="border-2 border-dashed border-[#16B8AA]/40 rounded-2xl bg-slate-50 p-2 overflow-hidden touch-none">
+                <div className="border border-dashed border-[#16B8AA]/40 bg-[#FAF7F0] rounded-xl overflow-hidden">
                   <canvas
                     ref={canvasRef}
-                    width={450}
-                    height={160}
+                    width={500}
+                    height={150}
                     onMouseDown={startDrawing}
                     onMouseMove={draw}
                     onMouseUp={stopDrawing}
-                    onMouseLeave={stopDrawing}
                     onTouchStart={startDrawing}
                     onTouchMove={draw}
                     onTouchEnd={stopDrawing}
-                    className="w-full h-40 bg-white rounded-xl cursor-crosshair"
+                    className="w-full h-[150px] cursor-crosshair touch-none"
                   />
                 </div>
               </div>
             )}
           </div>
 
-          <button
-            type="button"
-            onClick={handleSign}
-            disabled={loading}
-            className="w-full py-4 rounded-full bg-[#13322E] hover:bg-[#254842] text-white text-xs font-black uppercase tracking-widest transition-all shadow-md flex items-center justify-center space-x-2 cursor-pointer disabled:opacity-50"
-          >
-            <PenTool className="w-4 h-4 text-[#16B8AA]" />
-            <span>{loading ? 'Registrando firma...' : `Firmar Contrato como ${viewerRole === 'OWNER' ? 'Propietario' : 'Viajero'}`}</span>
-          </button>
+          {/* BOTÓN DE FIRMA */}
+          <div className="flex items-center justify-end space-x-3 pt-2">
+            <button
+              type="button"
+              disabled={loading || success}
+              onClick={handleSign}
+              className="inline-flex items-center space-x-2 px-8 py-3.5 rounded-full bg-[#16B8AA] text-white text-xs font-black uppercase tracking-widest hover:bg-[#0F766E] transition-all shadow-md cursor-pointer disabled:opacity-50"
+            >
+              <Check className="w-4 h-4" />
+              <span>{loading ? 'Registrando firma...' : 'Firmar y Validar Contrato'}</span>
+            </button>
+          </div>
+
         </div>
       )}
 
