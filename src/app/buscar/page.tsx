@@ -10,6 +10,7 @@ import { getFeaturedAudience } from '@/lib/featured';
 import type { Metadata } from 'next';
 import VehicleTypeSlider from '@/components/VehicleTypeSlider';
 import { VEHICLE_TYPES_CONFIG } from '@/lib/vehicle-types';
+import SearchMapExplorer from '@/components/SearchMapExplorer';
 
 interface SearchPageProps {
   searchParams: Promise<{
@@ -94,7 +95,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       where: whereClause,
       select: {
         id: true, ownerId: true, slug: true, title: true, island: true, municipality: true, passengers: true, beds: true,
-        transmission: true, basePricePerDay: true, description: true,
+        transmission: true, basePricePerDay: true, description: true, latitude: true, longitude: true, addressApprox: true,
         photos: { orderBy: { orderIndex: 'asc' } },
         reviews: { select: { rating: true } },
       },
@@ -262,7 +263,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             </form>
           </aside>
 
-          {/* LISTA DE RESULTADOS */}
+          {/* RESULTADOS CON VISTA CUADRÍCULA Y MAPA INTERACTIVO (IDEALISTA) */}
           <div className="lg:col-span-3 space-y-6">
             {databaseUnavailable ? (
               <div className="bg-white rounded-3xl p-12 text-center border border-[#E9E1D2]">
@@ -276,83 +277,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 <p className="text-sm text-[#6B726E]">Prueba a cambiar la isla o reducir las restricciones de precio y viajeros.</p>
               </div>
             ) : (
-              vehicles.map((v: any) => {
-                const avgRating =
-                  v.reviews.length > 0
-                    ? v.reviews.reduce((acc: number, r: any) => acc + r.rating, 0) / v.reviews.length
-                    : 0;
-
-                return (
-                  <div
-                    key={v.id}
-                    className="bg-white rounded-3xl overflow-hidden border border-[#E9E1D2] shadow-sm hover:shadow-xl transition-all duration-300 grid grid-cols-1 md:grid-cols-3"
-                  >
-                    <VehicleViewTracker vehicleId={v.id} event="IMPRESSION" />
-                    <div className="relative h-64 md:h-full">
-                      <img
-                        src={v.photos[0]?.url || 'https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=800'}
-                        alt={v.title}
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold">
-                        {v.island}
-                      </div>
-                      {v.isFeatured && <div className="absolute right-4 top-4 rounded-full bg-[#D97706] px-3 py-1 text-[10px] font-black uppercase tracking-wider text-white shadow">Usuario destacado</div>}
-                    </div>
-
-                    <div className="md:col-span-2 p-6 flex flex-col justify-between">
-                      <div>
-                        <div className="flex items-center justify-between text-xs text-[#6B726E] mb-2">
-                          <span className="flex items-center space-x-1">
-                            <MapPin className="w-3.5 h-3.5 text-[#E07A5F]" />
-                            <span>{v.municipality}, {v.island}</span>
-                          </span>
-                          <div className="flex items-center space-x-1 font-semibold text-[#1C2826]">
-                            <Star className="w-3.5 h-3.5 fill-[#E07A5F] text-[#E07A5F]" />
-                            <span>{avgRating.toFixed(1)} ({v.reviews.length})</span>
-                          </div>
-                        </div>
-
-                        <h3 className="font-serif text-2xl font-medium text-[#1C2826] mb-2">
-                          {v.title}
-                        </h3>
-
-                        <p className="text-xs text-[#6B726E] line-clamp-2 mb-4 font-light leading-relaxed">
-                          {v.description}
-                        </p>
-
-                        <div className="flex flex-wrap gap-2 mb-4">
-                          <span className="px-2.5 py-1 rounded-md bg-[#F7F6F2] border border-[#E9E1D2] text-[11px] font-medium text-[#4A4643]">
-                            {v.passengers} Viajeros
-                          </span>
-                          <span className="px-2.5 py-1 rounded-md bg-[#F7F6F2] border border-[#E9E1D2] text-[11px] font-medium text-[#4A4643]">
-                            {v.beds} Camas
-                          </span>
-                          <span className="px-2.5 py-1 rounded-md bg-[#F7F6F2] border border-[#E9E1D2] text-[11px] font-medium text-[#4A4643]">
-                            {v.transmission}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="pt-4 border-t border-[#E9E1D2] flex items-center justify-between">
-                        <div>
-                          <span className="text-xs text-[#6B726E]">Desde </span>
-                          <span className="font-serif text-2xl font-semibold text-[#1C2826]">{v.basePricePerDay}€</span>
-                          <span className="text-xs text-[#6B726E]"> /día</span>
-                        </div>
-
-                        <Link
-                          href={`/camper/${v.slug}`}
-                          className="px-6 py-2.5 rounded-full bg-[#1C2826] text-white text-xs font-semibold hover:bg-[#2C3E3B] transition-colors inline-flex items-center space-x-1"
-                        >
-                          <span>VER FICHA</span>
-                          <ChevronRight className="w-4 h-4" />
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })
+              <SearchMapExplorer vehicles={vehicles} selectedIsland={selectedIsland} />
             )}
           </div>
 

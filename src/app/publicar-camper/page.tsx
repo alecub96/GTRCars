@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import { CANARY_ISLANDS } from '@/lib/pricing';
 import { BusFront, CarFront, Caravan, CheckCircle2, Mountain, Ship, Truck, Upload, AlertCircle, FileText, ShieldAlert } from 'lucide-react';
+import OwnerLocationMapPicker from '@/components/OwnerLocationMapPicker';
 
 const EQUIPMENT = [
   'Aire acondicionado',
@@ -78,6 +79,8 @@ export default function PublishCamperPage() {
     bookingType: 'REQUEST_TO_BOOK',
     cancellationPolicy: 'MODERATE',
     addressApprox: '',
+    latitude: null as number | null,
+    longitude: null as number | null,
     description: '',
     rules: '',
     features: [] as string[],
@@ -275,6 +278,22 @@ export default function PublishCamperPage() {
                     />
                   </div>
                 </div>
+
+                <OwnerLocationMapPicker
+                  island={formData.island}
+                  municipality={formData.municipality}
+                  initialLat={formData.latitude}
+                  initialLng={formData.longitude}
+                  initialAddressApprox={formData.addressApprox}
+                  onChange={({ latitude, longitude, addressApprox }) => {
+                    setFormData((prev) => ({
+                      ...prev,
+                      latitude,
+                      longitude,
+                      addressApprox,
+                    }));
+                  }}
+                />
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
