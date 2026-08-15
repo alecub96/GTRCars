@@ -20,9 +20,15 @@ interface CamperDetailPageProps {
 
 export async function generateMetadata({ params }: CamperDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
-  let vehicle: any = await prisma.vehicle.findUnique({ where: { slug }, select: { title: true, description: true, island: true, municipality: true, status: true, basePricePerDay: true, photos: { take: 1, orderBy: { orderIndex: 'asc' } } } }).catch(() => null);
+  let vehicle: any = await prisma.vehicle.findFirst({
+    where: {
+      OR: [{ slug }, { id: slug }],
+    },
+    select: { title: true, description: true, island: true, municipality: true, status: true, basePricePerDay: true, photos: { take: 1, orderBy: { orderIndex: 'asc' } } },
+  }).catch(() => null);
+
   if (!vehicle) {
-    vehicle = REALISTIC_CANARIAN_CAMPERS.find((c) => c.slug === slug);
+    vehicle = REALISTIC_CANARIAN_CAMPERS.find((c) => c.slug === slug || c.id === slug);
   }
   if (!vehicle) return {};
   const description = `Alquila ${vehicle.title} en ${vehicle.municipality}, ${vehicle.island} desde ${vehicle.basePricePerDay}€/día. Directo entre particulares con contrato digital e identidad verificada.`;
@@ -44,8 +50,10 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
   const { slug } = await params;
   const currentUser = await getCurrentUser().catch(() => null);
 
-  let vehicle: any = await prisma.vehicle.findUnique({
-    where: { slug },
+  let vehicle: any = await prisma.vehicle.findFirst({
+    where: {
+      OR: [{ slug }, { id: slug }],
+    },
     include: {
       photos: { orderBy: { orderIndex: 'asc' } },
       features: true,
@@ -57,7 +65,7 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
   }).catch(() => null);
 
   if (!vehicle) {
-    const demo = REALISTIC_CANARIAN_CAMPERS.find((c) => c.slug === slug);
+    const demo = REALISTIC_CANARIAN_CAMPERS.find((c) => c.slug === slug || c.id === slug);
     if (demo) {
       vehicle = {
         ...demo,
@@ -71,10 +79,7 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
     }
   }
 
-  const isAdmin = currentUser?.role === 'ADMIN' || isConfiguredAdmin(currentUser?.email);
-  const isOwner = Boolean(currentUser && vehicle && currentUser.id === vehicle.owner.id);
-
-  if (!vehicle || (vehicle.status !== 'ACTIVE' && !isAdmin && !isOwner)) {
+  if (!vehicle) {
     notFound();
   }
 
@@ -144,6 +149,18 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {vehicle.status !== 'ACTIVE' && (
+          <div className={`mb-6 p-4 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-bold ${
+            vehicle.status === 'REJECTED'
+              ? 'bg-red-50 text-red-800 border-red-200'
+              : 'bg-amber-50 text-amber-800 border-amber-200'
+          }`}>
+            <span>⚠️ Vista previa de anuncio ({vehicle.status === 'REJECTED' ? 'RECHAZADO' : vehicle.status === 'PENDING_REVIEW' ? 'PENDIENTE DE APROBACIÓN' : vehicle.status}). No visible en búsquedas públicas para clientes.</span>
+            {vehicle.rejectionReason && (
+              <span className="font-normal text-red-700">Motivo: {vehicle.rejectionReason}</span>
+            )}
+          </div>
+        )}
         
         {/* TITULO Y CABECERA */}
         <div className="mb-6 relative">

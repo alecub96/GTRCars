@@ -201,7 +201,7 @@ export default function AdminVehicleQueue() {
 
                 <div className="flex flex-wrap items-center gap-2 pt-3 md:pt-0 border-t md:border-t-0 border-[#E9E1D2]">
                   <a
-                    href={`/camper/${v.slug}`}
+                    href={`/camper/${v.slug || v.id}`}
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-full border border-[#E9E1D2] bg-white text-xs font-bold text-[#13322E] hover:bg-[#FAF7F0] transition-colors"

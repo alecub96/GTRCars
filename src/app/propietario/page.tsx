@@ -240,7 +240,7 @@ export default function OwnerDashboardPage() {
 
                   <div className="pt-4 border-t border-[#E9E1D2] space-y-3">
                     <Link
-                      href={`/camper/${v.slug}`}
+                      href={`/camper/${v.slug || v.id}`}
                       target="_blank"
                       className="w-full py-2.5 rounded-full border border-[#E9E1D2] bg-[#FAF7F0] hover:bg-[#13322E] hover:text-white text-[#13322E] font-bold text-xs transition-all flex items-center justify-center space-x-1.5 shadow-sm"
                     >
