@@ -9,6 +9,7 @@ import VehicleViewTracker from '@/components/VehicleViewTracker';
 import { Star, MapPin, Users, Bed, ShieldCheck, Check, Fuel, Settings2, Compass } from 'lucide-react';
 import type { Metadata } from 'next';
 import { getFeaturedAudience } from '@/lib/featured';
+import CamperLocationMap from '@/components/CamperLocationMap';
 
 interface CamperDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -205,6 +206,13 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
                 ))}
               </div>
             </div>
+
+            {/* MAPA DE UBICACIÓN APROXIMADA Y PUNTOS CAMPER */}
+            <CamperLocationMap
+              island={vehicle.island}
+              municipality={vehicle.municipality}
+              vehicleTitle={vehicle.title}
+            />
 
             {/* PROPIETARIO */}
             <div className="p-6 bg-[#F3EFEA] rounded-3xl border border-[#E9E1D2] flex items-center space-x-4">
