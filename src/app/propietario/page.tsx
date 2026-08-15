@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { BadgeCheck, Sparkles, Plus, BarChart3, WalletCards } from 'lucide-react';
 import OwnerAvailabilityCalendar from '@/components/OwnerAvailabilityCalendar';
 import OwnerBookingsPanel from '@/components/OwnerBookingsPanel';
+import UserContractsPanel from '@/components/UserContractsPanel';
 import { useRouter } from 'next/navigation';
 import StripeConnectOnboarding from '@/components/StripeConnectOnboarding';
 
@@ -164,8 +165,10 @@ export default function OwnerDashboardPage() {
           </div>
         </div>
 
-        {/* LISTADO DE MIS CAMPERS */}
+        {/* LISTADO DE MIS CAMPERS Y CONTRATOS */}
         <OwnerBookingsPanel initialBookings={bookings} />
+
+        <UserContractsPanel bookings={bookings} viewerRole="OWNER" />
 
         <OwnerAvailabilityCalendar vehicles={vehicles} />
 

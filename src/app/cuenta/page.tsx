@@ -4,7 +4,8 @@ import { getCurrentUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { Heart, Search, UserCircle } from 'lucide-react';
+import { Heart, Search, UserCircle, FileCheck2 } from 'lucide-react';
+import UserContractsPanel from '@/components/UserContractsPanel';
 
 export default async function TravelerAccountPage() {
   const user = await getCurrentUser().catch(() => null);
@@ -73,6 +74,9 @@ export default async function TravelerAccountPage() {
             ) : (
               bookings.map((booking) => <TravelerBookingCard key={booking.id} booking={booking} />)
             )}
+
+            {/* SECCIÓN MIS CONTRATOS */}
+            <UserContractsPanel bookings={bookings} viewerRole="TRAVELER" />
           </section>
           <aside className="h-fit rounded-3xl border border-[#E9E1D2] bg-white p-5">
             <div className="flex items-center gap-2">
