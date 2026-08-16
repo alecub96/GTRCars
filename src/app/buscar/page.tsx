@@ -71,8 +71,13 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const endDate = params.endDate;
 
   const whereClause: any = { status: 'ACTIVE' };
-  if (selectedIsland) whereClause.island = selectedIsland;
-  if (vehicleType) whereClause.vehicleType = vehicleType;
+  if (selectedIsland && selectedIsland !== 'todas') {
+    const normIsland = selectedIsland.replace(/-/g, ' ');
+    whereClause.island = { contains: normIsland };
+  }
+  if (vehicleType && vehicleType !== 'TODOS') {
+    whereClause.vehicleType = vehicleType;
+  }
   if (passengers) whereClause.passengers = { gte: passengers };
   if (minPrice || maxPrice) {
     whereClause.basePricePerDay = {};
@@ -94,17 +99,38 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     const { ensureDbSchema } = await import('@/lib/prisma-ensure-schema');
     await ensureDbSchema();
 
-    const databaseVehicles = await prisma.vehicle.findMany({
-      where: whereClause,
-      select: {
-        id: true, ownerId: true, slug: true, title: true, island: true, municipality: true, passengers: true, beds: true,
-        transmission: true, basePricePerDay: true, description: true, latitude: true, longitude: true, addressApprox: true,
-        photos: { orderBy: { orderIndex: 'asc' } },
-        reviews: { select: { rating: true } },
-      },
-      orderBy,
-    });
-    const featured = await getFeaturedAudience();
+    let databaseVehicles: any[] = [];
+    try {
+      databaseVehicles = await prisma.vehicle.findMany({
+        where: whereClause,
+        select: {
+          id: true, ownerId: true, slug: true, title: true, island: true, municipality: true, passengers: true, beds: true,
+          transmission: true, basePricePerDay: true, description: true, latitude: true, longitude: true, addressApprox: true,
+          photos: { orderBy: { orderIndex: 'asc' } },
+          reviews: { select: { rating: true } },
+        },
+        orderBy,
+      });
+    } catch (queryErr) {
+      console.warn('Prisma findMany fallback:', queryErr);
+      const rawRows: any[] = await prisma.$queryRawUnsafe(
+        `SELECT id, ownerId, slug, title, island, municipality, passengers, beds, transmission, basePricePerDay, description, latitude, longitude, addressApprox FROM Vehicle WHERE status = 'ACTIVE' ORDER BY createdAt DESC`
+      ).catch(() => []);
+
+      for (const row of rawRows) {
+        const photos: any[] = await prisma.$queryRawUnsafe(
+          `SELECT url FROM VehiclePhoto WHERE vehicleId = ? ORDER BY orderIndex ASC`,
+          row.id
+        ).catch(() => []);
+        databaseVehicles.push({
+          ...row,
+          photos: photos || [],
+          reviews: [],
+        });
+      }
+    }
+
+    const featured = await getFeaturedAudience().catch(() => ({ ownerIds: new Set(), vehicleIds: new Set(), subscriptionOwnerIds: new Set() }));
     vehicles = databaseVehicles
       .map((vehicle) => ({
         ...vehicle,
@@ -112,13 +138,13 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       }))
       .sort((a, b) => Number(b.isFeatured) - Number(a.isFeatured));
   } catch (error) {
-    // Modo fallback
+    console.error('Error fetching database vehicles:', error);
   }
 
   // Filtrar e integrar el catálogo de campers realistas
   const filteredDemo = REALISTIC_CANARIAN_CAMPERS.filter((demo) => {
-    if (selectedIsland && demo.island.toLowerCase() !== selectedIsland.toLowerCase()) return false;
-    if (vehicleType && demo.vehicleType !== vehicleType) return false;
+    if (selectedIsland && selectedIsland !== 'todas' && !demo.island.toLowerCase().includes(selectedIsland.replace(/-/g, ' ').toLowerCase())) return false;
+    if (vehicleType && vehicleType !== 'TODOS' && demo.vehicleType !== vehicleType) return false;
     if (passengers && demo.passengers < passengers) return false;
     if (minPrice && demo.basePricePerDay < minPrice) return false;
     if (maxPrice && demo.basePricePerDay > maxPrice) return false;
@@ -126,9 +152,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   });
 
   const allVehiclesMap = new Map<string, any>();
-  vehicles.forEach((v) => allVehiclesMap.set(v.slug, v));
+  vehicles.forEach((v) => allVehiclesMap.set(v.slug || v.id, v));
   filteredDemo.forEach((d) => {
-    if (!allVehiclesMap.has(d.slug)) {
+    if (!allVehiclesMap.has(d.slug) && !allVehiclesMap.has(d.id)) {
       allVehiclesMap.set(d.slug, d);
     }
   });

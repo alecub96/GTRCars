@@ -51,8 +51,8 @@ export async function generateMetadata({ params }: CamperDetailPageProps): Promi
 
 export default async function CamperDetailPage({ params }: CamperDetailPageProps) {
   const rawParams = await params;
-  const rawSlug = rawParams.slug;
-  const slug = decodeURIComponent(rawSlug).trim();
+  const rawSlug = rawParams.slug || '';
+  const slug = decodeURIComponent(rawSlug).trim().toLowerCase();
   const currentUser = await getCurrentUser().catch(() => null);
 
   let vehicle: any = null;
@@ -61,6 +61,7 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
     const { ensureDbSchema } = await import('@/lib/prisma-ensure-schema');
     await ensureDbSchema();
 
+    // 1. Búsqueda directa por slug o ID exacto
     vehicle = await prisma.vehicle.findFirst({
       where: {
         OR: [
@@ -68,7 +69,7 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
           { id: slug },
           { slug: rawSlug },
           { id: rawSlug },
-          { slug: { contains: slug.split('-').slice(0, 3).join('-') } },
+          { slug: { contains: slug.replace(/-[a-z0-9]{8}$/i, '') } },
         ],
       },
       include: {
@@ -80,12 +81,75 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
         reviews: { include: { author: { select: { firstName: true, avatarUrl: true } } } },
       },
     });
+
+    // 2. Si falla por relaciones complejas, intentar con relaciones esenciales
+    if (!vehicle) {
+      vehicle = await prisma.vehicle.findFirst({
+        where: {
+          OR: [
+            { slug: slug },
+            { id: slug },
+            { slug: rawSlug },
+            { id: rawSlug },
+            { slug: { contains: slug.split('-').slice(0, 3).join('-') } },
+          ],
+        },
+        include: {
+          photos: { orderBy: { orderIndex: 'asc' } },
+          owner: { select: { id: true, firstName: true, lastName: true, avatarUrl: true, verification: true, createdAt: true } },
+          reviews: true,
+        },
+      });
+      if (vehicle) {
+        vehicle.features = vehicle.features || [];
+        vehicle.extras = vehicle.extras || [];
+        vehicle.pricingRules = vehicle.pricingRules || [];
+      }
+    }
+
+    // 3. Si aún no se encuentra, buscar por ID parcial o título en base de datos
+    if (!vehicle) {
+      const rawRows: any[] = await prisma.$queryRawUnsafe(
+        `SELECT * FROM Vehicle WHERE LOWER(slug) = ? OR id = ? OR slug LIKE ? LIMIT 1`,
+        slug,
+        slug,
+        `%${slug.split('-')[0]}%`
+      ).catch(() => []);
+
+      if (rawRows && rawRows.length > 0) {
+        const rawVeh = rawRows[0];
+        const rawPhotos: any[] = await prisma.$queryRawUnsafe(
+          `SELECT * FROM VehiclePhoto WHERE vehicleId = ? ORDER BY orderIndex ASC`,
+          rawVeh.id
+        ).catch(() => []);
+
+        const rawOwner: any[] = await prisma.$queryRawUnsafe(
+          `SELECT id, firstName, lastName, avatarUrl, verification, createdAt FROM User WHERE id = ? LIMIT 1`,
+          rawVeh.ownerId
+        ).catch(() => []);
+
+        vehicle = {
+          ...rawVeh,
+          photos: rawPhotos || [],
+          features: [],
+          extras: [],
+          pricingRules: [],
+          reviews: [],
+          owner: rawOwner?.[0] || { firstName: 'Propietario', lastName: 'Vaneando' },
+        };
+      }
+    }
   } catch (err) {
     console.error('Error fetching vehicle by slug/id:', err);
   }
 
   if (!vehicle) {
-    const demo = REALISTIC_CANARIAN_CAMPERS.find((c) => c.slug === slug || c.id === slug || c.slug === rawSlug || c.id === rawSlug);
+    const demo = REALISTIC_CANARIAN_CAMPERS.find(
+      (c) =>
+        c.slug.toLowerCase() === slug ||
+        c.id.toLowerCase() === slug ||
+        c.slug.toLowerCase().includes(slug.split('-')[0])
+    );
     if (demo) {
       vehicle = {
         ...demo,

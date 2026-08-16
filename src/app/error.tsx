@@ -33,8 +33,22 @@ export default function ErrorPage({ error, reset }: { error: Error & { digest?: 
         <h1 className="mt-2 font-serif text-4xl font-bold">No hemos podido cargar esta sección.</h1>
         <p className="mt-4 text-sm leading-relaxed text-[#6B726E]">Tus datos no se han perdido. Reintenta la operación o vuelve al inicio mientras recuperamos la conexión.</p>
         <div className="mt-7 flex flex-wrap justify-center gap-2">
-          <button type="button" onClick={() => window.location.reload()} className="flex items-center gap-2 rounded-full bg-[#16B8AA] px-5 py-3 text-xs font-bold text-white cursor-pointer"><RotateCcw className="h-4 w-4" />Reintentar</button>
-          <Link href="/" className="flex items-center gap-2 rounded-full border border-[#E9E1D2] px-5 py-3 text-xs font-bold"><Home className="h-4 w-4" />Volver al inicio</Link>
+          <button
+            type="button"
+            onClick={() => {
+              if (typeof window !== 'undefined') {
+                window.location.href = window.location.pathname + (window.location.search ? window.location.search + '&' : '?') + 'r=' + Date.now();
+              }
+            }}
+            className="flex items-center gap-2 rounded-full bg-[#16B8AA] px-5 py-3 text-xs font-bold text-white cursor-pointer"
+          >
+            <RotateCcw className="h-4 w-4" />
+            Reintentar
+          </button>
+          <Link href="/" className="flex items-center gap-2 rounded-full border border-[#E9E1D2] px-5 py-3 text-xs font-bold">
+            <Home className="h-4 w-4" />
+            Volver al inicio
+          </Link>
         </div>
       </section>
     </main>
