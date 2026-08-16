@@ -13,6 +13,8 @@ import { VEHICLE_TYPES_CONFIG } from '@/lib/vehicle-types';
 import SearchMapExplorer from '@/components/SearchMapExplorer';
 import { REALISTIC_CANARIAN_CAMPERS } from '@/lib/demo-campers-data';
 
+export const dynamic = 'force-dynamic';
+
 interface SearchPageProps {
   searchParams: Promise<{
     island?: string;
