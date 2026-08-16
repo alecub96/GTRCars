@@ -195,10 +195,10 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
           <div className="flex items-center space-x-4 mt-3 text-xs text-[#4A4643]">
             <div className="flex items-center space-x-1 font-semibold text-[#1C2826]">
               <Star className="w-4 h-4 fill-[#E07A5F] text-[#E07A5F]" />
-              <span>{vehicle.reviews.length ? `${avgRating.toFixed(1)} (${vehicle.reviews.length} opiniones)` : 'Nuevo · sin opiniones'}</span>
+              <span>{vehicle.reviews?.length ? `${avgRating.toFixed(1)} (${vehicle.reviews.length} opiniones)` : 'Nuevo · sin opiniones'}</span>
             </div>
             <span>•</span>
-            {vehicle.owner.verification === 'VERIFIED' && <div className="flex items-center space-x-1 text-[#E07A5F]"><ShieldCheck className="w-4 h-4" /><span>Propietario verificado</span></div>}
+            {vehicle.owner?.verification === 'VERIFIED' && <div className="flex items-center space-x-1 text-[#E07A5F]"><ShieldCheck className="w-4 h-4" /><span>Propietario verificado</span></div>}
             {isFeatured && <div className="flex items-center space-x-1 text-[#D97706]"><ShieldCheck className="w-4 h-4" /><span>Usuario destacado</span></div>}
           </div>
         </div>
@@ -380,7 +380,7 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
                 <ShieldCheck className="mb-3 h-8 w-8 text-[#16B8AA]" />
                 <h3 className="font-serif text-xl font-bold">Vista del anuncio</h3>
                 <p className="mt-2 text-sm text-[#6B726E]">Estás en modo {currentUser.role === 'ADMIN' ? 'administrador' : 'propietario'}. Las solicitudes de fechas solo están disponibles en modo viajero.</p>
-                {vehicle.owner.id === currentUser.id && <a href="/propietario" className="mt-5 block rounded-full bg-[#13322E] px-5 py-3 text-center text-xs font-bold uppercase tracking-wider text-white">Volver a gestionar mi anuncio</a>}
+                {vehicle.owner?.id === currentUser.id && <a href="/propietario" className="mt-5 block rounded-full bg-[#13322E] px-5 py-3 text-center text-xs font-bold uppercase tracking-wider text-white">Volver a gestionar mi anuncio</a>}
               </div>
             ) : <BookingWidget
               vehicle={{
