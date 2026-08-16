@@ -1,10 +1,14 @@
 import { prisma } from './prisma';
 
 let schemaEnsured = false;
+let schemaPromise: Promise<void> | null = null;
 
 export async function ensureDbSchema() {
   if (schemaEnsured) return;
-  try {
+  if (schemaPromise) return schemaPromise;
+
+  schemaPromise = (async () => {
+    try {
     const tableQueries = [
       `CREATE TABLE IF NOT EXISTS SupportConversation (
         id VARCHAR(191) NOT NULL PRIMARY KEY,
@@ -99,8 +103,14 @@ export async function ensureDbSchema() {
     for (const q of alterQueries) {
       await prisma.$executeRawUnsafe(q).catch(() => {});
     }
-    schemaEnsured = true;
-  } catch (err) {
-    console.warn('Auto schema migration warning:', err);
-  }
+      schemaEnsured = true;
+    } catch (err) {
+      console.warn('Auto schema migration warning:', err);
+      schemaEnsured = true; // evitar reintentos fallidos constantes
+    } finally {
+      schemaPromise = null;
+    }
+  })();
+
+  return schemaPromise;
 }

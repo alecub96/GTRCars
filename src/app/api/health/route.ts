@@ -26,7 +26,8 @@ export async function GET() {
       ].filter(Boolean),
     },
   };
-  const healthy = database.status === 'ok' && Object.values(configuration).every((check) => check.status === 'configured');
+  const serverOperational = database.status === 'ok';
+  const healthy = serverOperational && Object.values(configuration).every((check) => check.status === 'configured');
 
   return NextResponse.json(
     {
@@ -35,7 +36,7 @@ export async function GET() {
       timestamp: new Date().toISOString(),
     },
     {
-      status: healthy ? 200 : 503,
+      status: serverOperational ? 200 : 503,
       headers: { 'Cache-Control': 'no-store' },
     },
   );
