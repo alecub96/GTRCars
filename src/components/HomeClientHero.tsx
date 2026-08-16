@@ -77,7 +77,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
               <Link href="/propietario" className="rounded-full bg-[#16B8AA] px-6 py-3 text-xs font-black uppercase tracking-widest text-white transition hover:bg-[#0F766E]">Ir al panel de propietario</Link>
             </div>
           ) : (
-            <div className="space-y-4 relative">
+            <div className="space-y-4 relative max-w-4xl mx-auto w-full">
               <div className="flex justify-center">
                 <Link
                   href={`/mapa?island=${encodeURIComponent(selectedIsland)}`}

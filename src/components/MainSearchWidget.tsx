@@ -91,7 +91,7 @@ export default function MainSearchWidget({
   return (
     <form
       onSubmit={handleSearch}
-      className="bg-white/95 backdrop-blur-xl rounded-[28px] p-2.5 sm:p-3.5 shadow-2xl border border-[#E9E1D2] max-w-4xl w-full grid grid-cols-1 md:grid-cols-[1.1fr_1.35fr_1.05fr_auto] gap-2 items-center text-[#13322E] relative z-30"
+      className="bg-white/95 backdrop-blur-xl rounded-[28px] p-2.5 sm:p-3.5 shadow-2xl border border-[#E9E1D2] max-w-4xl w-full mx-auto grid grid-cols-1 md:grid-cols-[1.1fr_1.35fr_1.05fr_140px] gap-2.5 items-center text-[#13322E] relative z-30"
     >
       {/* 1. SELECCIONAR ISLA */}
       <div ref={islandRef} className="relative w-full h-full">
@@ -297,10 +297,11 @@ export default function MainSearchWidget({
       <div className="w-full h-full min-h-[58px] flex items-center">
         <button
           type="submit"
-          className="w-full h-full min-h-[58px] py-3.5 px-7 rounded-2xl bg-[#16B8AA] hover:bg-[#0F766E] text-white font-black text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center space-x-2 shadow-lg group cursor-pointer transition-all duration-200"
+          style={{ backgroundColor: '#16B8AA', color: '#FFFFFF' }}
+          className="w-full h-full min-h-[58px] py-3.5 px-6 rounded-2xl !bg-[#16B8AA] hover:!bg-[#0F766E] !text-white font-black text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center space-x-2 shadow-lg group cursor-pointer transition-all duration-200"
         >
-          <Search className="w-4 h-4 text-white group-hover:scale-110 transition-transform" />
-          <span>BUSCAR</span>
+          <Search className="w-4 h-4 !text-white group-hover:scale-110 transition-transform" />
+          <span className="!text-white font-black">BUSCAR</span>
         </button>
       </div>
     </form>
