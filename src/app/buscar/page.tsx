@@ -88,7 +88,6 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   if (sort === 'price_desc') orderBy = { basePricePerDay: 'desc' };
 
   let vehicles: any[] = [];
-  let databaseUnavailable = false;
   try {
     const { ensureDbSchema } = await import('@/lib/prisma-ensure-schema');
     await ensureDbSchema();
@@ -285,13 +284,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
           {/* RESULTADOS CON VISTA CUADRÍCULA Y MAPA INTERACTIVO (IDEALISTA) */}
           <div className="lg:col-span-3 space-y-6">
-            {databaseUnavailable ? (
-              <div className="bg-white rounded-3xl p-12 text-center border border-[#E9E1D2]">
-                <h3 className="font-serif text-2xl mb-2">Estamos actualizando la disponibilidad</h3>
-                <p className="text-sm text-[#6B726E]">No hemos podido cargar los vehículos ahora mismo. Vuelve a intentarlo en unos instantes.</p>
-                <a href="/buscar" className="inline-flex mt-6 px-6 py-3 rounded-full bg-[#1C2826] text-white text-xs font-semibold">Reintentar</a>
-              </div>
-            ) : vehicles.length === 0 ? (
+            {vehicles.length === 0 ? (
               <div className="bg-white rounded-3xl p-12 text-center border border-[#E9E1D2]">
                 <h3 className="font-serif text-2xl mb-2">No encontramos campers con esos filtros</h3>
                 <p className="text-sm text-[#6B726E]">Prueba a cambiar la isla o reducir las restricciones de precio y viajeros.</p>
