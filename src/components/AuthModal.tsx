@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
-import { User, X, LogIn, UserPlus, LogOut, ShieldCheck, Truck, KeyRound, RefreshCw, Compass, Mail, UserCircle, CheckCircle2 } from 'lucide-react';
+import { User, X, LogIn, UserPlus, LogOut, ShieldCheck, Truck, KeyRound, RefreshCw, Compass, Mail, UserCircle, CheckCircle2, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AuthModal() {
@@ -22,6 +22,7 @@ export default function AuthModal() {
   const [roleNotice, setRoleNotice] = useState<'TRAVELER' | 'OWNER' | null>(null);
   const [switchError, setSwitchError] = useState('');
   const [mounted, setMounted] = useState(false);
+  const [customSubtitle, setCustomSubtitle] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -76,6 +77,35 @@ export default function AuthModal() {
 
       setUser(data.user);
       setIsOpen(false);
+
+      // Comprobar si el usuario tenía una reserva en curso antes de identificarse
+      if (typeof window !== 'undefined') {
+        const pendingStr = sessionStorage.getItem('pending_booking');
+        if (pendingStr) {
+          try {
+            const pending = JSON.parse(pendingStr);
+            sessionStorage.removeItem('pending_booking');
+            const bookRes = await fetch('/api/bookings', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                vehicleId: pending.vehicleId,
+                startDate: pending.startDate,
+                endDate: pending.endDate,
+                selectedExtraIds: pending.selectedExtraIds,
+              }),
+            });
+            const bookData = await bookRes.json();
+            if (bookRes.ok && bookData?.booking?.id) {
+              window.location.href = `/reserva/${bookData.booking.id}`;
+              return;
+            }
+          } catch (e) {
+            console.error('Error auto-procesando reserva pendiente:', e);
+          }
+        }
+      }
+
       router.refresh();
     } catch (err: any) {
       setError(err.message);
@@ -128,6 +158,8 @@ export default function AuthModal() {
   useEffect(() => {
     const handleOpenModal = (e: any) => {
       if (e.detail?.mode) setMode(e.detail.mode);
+      if (e.detail?.subtitle) setCustomSubtitle(e.detail.subtitle);
+      else setCustomSubtitle(null);
       setIsOpen(true);
     };
     window.addEventListener('open-auth-modal', handleOpenModal);
@@ -324,6 +356,13 @@ export default function AuthModal() {
                     Iniciar Sesión
                   </button>
                 </div>
+
+                {customSubtitle && (
+                  <div className="mb-5 p-3.5 rounded-2xl bg-teal-50 border border-teal-200 text-[#0F766E] text-xs font-semibold flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-[#16B8AA] shrink-0" />
+                    <span>{customSubtitle}</span>
+                  </div>
+                )}
 
                 {error && (
                   <div className="mb-4 p-3 rounded-2xl bg-red-50 border border-red-200 text-red-700 text-xs font-bold text-center">

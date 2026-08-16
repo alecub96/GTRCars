@@ -81,6 +81,30 @@ export default function BookingWidget({ vehicle }: BookingWidgetProps) {
 
       const data = await res.json();
       if (!res.ok) {
+        // Si el usuario no ha iniciado sesión, guardamos la selección y abrimos el modal de registro/acceso
+        if (res.status === 401 || data.error?.toLowerCase().includes('iniciar sesión')) {
+          if (typeof window !== 'undefined') {
+            sessionStorage.setItem(
+              'pending_booking',
+              JSON.stringify({
+                vehicleId: vehicle.id,
+                startDate,
+                endDate,
+                selectedExtraIds,
+              })
+            );
+          }
+          window.dispatchEvent(
+            new CustomEvent('open-auth-modal', {
+              detail: {
+                mode: 'register',
+                subtitle: 'Crea tu cuenta o inicia sesión para confirmar tu reserva en un clic. Mantendremos tus fechas guardadas.',
+              },
+            })
+          );
+          setLoading(false);
+          return;
+        }
         throw new Error(data.error || 'Error al procesar reserva');
       }
 

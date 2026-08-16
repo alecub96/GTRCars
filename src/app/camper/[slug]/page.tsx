@@ -9,6 +9,7 @@ import VehicleViewTracker from '@/components/VehicleViewTracker';
 import { Star, MapPin, Users, Bed, ShieldCheck, Check, Fuel, Settings2, Compass } from 'lucide-react';
 import type { Metadata } from 'next';
 import { getFeaturedAudience } from '@/lib/featured';
+import CamperDetailGallery from '@/components/CamperDetailGallery';
 import CamperLocationMap from '@/components/CamperLocationMap';
 import { isConfiguredAdmin } from '@/lib/admin';
 import { REALISTIC_CANARIAN_CAMPERS } from '@/lib/demo-campers-data';
@@ -203,26 +204,8 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
           </div>
         </div>
 
-        {/* GALERÍA DE FOTOS EDITORIAL */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12 rounded-3xl overflow-hidden h-[450px]">
-          <div className="md:col-span-2 h-full">
-            <img
-              src={vehicle.photos[0]?.url || 'https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=1200'}
-              alt={vehicle.title}
-              className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-            />
-          </div>
-          <div className="hidden md:grid md:col-span-2 grid-cols-2 gap-4 h-full">
-            {vehicle.photos.slice(1, 5).map((photo: any, i: number) => (
-              <img
-                key={photo.id}
-                src={photo.url}
-                alt={`${vehicle.title} vista ${i + 2}`}
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-              />
-            ))}
-          </div>
-        </div>
+        {/* GALERÍA DE FOTOS EDITORIAL Y TÁCTIL MÓVIL CON LIGHTBOX */}
+        <CamperDetailGallery photos={vehicle.photos} title={vehicle.title} />
 
         {/* CONTENIDO PRINCIPAL Y STICKY WIDGET */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">

@@ -19,7 +19,8 @@ import {
   Users,
   Bed,
 } from 'lucide-react';
-import FavoriteButton from './FavoriteButton';
+import FavoriteButton from '@/components/FavoriteButton';
+import VehicleCardPhotoSlider from '@/components/VehicleCardPhotoSlider';
 import RealCanaryMapExplorer from './RealCanaryMapExplorer';
 
 export interface VehicleSearchItem {
@@ -261,20 +262,16 @@ export default function SearchMapExplorer({
                 className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-[#E9E1D2] bg-white p-4 shadow-sm transition-all duration-300 hover:shadow-md"
               >
                 <div>
-                  <div className="relative mb-3 h-48 w-full overflow-hidden rounded-2xl bg-[#EBE7DF]">
-                    <img
-                      src={vehicle.photos?.[0]?.url || 'https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=600'}
-                      alt={vehicle.title}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  <div className="relative">
+                    <VehicleCardPhotoSlider
+                      photos={vehicle.photos}
+                      title={vehicle.title}
+                      slug={vehicle.slug}
+                      isFeatured={vehicle.isFeatured}
                     />
-                    <div className="absolute top-3 right-3 z-10">
+                    <div className="absolute top-3 right-3 z-30">
                       <FavoriteButton vehicleId={vehicle.id} />
                     </div>
-                    {vehicle.isFeatured && (
-                      <span className="absolute top-3 left-3 rounded-full bg-[#D97706] px-3 py-1 text-[9px] font-black uppercase tracking-wider text-white shadow-sm">
-                        Destacado
-                      </span>
-                    )}
                   </div>
 
                   <div className="space-y-1">

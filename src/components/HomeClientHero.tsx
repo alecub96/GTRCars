@@ -8,6 +8,7 @@ import VehicleTypeSlider from '@/components/VehicleTypeSlider';
 import { CANARY_ISLANDS } from '@/lib/pricing';
 import { Star, ChevronRight, MapPin, ShieldCheck, HeartHandshake, KeyRound } from 'lucide-react';
 import VehicleViewTracker from '@/components/VehicleViewTracker';
+import VehicleCardPhotoSlider from '@/components/VehicleCardPhotoSlider';
 import Image from 'next/image';
 
 const ISLAND_HERO_IMAGES: Record<string, string> = {
@@ -159,22 +160,20 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                 : 5.0;
 
             return (
-              <Link
+              <div
                 key={vehicle.id}
-                href={`/camper/${vehicle.slug}`}
                 className="group bg-[#F4F9F8] rounded-3xl overflow-hidden border border-[#E9E1D2] shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
               >
                 <VehicleViewTracker vehicleId={vehicle.id} event="IMPRESSION" />
-                <div className="p-5">
-                  <div className="relative h-60 rounded-2xl overflow-hidden mb-4">
-                    <Image
-                      src={vehicle.photos[0]?.url || 'https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=800'}
-                      alt={vehicle.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                <div className="p-5 pb-2">
+                  <div className="relative mb-4">
+                    <VehicleCardPhotoSlider
+                      photos={vehicle.photos}
+                      title={vehicle.title}
+                      slug={vehicle.slug}
+                      isFeatured={vehicle.isFeatured}
                     />
-                    <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black uppercase text-[#16B8AA] tracking-wider">
+                    <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black uppercase text-[#16B8AA] tracking-wider z-20 pointer-events-none">
                       {vehicle.island}
                     </div>
                   </div>
@@ -188,7 +187,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                   </div>
 
                   <h3 className="font-serif text-xl font-bold text-[#13322E] group-hover:text-[#16B8AA] transition-colors line-clamp-1 mb-2">
-                    {vehicle.title}
+                    <Link href={`/camper/${vehicle.slug}`}>{vehicle.title}</Link>
                   </h3>
 
                   <p className="text-xs text-[#6B726E] line-clamp-2 font-medium leading-relaxed mb-4">
@@ -196,7 +195,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                   </p>
                 </div>
 
-                <div className="p-5 pt-0 border-t border-[#E9E1D2]/80 flex items-center justify-between mt-2">
+                <div className="p-5 pt-3 border-t border-[#E9E1D2]/80 flex items-center justify-between mt-2">
                   <span className="text-xs font-bold text-[#6B726E]">Hasta {vehicle.passengers} personas</span>
                   <div className="text-right">
                     <span className="text-xs text-[#6B726E] font-medium">Desde </span>
@@ -204,7 +203,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                     <span className="text-xs text-[#6B726E] font-medium"> /día</span>
                   </div>
                 </div>
-              </Link>
+              </div>
             );
           })}
         </div>
