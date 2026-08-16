@@ -115,6 +115,7 @@ export default function AuthModal() {
   };
 
   const handleSwitchRole = async () => {
+    if (switching) return;
     const targetRole = user.role === 'OWNER' ? 'TRAVELER' : 'OWNER';
     setSwitching(true);
     setSwitchError('');
@@ -133,9 +134,18 @@ export default function AuthModal() {
       setIsOpen(false);
       setRoleNotice(targetRole);
 
-      setTimeout(() => {
-        window.location.href = targetRole === 'TRAVELER' ? '/cuenta' : '/propietario';
-      }, 1000);
+      window.dispatchEvent(
+        new CustomEvent('role-switched', { detail: { targetRole: data.user.role } })
+      );
+
+      const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
+      if (currentPath === '/cuenta' || currentPath === '/propietario') {
+        setTimeout(() => {
+          window.location.href = targetRole === 'TRAVELER' ? '/cuenta' : '/propietario';
+        }, 500);
+      } else {
+        router.refresh();
+      }
     } catch (err: any) {
       setSwitchError(err.message || 'No se pudo cambiar de modo');
     } finally {
@@ -162,8 +172,19 @@ export default function AuthModal() {
       else setCustomSubtitle(null);
       setIsOpen(true);
     };
+
+    const handleRoleSwitched = (e: any) => {
+      if (e.detail?.targetRole) {
+        setRoleNotice(e.detail.targetRole);
+      }
+    };
+
     window.addEventListener('open-auth-modal', handleOpenModal);
-    return () => window.removeEventListener('open-auth-modal', handleOpenModal);
+    window.addEventListener('role-switched', handleRoleSwitched);
+    return () => {
+      window.removeEventListener('open-auth-modal', handleOpenModal);
+      window.removeEventListener('role-switched', handleRoleSwitched);
+    };
   }, []);
 
   useEffect(() => {

@@ -65,7 +65,7 @@ export default function Navbar() {
   }, [mobileOpen]);
 
   const handleMobileSwitchRole = async () => {
-    if (!user) return;
+    if (!user || switching) return;
     const targetRole = user.role === 'OWNER' ? 'TRAVELER' : 'OWNER';
     setSwitching(true);
 
@@ -83,11 +83,18 @@ export default function Navbar() {
       setRole(data.user.role);
       setMobileOpen(false);
 
-      setTimeout(() => {
+      window.dispatchEvent(
+        new CustomEvent('role-switched', { detail: { targetRole: data.user.role } })
+      );
+
+      const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
+      if (currentPath === '/cuenta' || currentPath === '/propietario') {
         window.location.href = targetRole === 'TRAVELER' ? '/cuenta' : '/propietario';
-      }, 500);
+      } else {
+        router.refresh();
+      }
     } catch (err: any) {
-      alert(err.message || 'No se pudo cambiar de modo');
+      console.error('Error switching role:', err);
     } finally {
       setSwitching(false);
     }

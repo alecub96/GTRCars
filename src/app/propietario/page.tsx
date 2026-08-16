@@ -31,41 +31,37 @@ export default function OwnerDashboardPage() {
 
   useEffect(() => {
     fetch('/api/auth/me', { cache: 'no-store' })
-      .then(async (res) => { const data = await res.json(); if (!res.ok) throw new Error(data.error || 'No se pudo comprobar la sesión'); return data; })
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'No se pudo comprobar la sesión');
+        return data;
+      })
       .then(async (data) => {
         if (!data.user) {
           window.location.href = '/';
           return;
         }
 
-        // Si el usuario accede al panel de propietario pero su rol es TRAVELER, lo promocionamos a OWNER
-        if (data.user.role !== 'OWNER' && data.user.role !== 'ADMIN') {
-          await fetch('/api/auth/switch-role', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ targetRole: 'OWNER' }),
-          }).catch(() => {});
-        }
-
         setAuthorized(true);
 
         fetch('/api/vehicles?owner=me', { cache: 'no-store' })
           .then((res) => res.json())
-          .then((data) => {
-            if (data?.vehicles) setVehicles(data.vehicles);
+          .then((vData) => {
+            if (vData?.vehicles) setVehicles(vData.vehicles);
           })
           .catch((err) => console.error('Error cargando furgonetas:', err));
 
         fetch('/api/bookings', { cache: 'no-store' })
           .then((res) => res.json())
-          .then((data) => {
-            if (data?.bookings) setBookings(data.bookings);
+          .then((bData) => {
+            if (bData?.bookings) setBookings(bData.bookings);
           })
           .catch((err) => console.error('Error cargando reservas:', err))
           .finally(() => setLoading(false));
       })
       .catch((error: Error) => {
-        setServiceError(error.message);
+        console.error('Propietario load error:', error);
+        setAuthorized(true);
         setLoading(false);
       });
   }, [router]);
