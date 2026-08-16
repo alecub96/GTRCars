@@ -191,23 +191,25 @@ export default function AuthModal() {
               {switchError && <p role="alert" className="mb-3 rounded-xl border border-red-200 bg-red-50 p-3 text-xs font-bold text-red-700">{switchError}</p>}
 
               <div className="space-y-1 text-xs font-bold text-slate-700">
-                {user.role !== 'ADMIN' && <Link
-                  href="/mensajes"
-                  onClick={() => setIsOpen(false)}
-                  className="flex items-center space-x-2.5 p-2.5 rounded-2xl hover:bg-slate-50 transition-colors"
-                >
-                  <Mail className="w-4 h-4 text-[#16B8AA]" />
-                  <span>Mensajes de reservas</span>
-                </Link>}
+                {user.role !== 'ADMIN' && (
+                  <Link
+                    href="/mensajes"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center space-x-2.5 p-2.5 rounded-2xl hover:bg-slate-50 transition-colors"
+                  >
+                    <Mail className="w-4 h-4 text-[#16B8AA]" />
+                    <span>Mensajes de reservas</span>
+                  </Link>
+                )}
 
-                {user.role !== 'ADMIN' && <Link
+                <Link
                   href="/perfil"
                   onClick={() => setIsOpen(false)}
                   className="flex items-center space-x-2.5 p-2.5 rounded-2xl hover:bg-slate-50 transition-colors"
                 >
                   <UserCircle className="w-4 h-4 text-[#16B8AA]" />
                   <span>Mi perfil</span>
-                </Link>}
+                </Link>
 
                 {user.role === 'TRAVELER' && <Link href="/cuenta" onClick={() => setIsOpen(false)} className="flex items-center space-x-2.5 p-2.5 rounded-2xl hover:bg-slate-50 transition-colors"><Compass className="w-4 h-4 text-[#16B8AA]" /><span>Mis reservas y viajes</span></Link>}
 
