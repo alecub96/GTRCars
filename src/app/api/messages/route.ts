@@ -72,7 +72,7 @@ export async function POST(request: Request) {
       }
 
       const vehicle = await prisma.vehicle.findUnique({ where: { id: vehicleId }, select: { ownerId: true, status: true } });
-      if (!vehicle || vehicle.status !== 'ACTIVE' || user.role !== 'TRAVELER' || vehicle.ownerId !== recipientId || recipientId === user.id) {
+      if (!vehicle || vehicle.status !== 'ACTIVE' || vehicle.ownerId !== recipientId || recipientId === user.id) {
         return NextResponse.json({ error: 'No se puede iniciar esta conversación' }, { status: 403 });
       }
 

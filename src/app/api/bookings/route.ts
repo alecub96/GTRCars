@@ -12,13 +12,29 @@ function isSerializationConflict(error: unknown) {
   return error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2034';
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const user = await getCurrentUser();
     if (!user) return NextResponse.json({ error: 'Debes iniciar sesión' }, { status: 401 });
-    const where = user.role === 'OWNER' ? { ownerId: user.id } : { travelerId: user.id };
-    const bookings = await prisma.booking.findMany({ where, include: { vehicle: { include: { photos: { take: 1 } } }, traveler: { select: { firstName: true, lastName: true } }, owner: { select: { firstName: true, lastName: true } }, conversations: { select: { id: true }, take: 1 } }, orderBy: { createdAt: 'desc' } });
-    return NextResponse.json({ success: true, bookings });
+    const { searchParams } = new URL(request.url);
+    const asRole = searchParams.get('as') || searchParams.get('role');
+    const where = asRole === 'traveler'
+      ? { travelerId: user.id }
+      : asRole === 'owner'
+      ? { ownerId: user.id }
+      : { OR: [{ ownerId: user.id }, { travelerId: user.id }] };
+
+    const bookings = await prisma.booking.findMany({
+      where,
+      include: {
+        vehicle: { include: { photos: { take: 1 } } },
+        traveler: { select: { firstName: true, lastName: true, email: true } },
+        owner: { select: { firstName: true, lastName: true, email: true } },
+        conversations: { select: { id: true }, take: 1 },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+    return NextResponse.json({ success: true, bookings }, { headers: { 'Cache-Control': 'no-store' } });
   } catch (error) {
     if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
     return NextResponse.json({ error: 'No se pudieron cargar las reservas' }, { status: 500 });
@@ -55,8 +71,8 @@ export async function POST(request: Request) {
     if (!vehicle || vehicle.status !== 'ACTIVE') {
       return NextResponse.json({ error: 'El vehículo no está disponible' }, { status: 404 });
     }
-    if (vehicle.ownerId === user.id || user.role === 'OWNER' || user.role === 'ADMIN') {
-      return NextResponse.json({ error: 'Cambia a modo viajero para solicitar una reserva' }, { status: 403 });
+    if (vehicle.ownerId === user.id) {
+      return NextResponse.json({ error: 'No puedes reservar tu propio vehículo' }, { status: 400 });
     }
 
     const start = new Date(startDate);
