@@ -49,14 +49,14 @@ export default function OwnerDashboardPage() {
 
         setAuthorized(true);
 
-        fetch('/api/vehicles?owner=me')
+        fetch('/api/vehicles?owner=me', { cache: 'no-store' })
           .then((res) => res.json())
           .then((data) => {
             if (data?.vehicles) setVehicles(data.vehicles);
           })
           .catch((err) => console.error('Error cargando furgonetas:', err));
 
-        fetch('/api/bookings')
+        fetch('/api/bookings', { cache: 'no-store' })
           .then((res) => res.json())
           .then((data) => {
             if (data?.bookings) setBookings(data.bookings);

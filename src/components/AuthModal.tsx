@@ -125,33 +125,58 @@ export default function AuthModal() {
     router.refresh();
   };
 
+  useEffect(() => {
+    const handleOpenModal = (e: any) => {
+      if (e.detail?.mode) setMode(e.detail.mode);
+      setIsOpen(true);
+    };
+    window.addEventListener('open-auth-modal', handleOpenModal);
+    return () => window.removeEventListener('open-auth-modal', handleOpenModal);
+  }, []);
+
+  useEffect(() => {
+    if (roleNotice) {
+      const timer = setTimeout(() => setRoleNotice(null), 3500);
+      return () => clearTimeout(timer);
+    }
+  }, [roleNotice]);
+
   return (
     <>
       {roleNotice && (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[999999] w-[92%] max-w-md pointer-events-auto animate-in slide-in-from-bottom-8 fade-in duration-300">
-          <div className="rounded-3xl bg-[#13322E] text-white p-5 shadow-[0_20px_50px_rgba(0,0,0,0.35)] border border-[#16B8AA]/40 flex items-center space-x-4">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#16B8AA]/20 text-[#16B8AA]">
-              <CheckCircle2 className="h-7 w-7" />
+        <div className="fixed top-4 inset-x-3 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 sm:w-full sm:max-w-md z-[999999] pointer-events-auto animate-in fade-in slide-in-from-top-4 duration-300">
+          <div className="rounded-2xl sm:rounded-3xl bg-[#13322E] text-white p-4 sm:p-5 shadow-[0_20px_50px_rgba(0,0,0,0.4)] border border-[#16B8AA]/40 flex items-center justify-between gap-3">
+            <div className="flex items-center space-x-3 min-w-0">
+              <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-xl sm:rounded-2xl bg-[#16B8AA]/20 text-[#16B8AA]">
+                <CheckCircle2 className="h-6 w-6 sm:h-7 sm:w-7" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#16B8AA] block">
+                  Modo actualizado
+                </span>
+                <h3 className="text-sm sm:text-base font-bold text-white tracking-tight truncate">
+                  Ahora estás en modo {roleNotice === 'OWNER' ? 'propietario' : 'viajero'}
+                </h3>
+                <p className="text-[11px] sm:text-xs text-[#A0AEC0] font-medium truncate mt-0.5">
+                  {roleNotice === 'OWNER'
+                    ? 'Gestiona tus campers, calendario y finanzas.'
+                    : 'Explora campers y gestiona tus viajes.'}
+                </p>
+              </div>
             </div>
-            <div className="flex-1 min-w-0">
-              <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#16B8AA] block">
-                Modo actualizado
-              </span>
-              <h3 className="text-base font-bold text-white tracking-tight">
-                Ahora estás en modo {roleNotice === 'OWNER' ? 'propietario' : 'viajero'}
-              </h3>
-              <p className="text-xs text-[#A0AEC0] font-medium truncate mt-0.5">
-                {roleNotice === 'OWNER'
-                  ? 'Gestiona tus campers, calendario y finanzas.'
-                  : 'Explora campers y gestiona tus viajes.'}
-              </p>
-            </div>
+            <button
+              type="button"
+              onClick={() => setRoleNotice(null)}
+              className="p-1.5 rounded-full text-slate-400 hover:text-white shrink-0 cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
           </div>
         </div>
       )}
       {user ? (
-        /* MENÚ DESPLEGABLE DE PERFIL CON BOTÓN DE CONMUTACIÓN DE MODO Y ACCESO A MENSAJES */
-        <div className="relative">
+        /* MENÚ DESPLEGABLE DE PERFIL PARA ESCRITORIO (EN MÓVIL SE USA EL MENÚ UNIFICADO) */
+        <div className="relative hidden md:inline-block">
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="inline-flex items-center space-x-1.5 sm:space-x-2 text-xs font-bold uppercase tracking-wider px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full bg-[#F4F9F8] text-[#13322E] border border-[#E9E1D2] hover:bg-[#E9E1D2] transition-all shadow-sm shrink-0 cursor-pointer"
@@ -258,7 +283,7 @@ export default function AuthModal() {
         <>
           <button
             onClick={() => { setMode('register'); setIsOpen(true); }}
-            className="inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full bg-[#16B8AA] text-white hover:bg-[#0F766E] transition-all shadow-sm cursor-pointer"
+            className="hidden md:inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full bg-[#16B8AA] text-white hover:bg-[#0F766E] transition-all shadow-sm cursor-pointer"
           >
             <User className="w-4 h-4" />
             <span>Acceder / Registrarse</span>

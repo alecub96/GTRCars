@@ -22,7 +22,15 @@ export async function GET(request: Request) {
       if (!currentUser) {
         return NextResponse.json({ error: 'Debes iniciar sesión' }, { status: 401 });
       }
-      whereClause.ownerId = currentUser.id;
+      // Buscar tanto por ownerId directo como por email del usuario para máxima resiliencia
+      whereClause.OR = [
+        { ownerId: currentUser.id },
+        ...(currentUser.email ? [
+          { owner: { email: currentUser.email } },
+          { owner: { email: currentUser.email.toLowerCase() } },
+          { owner: { email: currentUser.email.trim() } },
+        ] : []),
+      ];
       // No filtrar por estado: el propietario debe ver sus campers en PENDING_REVIEW, ACTIVE, REJECTED, etc.
     } else {
       whereClause.status = 'ACTIVE';
@@ -36,8 +44,9 @@ export async function GET(request: Request) {
       include: {
         photos: { orderBy: { orderIndex: 'asc' } },
         reviews: { select: { rating: true } },
-        owner: { select: { firstName: true, avatarUrl: true } },
+        owner: { select: { id: true, firstName: true, lastName: true, email: true, avatarUrl: true } },
       },
+      orderBy: { createdAt: 'desc' },
     });
 
     const featured = await getFeaturedAudience();
