@@ -88,6 +88,38 @@ export async function ensureDbSchema() {
         enabled BOOLEAN NOT NULL DEFAULT TRUE,
         INDEX idx_veh_extra_pair (vehicleId, extraId)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
+
+      `CREATE TABLE IF NOT EXISTS VehicleView (
+        id VARCHAR(191) NOT NULL PRIMARY KEY,
+        vehicleId VARCHAR(191) NOT NULL,
+        viewerId VARCHAR(191) NULL,
+        country VARCHAR(191) NULL,
+        source VARCHAR(191) NOT NULL DEFAULT 'directo',
+        event VARCHAR(191) NOT NULL DEFAULT 'VIEW',
+        createdAt DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+        INDEX idx_veh_view_id (vehicleId, createdAt)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
+
+      `CREATE TABLE IF NOT EXISTS Review (
+        id VARCHAR(191) NOT NULL PRIMARY KEY,
+        bookingId VARCHAR(191) NULL,
+        vehicleId VARCHAR(191) NULL,
+        authorId VARCHAR(191) NOT NULL,
+        subjectId VARCHAR(191) NULL,
+        subjectRole VARCHAR(191) NOT NULL DEFAULT 'OWNER',
+        rating INT NOT NULL DEFAULT 5,
+        comment TEXT NULL,
+        createdAt DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+        INDEX idx_review_veh (vehicleId)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
+
+      `CREATE TABLE IF NOT EXISTS Favorite (
+        id VARCHAR(191) NOT NULL PRIMARY KEY,
+        userId VARCHAR(191) NOT NULL,
+        vehicleId VARCHAR(191) NOT NULL,
+        createdAt DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+        UNIQUE KEY uniq_fav_user_veh (userId, vehicleId)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
     ];
 
     for (const tq of tableQueries) {

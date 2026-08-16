@@ -21,55 +21,27 @@ interface CamperDetailPageProps {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateMetadata({ params }: CamperDetailPageProps): Promise<Metadata> {
-  const { slug } = await params;
-  let vehicle: any = await prisma.vehicle.findFirst({
-    where: {
-      OR: [{ slug }, { id: slug }],
-    },
-    select: { title: true, description: true, island: true, municipality: true, status: true, basePricePerDay: true, photos: { take: 1, orderBy: { orderIndex: 'asc' } } },
-  }).catch(() => null);
-
-  if (!vehicle) {
-    vehicle = REALISTIC_CANARIAN_CAMPERS.find((c) => c.slug === slug || c.id === slug);
-  }
-  if (!vehicle) return {};
-  const description = `Alquila ${vehicle.title} en ${vehicle.municipality}, ${vehicle.island} desde ${vehicle.basePricePerDay}€/día. Directo entre particulares con contrato digital e identidad verificada.`;
-  return {
-    title: `${vehicle.title} en ${vehicle.island} desde ${vehicle.basePricePerDay}€/día | vaneando.`,
-    description,
-    alternates: { canonical: `https://vaneando.com/camper/${slug}` },
-    robots: vehicle.status === 'ACTIVE' ? { index: true, follow: true } : { index: false, follow: false },
-    openGraph: {
-      title: `${vehicle.title} en ${vehicle.island}`,
-      description,
-      url: `https://vaneando.com/camper/${slug}`,
-      images: [vehicle.photos?.[0]?.url || 'https://vaneando.com/vaneando-lockup.svg'],
-    },
-  };
-}
-
-export default async function CamperDetailPage({ params }: CamperDetailPageProps) {
-  const rawParams = await params;
-  const rawSlug = rawParams.slug || '';
-  const slug = decodeURIComponent(rawSlug).trim().toLowerCase();
-  const currentUser = await getCurrentUser().catch(() => null);
-
-  let vehicle: any = null;
+async function fetchVehicleBySlugOrId(slugParam: string) {
+  const raw = slugParam || '';
+  const decoded = decodeURIComponent(raw).trim().toLowerCase();
+  const slugClean = decoded.replace(/-[a-f0-9]{8}$/i, '');
+  const titleSearch = decoded.replace(/-/g, ' ');
 
   try {
     const { ensureDbSchema } = await import('@/lib/prisma-ensure-schema');
-    await ensureDbSchema();
+    await ensureDbSchema().catch(() => {});
 
-    // 1. Búsqueda directa por slug o ID exacto
-    vehicle = await prisma.vehicle.findFirst({
+    // Intento 1: Prisma con todas las relaciones
+    let v: any = await prisma.vehicle.findFirst({
       where: {
         OR: [
-          { slug: slug },
-          { id: slug },
-          { slug: rawSlug },
-          { id: rawSlug },
-          { slug: { contains: slug.replace(/-[a-z0-9]{8}$/i, '') } },
+          { slug: raw },
+          { slug: decoded },
+          { id: raw },
+          { id: decoded },
+          { slug: { contains: slugClean } },
+          { slug: { contains: decoded } },
+          { title: { contains: titleSearch } },
         ],
       },
       include: {
@@ -77,91 +49,119 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
         features: true,
         extras: { include: { extra: true } },
         pricingRules: { orderBy: { startDate: 'asc' } },
-        owner: { select: { id: true, firstName: true, lastName: true, avatarUrl: true, verification: true, createdAt: true } },
+        owner: { select: { id: true, firstName: true, lastName: true, avatarUrl: true, verification: true, createdAt: true, phone: true, email: true } },
         reviews: { include: { author: { select: { firstName: true, avatarUrl: true } } } },
       },
-    });
+    }).catch(() => null);
 
-    // 2. Si falla por relaciones complejas, intentar con relaciones esenciales
-    if (!vehicle) {
-      vehicle = await prisma.vehicle.findFirst({
-        where: {
-          OR: [
-            { slug: slug },
-            { id: slug },
-            { slug: rawSlug },
-            { id: rawSlug },
-            { slug: { contains: slug.split('-').slice(0, 3).join('-') } },
-          ],
-        },
-        include: {
-          photos: { orderBy: { orderIndex: 'asc' } },
-          owner: { select: { id: true, firstName: true, lastName: true, avatarUrl: true, verification: true, createdAt: true } },
-          reviews: true,
-        },
-      });
-      if (vehicle) {
-        vehicle.features = vehicle.features || [];
-        vehicle.extras = vehicle.extras || [];
-        vehicle.pricingRules = vehicle.pricingRules || [];
-      }
+    if (v) return v;
+
+    // Intento 2: Prisma con relaciones esenciales
+    v = await prisma.vehicle.findFirst({
+      where: {
+        OR: [
+          { slug: raw },
+          { slug: decoded },
+          { id: raw },
+          { id: decoded },
+          { slug: { contains: slugClean } },
+        ],
+      },
+      include: {
+        photos: { orderBy: { orderIndex: 'asc' } },
+        owner: { select: { id: true, firstName: true, lastName: true, avatarUrl: true, verification: true, createdAt: true } },
+      },
+    }).catch(() => null);
+
+    if (v) {
+      v.features = v.features || [];
+      v.extras = v.extras || [];
+      v.pricingRules = v.pricingRules || [];
+      v.reviews = v.reviews || [];
+      return v;
     }
 
-    // 3. Si aún no se encuentra, buscar por ID parcial o título en base de datos
-    if (!vehicle) {
-      const rawRows = ((await prisma.$queryRawUnsafe(
-        `SELECT * FROM Vehicle WHERE LOWER(slug) = ? OR id = ? OR slug LIKE ? LIMIT 1`,
-        slug,
-        slug,
-        `%${slug.split('-')[0]}%`
+    // Intento 3: Consulta raw directa a MySQL / MariaDB
+    const rawRows = ((await prisma.$queryRawUnsafe(
+      `SELECT * FROM Vehicle WHERE LOWER(slug) = ? OR id = ? OR slug LIKE ? OR LOWER(title) LIKE ? LIMIT 1`,
+      decoded,
+      raw,
+      `%${slugClean}%`,
+      `%${titleSearch}%`
+    ).catch(() => [])) || []) as any[];
+
+    if (rawRows && rawRows.length > 0) {
+      const rawVeh = rawRows[0];
+      const rawPhotos = ((await prisma.$queryRawUnsafe(
+        `SELECT * FROM VehiclePhoto WHERE vehicleId = ? ORDER BY orderIndex ASC`,
+        rawVeh.id
       ).catch(() => [])) || []) as any[];
 
-      if (rawRows && rawRows.length > 0) {
-        const rawVeh = rawRows[0];
-        const rawPhotos = ((await prisma.$queryRawUnsafe(
-          `SELECT * FROM VehiclePhoto WHERE vehicleId = ? ORDER BY orderIndex ASC`,
-          rawVeh.id
-        ).catch(() => [])) || []) as any[];
+      const rawOwner = ((await prisma.$queryRawUnsafe(
+        `SELECT id, firstName, lastName, avatarUrl, verification, createdAt FROM User WHERE id = ? LIMIT 1`,
+        rawVeh.ownerId
+      ).catch(() => [])) || []) as any[];
 
-        const rawOwner = ((await prisma.$queryRawUnsafe(
-          `SELECT id, firstName, lastName, avatarUrl, verification, createdAt FROM User WHERE id = ? LIMIT 1`,
-          rawVeh.ownerId
-        ).catch(() => [])) || []) as any[];
-
-        vehicle = {
-          ...rawVeh,
-          photos: rawPhotos || [],
-          features: [],
-          extras: [],
-          pricingRules: [],
-          reviews: [],
-          owner: rawOwner?.[0] || { firstName: 'Propietario', lastName: 'Vaneando' },
-        };
-      }
+      return {
+        ...rawVeh,
+        photos: rawPhotos || [],
+        features: [],
+        extras: [],
+        pricingRules: [],
+        reviews: [],
+        owner: rawOwner?.[0] || { firstName: 'Propietario', lastName: 'Vaneando', createdAt: new Date() },
+      };
     }
   } catch (err) {
     console.error('Error fetching vehicle by slug/id:', err);
   }
 
-  if (!vehicle) {
-    const demo = REALISTIC_CANARIAN_CAMPERS.find(
-      (c) =>
-        c.slug.toLowerCase() === slug ||
-        c.id.toLowerCase() === slug ||
-        c.slug.toLowerCase().includes(slug.split('-')[0])
-    );
-    if (demo) {
-      vehicle = {
-        ...demo,
-        owner: {
-          ...demo.owner,
-          createdAt: new Date('2024-01-15'),
-        },
-        pricingRules: [],
-        extras: [],
-      };
-    }
+  // Intento 4: Demo / fallback local
+  const demo = REALISTIC_CANARIAN_CAMPERS.find(
+    (c) =>
+      c.slug.toLowerCase() === decoded ||
+      c.id.toLowerCase() === decoded ||
+      c.slug.toLowerCase().includes(slugClean) ||
+      c.title.toLowerCase().includes(titleSearch.toLowerCase())
+  );
+  if (demo) {
+    return {
+      ...demo,
+      owner: {
+        ...demo.owner,
+        createdAt: new Date('2024-01-15'),
+      },
+      pricingRules: [],
+      extras: [],
+    };
   }
+
+  return null;
+}
+
+export async function generateMetadata({ params }: CamperDetailPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const vehicle = await fetchVehicleBySlugOrId(slug);
+  if (!vehicle) return {};
+  const description = `Alquila ${vehicle.title} en ${vehicle.municipality || 'Canarias'}, ${vehicle.island} desde ${vehicle.basePricePerDay}€/día. Directo entre particulares con contrato digital e identidad verificada.`;
+  return {
+    title: `${vehicle.title} en ${vehicle.island} desde ${vehicle.basePricePerDay}€/día | vaneando.`,
+    description,
+    alternates: { canonical: `https://vaneando.com/camper/${vehicle.slug || slug}` },
+    robots: vehicle.status === 'ACTIVE' ? { index: true, follow: true } : { index: false, follow: false },
+    openGraph: {
+      title: `${vehicle.title} en ${vehicle.island}`,
+      description,
+      url: `https://vaneando.com/camper/${vehicle.slug || slug}`,
+      images: [vehicle.photos?.[0]?.url || 'https://vaneando.com/vaneando-lockup.svg'],
+    },
+  };
+}
+
+export default async function CamperDetailPage({ params }: CamperDetailPageProps) {
+  const { slug: rawSlug } = await params;
+  const currentUser = await getCurrentUser().catch(() => null);
+  const vehicle = await fetchVehicleBySlugOrId(rawSlug);
 
   if (!vehicle) {
     notFound();
