@@ -103,14 +103,14 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
   }
 
   const avgRating =
-    vehicle.reviews.length > 0
+    vehicle.reviews?.length > 0
       ? vehicle.reviews.reduce((acc: number, r: any) => acc + r.rating, 0) / vehicle.reviews.length
       : 0;
   const featured = await getFeaturedAudience().catch(() => null);
   const isFeatured = Boolean(featured && (
-    featured.ownerIds.has(vehicle.owner.id) ||
-    featured.vehicleIds.has(vehicle.id) ||
-    featured.subscriptionOwnerIds.has(vehicle.owner.id)
+    (vehicle.owner?.id && featured.ownerIds.has(vehicle.owner.id)) ||
+    (vehicle.id && featured.vehicleIds.has(vehicle.id)) ||
+    (vehicle.owner?.id && featured.subscriptionOwnerIds.has(vehicle.owner.id))
   ));
 
   const jsonLdVehicleProduct = {
@@ -130,10 +130,10 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
       itemCondition: 'https://schema.org/UsedCondition',
       seller: {
         '@type': 'Person',
-        name: `${vehicle.owner.firstName} ${vehicle.owner.lastName}`,
+        name: `${vehicle.owner?.firstName || 'Propietario'} ${vehicle.owner?.lastName || 'Vaneando'}`,
       },
     },
-    ...(vehicle.reviews.length ? {
+    ...(vehicle.reviews?.length ? {
       aggregateRating: {
         '@type': 'AggregateRating',
         ratingValue: avgRating,
@@ -288,14 +288,14 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
             {/* PROPIETARIO */}
             <div className="p-6 bg-[#F3EFEA] rounded-3xl border border-[#E9E1D2] flex items-center space-x-4">
               <img
-                src={vehicle.owner.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400'}
-                alt={vehicle.owner.firstName}
+                src={vehicle.owner?.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400'}
+                alt={vehicle.owner?.firstName || 'Propietario'}
                 className="w-16 h-16 rounded-full object-cover border-2 border-white"
               />
               <div>
                 <span className="text-xs uppercase tracking-wider font-semibold text-[#E07A5F]">Propietario</span>
-                <h4 className="font-serif text-xl font-medium">{vehicle.owner.firstName} {vehicle.owner.lastName}</h4>
-                <p className="text-xs text-[#6B726E] mt-0.5">En vaneando. desde {new Date(vehicle.owner.createdAt).getFullYear()}{vehicle.owner.verification === 'VERIFIED' ? ' · identidad verificada' : ''}{isFeatured ? ' · Usuario destacado' : ''}</p>
+                <h4 className="font-serif text-xl font-medium">{vehicle.owner?.firstName || 'Propietario'} {vehicle.owner?.lastName || ''}</h4>
+                <p className="text-xs text-[#6B726E] mt-0.5">En vaneando. desde {vehicle.owner?.createdAt ? new Date(vehicle.owner.createdAt).getFullYear() : '2024'}{vehicle.owner?.verification === 'VERIFIED' ? ' · identidad verificada' : ''}{isFeatured ? ' · Usuario destacado' : ''}</p>
               </div>
             </div>
 
