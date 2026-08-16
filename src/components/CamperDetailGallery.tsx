@@ -147,60 +147,99 @@ export default function CamperDetailGallery({ photos, title }: CamperDetailGalle
         )}
       </div>
 
-      {/* 2. VISTA ESCRITORIO (EDITORIAL GRID AIRBNB STYLE) */}
-      <div className="hidden md:grid grid-cols-4 gap-3 h-[440px] rounded-3xl overflow-hidden relative shadow-md">
-        {/* FOTO PRINCIPAL (IZQUIERDA) */}
+      {/* 2. VISTA ESCRITORIO (EDITORIAL ADAPTABLE SEGÚN CANTIDAD DE FOTOS) */}
+      {total === 1 ? (
         <div
-          className="col-span-2 h-full relative group cursor-pointer overflow-hidden bg-[#EBE7DF]"
+          className="hidden md:block h-[420px] rounded-3xl overflow-hidden relative shadow-md group cursor-pointer bg-[#EBE7DF]"
           onClick={() => openLightbox(0)}
         >
           <img
             src={validPhotos[0].url}
             alt={`${title} - Foto Principal`}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
           />
-          <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              openLightbox(0);
+            }}
+            className="absolute bottom-4 right-4 z-10 bg-white/95 backdrop-blur-md text-[#13322E] border border-[#E9E1D2] hover:bg-[#13322E] hover:text-white px-4 py-2 rounded-full font-bold text-xs flex items-center space-x-2 shadow-lg transition-all cursor-pointer"
+          >
+            <ZoomIn className="w-4 h-4" />
+            <span>Ampliar foto</span>
+          </button>
         </div>
-
-        {/* FOTOS SECUNDARIAS (DERECHA) */}
-        <div className="col-span-2 grid grid-cols-2 gap-3 h-full">
-          {validPhotos.slice(1, 5).map((photo, index) => (
+      ) : total === 2 ? (
+        <div className="hidden md:grid grid-cols-2 gap-3 h-[420px] rounded-3xl overflow-hidden relative shadow-md">
+          {validPhotos.slice(0, 2).map((photo, index) => (
             <div
               key={photo.id || index}
-              onClick={() => openLightbox(index + 1)}
-              className="relative h-[214px] group cursor-pointer overflow-hidden bg-[#EBE7DF]"
+              onClick={() => openLightbox(index)}
+              className="h-full relative group cursor-pointer overflow-hidden bg-[#EBE7DF]"
             >
               <img
                 src={photo.url}
-                alt={`${title} - Vista ${index + 2}`}
+                alt={`${title} - Foto ${index + 1}`}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
           ))}
+          <button
+            type="button"
+            onClick={() => openLightbox(0)}
+            className="absolute bottom-4 right-4 z-10 bg-white/95 backdrop-blur-md text-[#13322E] border border-[#E9E1D2] hover:bg-[#13322E] hover:text-white px-4 py-2.5 rounded-full font-bold text-xs flex items-center space-x-2 shadow-lg transition-all cursor-pointer"
+          >
+            <Grid className="w-4 h-4" />
+            <span>Ver las 2 fotos</span>
+          </button>
+        </div>
+      ) : (
+        <div className="hidden md:grid grid-cols-4 gap-3 h-[440px] rounded-3xl overflow-hidden relative shadow-md">
+          {/* FOTO PRINCIPAL (IZQUIERDA) */}
+          <div
+            className="col-span-2 h-full relative group cursor-pointer overflow-hidden bg-[#EBE7DF]"
+            onClick={() => openLightbox(0)}
+          >
+            <img
+              src={validPhotos[0].url}
+              alt={`${title} - Foto Principal`}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+            <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+          </div>
 
-          {/* RELLENO SI HAY MENOS DE 5 FOTOS */}
-          {validPhotos.length < 5 &&
-            [...Array(5 - validPhotos.length)].map((_, i) => (
+          {/* FOTOS SECUNDARIAS (DERECHA) */}
+          <div className="col-span-2 grid grid-cols-2 gap-3 h-full">
+            {validPhotos.slice(1, 5).map((photo, index) => (
               <div
-                key={`placeholder-${i}`}
-                className="h-[214px] bg-[#FAF7F0] border border-[#E9E1D2] rounded-xl flex items-center justify-center text-[#94A3B8]"
+                key={photo.id || index}
+                onClick={() => openLightbox(index + 1)}
+                className="relative h-[214px] group cursor-pointer overflow-hidden bg-[#EBE7DF]"
               >
-                <Camera className="w-6 h-6 opacity-40" />
+                <img
+                  src={photo.url}
+                  alt={`${title} - Vista ${index + 2}`}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
             ))}
-        </div>
+          </div>
 
-        {/* BOTÓN FLOTANTE "VER TODAS LAS FOTOS" */}
-        <button
-          type="button"
-          onClick={() => openLightbox(0)}
-          className="absolute bottom-4 right-4 z-10 bg-white/95 backdrop-blur-md text-[#13322E] border border-[#E9E1D2] hover:bg-[#13322E] hover:text-white px-4 py-2.5 rounded-full font-bold text-xs flex items-center space-x-2 shadow-lg transition-all cursor-pointer"
-        >
-          <Grid className="w-4 h-4" />
-          <span>Ver todas las fotos ({total})</span>
-        </button>
-      </div>
+          {/* BOTÓN FLOTANTE "VER TODAS LAS FOTOS" */}
+          <button
+            type="button"
+            onClick={() => openLightbox(0)}
+            className="absolute bottom-4 right-4 z-10 bg-white/95 backdrop-blur-md text-[#13322E] border border-[#E9E1D2] hover:bg-[#13322E] hover:text-white px-4 py-2.5 rounded-full font-bold text-xs flex items-center space-x-2 shadow-lg transition-all cursor-pointer"
+          >
+            <Grid className="w-4 h-4" />
+            <span>Ver todas las fotos ({total})</span>
+          </button>
+        </div>
+      )}
 
       {/* 3. LIGHTBOX / MODAL PANTALLA COMPLETA */}
       {lightboxOpen && (
