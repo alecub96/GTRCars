@@ -1,9 +1,12 @@
+import React from 'react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Términos y condiciones',
-  description: 'Condiciones de uso, reserva, contratación y convivencia de la plataforma Vaneando.',
+  title: 'Términos y condiciones | vaneando.',
+  description: 'Condiciones de uso de la plataforma, reservas, fianzas, seguros y responsabilidades.',
   alternates: { canonical: '/terminos' },
 };
 
-export default function TermsLayout({ children }: LayoutProps<'/terminos'>) { return children; }
+export default function TermsLayout({ children }: { children: React.ReactNode }) {
+  return <>{children}</>;
+}

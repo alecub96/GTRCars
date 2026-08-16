@@ -7,20 +7,20 @@ import { AlertTriangle, Home, RotateCcw } from 'lucide-react';
 export default function ErrorPage({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   useEffect(() => {
     console.error('Vaneando route error:', error);
-    // Si el error es debido a que el navegador tiene en caché un chunk JS antiguo tras un nuevo despliegue en Hostinger,
-    // recargar automáticamente para cargar la nueva versión limpia sin mostrar pantalla de fallo al usuario.
+    const errorStr = (error?.message || error?.name || '').toLowerCase();
     const isChunkError =
       error?.name === 'ChunkLoadError' ||
-      error?.message?.toLowerCase().includes('loading chunk') ||
-      error?.message?.toLowerCase().includes('loading CSS chunk');
+      errorStr.includes('loading chunk') ||
+      errorStr.includes('loading css chunk') ||
+      errorStr.includes('failed to fetch dynamically imported module');
 
     if (isChunkError && typeof window !== 'undefined') {
-      const storageKey = 'last_chunk_reload';
+      const storageKey = 'vaneando_chunk_reload';
       const lastReload = sessionStorage.getItem(storageKey);
       const now = Date.now();
-      if (!lastReload || now - parseInt(lastReload, 10) > 10000) {
+      if (!lastReload || now - parseInt(lastReload, 10) > 8000) {
         sessionStorage.setItem(storageKey, now.toString());
-        window.location.reload();
+        window.location.href = window.location.pathname + window.location.search;
       }
     }
   }, [error]);

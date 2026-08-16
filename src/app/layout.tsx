@@ -198,6 +198,36 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                function handleChunkError(msg) {
+                  var text = (msg || '').toLowerCase();
+                  if (text.indexOf('loading chunk') !== -1 || text.indexOf('chunkloaderror') !== -1 || text.indexOf('loading css chunk') !== -1 || text.indexOf('failed to fetch dynamically imported module') !== -1) {
+                    var storageKey = 'vaneando_chunk_reload';
+                    var lastReload = sessionStorage.getItem(storageKey);
+                    var now = Date.now();
+                    if (!lastReload || (now - parseInt(lastReload, 10)) > 8000) {
+                      sessionStorage.setItem(storageKey, now.toString());
+                      window.location.href = window.location.pathname + window.location.search;
+                    }
+                  }
+                }
+                window.addEventListener('error', function(e) {
+                  if (e && (e.message || (e.target && e.target.src) || (e.target && e.target.href))) {
+                    handleChunkError(e.message || e.filename || '');
+                  }
+                }, true);
+                window.addEventListener('unhandledrejection', function(e) {
+                  if (e && e.reason) {
+                    handleChunkError(e.reason.message || e.reason.name || String(e.reason));
+                  }
+                });
+              })();
+            `,
+          }}
+        />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdGlobalOrg) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWebSite) }} />
       </head>
