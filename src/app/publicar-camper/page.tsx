@@ -514,17 +514,18 @@ export default function PublishCamperPage() {
               <div className="space-y-5">
                 <h3 className="font-serif text-xl font-bold text-[#13322E]">3. Tarifas, condiciones y presentación</h3>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">
-                      Precio / día (€)
+                      Tu precio base por día (€)
                     </label>
                     <input
                       type="number"
                       required
+                      min="10"
                       value={formData.basePricePerDay || ''}
                       onChange={(e) => handleNumberInput('basePricePerDay', e.target.value)}
-                      placeholder="65"
+                      placeholder="70"
                       className="w-full p-3.5 rounded-xl border border-[#E9E1D2] text-base font-extrabold text-[#16B8AA] focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
                     />
                   </div>
@@ -535,6 +536,7 @@ export default function PublishCamperPage() {
                     <input
                       type="number"
                       required
+                      min="0"
                       value={formData.securityDeposit || ''}
                       onChange={(e) => handleNumberInput('securityDeposit', e.target.value)}
                       placeholder="400"
@@ -542,6 +544,52 @@ export default function PublishCamperPage() {
                     />
                   </div>
                 </div>
+
+                {/* DESGLOSE ECONÓMICO EN TIEMPO REAL */}
+                {formData.basePricePerDay > 0 && (
+                  <div className="rounded-2xl border border-teal-200 bg-teal-50/50 p-4 sm:p-5 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-black uppercase tracking-wider text-[#0F766E]">
+                        💡 Desglose económico transparente
+                      </span>
+                      <span className="text-[10px] bg-[#16B8AA] text-white font-bold px-2.5 py-0.5 rounded-full">
+                        División automática en Stripe
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                      <div className="bg-white p-3.5 rounded-xl border border-teal-100 shadow-sm">
+                        <span className="block text-[11px] text-[#6B726E] font-medium">
+                          El viajero verá y pagará:
+                        </span>
+                        <div className="flex items-baseline space-x-1.5 mt-0.5">
+                          <strong className="text-xl font-bold text-[#13322E]">
+                            {(Math.round(formData.basePricePerDay * 1.045 * 100) / 100).toFixed(2)} €
+                          </strong>
+                          <span className="text-xs text-[#6B726E]">/ día</span>
+                        </div>
+                        <p className="text-[10px] text-[#6B726E] mt-1">
+                          (Tu precio de {formData.basePricePerDay}€ + 4,5% tarifa de servicio)
+                        </p>
+                      </div>
+
+                      <div className="bg-white p-3.5 rounded-xl border border-teal-100 shadow-sm">
+                        <span className="block text-[11px] text-[#6B726E] font-medium">
+                          Tú recibirás en tu banco:
+                        </span>
+                        <div className="flex items-baseline space-x-1.5 mt-0.5">
+                          <strong className="text-xl font-bold text-[#16B8AA]">
+                            {(Math.round(formData.basePricePerDay * 0.90 * 100) / 100).toFixed(2)} €
+                          </strong>
+                          <span className="text-xs text-[#6B726E]">netos / día</span>
+                        </div>
+                        <p className="text-[10px] text-[#6B726E] mt-1">
+                          (Tras el 10% de comisión de intermediación de Vaneando)
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {/* MODULO INTERACTIVO DE TARIFAS POR FECHAS Y TEMPORADA */}
                 <div className="p-5 rounded-2xl bg-[#FAF7F0] border border-[#E9E1D2] space-y-4">
@@ -595,7 +643,7 @@ export default function PublishCamperPage() {
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between gap-3 pt-1">
+                    <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
                       <div className="flex items-center gap-2">
                         <label className="text-xs font-black uppercase tracking-wider text-[#13322E]">
                           Precio en estas fechas:
@@ -611,6 +659,12 @@ export default function PublishCamperPage() {
                           <span className="text-xs font-bold text-[#6B726E]">€/día</span>
                         </div>
                       </div>
+
+                      {rulePrice > 0 && (
+                        <div className="text-[11px] bg-teal-50 border border-teal-200 px-3 py-1.5 rounded-lg text-[#0F766E] font-medium">
+                          Viajero pagará: <strong>{(rulePrice * 1.045).toFixed(2)}€</strong> | Recibirás: <strong>{(rulePrice * 0.90).toFixed(2)}€ netos</strong>
+                        </div>
+                      )}
 
                       <button
                         type="button"
