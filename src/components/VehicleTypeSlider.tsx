@@ -45,7 +45,7 @@ export default function VehicleTypeSlider({
 
   const scroll = (direction: 'left' | 'right') => {
     if (sliderRef.current) {
-      const scrollAmount = direction === 'left' ? -200 : 200;
+      const scrollAmount = direction === 'left' ? -220 : 220;
       sliderRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
   };
@@ -88,32 +88,32 @@ export default function VehicleTypeSlider({
   };
 
   return (
-    <div className="relative max-w-6xl mx-auto w-full my-3 px-1 sm:px-2">
-      {/* BOTÓN FLECHA IZQUIERDA (SOLO EN MÓVIL) */}
+    <div className="relative max-w-6xl mx-auto w-full my-2 px-2 sm:px-4">
+      {/* BOTÓN FLECHA IZQUIERDA (MÓVIL / TABLET) */}
       <button
         type="button"
         onClick={() => scroll('left')}
         aria-label="Deslizar a la izquierda"
-        className="md:hidden absolute left-0 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/95 text-[#13322E] shadow-md border border-[#E9E1D2] flex items-center justify-center hover:bg-[#16B8AA] hover:text-white transition-all cursor-pointer"
+        className="lg:hidden absolute left-1 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/95 text-[#13322E] shadow-md border border-[#E9E1D2] flex items-center justify-center hover:bg-[#16B8AA] hover:text-white transition-all cursor-pointer"
       >
         <ChevronLeft className="w-4 h-4" />
       </button>
 
-      {/* CONTENEDOR SLIDER: 1 SOLA FILA EN PC, DESLIZABLE TÁCTIL EN MÓVIL */}
+      {/* CONTENEDOR SLIDER: ALINEADO SIN CORTES LATERALES */}
       <div
         ref={sliderRef}
         onMouseDown={handleMouseDown}
         onMouseLeave={handleMouseLeave}
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
-        className="flex items-center justify-start md:justify-center flex-nowrap gap-2 sm:gap-2.5 overflow-x-auto py-2 px-9 md:px-0 scrollbar-none cursor-grab active:cursor-grabbing select-none touch-pan-x"
+        className="flex items-center justify-start lg:justify-center flex-nowrap gap-2 sm:gap-2.5 overflow-x-auto py-2 px-10 lg:px-2 scrollbar-none cursor-grab active:cursor-grabbing select-none touch-pan-x"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {showAllOption && (
           <button
             type="button"
             onClick={() => handleSelect('')}
-            className={`flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-2xl border text-[11px] sm:text-xs font-bold shrink-0 transition-all shadow-sm cursor-pointer whitespace-nowrap ${
+            className={`flex items-center space-x-1.5 sm:space-x-2 px-3.5 py-2 sm:py-2.5 rounded-2xl border text-[11px] sm:text-xs font-bold shrink-0 transition-all shadow-sm cursor-pointer whitespace-nowrap ${
               !currentType
                 ? 'border-[#16B8AA] bg-[#16B8AA] text-white ring-2 ring-[#16B8AA]/30'
                 : 'border-white/70 bg-white/95 text-[#13322E] hover:bg-white hover:border-[#16B8AA]'
@@ -133,7 +133,7 @@ export default function VehicleTypeSlider({
               key={id}
               type="button"
               onClick={() => handleSelect(id)}
-              className={`flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-2xl border text-[11px] sm:text-xs font-bold shrink-0 transition-all shadow-sm cursor-pointer whitespace-nowrap ${
+              className={`flex items-center space-x-1.5 sm:space-x-2 px-3.5 py-2 sm:py-2.5 rounded-2xl border text-[11px] sm:text-xs font-bold shrink-0 transition-all shadow-sm cursor-pointer whitespace-nowrap ${
                 isActive
                   ? 'border-[#16B8AA] bg-[#16B8AA] text-white ring-2 ring-[#16B8AA]/30'
                   : 'border-white/70 bg-white/95 text-[#13322E] hover:bg-white hover:border-[#16B8AA]'
@@ -146,12 +146,12 @@ export default function VehicleTypeSlider({
         })}
       </div>
 
-      {/* BOTÓN FLECHA DERECHA (SOLO EN MÓVIL) */}
+      {/* BOTÓN FLECHA DERECHA (MÓVIL / TABLET) */}
       <button
         type="button"
         onClick={() => scroll('right')}
         aria-label="Deslizar a la derecha"
-        className="md:hidden absolute right-0 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/95 text-[#13322E] shadow-md border border-[#E9E1D2] flex items-center justify-center hover:bg-[#16B8AA] hover:text-white transition-all cursor-pointer"
+        className="lg:hidden absolute right-1 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/95 text-[#13322E] shadow-md border border-[#E9E1D2] flex items-center justify-center hover:bg-[#16B8AA] hover:text-white transition-all cursor-pointer"
       >
         <ChevronRight className="w-4 h-4" />
       </button>
