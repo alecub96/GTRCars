@@ -3,6 +3,7 @@ import { getCurrentUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { closeInactiveSupportChats, SUPPORT_WAIT_MESSAGE } from '@/lib/support';
 import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
+import { ensureDbSchema } from '@/lib/prisma-ensure-schema';
 
 function canAccess(user: { id: string; role: string }, conversation: { userId: string }) {
   return user.role === 'ADMIN' || conversation.userId === user.id;
@@ -10,6 +11,7 @@ function canAccess(user: { id: string; role: string }, conversation: { userId: s
 
 export async function GET(request: Request) {
   try {
+    await ensureDbSchema();
     await closeInactiveSupportChats().catch((error) => console.error('Support cleanup error:', error));
     const user = await getCurrentUser();
     if (!user) return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
@@ -65,6 +67,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    await ensureDbSchema();
     await closeInactiveSupportChats().catch((error) => console.error('Support cleanup error:', error));
     const user = await getCurrentUser();
     if (!user) return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
