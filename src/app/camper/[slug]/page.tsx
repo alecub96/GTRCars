@@ -109,24 +109,24 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
 
     // 3. Si aún no se encuentra, buscar por ID parcial o título en base de datos
     if (!vehicle) {
-      const rawRows: any[] = await prisma.$queryRawUnsafe(
+      const rawRows = ((await prisma.$queryRawUnsafe(
         `SELECT * FROM Vehicle WHERE LOWER(slug) = ? OR id = ? OR slug LIKE ? LIMIT 1`,
         slug,
         slug,
         `%${slug.split('-')[0]}%`
-      ).catch(() => []);
+      ).catch(() => [])) || []) as any[];
 
       if (rawRows && rawRows.length > 0) {
         const rawVeh = rawRows[0];
-        const rawPhotos: any[] = await prisma.$queryRawUnsafe(
+        const rawPhotos = ((await prisma.$queryRawUnsafe(
           `SELECT * FROM VehiclePhoto WHERE vehicleId = ? ORDER BY orderIndex ASC`,
           rawVeh.id
-        ).catch(() => []);
+        ).catch(() => [])) || []) as any[];
 
-        const rawOwner: any[] = await prisma.$queryRawUnsafe(
+        const rawOwner = ((await prisma.$queryRawUnsafe(
           `SELECT id, firstName, lastName, avatarUrl, verification, createdAt FROM User WHERE id = ? LIMIT 1`,
           rawVeh.ownerId
-        ).catch(() => []);
+        ).catch(() => [])) || []) as any[];
 
         vehicle = {
           ...rawVeh,

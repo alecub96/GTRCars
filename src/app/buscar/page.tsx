@@ -113,15 +113,15 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       });
     } catch (queryErr) {
       console.warn('Prisma findMany fallback:', queryErr);
-      const rawRows: any[] = await prisma.$queryRawUnsafe(
+      const rawRows = ((await prisma.$queryRawUnsafe(
         `SELECT id, ownerId, slug, title, island, municipality, passengers, beds, transmission, basePricePerDay, description, latitude, longitude, addressApprox FROM Vehicle WHERE status = 'ACTIVE' ORDER BY createdAt DESC`
-      ).catch(() => []);
+      ).catch(() => [])) || []) as any[];
 
       for (const row of rawRows) {
-        const photos: any[] = await prisma.$queryRawUnsafe(
+        const photos = ((await prisma.$queryRawUnsafe(
           `SELECT url FROM VehiclePhoto WHERE vehicleId = ? ORDER BY orderIndex ASC`,
           row.id
-        ).catch(() => []);
+        ).catch(() => [])) || []) as any[];
         databaseVehicles.push({
           ...row,
           photos: photos || [],
