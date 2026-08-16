@@ -217,19 +217,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               (function() {
                 function handleChunkError(msg) {
                   var text = (msg || '').toLowerCase();
-                  if (text.indexOf('loading chunk') !== -1 || text.indexOf('chunkloaderror') !== -1 || text.indexOf('loading css chunk') !== -1 || text.indexOf('failed to fetch dynamically imported module') !== -1) {
+                  if (text.indexOf('loading chunk') !== -1 || text.indexOf('chunkloaderror') !== -1 || text.indexOf('loading css chunk') !== -1 || text.indexOf('failed to fetch dynamically imported module') !== -1 || text.indexOf('dynamically imported') !== -1) {
                     var storageKey = 'vaneando_chunk_reload';
                     var lastReload = sessionStorage.getItem(storageKey);
                     var now = Date.now();
-                    if (!lastReload || (now - parseInt(lastReload, 10)) > 8000) {
+                    if (!lastReload || (now - parseInt(lastReload, 10)) > 4000) {
                       sessionStorage.setItem(storageKey, now.toString());
-                      window.location.href = window.location.pathname + window.location.search;
+                      var search = window.location.search;
+                      var sep = search ? '&' : '?';
+                      window.location.replace(window.location.pathname + search + sep + '_v=' + now);
                     }
                   }
                 }
                 window.addEventListener('error', function(e) {
                   if (e && (e.message || (e.target && e.target.src) || (e.target && e.target.href))) {
-                    handleChunkError(e.message || e.filename || '');
+                    handleChunkError(e.message || e.filename || (e.target && (e.target.src || e.target.href)) || '');
                   }
                 }, true);
                 window.addEventListener('unhandledrejection', function(e) {
