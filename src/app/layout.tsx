@@ -131,9 +131,17 @@ export const metadata: Metadata = {
     google: 'b_aBYmH5fbwoMGeDcDbEHlOhekFHl1pZoVNhw2dfufE',
   },
   icons: {
-    icon: '/vaneando-icon.svg',
-    apple: '/vaneando-icon.svg',
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/vaneando-icon.svg', type: 'image/svg+xml' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+    shortcut: ['/favicon.ico'],
   },
+  manifest: '/site.webmanifest',
   other: {
     'google-site-verification': 'b_aBYmH5fbwoMGeDcDbEHlOhekFHl1pZoVNhw2dfufE',
     'geo.region': 'ES-CN',
@@ -196,6 +204,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es" className="h-full antialiased overflow-x-hidden w-full max-w-full">
       <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+        <link rel="icon" type="image/svg+xml" href="/vaneando-icon.svg" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/site.webmanifest" />
         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
         <script
