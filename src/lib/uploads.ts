@@ -16,9 +16,6 @@ const extensions: Record<string, string> = {
 };
 
 export function getUploadRoot() {
-  if (process.env.NODE_ENV === 'production' && !process.env.UPLOAD_DIR) {
-    throw new UploadConfigurationError('UPLOAD_DIR no está configurada para almacenamiento persistente');
-  }
   return path.resolve(process.env.UPLOAD_DIR || path.join(process.cwd(), 'storage'));
 }
 
