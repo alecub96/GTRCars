@@ -162,10 +162,16 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                 ? vehicle.reviews.reduce((acc: number, r: any) => acc + r.rating, 0) / vehicle.reviews.length
                 : 5.0;
 
+            const isFeatured = Boolean(vehicle.isFeatured);
+
             return (
               <div
                 key={vehicle.id}
-                className="group bg-[#F4F9F8] rounded-3xl overflow-hidden border border-[#E9E1D2] shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+                className={`group rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all flex flex-col justify-between ${
+                  isFeatured
+                    ? 'bg-gradient-to-b from-amber-50/50 via-white to-white border-2 border-amber-400/90 ring-2 ring-amber-400/20 hover:border-amber-500'
+                    : 'bg-[#F4F9F8] border border-[#E9E1D2]'
+                }`}
               >
                 <VehicleViewTracker vehicleId={vehicle.id} event="IMPRESSION" />
                 <div className="p-5 pb-2">
@@ -174,7 +180,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                       photos={vehicle.photos}
                       title={vehicle.title}
                       slug={vehicle.slug}
-                      isFeatured={vehicle.isFeatured}
+                      isFeatured={isFeatured}
                     />
                     <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black uppercase text-[#16B8AA] tracking-wider z-20 pointer-events-none">
                       {vehicle.island}

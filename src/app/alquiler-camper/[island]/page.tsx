@@ -141,36 +141,48 @@ export default async function SeoIslandPage({ params }: SeoIslandPageProps) {
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {vehicles.map((v: any) => (
-            <Link
-              key={v.id}
-              href={`/camper/${v.slug}`}
-              className="group bg-white rounded-3xl overflow-hidden border border-[#E9E1D2] shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
-            >
-              <div>
-                <VehicleViewTracker vehicleId={v.id} event="IMPRESSION" />
-                <div className="relative h-60">
-                  <img
-                    src={v.photos[0]?.url || 'https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=800'}
-                    alt={v.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <span className="absolute top-4 left-4 bg-white/90 backdrop-blur-md text-[#13322E] text-[10px] font-black uppercase px-3 py-1 rounded-full shadow-sm">
-                    {v.vehicleType ? v.vehicleType.replace('_', ' ') : 'Camper'}
-                  </span>
+          {vehicles.map((v: any) => {
+            const isFeatured = Boolean(v.isFeatured);
+            return (
+              <Link
+                key={v.id}
+                href={`/camper/${v.slug}`}
+                className={`group rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between ${
+                  isFeatured
+                    ? 'border-2 border-amber-400/90 bg-gradient-to-b from-amber-50/50 via-white to-white ring-2 ring-amber-400/20 hover:border-amber-500'
+                    : 'bg-white border border-[#E9E1D2]'
+                }`}
+              >
+                <div>
+                  <VehicleViewTracker vehicleId={v.id} event="IMPRESSION" />
+                  <div className="relative h-60">
+                    <img
+                      src={v.photos[0]?.url || 'https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=800'}
+                      alt={v.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <span className="absolute top-4 left-4 bg-white/90 backdrop-blur-md text-[#13322E] text-[10px] font-black uppercase px-3 py-1 rounded-full shadow-sm">
+                      {v.vehicleType ? v.vehicleType.replace('_', ' ') : 'Camper'}
+                    </span>
+                    {isFeatured && (
+                      <span className="absolute top-4 right-4 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-[10px] font-black uppercase px-3 py-1 rounded-full shadow-md border border-amber-300/40 flex items-center gap-1">
+                        ⭐ Destacado
+                      </span>
+                    )}
+                  </div>
+                  <div className="p-6">
+                    <h3 className="font-serif text-xl font-bold mb-2 group-hover:text-[#16B8AA] transition-colors text-[#13322E]">{v.title}</h3>
+                    <p className="text-xs text-[#6B726E] font-medium mb-4">{v.municipality} • {v.passengers} personas para dormir</p>
+                  </div>
                 </div>
-                <div className="p-6">
-                  <h3 className="font-serif text-xl font-bold mb-2 group-hover:text-[#16B8AA] transition-colors text-[#13322E]">{v.title}</h3>
-                  <p className="text-xs text-[#6B726E] font-medium mb-4">{v.municipality} • {v.passengers} personas para dormir</p>
-                </div>
-              </div>
 
-              <div className="px-6 pb-6 pt-4 border-t border-[#E9E1D2] flex justify-between items-center">
-                <span className="font-serif text-2xl font-bold text-[#13322E]">{v.basePricePerDay}€ <span className="text-xs font-sans font-medium text-[#6B726E]">/día</span></span>
-                <span className="text-xs font-black uppercase tracking-wider text-[#16B8AA]">Ver Camper →</span>
-              </div>
-            </Link>
-          ))}
+                <div className="px-6 pb-6 pt-4 border-t border-[#E9E1D2] flex justify-between items-center">
+                  <span className="font-serif text-2xl font-bold text-[#13322E]">{v.basePricePerDay}€ <span className="text-xs font-sans font-medium text-[#6B726E]">/día</span></span>
+                  <span className={`text-xs font-black uppercase tracking-wider ${isFeatured ? 'text-amber-700' : 'text-[#16B8AA]'}`}>Ver Camper →</span>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </section>
 

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
-import { getFeaturedAudience } from '@/lib/featured';
+import { getFeaturedAudience, sortVehiclesWithHalfHourFeaturedRotation } from '@/lib/featured';
 import { ensureDbSchema } from '@/lib/prisma-ensure-schema';
 import { REALISTIC_CANARIAN_CAMPERS } from '@/lib/demo-campers-data';
 
@@ -73,27 +73,7 @@ export async function GET(request: Request) {
       );
     }
 
-    const now = new Date();
-    const activeFeaturedVehicles = featuredVehicles.filter((vehicle) => vehicle.isFeatured);
-    const standardVehicles = featuredVehicles.filter((vehicle) => !vehicle.isFeatured);
-
-    const dayOfYear = Math.floor(
-      (now.getTime() - new Date(now.getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24)
-    );
-
-    const rotatedFeaturedVehicles = [...activeFeaturedVehicles].sort((a, b) => {
-      const hashA = ((a.id || '').charCodeAt(0) + dayOfYear) % 100;
-      const hashB = ((b.id || '').charCodeAt(0) + dayOfYear) % 100;
-      return hashB - hashA;
-    });
-
-    const sortedStandardVehicles = [...standardVehicles].sort((a, b) => {
-      const avgA = a.reviews && a.reviews.length > 0 ? a.reviews.reduce((s: number, r: any) => s + (r.rating || 5), 0) / a.reviews.length : 5;
-      const avgB = b.reviews && b.reviews.length > 0 ? b.reviews.reduce((s: number, r: any) => s + (r.rating || 5), 0) / b.reviews.length : 5;
-      return avgB - avgA;
-    });
-
-    const finalSortedVehicles = [...rotatedFeaturedVehicles, ...sortedStandardVehicles];
+    const finalSortedVehicles = sortVehiclesWithHalfHourFeaturedRotation(featuredVehicles);
 
     return NextResponse.json(
       { success: true, vehicles: finalSortedVehicles },

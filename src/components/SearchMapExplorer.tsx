@@ -248,70 +248,140 @@ export default function SearchMapExplorer({
       )}
 
       {/* VISTA 2: CUADRÍCULA DE VEHÍCULOS (MODO DEFAULT Y PARTE DE VISTA DIVIDIDA) */}
-      {(viewMode === 'grid' || viewMode === 'split') && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {vehicles.map((vehicle) => {
-            const avgRating =
-              vehicle.reviews?.length > 0
-                ? vehicle.reviews.reduce((acc, r) => acc + r.rating, 0) / vehicle.reviews.length
-                : 0;
+      {(viewMode === 'grid' || viewMode === 'split') && (() => {
+        const featuredVehicles = vehicles.filter((v) => Boolean(v.isFeatured));
+        const standardVehicles = vehicles.filter((v) => !v.isFeatured);
 
-            return (
-              <div
-                key={vehicle.id}
-                className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-[#E9E1D2] bg-white p-4 shadow-sm transition-all duration-300 hover:shadow-md"
-              >
-                <div>
-                  <div className="relative">
-                    <VehicleCardPhotoSlider
-                      photos={vehicle.photos}
-                      title={vehicle.title}
-                      slug={vehicle.slug}
-                      isFeatured={vehicle.isFeatured}
-                    />
-                    <div className="absolute top-3 right-3 z-30">
-                      <FavoriteButton vehicleId={vehicle.id} />
-                    </div>
-                  </div>
+        const renderVehicleCard = (vehicle: VehicleSearchItem) => {
+          const avgRating =
+            vehicle.reviews?.length > 0
+              ? vehicle.reviews.reduce((acc, r) => acc + r.rating, 0) / vehicle.reviews.length
+              : 0;
+          const isFeatured = Boolean(vehicle.isFeatured);
 
-                  <div className="space-y-1">
-                    <div className="flex items-center justify-between text-xs text-[#6B726E]">
-                      <span className="font-bold text-[#16B8AA] uppercase text-[10px] tracking-wider">
-                        {vehicle.island} • {vehicle.municipality}
-                      </span>
-                      {avgRating > 0 && (
-                        <div className="flex items-center space-x-1 font-bold text-[#13322E]">
-                          <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-                          <span>{avgRating.toFixed(1)}</span>
-                        </div>
-                      )}
-                    </div>
-
-                    <h3 className="font-bold text-base text-[#13322E] line-clamp-1">
-                      <Link href={`/camper/${vehicle.slug}`} className="hover:text-[#16B8AA] transition-colors">
-                        {vehicle.title}
-                      </Link>
-                    </h3>
+          return (
+            <div
+              key={vehicle.id}
+              className={`group relative flex flex-col justify-between overflow-hidden rounded-3xl p-4 transition-all duration-300 ${
+                isFeatured
+                  ? 'border-2 border-amber-400/90 bg-gradient-to-b from-amber-50/50 via-white to-white shadow-md hover:shadow-xl ring-2 ring-amber-400/20 hover:border-amber-500'
+                  : 'border border-[#E9E1D2] bg-white shadow-sm hover:shadow-md hover:border-[#16B8AA]/40'
+              }`}
+            >
+              <div>
+                <div className="relative">
+                  <VehicleCardPhotoSlider
+                    photos={vehicle.photos}
+                    title={vehicle.title}
+                    slug={vehicle.slug}
+                    isFeatured={isFeatured}
+                  />
+                  <div className="absolute top-3 right-3 z-30">
+                    <FavoriteButton vehicleId={vehicle.id} />
                   </div>
                 </div>
 
-                <div className="mt-4 flex items-center justify-between border-t border-[#E9E1D2] pt-3">
-                  <div>
-                    <span className="text-base font-black text-[#13322E]">{vehicle.basePricePerDay} €</span>
-                    <span className="text-xs text-[#6B726E] font-medium"> / día</span>
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between text-xs text-[#6B726E]">
+                    <span className="font-bold text-[#16B8AA] uppercase text-[10px] tracking-wider">
+                      {vehicle.island} • {vehicle.municipality}
+                    </span>
+                    {avgRating > 0 && (
+                      <div className="flex items-center space-x-1 font-bold text-[#13322E]">
+                        <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                        <span>{avgRating.toFixed(1)}</span>
+                      </div>
+                    )}
                   </div>
-                  <Link
-                    href={`/camper/${vehicle.slug}`}
-                    className="rounded-full bg-[#13322E] px-4 py-2 text-xs font-bold text-white hover:bg-[#16B8AA] transition-all"
-                  >
-                    Ver camper
-                  </Link>
+
+                  <h3 className="font-bold text-base text-[#13322E] line-clamp-1">
+                    <Link href={`/camper/${vehicle.slug}`} className="hover:text-[#16B8AA] transition-colors">
+                      {vehicle.title}
+                    </Link>
+                  </h3>
                 </div>
               </div>
-            );
-          })}
-        </div>
-      )}
+
+              <div className="mt-4 flex items-center justify-between border-t border-[#E9E1D2] pt-3">
+                <div>
+                  <span className="text-base font-black text-[#13322E]">{vehicle.basePricePerDay} €</span>
+                  <span className="text-xs text-[#6B726E] font-medium"> / día</span>
+                </div>
+                <Link
+                  href={`/camper/${vehicle.slug}`}
+                  className={`rounded-full px-4 py-2 text-xs font-bold text-white transition-all ${
+                    isFeatured
+                      ? 'bg-[#13322E] hover:bg-[#D97706] shadow-sm'
+                      : 'bg-[#13322E] hover:bg-[#16B8AA]'
+                  }`}
+                >
+                  Ver camper
+                </Link>
+              </div>
+            </div>
+          );
+        };
+
+        return (
+          <div className="space-y-10">
+            {/* SECCIÓN 1: CAMPERS DESTACADAS */}
+            {featuredVehicles.length > 0 && (
+              <section className="space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-amber-200/80 pb-3">
+                  <div className="flex items-center space-x-2.5">
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-amber-100 text-amber-600 text-sm font-black shadow-xs">
+                      ⭐
+                    </span>
+                    <div>
+                      <h2 className="font-serif text-xl font-bold text-[#13322E] flex items-center gap-2">
+                        Campers Destacadas
+                        <span className="rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-white px-2.5 py-0.5 text-[9px] font-black uppercase tracking-wider shadow-xs">
+                          Prioritarias
+                        </span>
+                      </h2>
+                      <p className="text-xs text-[#6B726E]">
+                        Anuncios prioritarios recomendados en Canarias · Rotación cada 30 minutos
+                      </p>
+                    </div>
+                  </div>
+                  <span className="text-xs font-black uppercase tracking-wider text-amber-900 bg-amber-100/80 border border-amber-300 px-3 py-1 rounded-full w-fit">
+                    {featuredVehicles.length} {featuredVehicles.length === 1 ? 'destacado' : 'destacados'}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {featuredVehicles.map(renderVehicleCard)}
+                </div>
+              </section>
+            )}
+
+            {/* SECCIÓN 2: TODAS LAS CAMPERS DISPONIBLES */}
+            {standardVehicles.length > 0 && (
+              <section className="space-y-4">
+                {featuredVehicles.length > 0 && (
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-t border-[#E9E1D2] pt-8 pb-2">
+                    <div>
+                      <h2 className="font-serif text-xl font-bold text-[#13322E]">
+                        Todas las campers disponibles
+                      </h2>
+                      <p className="text-xs text-[#6B726E]">
+                        Otras opciones verificadas entre particulares en las islas
+                      </p>
+                    </div>
+                    <span className="text-xs font-bold text-[#6B726E] bg-white border border-[#E9E1D2] px-3 py-1 rounded-full w-fit">
+                      {standardVehicles.length} {standardVehicles.length === 1 ? 'camper disponible' : 'campers disponibles'}
+                    </span>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {standardVehicles.map(renderVehicleCard)}
+                </div>
+              </section>
+            )}
+          </div>
+        );
+      })()}
     </div>
   );
 }

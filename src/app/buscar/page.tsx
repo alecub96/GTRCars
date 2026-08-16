@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma';
 import { CANARY_ISLANDS } from '@/lib/pricing';
 import { Star, MapPin, Filter, SlidersHorizontal, ShieldCheck, ChevronRight } from 'lucide-react';
 import VehicleViewTracker from '@/components/VehicleViewTracker';
-import { getFeaturedAudience } from '@/lib/featured';
+import { getFeaturedAudience, sortVehiclesWithHalfHourFeaturedRotation } from '@/lib/featured';
 
 import type { Metadata } from 'next';
 import VehicleTypeSlider from '@/components/VehicleTypeSlider';
@@ -160,7 +160,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   });
 
   const finalVehiclesList = Array.from(allVehiclesMap.values());
-  vehicles = finalVehiclesList;
+  vehicles = sortVehiclesWithHalfHourFeaturedRotation(finalVehiclesList);
 
   const jsonLdSearchResults = {
     '@context': 'https://schema.org',
