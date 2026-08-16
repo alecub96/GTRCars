@@ -55,6 +55,14 @@ export async function GET(request: Request) {
       isFeatured: featured.ownerIds.has(vehicle.ownerId) || featured.vehicleIds.has(vehicle.id) || featured.subscriptionOwnerIds.has(vehicle.ownerId),
     }));
 
+    if (ownerOnly) {
+      // Para el panel de propietario devolvemos todos sus vehículos directamente
+      return NextResponse.json(
+        { success: true, vehicles: featuredVehicles },
+        { headers: { 'Cache-Control': 'no-store, max-age=0' } }
+      );
+    }
+
     const now = new Date();
     const activeFeaturedVehicles = featuredVehicles.filter((vehicle) => vehicle.isFeatured);
     const standardVehicles = featuredVehicles.filter((vehicle) => !vehicle.isFeatured);

@@ -30,7 +30,7 @@ export default function OwnerDashboardPage() {
   }, []);
 
   useEffect(() => {
-    fetch('/api/auth/me')
+    fetch('/api/auth/me', { cache: 'no-store' })
       .then(async (res) => { const data = await res.json(); if (!res.ok) throw new Error(data.error || 'No se pudo comprobar la sesión'); return data; })
       .then(async (data) => {
         if (!data.user) {

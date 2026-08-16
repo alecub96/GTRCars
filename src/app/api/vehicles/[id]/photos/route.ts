@@ -8,10 +8,14 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
   try {
     const user = await getCurrentUser();
     if (!user) return NextResponse.json({ error: 'Debes iniciar sesión' }, { status: 401 });
-    if (user.role !== 'OWNER') return NextResponse.json({ error: 'Solo los propietarios pueden añadir fotos' }, { status: 403 });
     const { id } = await context.params;
-    const vehicle = await prisma.vehicle.findUnique({ where: { id }, include: { photos: true } });
-    if (!vehicle || vehicle.ownerId !== user.id) return NextResponse.json({ error: 'Vehículo no encontrado' }, { status: 404 });
+    const vehicle = await prisma.vehicle.findUnique({
+      where: { id },
+      include: { photos: true, owner: { select: { id: true, email: true } } },
+    });
+    if (!vehicle) return NextResponse.json({ error: 'Vehículo no encontrado' }, { status: 404 });
+    const isOwner = vehicle.ownerId === user.id || vehicle.owner?.email === user.email || user.role === 'ADMIN';
+    if (!isOwner) return NextResponse.json({ error: 'No tienes permiso para modificar este vehículo' }, { status: 403 });
     if (vehicle.photos.length >= 20) return NextResponse.json({ error: 'El anuncio admite un máximo de 20 fotos' }, { status: 400 });
     const form = await request.formData();
     const file = form.get('file');

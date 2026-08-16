@@ -8,6 +8,8 @@ const ISLANDS = new Set(['Gran Canaria', 'Tenerife', 'Lanzarote', 'Fuerteventura
 
 import { ensureDbSchema } from '@/lib/prisma-ensure-schema';
 
+import { signToken } from '@/lib/jwt';
+
 export async function POST(request: Request) {
   try {
     await ensureDbSchema();
@@ -15,12 +17,24 @@ export async function POST(request: Request) {
     const user = await getCurrentUser();
     if (!user) return NextResponse.json({ error: 'Debes iniciar sesión para publicar una camper' }, { status: 401 });
 
+    let updatedToken: string | null = null;
     // Si el usuario publica un anuncio pero su rol en la BD sigue en TRAVELER, se actualiza automaticamente a OWNER
     if (user.role !== 'OWNER' && user.role !== 'ADMIN') {
-      await prisma.user.update({
+      const updatedUser = await prisma.user.update({
         where: { id: user.id },
         data: { role: 'OWNER' },
-      }).catch((err) => console.warn('Auto role promotion warning:', err));
+      }).catch((err) => {
+        console.warn('Auto role promotion warning:', err);
+        return null;
+      });
+
+      if (updatedUser) {
+        updatedToken = signToken({
+          userId: updatedUser.id,
+          email: updatedUser.email,
+          role: 'OWNER',
+        });
+      }
     }
 
     const ownerId = user.id;
@@ -190,7 +204,18 @@ export async function POST(request: Request) {
       }
     }
 
-    return NextResponse.json({ success: true, vehicle });
+    const response = NextResponse.json({ success: true, vehicle });
+    if (updatedToken) {
+      response.cookies.set('auth_token', updatedToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        priority: 'high',
+        maxAge: 60 * 60 * 24 * 7,
+        path: '/',
+      });
+    }
+    return response;
   } catch (error: any) {
     console.error('API Publish Vehicle Error:', error);
     if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();

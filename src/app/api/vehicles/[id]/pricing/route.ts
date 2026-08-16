@@ -14,9 +14,10 @@ async function respond(operation: () => Promise<NextResponse>) {
 
 async function ownedVehicle(id: string) {
   const user = await getCurrentUser();
-  if (!user || user.role !== 'OWNER') return { user: null, vehicle: null };
+  if (!user) return { user: null, vehicle: null };
   const vehicle = await prisma.vehicle.findUnique({ where: { id }, select: { ownerId: true } });
-  return { user, vehicle: vehicle?.ownerId === user.id ? vehicle : null };
+  const isOwner = Boolean(vehicle && (vehicle.ownerId === user.id || user.role === 'ADMIN'));
+  return { user, vehicle: isOwner ? vehicle : null };
 }
 
 export async function GET(_: Request, context: { params: Promise<{ id: string }> }) {

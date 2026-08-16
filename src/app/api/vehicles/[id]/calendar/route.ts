@@ -33,7 +33,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
   const user = await getCurrentUser();
   const { id } = await context.params;
   const vehicle = await prisma.vehicle.findUnique({ where: { id }, select: { ownerId: true } });
-  if (!user || user.role !== 'OWNER' || !vehicle || vehicle.ownerId !== user.id) return NextResponse.json({ error: 'No autorizado' }, { status: 403 });
+  if (!user || !vehicle || (vehicle.ownerId !== user.id && user.role !== 'ADMIN')) return NextResponse.json({ error: 'No autorizado' }, { status: 403 });
   const form = await request.formData();
   const file = form.get('file');
   if (!(file instanceof File)) return NextResponse.json({ error: 'Selecciona un archivo .ics' }, { status: 400 });

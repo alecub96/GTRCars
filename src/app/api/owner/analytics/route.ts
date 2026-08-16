@@ -6,7 +6,7 @@ import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-er
 export async function GET() {
  try {
   const user = await getCurrentUser();
-  if (!user || user.role !== 'OWNER') return NextResponse.json({ error: 'Solo propietarios' }, { status: 403 });
+  if (!user || (user.role !== 'OWNER' && user.role !== 'ADMIN')) return NextResponse.json({ error: 'Solo propietarios' }, { status: 403 });
   const [vehicles, views, bookings] = await Promise.all([
     prisma.vehicle.findMany({ where: { ownerId: user.id }, select: { id: true, title: true } }),
     prisma.vehicleView.findMany({ where: { vehicle: { ownerId: user.id } }, select: { vehicleId: true, country: true, source: true, event: true, createdAt: true } }),

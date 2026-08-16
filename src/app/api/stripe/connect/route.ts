@@ -7,7 +7,7 @@ import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-er
 export async function POST() {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: 'Debes iniciar sesión' }, { status: 401 });
-  if (user.role !== 'OWNER') return NextResponse.json({ error: 'Solo los propietarios pueden configurar cobros' }, { status: 403 });
+  if (user.role !== 'OWNER' && user.role !== 'ADMIN') return NextResponse.json({ error: 'Solo los propietarios pueden configurar cobros' }, { status: 403 });
   const key = process.env.STRIPE_SECRET_KEY || '';
   if (!key || key.includes('mock')) return NextResponse.json({ error: 'Stripe Connect requiere una clave real configurada' }, { status: 503 });
   try {
