@@ -408,7 +408,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                   ))}
                 </div>
                 <p className="text-xs text-[#13322E] font-medium leading-relaxed mb-6 italic">
-                  "Alquilar la camper en Gran Canaria a través de Vaneando fue la mejor decisión. El propietario nos entregó la furgoneta directamente en el aeropuerto LPA con recomendaciones secretas de pernocta."
+                  &ldquo;Alquilar la camper en Gran Canaria a través de Vaneando fue la mejor decisión. El propietario nos entregó la furgoneta directamente en el aeropuerto LPA con recomendaciones secretas de pernocta.&rdquo;
                 </p>
               </div>
               <div className="flex items-center space-x-3 pt-4 border-t border-[#E9E1D2]">
@@ -428,7 +428,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                   ))}
                 </div>
                 <p className="text-xs text-[#13322E] font-medium leading-relaxed mb-6 italic">
-                  "Ahorramos más del 50% en comparación con reservar hotel y coche de alquiler en Tenerife. La camper estaba impecable, con tablas de surf e inventario completo de cocina."
+                  &ldquo;Ahorramos más del 50% en comparación con reservar hotel y coche de alquiler en Tenerife. La camper estaba impecable, con tablas de surf e inventario completo de cocina.&rdquo;
                 </p>
               </div>
               <div className="flex items-center space-x-3 pt-4 border-t border-[#E9E1D2]">
@@ -448,7 +448,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                   ))}
                 </div>
                 <p className="text-xs text-[#13322E] font-medium leading-relaxed mb-6 italic">
-                  "Transparencia absoluta. La fianza se liberó inmediatamente al devolver el vehículo y el trato con el propietario canario fue cercano y familiar. Repetiremos 100%."
+                  &ldquo;Transparencia absoluta. La fianza se liberó inmediatamente al devolver el vehículo y el trato con el propietario canario fue cercano y familiar. Repetiremos 100%.&rdquo;
                 </p>
               </div>
               <div className="flex items-center space-x-3 pt-4 border-t border-[#E9E1D2]">
