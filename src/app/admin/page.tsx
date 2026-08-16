@@ -75,8 +75,67 @@ export default function AdminPage() {
 
         <section className="mb-8 flex flex-col gap-4 rounded-3xl border border-[#E9E1D2] bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4"><div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#13322E] text-[#16B8AA]"><UserRound className="h-6 w-6" /></div><div><p className="text-[10px] font-black uppercase tracking-[.2em] text-[#16B8AA]">Perfil administrador</p><h2 className="text-2xl font-bold tracking-tight">Tu cuenta y preferencias</h2><p className="text-sm text-[#6B726E]">Gestiona tu perfil, seguridad y sesiones desde un espacio separado del panel financiero.</p></div></div>
-          <Link href="/perfil" className="rounded-full border border-[#13322E] px-5 py-3 text-center text-xs font-bold uppercase tracking-wider text-[#13322E]">Abrir mi perfil</Link>
+          <Link href="/perfil" className="rounded-full border border-[#13322E] px-5 py-3 text-center text-xs font-bold uppercase tracking-wider text-[#13322E] hover:bg-[#13322E] hover:text-white transition-all">Abrir mi perfil</Link>
         </section>
+
+        {/* CENTRO DE ALERTAS Y ACCIONES PENDIENTES */}
+        <div className="mb-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className={`p-5 rounded-3xl border transition-all ${
+            (data?.metrics?.pendingVehiclesCount || 0) > 0
+              ? 'bg-amber-50/80 border-amber-300 shadow-sm'
+              : 'bg-white border-[#E9E1D2]'
+          }`}>
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[10px] font-black uppercase tracking-wider text-[#D97706]">Moderación</span>
+              {(data?.metrics?.pendingVehiclesCount || 0) > 0 && (
+                <span className="animate-pulse flex h-2.5 w-2.5 rounded-full bg-amber-500" />
+              )}
+            </div>
+            <h4 className="text-2xl font-black text-[#13322E]">{data?.metrics?.pendingVehiclesCount || 0}</h4>
+            <p className="text-xs text-[#6B726E] font-medium mt-1">Campers pendientes de aprobación</p>
+          </div>
+
+          <div className={`p-5 rounded-3xl border transition-all ${
+            (data?.metrics?.pendingVerificationsCount || 0) > 0
+              ? 'bg-sky-50/80 border-sky-300 shadow-sm'
+              : 'bg-white border-[#E9E1D2]'
+          }`}>
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[10px] font-black uppercase tracking-wider text-sky-700">Identidad DNI</span>
+              {(data?.metrics?.pendingVerificationsCount || 0) > 0 && (
+                <span className="animate-pulse flex h-2.5 w-2.5 rounded-full bg-sky-500" />
+              )}
+            </div>
+            <h4 className="text-2xl font-black text-[#13322E]">{data?.metrics?.pendingVerificationsCount || 0}</h4>
+            <p className="text-xs text-[#6B726E] font-medium mt-1">Documentos por validar</p>
+          </div>
+
+          <div className={`p-5 rounded-3xl border transition-all ${
+            (data?.metrics?.pendingIncidentsCount || 0) > 0
+              ? 'bg-red-50/80 border-red-300 shadow-sm'
+              : 'bg-white border-[#E9E1D2]'
+          }`}>
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[10px] font-black uppercase tracking-wider text-red-700">Incidencias</span>
+              {(data?.metrics?.pendingIncidentsCount || 0) > 0 && (
+                <span className="animate-pulse flex h-2.5 w-2.5 rounded-full bg-red-500" />
+              )}
+            </div>
+            <h4 className="text-2xl font-black text-[#13322E]">{data?.metrics?.pendingIncidentsCount || 0}</h4>
+            <p className="text-xs text-[#6B726E] font-medium mt-1">Partes de viaje abiertos</p>
+          </div>
+
+          <Link href="/soporte" className="p-5 rounded-3xl border border-[#E9E1D2] bg-white hover:bg-[#FAF7F0] transition-all flex flex-col justify-between group">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[10px] font-black uppercase tracking-wider text-[#16B8AA]">Soporte</span>
+              <span className="text-xs font-bold text-[#16B8AA] group-hover:translate-x-1 transition-transform">Ver chat →</span>
+            </div>
+            <div>
+              <h4 className="text-2xl font-black text-[#13322E]">{data?.metrics?.unreadMessagesCount || 0}</h4>
+              <p className="text-xs text-[#6B726E] font-medium mt-1">Mensajes de usuarios</p>
+            </div>
+          </Link>
+        </div>
 
         {/* MÉTRICAS FINANCIERAS */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
