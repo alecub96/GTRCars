@@ -223,10 +223,10 @@ export default function AdminVehicleQueue() {
 
                 <div className="flex flex-wrap items-center gap-2 pt-3 md:pt-0 border-t md:border-t-0 border-[#E9E1D2]">
                   <a
-                    href={`/camper/${v.slug || v.id}`}
+                    href={`/camper/${encodeURIComponent(v.slug || v.id)}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-full border border-[#E9E1D2] bg-white text-xs font-bold text-[#13322E] hover:bg-[#FAF7F0] transition-colors"
+                    className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-full border border-[#E9E1D2] bg-white text-xs font-bold text-[#13322E] hover:bg-[#13322E] hover:text-white hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm"
                   >
                     <Eye className="w-3.5 h-3.5 text-[#16B8AA]" />
                     <span>Ver Ficha</span>
@@ -237,9 +237,9 @@ export default function AdminVehicleQueue() {
                       type="button"
                       disabled={isProcessing}
                       onClick={() => reviewVehicle(v.id, 'approve')}
-                      className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-full bg-[#16B8AA] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#0F766E] transition-all shadow-sm cursor-pointer disabled:opacity-50"
+                      className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-full bg-[#16B8AA] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#0F766E] hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer disabled:opacity-50"
                     >
-                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      <CheckCircle2 className={`w-3.5 h-3.5 ${isProcessing ? 'animate-spin' : ''}`} />
                       <span>{isProcessing ? 'Aprobando...' : 'Aprobar'}</span>
                     </button>
                   )}
@@ -249,9 +249,9 @@ export default function AdminVehicleQueue() {
                       type="button"
                       disabled={isProcessing}
                       onClick={() => reviewVehicle(v.id, 'reject')}
-                      className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-full bg-red-50 text-red-700 border border-red-200 text-xs font-bold uppercase tracking-wider hover:bg-red-100 transition-all cursor-pointer disabled:opacity-50"
+                      className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-full border border-red-200 bg-red-50 text-red-700 text-xs font-bold uppercase tracking-wider hover:bg-red-600 hover:text-white hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer disabled:opacity-50"
                     >
-                      <XCircle className="w-3.5 h-3.5" />
+                      <XCircle className={`w-3.5 h-3.5 ${isProcessing ? 'animate-spin' : ''}`} />
                       <span>{isProcessing ? 'Rechazando...' : 'Rechazar'}</span>
                     </button>
                   )}
@@ -261,10 +261,9 @@ export default function AdminVehicleQueue() {
                     disabled={isProcessing}
                     onClick={() => deleteVehicle(v.id)}
                     title="Eliminar anuncio permanentemente"
-                    className="inline-flex items-center space-x-1 px-3 py-2 rounded-full text-slate-400 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-200 text-xs font-bold transition-all cursor-pointer disabled:opacity-50"
+                    className="inline-flex items-center justify-center p-2 rounded-full border border-slate-200 bg-white text-slate-400 hover:bg-red-50 hover:text-red-600 hover:border-red-200 hover:scale-110 active:scale-90 transition-all duration-200 shadow-sm cursor-pointer disabled:opacity-50"
                   >
-                    <Trash2 className="w-3.5 h-3.5" />
-                    <span className="hidden sm:inline">Eliminar</span>
+                    <Trash2 className={`w-4 h-4 ${isProcessing ? 'animate-spin' : ''}`} />
                   </button>
                 </div>
               </div>

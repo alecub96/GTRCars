@@ -14,6 +14,8 @@ import { isConfiguredAdmin } from '@/lib/admin';
 import { REALISTIC_CANARIAN_CAMPERS } from '@/lib/demo-campers-data';
 import Link from 'next/link';
 
+export const dynamic = 'force-dynamic';
+
 interface CamperDetailPageProps {
   params: Promise<{ slug: string }>;
 }
@@ -47,12 +49,13 @@ export async function generateMetadata({ params }: CamperDetailPageProps): Promi
 }
 
 export default async function CamperDetailPage({ params }: CamperDetailPageProps) {
-  const { slug } = await params;
+  const rawParams = await params;
+  const slug = decodeURIComponent(rawParams.slug);
   const currentUser = await getCurrentUser().catch(() => null);
 
   let vehicle: any = await prisma.vehicle.findFirst({
     where: {
-      OR: [{ slug }, { id: slug }],
+      OR: [{ slug }, { id: slug }, { slug: rawParams.slug }],
     },
     include: {
       photos: { orderBy: { orderIndex: 'asc' } },
