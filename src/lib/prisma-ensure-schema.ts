@@ -169,6 +169,18 @@ export async function ensureDbSchema() {
         updatedAt DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
         INDEX idx_doc_user (userId, status)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
+
+      `CREATE TABLE IF NOT EXISTS ExternalCalendarFeed (
+        id VARCHAR(191) NOT NULL PRIMARY KEY,
+        vehicleId VARCHAR(191) NOT NULL,
+        name VARCHAR(191) NOT NULL,
+        url TEXT NOT NULL,
+        platform VARCHAR(191) NOT NULL DEFAULT 'OTHER',
+        lastSyncAt DATETIME(3) NULL,
+        lastEventCount INT NOT NULL DEFAULT 0,
+        createdAt DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+        INDEX idx_ext_cal_veh (vehicleId)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
     ];
 
     for (const tq of tableQueries) {
