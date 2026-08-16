@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { MapPin, Users, Search, ChevronDown, Plus, Minus, Check, Sparkles } from 'lucide-react';
+import { MapPin, Users, Search, ChevronDown, Plus, Minus, Check, Sparkles, Map } from 'lucide-react';
 import { CANARY_ISLANDS } from '@/lib/pricing';
 import DateRangeCalendar from '@/components/DateRangeCalendar';
 
@@ -24,7 +24,12 @@ const ISLAND_EMOJIS: Record<string, string> = {
   'La Graciosa': '⛵',
 };
 
-export default function MainSearchWidget({ selectedIsland, onIslandChange, selectedVehicleType, onVehicleTypeChange }: MainSearchWidgetProps) {
+export default function MainSearchWidget({
+  selectedIsland,
+  onIslandChange,
+  selectedVehicleType,
+  onVehicleTypeChange,
+}: MainSearchWidgetProps) {
   const [islandInternal, setIslandInternal] = useState('Gran Canaria');
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
@@ -86,20 +91,20 @@ export default function MainSearchWidget({ selectedIsland, onIslandChange, selec
   return (
     <form
       onSubmit={handleSearch}
-      className="bg-white/95 backdrop-blur-xl rounded-[28px] p-3 sm:p-4 shadow-2xl border border-[#E9E1D2] max-w-4xl w-full max-w-full grid grid-cols-1 md:grid-cols-4 gap-2 text-[#13322E] relative z-30"
+      className="bg-white/95 backdrop-blur-xl rounded-[28px] p-2.5 sm:p-3.5 shadow-2xl border border-[#E9E1D2] max-w-4xl w-full grid grid-cols-1 md:grid-cols-[1.1fr_1.35fr_1.05fr_auto] gap-2 items-center text-[#13322E] relative z-30"
     >
-      {/* 1. SELECCIONAR ISLA PERSONALIZADO */}
-      <div ref={islandRef} className="relative w-full">
+      {/* 1. SELECCIONAR ISLA */}
+      <div ref={islandRef} className="relative w-full h-full">
         <button
           type="button"
           onClick={() => {
             setIslandOpen(!isIslandOpen);
             setIsPassengersOpen(false);
           }}
-          className={`w-full p-3 rounded-2xl transition-all flex items-center space-x-3 text-left border cursor-pointer ${
+          className={`w-full h-full min-h-[58px] p-3 rounded-2xl transition-all flex items-center space-x-3 text-left border cursor-pointer ${
             isIslandOpen
               ? 'bg-white border-[#16B8AA] ring-4 ring-[#16B8AA]/10 shadow-sm'
-              : 'border-[#E9E1D2] sm:border-transparent bg-[#FAF7F0] sm:bg-transparent hover:bg-[#F8FAFC]'
+              : 'border-[#E9E1D2] bg-[#FAF7F0] hover:bg-[#F4EFE6]'
           }`}
         >
           <MapPin className="w-5 h-5 text-[#16B8AA] shrink-0" />
@@ -111,7 +116,11 @@ export default function MainSearchWidget({ selectedIsland, onIslandChange, selec
               <span className="font-extrabold text-sm text-[#13322E] truncate">
                 {ISLAND_EMOJIS[activeIsland] || '🏝️'} {activeIsland}
               </span>
-              <ChevronDown className={`w-4 h-4 text-[#94A3B8] transition-transform duration-200 ${isIslandOpen ? 'rotate-180 text-[#16B8AA]' : ''}`} />
+              <ChevronDown
+                className={`w-4 h-4 text-[#94A3B8] transition-transform duration-200 ${
+                  isIslandOpen ? 'rotate-180 text-[#16B8AA]' : ''
+                }`}
+              />
             </div>
           </div>
         </button>
@@ -120,7 +129,9 @@ export default function MainSearchWidget({ selectedIsland, onIslandChange, selec
         {isIslandOpen && (
           <div className="absolute top-full left-0 mt-2 w-[calc(100vw-48px)] max-w-xs sm:w-72 bg-white rounded-2xl shadow-2xl border border-[#E9E1D2] p-2 z-[99999] animate-in fade-in slide-in-from-top-2 duration-200">
             <div className="px-3 py-2 border-b border-[#E9E1D2]/60 mb-1 flex items-center justify-between">
-              <span className="text-[10px] font-black uppercase tracking-wider text-[#16B8AA]">Selecciona tu Isla</span>
+              <span className="text-[10px] font-black uppercase tracking-wider text-[#16B8AA]">
+                Selecciona tu Isla
+              </span>
               <Sparkles className="w-3.5 h-3.5 text-[#16B8AA]" />
             </div>
             <div className="max-h-64 overflow-y-auto space-y-1 pr-1 custom-scrollbar">
@@ -151,22 +162,30 @@ export default function MainSearchWidget({ selectedIsland, onIslandChange, selec
       </div>
 
       {/* 2. FECHAS */}
-      <div className="p-3 rounded-2xl bg-[#FAF7F0] sm:bg-transparent border border-[#E9E1D2] sm:border-transparent hover:bg-[#F8FAFC] transition-colors flex items-center space-x-3">
-        <DateRangeCalendar variant="popover" startDate={startDate} endDate={endDate} onChange={(start, end) => { setStartDate(start); setEndDate(end); }} />
+      <div className="w-full h-full min-h-[58px] p-3 rounded-2xl bg-[#FAF7F0] border border-[#E9E1D2] hover:bg-[#F4EFE6] transition-colors flex items-center">
+        <DateRangeCalendar
+          variant="popover"
+          startDate={startDate}
+          endDate={endDate}
+          onChange={(start, end) => {
+            setStartDate(start);
+            setEndDate(end);
+          }}
+        />
       </div>
 
-      {/* 3. VIAJEROS Y MASCOTAS PERSONALIZADO */}
-      <div ref={passengersRef} className="relative w-full">
+      {/* 3. VIAJEROS Y MASCOTAS */}
+      <div ref={passengersRef} className="relative w-full h-full">
         <button
           type="button"
           onClick={() => {
             setIsPassengersOpen(!isPassengersOpen);
             setIslandOpen(false);
           }}
-          className={`w-full p-3 rounded-2xl transition-all flex items-center space-x-3 text-left border cursor-pointer ${
+          className={`w-full h-full min-h-[58px] p-3 rounded-2xl transition-all flex items-center space-x-3 text-left border cursor-pointer ${
             isPassengersOpen
               ? 'bg-white border-[#16B8AA] ring-4 ring-[#16B8AA]/10 shadow-sm'
-              : 'border-[#E9E1D2] sm:border-transparent bg-[#FAF7F0] sm:bg-transparent hover:bg-[#F8FAFC]'
+              : 'border-[#E9E1D2] bg-[#FAF7F0] hover:bg-[#F4EFE6]'
           }`}
         >
           <Users className="w-5 h-5 text-[#16B8AA] shrink-0" />
@@ -178,7 +197,11 @@ export default function MainSearchWidget({ selectedIsland, onIslandChange, selec
               <span className="font-extrabold text-sm text-[#13322E] truncate">
                 {passengerLabelText()}
               </span>
-              <ChevronDown className={`w-4 h-4 text-[#94A3B8] transition-transform duration-200 ${isPassengersOpen ? 'rotate-180 text-[#16B8AA]' : ''}`} />
+              <ChevronDown
+                className={`w-4 h-4 text-[#94A3B8] transition-transform duration-200 ${
+                  isPassengersOpen ? 'rotate-180 text-[#16B8AA]' : ''
+                }`}
+              />
             </div>
           </div>
         </button>
@@ -270,28 +293,14 @@ export default function MainSearchWidget({ selectedIsland, onIslandChange, selec
         )}
       </div>
 
-      {/* 4. BOTONES: BUSCAR Y BUSCAR EN EL MAPA */}
-      <div className="flex flex-col sm:flex-row md:flex-col gap-2 h-full">
+      {/* 4. BOTÓN BUSCAR ALINEADO */}
+      <div className="w-full h-full min-h-[58px] flex items-center">
         <button
           type="submit"
-          style={{ backgroundColor: '#16B8AA', color: '#FFFFFF' }}
-          className="flex-1 py-3 px-4 rounded-2xl !bg-[#16B8AA] !text-white hover:!bg-[#0F766E] transition-all font-black text-xs uppercase tracking-wider flex items-center justify-center space-x-1.5 shadow-lg group cursor-pointer"
+          className="w-full h-full min-h-[58px] py-3.5 px-7 rounded-2xl bg-[#16B8AA] hover:bg-[#0F766E] text-white font-black text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center space-x-2 shadow-lg group cursor-pointer transition-all duration-200"
         >
           <Search className="w-4 h-4 text-white group-hover:scale-110 transition-transform" />
-          <span className="text-white font-black">BUSCAR</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => {
-            const params = new URLSearchParams();
-            if (activeIsland) params.set('island', activeIsland);
-            if (selectedVehicleType) params.set('vehicleType', selectedVehicleType);
-            router.push(`/mapa?${params.toString()}`);
-          }}
-          className="flex-1 py-3 px-4 rounded-2xl bg-[#13322E] text-white hover:bg-[#1f4e48] transition-all font-black text-xs uppercase tracking-wider flex items-center justify-center space-x-1.5 shadow-md cursor-pointer border border-white/20"
-        >
-          <span>🗺️ Ver Mapa</span>
+          <span>BUSCAR</span>
         </button>
       </div>
     </form>

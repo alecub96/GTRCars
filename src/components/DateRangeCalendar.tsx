@@ -162,18 +162,18 @@ export default function DateRangeCalendar({ startDate, endDate, onChange, blocke
           e.stopPropagation();
           setOpen(!open);
         }}
-        className="flex w-full items-center gap-3 text-left cursor-pointer p-1 rounded-xl hover:bg-[#F8FAFC] transition-colors"
+        className="flex w-full items-center space-x-3 text-left cursor-pointer p-0"
       >
         <CalendarDays className="h-5 w-5 shrink-0 text-[#16B8AA]" />
-        <div className="grid flex-1 grid-cols-2 gap-3">
-          <span>
+        <div className="grid flex-1 grid-cols-2 gap-2 min-w-0">
+          <div className="truncate">
             <small className="block text-[9px] font-black uppercase tracking-wider text-[#94A3B8]">Salida</small>
-            <strong className="text-xs text-[#13322E]">{pretty(startDate)}</strong>
-          </span>
-          <span>
+            <strong className="text-xs sm:text-sm font-extrabold text-[#13322E] truncate block">{pretty(startDate)}</strong>
+          </div>
+          <div className="truncate">
             <small className="block text-[9px] font-black uppercase tracking-wider text-[#94A3B8]">Devolución</small>
-            <strong className="text-xs text-[#13322E]">{pretty(endDate)}</strong>
-          </span>
+            <strong className="text-xs sm:text-sm font-extrabold text-[#13322E] truncate block">{pretty(endDate)}</strong>
+          </div>
         </div>
       </button>
       {open && mounted && createPortal(calendarModal, document.body)}
