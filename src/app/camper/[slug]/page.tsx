@@ -50,25 +50,41 @@ export async function generateMetadata({ params }: CamperDetailPageProps): Promi
 
 export default async function CamperDetailPage({ params }: CamperDetailPageProps) {
   const rawParams = await params;
-  const slug = decodeURIComponent(rawParams.slug);
+  const rawSlug = rawParams.slug;
+  const slug = decodeURIComponent(rawSlug).trim();
   const currentUser = await getCurrentUser().catch(() => null);
 
-  let vehicle: any = await prisma.vehicle.findFirst({
-    where: {
-      OR: [{ slug }, { id: slug }, { slug: rawParams.slug }],
-    },
-    include: {
-      photos: { orderBy: { orderIndex: 'asc' } },
-      features: true,
-      extras: { include: { extra: true } },
-      pricingRules: { orderBy: { startDate: 'asc' } },
-      owner: { select: { id: true, firstName: true, lastName: true, avatarUrl: true, verification: true, createdAt: true } },
-      reviews: { include: { author: { select: { firstName: true, avatarUrl: true } } } },
-    },
-  }).catch(() => null);
+  let vehicle: any = null;
+
+  try {
+    const { ensureDbSchema } = await import('@/lib/prisma-ensure-schema');
+    await ensureDbSchema();
+
+    vehicle = await prisma.vehicle.findFirst({
+      where: {
+        OR: [
+          { slug: slug },
+          { id: slug },
+          { slug: rawSlug },
+          { id: rawSlug },
+          { slug: { contains: slug.split('-').slice(0, 3).join('-') } },
+        ],
+      },
+      include: {
+        photos: { orderBy: { orderIndex: 'asc' } },
+        features: true,
+        extras: { include: { extra: true } },
+        pricingRules: { orderBy: { startDate: 'asc' } },
+        owner: { select: { id: true, firstName: true, lastName: true, avatarUrl: true, verification: true, createdAt: true } },
+        reviews: { include: { author: { select: { firstName: true, avatarUrl: true } } } },
+      },
+    });
+  } catch (err) {
+    console.error('Error fetching vehicle by slug/id:', err);
+  }
 
   if (!vehicle) {
-    const demo = REALISTIC_CANARIAN_CAMPERS.find((c) => c.slug === slug || c.id === slug);
+    const demo = REALISTIC_CANARIAN_CAMPERS.find((c) => c.slug === slug || c.id === slug || c.slug === rawSlug || c.id === rawSlug);
     if (demo) {
       vehicle = {
         ...demo,
