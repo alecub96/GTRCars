@@ -5,6 +5,8 @@ import { parseIcsEvents, generateIcsCalendar, detectPlatformFromIcs } from '@/li
 import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 import { ensureDbSchema } from '@/lib/prisma-ensure-schema';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * GET: Exporta el calendario oficial de Vaneando en formato iCal (.ics)
  * o devuelve la lista de feeds vinculados si se consulta desde la app.
@@ -60,7 +62,7 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
         blocks: vehicle.availabilityBlocks || [],
       });
 
-      return new Response(icsString, {
+      return new NextResponse(icsString, {
         status: 200,
         headers: {
           'Content-Type': 'text/calendar; charset=utf-8',

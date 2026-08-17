@@ -93,7 +93,7 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
         setExportUrl(calData.exportUrl);
       } else {
         const origin = typeof window !== 'undefined' ? window.location.origin : 'https://vaneando.com';
-        setExportUrl(`${origin}/api/vehicles/${id}/calendar?export=true`);
+        setExportUrl(`${origin}/api/calendar/export/${id}`);
       }
     } catch (err) {
       console.error('Error loading calendar data:', err);
