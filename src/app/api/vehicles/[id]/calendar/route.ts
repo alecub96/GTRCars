@@ -19,8 +19,10 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
       url.searchParams.get('format') === 'ics' ||
       request.headers.get('accept')?.includes('text/calendar');
 
-    const vehicle = await prisma.vehicle.findUnique({
-      where: { id },
+    const vehicle = await prisma.vehicle.findFirst({
+      where: {
+        OR: [{ id }, { slug: id }],
+      },
       select: {
         id: true,
         slug: true,
@@ -29,7 +31,7 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
         status: true,
         bookings: {
           where: { status: { in: ['CONFIRMED', 'ACTIVE', 'COMPLETED'] } },
-          select: { id: true, code: true, startDate: true, endDate: true, status: true },
+          select: { id: true, code: true, pickupDate: true, returnDate: true, status: true },
         },
         availabilityBlocks: {
           select: { id: true, startDate: true, endDate: true, reason: true },
@@ -41,13 +43,21 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
       return NextResponse.json({ error: 'Vehículo no encontrado' }, { status: 404 });
     }
 
+    const vehicleId = vehicle.id;
+
     // MODO EXPORTACIÓN ICAL (.ics) PARA AIRBNB, YESCAPA, GOOGLE, ETC.
     if (isExport) {
       const icsString = generateIcsCalendar({
         vehicleTitle: vehicle.title,
         vehicleSlug: vehicle.slug,
-        bookings: vehicle.bookings,
-        blocks: vehicle.availabilityBlocks,
+        bookings: (vehicle.bookings || []).map((b) => ({
+          id: b.id,
+          code: b.code,
+          startDate: b.pickupDate,
+          endDate: b.returnDate,
+          status: b.status,
+        })),
+        blocks: vehicle.availabilityBlocks || [],
       });
 
       return new Response(icsString, {
@@ -70,19 +80,21 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
     try {
       feeds = ((await prisma.$queryRawUnsafe(
         `SELECT id, name, url, platform, lastSyncAt, lastEventCount, createdAt FROM ExternalCalendarFeed WHERE vehicleId = ? ORDER BY createdAt DESC`,
-        id
+        vehicleId
       ).catch(() => [])) || []) as any[];
     } catch {}
 
     const origin = url.origin || 'https://vaneando.com';
     const exportUrl = `${origin}/api/vehicles/${vehicle.id}/calendar?export=true`;
 
+    const allBlocks = vehicle.availabilityBlocks || [];
+
     return NextResponse.json({
       success: true,
       exportUrl,
       feeds,
-      totalBlocks: vehicle.availabilityBlocks.length,
-      syncedBlocks: vehicle.availabilityBlocks.filter((b) => b.reason?.startsWith('SYNC_')).length,
+      totalBlocks: allBlocks.length,
+      syncedBlocks: allBlocks.filter((b: any) => b.reason?.startsWith('SYNC_')).length,
     });
   } catch (error) {
     console.error('Calendar GET error:', error);
@@ -100,8 +112,10 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     const user = await getCurrentUser();
     const { id } = await context.params;
 
-    const vehicle = await prisma.vehicle.findUnique({
-      where: { id },
+    const vehicle = await prisma.vehicle.findFirst({
+      where: {
+        OR: [{ id }, { slug: id }],
+      },
       select: { id: true, ownerId: true, title: true },
     });
 
@@ -109,6 +123,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
       return NextResponse.json({ error: 'No autorizado' }, { status: 403 });
     }
 
+    const vehicleId = vehicle.id;
     const contentType = request.headers.get('content-type') || '';
     let icsContent = '';
     let sourcePlatform: string = 'OTHER';
@@ -201,7 +216,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
       if (feedUrl) {
         await tx.availabilityBlock.deleteMany({
           where: {
-            vehicleId: id,
+            vehicleId,
             reason: { startsWith: prefix },
           },
         });
@@ -211,7 +226,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
         // No pisar reservas directas de Vaneando
         const conflictBooking = await tx.availabilityBlock.findFirst({
           where: {
-            vehicleId: id,
+            vehicleId,
             startDate: { lt: event.end },
             endDate: { gt: event.start },
             reason: { startsWith: 'BOOKING_' },
@@ -222,7 +237,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
         // Comprobar si ya existe el bloqueo
         const exists = await tx.availabilityBlock.findFirst({
           where: {
-            vehicleId: id,
+            vehicleId,
             startDate: event.start,
             endDate: event.end,
           },
@@ -232,7 +247,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
           const reasonSummary = event.summary.replace(/[\r\n]/g, ' ').slice(0, 40);
           await tx.availabilityBlock.create({
             data: {
-              vehicleId: id,
+              vehicleId,
               startDate: event.start,
               endDate: event.end,
               reason: `${prefix}${reasonSummary}`,
@@ -244,11 +259,11 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
 
       // Si se sincronizó por URL, registrar o actualizar el feed en ExternalCalendarFeed
       if (feedUrl) {
-        const feedId = `cal_feed_${id.slice(0, 8)}_${Math.random().toString(36).slice(2, 8)}`;
+        const feedId = `cal_feed_${vehicleId.slice(0, 8)}_${Math.random().toString(36).slice(2, 8)}`;
         try {
           const existingFeeds = ((await tx.$queryRawUnsafe(
             `SELECT id FROM ExternalCalendarFeed WHERE vehicleId = ? AND url = ? LIMIT 1`,
-            id,
+            vehicleId,
             feedUrl
           ).catch(() => [])) || []) as any[];
 
@@ -264,7 +279,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
             await tx.$executeRawUnsafe(
               `INSERT INTO ExternalCalendarFeed (id, vehicleId, name, url, platform, lastSyncAt, lastEventCount, createdAt) VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP(3), ?, CURRENT_TIMESTAMP(3))`,
               feedId,
-              id,
+              vehicleId,
               feedName,
               feedUrl,
               sourcePlatform,
@@ -302,36 +317,39 @@ export async function DELETE(request: Request, context: { params: Promise<{ id: 
     const user = await getCurrentUser();
     const { id } = await context.params;
 
-    const vehicle = await prisma.vehicle.findUnique({
-      where: { id },
-      select: { ownerId: true },
+    const vehicle = await prisma.vehicle.findFirst({
+      where: {
+        OR: [{ id }, { slug: id }],
+      },
+      select: { id: true, ownerId: true },
     });
 
     if (!user || !vehicle || (vehicle.ownerId !== user.id && user.role !== 'ADMIN')) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 403 });
     }
 
+    const vehicleId = vehicle.id;
     const body = await request.json().catch(() => ({}));
     const feedId = String(body.feedId || '');
     const platform = String(body.platform || '');
 
     if (feedId) {
       try {
-        await prisma.$executeRawUnsafe(`DELETE FROM ExternalCalendarFeed WHERE id = ? AND vehicleId = ?`, feedId, id);
+        await prisma.$executeRawUnsafe(`DELETE FROM ExternalCalendarFeed WHERE id = ? AND vehicleId = ?`, feedId, vehicleId);
       } catch {}
     }
 
     if (platform && platform !== 'ALL') {
       await prisma.availabilityBlock.deleteMany({
         where: {
-          vehicleId: id,
+          vehicleId,
           reason: { startsWith: `SYNC_${platform}_` },
         },
       });
     } else if (body.clearAllSynced) {
       await prisma.availabilityBlock.deleteMany({
         where: {
-          vehicleId: id,
+          vehicleId,
           reason: { startsWith: 'SYNC_' },
         },
       });
