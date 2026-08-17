@@ -115,7 +115,9 @@ export default function Navbar() {
 
   const openAuth = (mode: 'login' | 'register') => {
     setMobileOpen(false);
-    window.dispatchEvent(new CustomEvent('open-auth-modal', { detail: { mode } }));
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('open-auth-modal', { detail: { mode } }));
+    }, 60);
   };
 
   return (
@@ -186,7 +188,6 @@ export default function Navbar() {
 
         {/* BOTÓN ÚNICO UNIFICADO PARA MÓVIL */}
         <div className="flex md:hidden items-center">
-          <AuthModal />
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Menú principal"

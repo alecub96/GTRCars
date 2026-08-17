@@ -51,7 +51,7 @@ export default function AdminPage() {
           return;
         }
 
-        const adminEmails = ['admin@vaneando.com', 'vaneando@vaneando.com', 'alecub96@hotmail.com'];
+        const adminEmails = ['admin@vaneando.com', 'vaneando@vaneando.com'];
         const isAdmin = auth.user.role === 'ADMIN' || adminEmails.includes(auth.user.email?.toLowerCase());
         setAuthorized(isAdmin);
 

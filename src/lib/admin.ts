@@ -4,7 +4,6 @@ import { prisma } from './prisma';
 const DEFAULT_ADMIN_EMAILS = [
   'admin@vaneando.com',
   'vaneando@vaneando.com',
-  'alecub96@hotmail.com',
 ];
 
 export function getConfiguredAdminEmails() {

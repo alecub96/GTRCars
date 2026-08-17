@@ -314,7 +314,7 @@ export const REALISTIC_CANARIAN_CAMPERS: DemoCamperItem[] = [
       avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400',
       verification: 'VERIFIED',
       phone: '+34 600 000 000',
-      email: 'alecub96@hotmail.com',
+      email: 'propietario@vaneando.com',
     },
     photos: [
       { id: 'p4-1', url: '/Anuncios/3/foto-1.png', orderIndex: 0 },

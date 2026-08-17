@@ -343,9 +343,16 @@ export default function AuthModal() {
           </button>
 
           {isOpen && mounted && createPortal(
-            <div className="fixed inset-0 z-[999999] overflow-y-auto bg-black/65 backdrop-blur-sm p-4 sm:p-6 flex min-h-full items-center justify-center">
-              <div className="relative w-full max-w-md bg-white border border-[#E9E1D2] rounded-3xl p-6 sm:p-8 shadow-2xl animate-fade-in my-auto text-left">
+            <div
+              onClick={() => setIsOpen(false)}
+              className="fixed inset-0 z-[999999] overflow-y-auto bg-black/65 backdrop-blur-sm p-4 sm:p-6 flex min-h-full items-center justify-center cursor-pointer"
+            >
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className="relative w-full max-w-md bg-white border border-[#E9E1D2] rounded-3xl p-6 sm:p-8 shadow-2xl animate-fade-in my-auto text-left cursor-default"
+              >
                 <button
+                  type="button"
                   onClick={() => setIsOpen(false)}
                   className="absolute top-5 right-5 p-2 rounded-full hover:bg-slate-100 transition-colors text-slate-500 cursor-pointer"
                 >
