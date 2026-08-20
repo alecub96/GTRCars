@@ -415,9 +415,9 @@ export default function EditCamperPage({ params }: { params: Promise<{ id: strin
                   onChange={(e) => setFormData({ ...formData, island: e.target.value })}
                   className="w-full rounded-xl border border-[#E9E1D2] p-3 text-sm bg-white focus:border-[#16B8AA] focus:outline-none cursor-pointer"
                 >
-                  {CANARY_ISLANDS.map((island) => (
-                    <option key={island} value={island}>
-                      {island}
+                  {CANARY_ISLANDS.map((is) => (
+                    <option key={is.name} value={is.name}>
+                      {is.name}
                     </option>
                   ))}
                 </select>
@@ -456,12 +456,14 @@ export default function EditCamperPage({ params }: { params: Promise<{ id: strin
                   initialLat={formData.latitude}
                   initialLng={formData.longitude}
                   island={formData.island}
-                  onLocationSelect={(lat, lng, address) => {
+                  municipality={formData.municipality}
+                  initialAddressApprox={formData.addressApprox}
+                  onChange={({ latitude, longitude, addressApprox }: { latitude: number; longitude: number; addressApprox: string }) => {
                     setFormData((prev) => ({
                       ...prev,
-                      latitude: lat,
-                      longitude: lng,
-                      addressApprox: address || prev.addressApprox,
+                      latitude,
+                      longitude,
+                      addressApprox: addressApprox || prev.addressApprox,
                     }));
                   }}
                 />

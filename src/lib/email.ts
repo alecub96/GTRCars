@@ -440,7 +440,7 @@ export async function sendBookingCancelledByOwnerEmail(
       ctaText: 'Buscar Otras Campers',
       ctaUrl: `${appUrl}/buscar`,
     }),
-  }).catch((err) => console.error('Error sending booking cancelled by owner email:', err));
+  }).catch((err: any) => console.error('Error sending booking cancelled by owner email:', err));
 }
 
 /**
@@ -485,7 +485,7 @@ export async function sendContractCancelledEmail(
       ctaText: 'Ver Estado de la Reserva',
       ctaUrl: `${appUrl}/reserva/${details.bookingId}`,
     }),
-  }).catch((err) => console.error('Error sending contract cancelled email:', err));
+  }).catch((err: any) => console.error('Error sending contract cancelled email:', err));
 }
 
 export function getEmailConfiguration() {
