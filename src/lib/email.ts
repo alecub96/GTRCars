@@ -397,6 +397,97 @@ export async function sendChatSummaryEmail(
   });
 }
 
+/**
+ * Notificación al viajero cuando el propietario cancela una reserva
+ */
+export async function sendBookingCancelledByOwnerEmail(
+  to: string,
+  travelerName: string,
+  details: {
+    code: string;
+    vehicle: string;
+    reason?: string;
+    bookingId: string;
+  }
+) {
+  if (!transporter) return;
+
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://vaneando.com';
+  const reasonText = details.reason ? details.reason : 'El propietario ha tenido un imprevisto con la disponibilidad del vehículo.';
+
+  const contentHtml = `
+    <h2>Hola ${escapeHtml(travelerName)},</h2>
+    <p>Te informamos de que el propietario ha cancelado la reserva <strong>${escapeHtml(details.code)}</strong> para el vehículo <strong>${escapeHtml(details.vehicle)}</strong>.</p>
+    
+    <div class="card" style="border-left: 4px solid #E07A5F; background-color: #FFF5F2;">
+      <p style="margin: 0 0 8px 0; font-weight: bold; color: #9C4221;">Motivo de la cancelación:</p>
+      <p style="margin: 0; color: #4A5568; font-style: italic;">"${escapeHtml(reasonText)}"</p>
+    </div>
+
+    <p>Si ya se había procesado algún pago o retención por esta reserva, el reembolso íntegro se tramitará automáticamente a tu método de pago original.</p>
+    <p>Puedes explorar otras campers disponibles en Canarias para las mismas fechas desde nuestro buscador.</p>
+  `;
+
+  await transporter.sendMail({
+    from,
+    to,
+    subject: `Reserva cancelada: ${details.code} (${details.vehicle}) 🚐`,
+    text: `Hola ${travelerName},\n\nEl propietario ha cancelado tu reserva ${details.code} para ${details.vehicle}.\n\nMotivo: ${reasonText}\n\nPuedes buscar otras opciones en: ${appUrl}/buscar`,
+    html: renderEmailLayout({
+      title: 'Reserva Cancelada por el Propietario',
+      previewText: `Tu reserva ${details.code} ha sido cancelada por el propietario`,
+      contentHtml,
+      ctaText: 'Buscar Otras Campers',
+      ctaUrl: `${appUrl}/buscar`,
+    }),
+  }).catch((err) => console.error('Error sending booking cancelled by owner email:', err));
+}
+
+/**
+ * Notificación al viajero cuando el propietario cancela un contrato de alquiler
+ */
+export async function sendContractCancelledEmail(
+  to: string,
+  travelerName: string,
+  details: {
+    code: string;
+    vehicle: string;
+    reason?: string;
+    bookingId: string;
+  }
+) {
+  if (!transporter) return;
+
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://vaneando.com';
+  const reasonText = details.reason ? details.reason : 'El propietario necesita actualizar las cláusulas, inspección o datos del contrato.';
+
+  const contentHtml = `
+    <h2>Hola ${escapeHtml(travelerName)},</h2>
+    <p>El contrato digital asociado a tu reserva <strong>${escapeHtml(details.code)}</strong> para <strong>${escapeHtml(details.vehicle)}</strong> ha sido cancelado temporalmente por el propietario.</p>
+    
+    <div class="card" style="border-left: 4px solid #D97706; background-color: #FFFBEB;">
+      <p style="margin: 0 0 8px 0; font-weight: bold; color: #92400E;">Motivo indicado:</p>
+      <p style="margin: 0; color: #4A5568; font-style: italic;">"${escapeHtml(reasonText)}"</p>
+    </div>
+
+    <p>El propietario va a regenerar el contrato con los datos actualizados. En cuanto esté disponible, recibirás un nuevo aviso para revisar y firmar el contrato digital actualizado desde tu panel.</p>
+  `;
+
+  await transporter.sendMail({
+    from,
+    to,
+    subject: `Contrato cancelado / en revisión: Reserva ${details.code} 📄`,
+    text: `Hola ${travelerName},\n\nEl contrato de tu reserva ${details.code} ha sido cancelado para su actualización.\nMotivo: ${reasonText}\n\nRevisa el estado en: ${appUrl}/reserva/${details.bookingId}`,
+    html: renderEmailLayout({
+      title: 'Contrato Digital Cancelado / En Revisión',
+      previewText: `El contrato de tu reserva ${details.code} ha sido cancelado por el propietario`,
+      contentHtml,
+      ctaText: 'Ver Estado de la Reserva',
+      ctaUrl: `${appUrl}/reserva/${details.bookingId}`,
+    }),
+  }).catch((err) => console.error('Error sending contract cancelled email:', err));
+}
+
 export function getEmailConfiguration() {
   return {
     configured: Boolean(transporter),

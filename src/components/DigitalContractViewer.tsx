@@ -19,6 +19,8 @@ import {
   Layers,
   HelpCircle,
   Eye,
+  RotateCcw,
+  Ban,
 } from 'lucide-react';
 
 interface ContractViewerProps {
@@ -279,6 +281,76 @@ export default function DigitalContractViewer({
       year: 'numeric',
     });
 
+  let snapshot: any = {};
+  try {
+    if (contract.termsSnapshot) snapshot = JSON.parse(contract.termsSnapshot);
+  } catch (_) {}
+  const isContractCancelled = Boolean(snapshot.contractCancelled);
+
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [contractCancelReason, setContractCancelReason] = useState('');
+  const [contractActionLoading, setContractActionLoading] = useState(false);
+
+  const handleCancelContract = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!contractCancelReason.trim()) return;
+
+    setContractActionLoading(true);
+    setError('');
+
+    try {
+      const res = await fetch(`/api/bookings/${booking.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'cancel-contract',
+          reason: contractCancelReason.trim(),
+        }),
+      });
+
+      const data = await res.json();
+      setContractActionLoading(false);
+
+      if (!res.ok) {
+        throw new Error(data.error || 'No se pudo cancelar el contrato');
+      }
+
+      setShowCancelModal(false);
+      setContractCancelReason('');
+      if (onSigned) onSigned();
+    } catch (err: any) {
+      setContractActionLoading(false);
+      setError(err.message || 'Error cancelando el contrato');
+    }
+  };
+
+  const handleRedoContract = async () => {
+    setContractActionLoading(true);
+    setError('');
+
+    try {
+      const res = await fetch(`/api/bookings/${booking.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'redo-contract',
+        }),
+      });
+
+      const data = await res.json();
+      setContractActionLoading(false);
+
+      if (!res.ok) {
+        throw new Error(data.error || 'No se pudo regenerar el contrato');
+      }
+
+      if (onSigned) onSigned();
+    } catch (err: any) {
+      setContractActionLoading(false);
+      setError(err.message || 'Error rehaciendo el contrato');
+    }
+  };
+
   return (
     <div className="bg-white rounded-3xl border border-[#E9E1D2] shadow-sm p-6 sm:p-8 space-y-6">
       
@@ -297,16 +369,109 @@ export default function DigitalContractViewer({
           </p>
         </div>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {viewerRole === 'OWNER' && !isContractCancelled && (
+            <button
+              type="button"
+              onClick={() => setShowCancelModal(true)}
+              className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-full border border-red-200 bg-red-50 text-xs font-bold text-red-700 hover:bg-red-100 transition-all cursor-pointer"
+            >
+              <Ban className="w-3.5 h-3.5" />
+              <span>Cancelar Contrato</span>
+            </button>
+          )}
+
+          {viewerRole === 'OWNER' && isContractCancelled && (
+            <button
+              type="button"
+              disabled={contractActionLoading}
+              onClick={handleRedoContract}
+              className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-full bg-[#16B8AA] hover:bg-[#0F766E] text-xs font-bold text-white transition-all shadow-sm cursor-pointer disabled:opacity-50"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Rehacer Contrato</span>
+            </button>
+          )}
+
           <button
             onClick={() => window.print()}
             className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-full border border-[#E9E1D2] bg-[#FAF7F0] text-xs font-bold text-[#13322E] hover:bg-[#13322E] hover:text-white transition-all cursor-pointer"
           >
             <Printer className="w-3.5 h-3.5" />
-            <span>Imprimir / Descargar PDF</span>
+            <span>Imprimir / PDF</span>
           </button>
         </div>
       </div>
+
+      {/* BANNER DE CONTRATO CANCELADO */}
+      {isContractCancelled && (
+        <div className="p-5 rounded-2xl bg-amber-50 border border-amber-300 text-amber-900 space-y-2.5">
+          <div className="flex items-center gap-2 font-bold text-sm text-amber-900">
+            <AlertTriangle className="w-5 h-5 text-amber-700 shrink-0" />
+            <span>Este contrato digital ha sido cancelado para actualización</span>
+          </div>
+          {snapshot.cancelledReason && (
+            <p className="text-xs text-amber-800">
+              <strong>Motivo indicado:</strong> &ldquo;{snapshot.cancelledReason}&rdquo;
+            </p>
+          )}
+          <p className="text-xs text-[#6B726E]">
+            {viewerRole === 'OWNER'
+              ? 'Puedes pulsar "Rehacer Contrato" para generar la nueva versión y enviarla al cliente.'
+              : 'El propietario está actualizando los datos del contrato. En cuanto esté disponible podrás firmarlo nuevamente.'}
+          </p>
+        </div>
+      )}
+
+      {/* MODAL DE CANCELACIÓN DE CONTRATO */}
+      {showCancelModal && (
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-[#13322E]/60 p-4 backdrop-blur-sm">
+          <form onSubmit={handleCancelContract} className="w-full max-w-lg rounded-[32px] bg-white p-7 shadow-2xl space-y-4">
+            <div className="flex items-center gap-3 text-red-600">
+              <AlertTriangle className="h-6 w-6 shrink-0" />
+              <div>
+                <span className="text-[10px] font-black uppercase tracking-[.2em]">Acción Legal</span>
+                <h3 className="font-serif text-2xl font-bold text-[#13322E]">Cancelar Contrato Digital</h3>
+              </div>
+            </div>
+
+            <p className="text-xs text-[#6B726E] leading-relaxed">
+              Al cancelar este contrato, se anulan las firmas emitidas y se enviará un correo automático a <strong>{booking.traveler?.firstName || 'el viajero'}</strong>. Podrás regenerarlo inmediatamente con el botón &ldquo;Rehacer Contrato&rdquo;.
+            </p>
+
+            <div>
+              <label className="block text-xs font-bold text-[#13322E] mb-1.5">
+                Motivo de la cancelación del contrato *
+              </label>
+              <textarea
+                required
+                rows={3}
+                value={contractCancelReason}
+                onChange={(e) => setContractCancelReason(e.target.value)}
+                placeholder="Ej. Cambio de conductor principal, modificación de fianza o actualización de equipamiento."
+                className="w-full rounded-2xl border border-[#E9E1D2] p-3 text-xs bg-[#FAF7F0] focus:bg-white focus:border-red-500 focus:outline-none"
+              />
+            </div>
+
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setShowCancelModal(false)}
+                className="rounded-full border border-[#E9E1D2] px-5 py-2.5 text-xs font-bold cursor-pointer"
+              >
+                Volver
+              </button>
+              <button
+                type="submit"
+                disabled={contractActionLoading}
+                className="rounded-full bg-red-600 hover:bg-red-700 px-6 py-2.5 text-xs font-black text-white shadow-md cursor-pointer disabled:opacity-50"
+              >
+                {contractActionLoading ? 'Cancelando...' : 'Confirmar Cancelación'}
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
 
       {/* PESTAÑAS PRINCIPALES */}
       <div className="flex border-b border-[#E9E1D2] gap-2 overflow-x-auto">

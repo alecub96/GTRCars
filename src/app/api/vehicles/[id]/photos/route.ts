@@ -30,3 +30,33 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     return NextResponse.json({ error: 'No se pudo guardar la foto' }, { status: 500 });
   }
 }
+
+export async function DELETE(request: Request, context: { params: Promise<{ id: string }> }) {
+  try {
+    const user = await getCurrentUser();
+    if (!user) return NextResponse.json({ error: 'Debes iniciar sesión' }, { status: 401 });
+    const { id } = await context.params;
+    const body = await request.json();
+    const { photoId } = body;
+
+    const vehicle = await prisma.vehicle.findUnique({
+      where: { id },
+      include: { owner: { select: { id: true, email: true } } },
+    });
+    if (!vehicle) return NextResponse.json({ error: 'Vehículo no encontrado' }, { status: 404 });
+    const isOwner = vehicle.ownerId === user.id || vehicle.owner?.email === user.email || user.role === 'ADMIN';
+    if (!isOwner) return NextResponse.json({ error: 'No tienes permiso para modificar este vehículo' }, { status: 403 });
+
+    if (photoId) {
+      await prisma.vehiclePhoto.deleteMany({
+        where: { id: photoId, vehicleId: id },
+      });
+    }
+
+    return NextResponse.json({ success: true, message: 'Foto eliminada con éxito' });
+  } catch (error) {
+    console.error('Vehicle photo delete error:', error);
+    return NextResponse.json({ error: 'No se pudo eliminar la foto' }, { status: 500 });
+  }
+}
+

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
-import { BadgeCheck, Sparkles, Plus, BarChart3, WalletCards } from 'lucide-react';
+import { BadgeCheck, Sparkles, Plus, BarChart3, WalletCards, Pencil } from 'lucide-react';
 import OwnerAvailabilityCalendar from '@/components/OwnerAvailabilityCalendar';
 import OwnerBookingsPanel from '@/components/OwnerBookingsPanel';
 import UserContractsPanel from '@/components/UserContractsPanel';
@@ -237,14 +237,25 @@ export default function OwnerDashboardPage() {
                     <p className="text-xs text-[#6B726E] font-medium mb-4">{v.basePricePerDay}€ / día</p>
                   </div>
 
-                  <div className="pt-4 border-t border-[#E9E1D2] space-y-3">
-                    <Link
-                      href={`/camper/${v.slug || v.id}`}
-                      target="_blank"
-                      className="w-full py-2.5 rounded-full border border-[#E9E1D2] bg-[#FAF7F0] hover:bg-[#13322E] hover:text-white text-[#13322E] font-bold text-xs transition-all flex items-center justify-center space-x-1.5 shadow-sm"
-                    >
-                      <span>Ver Ficha del Anuncio</span>
-                    </Link>
+                  <div className="pt-4 border-t border-[#E9E1D2] space-y-2.5">
+                    <div className="grid grid-cols-2 gap-2">
+                      <Link
+                        href={`/propietario/editar/${v.id}`}
+                        className="w-full py-2.5 rounded-full bg-[#13322E] text-white hover:bg-[#16B8AA] font-bold text-xs transition-all flex items-center justify-center space-x-1.5 shadow-sm"
+                      >
+                        <Pencil className="w-3.5 h-3.5" />
+                        <span>Editar Anuncio</span>
+                      </Link>
+
+                      <Link
+                        href={`/camper/${v.slug || v.id}`}
+                        target="_blank"
+                        className="w-full py-2.5 rounded-full border border-[#E9E1D2] bg-[#FAF7F0] hover:bg-white text-[#13322E] font-bold text-xs transition-all flex items-center justify-center space-x-1.5 shadow-sm"
+                      >
+                        <span>Ver Ficha</span>
+                      </Link>
+                    </div>
+
                     {!v.isFeatured ? (
                       <button
                         onClick={() => handleActivateFeatured(v.id)}
@@ -255,7 +266,7 @@ export default function OwnerDashboardPage() {
                         <span>{featuredLoading === v.id ? 'Activando...' : 'ACTIVAR USUARIO DESTACADO (2,99€/MES)'}</span>
                       </button>
                     ) : (
-                      <div className="py-2.5 px-4 rounded-full bg-amber-50 text-amber-900 border border-amber-200 text-center text-xs font-bold flex items-center justify-center space-x-2">
+                      <div className="py-2 px-4 rounded-full bg-amber-50 text-amber-900 border border-amber-200 text-center text-xs font-bold flex items-center justify-center space-x-2">
                         <Sparkles className="w-4 h-4 text-[#D97706]" />
                         <span>Usuario destacado activo</span>
                       </div>
