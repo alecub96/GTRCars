@@ -196,7 +196,58 @@ export async function ensureDbSchema() {
     for (const q of alterQueries) {
       await prisma.$executeRawUnsafe(q).catch(() => {});
     }
-      schemaEnsured = true;
+
+    // Sincronizar marcas y modelos exactos de los anuncios de demostración con sus fotos
+    const demoCorrections = [
+      {
+        slug: 'volkswagen-transporter-t6-custom-camper-gran-canaria',
+        title: 'Volkswagen T2 Bulli Clásica Vintage con Techo Elevable',
+        brand: 'Volkswagen',
+        model: 'T2 Bulli Camper Clásica',
+        vehicleType: 'TURISMO_CAMPERIZADO',
+        fuelType: 'GASOLINA',
+        fuelConsumption: '9.5 L/100km',
+        year: 1982,
+      },
+      {
+        slug: 'fiat-ducato-maxi-gran-volumen-l3h2-tenerife',
+        title: 'Dacia Dokker Stepway Camperizada con Mueble Camper y Cama Doble',
+        brand: 'Dacia',
+        model: 'Dokker Stepway Camperizada',
+        vehicleType: 'TURISMO_CAMPERIZADO',
+        fuelType: 'DIESEL',
+        fuelConsumption: '5.6 L/100km',
+        year: 2021,
+      },
+      {
+        slug: 'toyota-proace-nomad-camper-fuerteventura',
+        title: 'Autocaravana Rimor Seal Perfilada con Cama en Isla y Salón Comedor',
+        brand: 'Rimor',
+        model: 'Seal Perfilada (Chasis Renault Master)',
+        vehicleType: 'AUTOCARAVANA_PERFILADA',
+        fuelType: 'DIESEL',
+        fuelConsumption: '9.8 L/100km',
+        year: 2022,
+        basePricePerDay: 110,
+      },
+    ];
+
+    for (const c of demoCorrections) {
+      await prisma.$executeRawUnsafe(
+        `UPDATE Vehicle SET title = ?, brand = ?, model = ?, vehicleType = ?, fuelType = ?, fuelConsumption = ?, year = ? WHERE slug = ? OR title LIKE ?`,
+        c.title,
+        c.brand,
+        c.model,
+        c.vehicleType,
+        c.fuelType,
+        c.fuelConsumption,
+        c.year,
+        c.slug,
+        `%${c.brand}%`
+      ).catch(() => {});
+    }
+
+    schemaEnsured = true;
     } catch (err) {
       console.warn('Auto schema migration warning:', err);
       schemaEnsured = true; // evitar reintentos fallidos constantes
