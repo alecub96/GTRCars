@@ -9,6 +9,8 @@ import { CANARY_ISLANDS } from '@/lib/pricing';
 import { Star, ChevronRight, MapPin, ShieldCheck, HeartHandshake, KeyRound } from 'lucide-react';
 import VehicleViewTracker from '@/components/VehicleViewTracker';
 import VehicleCardPhotoSlider from '@/components/VehicleCardPhotoSlider';
+import FAQAccordion from '@/components/FAQAccordion';
+import SocialShareButtons from '@/components/SocialShareButtons';
 import Image from 'next/image';
 
 const ISLAND_HERO_IMAGES: Record<string, string> = {
@@ -522,20 +524,32 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
         </div>
       </section>
 
-      {/* 9. FOOTER ENRIQUECIDO ESTILO YESCAPA */}
+      {/* 8.5 SECCIÓN DE PREGUNTAS FRECUENTES (FAQS CON SCHEMA FAQPAGE) */}
+      <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-[#E9E1D2]">
+        <FAQAccordion />
+      </section>
+
+      {/* 9. FOOTER ENRIQUECIDO */}
       <footer className="bg-[#13322E] text-white pt-16 pb-12 border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-5 gap-10">
-          <div className="md:col-span-2">
-            <span className="font-serif text-3xl font-medium tracking-tight text-white block">vaneando<span className="text-[#b88a55]">.</span></span>
-            <span className="text-[9px] font-sans tracking-[0.25em] uppercase text-[#16B8AA] block font-black mt-0.5 mb-4">
-              Canarias sobre ruedas
-            </span>
-            <p className="text-xs text-white/60 font-medium leading-relaxed max-w-sm mb-4">
-              La plataforma oficial de alquiler de campers, autocaravanas, caravanas, 4x4 y barcos entre particulares en las 8 Islas Canarias.
+          <div className="md:col-span-2 space-y-4">
+            <div>
+              <span className="font-serif text-3xl font-medium tracking-tight text-white block">vaneando<span className="text-[#b88a55]">.</span></span>
+              <span className="text-[9px] font-sans tracking-[0.25em] uppercase text-[#16B8AA] block font-black mt-0.5">
+                Canarias sobre ruedas
+              </span>
+            </div>
+            <p className="text-xs text-white/70 font-medium leading-relaxed max-w-sm">
+              La plataforma oficial de alquiler de furgonetas camperizadas y autocaravanas entre particulares en las 8 Islas Canarias.
             </p>
-            <div className="flex items-center space-x-3 text-xs text-white/70">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-white/80">
               <span className="bg-white/10 px-3 py-1 rounded-full border border-white/10">💳 Pagos Seguros SSL</span>
-              <span className="bg-white/10 px-3 py-1 rounded-full border border-white/10">⚖️ Fianza entre Particulares</span>
+              <span className="bg-white/10 px-3 py-1 rounded-full border border-white/10">⚖️ Contratos eIDAS</span>
+              <span className="bg-white/10 px-3 py-1 rounded-full border border-white/10">⚡ Respuesta &lt; 15 min</span>
+            </div>
+
+            <div className="pt-2">
+              <SocialShareButtons className="text-white/80" />
             </div>
           </div>
 
@@ -552,14 +566,13 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
           </div>
 
           <div>
-            <h4 className="text-xs font-black uppercase tracking-widest text-[#16B8AA] mb-4">Tipos de Vehículo</h4>
+            <h4 className="text-xs font-black uppercase tracking-widest text-[#16B8AA] mb-4">Comunidad & Ayuda</h4>
             <ul className="space-y-2 text-xs text-white/70 font-medium">
-              <li><Link href="/buscar?vehicleType=CAMPER" className="hover:text-white">Furgoneta Camper Pequeña</Link></li>
-              <li><Link href="/buscar?vehicleType=CAMPER" className="hover:text-white">Camper Gran Volumen</Link></li>
-              <li><Link href="/buscar?vehicleType=AUTOCARAVANA" className="hover:text-white">Autocaravana Perfilada</Link></li>
-              <li><Link href="/buscar?vehicleType=AUTOCARAVANA" className="hover:text-white">Autocaravana Capuchina</Link></li>
-              <li><Link href="/buscar?vehicleType=FOUR_BY_FOUR" className="hover:text-white">4x4 con Tienda de Techo</Link></li>
-              <li><Link href="/buscar?vehicleType=BARCO" className="hover:text-white">Barcos & Veleros Habitables</Link></li>
+              <li><Link href="/sobre-nosotros" className="hover:text-white">Sobre Nosotros / Equipo</Link></li>
+              <li><Link href="/historias" className="hover:text-white">Historias de Éxito</Link></li>
+              <li><Link href="/contacto" className="hover:text-white">Contacto y Soporte</Link></li>
+              <li><Link href="/seguridad" className="hover:text-white">Garantías y Seguros</Link></li>
+              <li><Link href="/publicar-camper" className="hover:text-white">Publicar mi Furgoneta</Link></li>
             </ul>
           </div>
 
@@ -569,17 +582,18 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
               <li><Link href="/guias/hotel-vs-camper-gran-canaria-ahorro-experiencia" className="hover:text-white">Hotel vs Camper Gran Canaria</Link></li>
               <li><Link href="/guias/vaneando-vs-yescapa-indie-campers-roadsurfer-canarias" className="hover:text-white">Vaneando vs Yescapa</Link></li>
               <li><Link href="/guias/pernocta-legal-zonas-acampada-gran-canaria-tenerife" className="hover:text-white">Mapa de Pernocta Legal</Link></li>
-              <li><Link href="/guias/alquiler-4x4-camperizado-caravana-barco-canarias" className="hover:text-white">Guía de 6 Categorías</Link></li>
+              <li><Link href="/guias" className="hover:text-white">Ver todas las guías</Link></li>
             </ul>
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-xs text-white/40 font-medium gap-4">
-          <p>© 2026 Vaneando. La plataforma oficial de alquiler entre particulares en Canarias.</p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-xs text-white/50 font-medium gap-4">
+          <p>© 2026 Vaneando.com — La plataforma oficial de alquiler entre particulares en Canarias.</p>
           <div className="flex space-x-4">
             <Link href="/terminos" className="hover:text-white">Términos</Link>
             <Link href="/privacidad" className="hover:text-white">Privacidad</Link>
             <Link href="/cookies" className="hover:text-white">Cookies</Link>
+            <Link href="/contacto" className="hover:text-white">Contacto</Link>
           </div>
         </div>
       </footer>

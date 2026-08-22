@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import AuthModal from '@/components/AuthModal';
 import OnboardingTour from '@/components/OnboardingTour';
+import LanguageSelector from '@/components/LanguageSelector';
 import {
   LifeBuoy,
   Menu,
@@ -164,14 +165,20 @@ export default function Navbar() {
             </Link>
           )}
           {role !== 'ADMIN' && (
-            <Link href="/seguridad" className="hover:text-[#16B8AA] transition-colors">
-              Seguros
+            <Link href="/historias" className="hover:text-[#16B8AA] transition-colors">
+              Historias
+            </Link>
+          )}
+          {role !== 'ADMIN' && (
+            <Link href="/contacto" className="hover:text-[#16B8AA] transition-colors">
+              Contacto
             </Link>
           )}
         </div>
 
         {/* CONTROLES DERECHA (DESKTOP) */}
         <div className="hidden md:flex items-center space-x-3">
+          <LanguageSelector />
           {role && role !== 'ANONYMOUS' && role !== 'ADMIN' && (
             <Link
               href="/soporte"
@@ -391,11 +398,29 @@ export default function Navbar() {
 
                   <Link
                     onClick={() => setMobileOpen(false)}
-                    href="/soporte"
+                    href="/historias"
                     className="flex items-center space-x-3 rounded-2xl p-3 hover:bg-[#FAF7F0] transition-colors"
                   >
-                    <LifeBuoy className="w-4 h-4 text-[#16B8AA]" />
-                    <span>Soporte y Atención al Cliente</span>
+                    <Compass className="w-4 h-4 text-[#16B8AA]" />
+                    <span>Historias de Éxito</span>
+                  </Link>
+
+                  <Link
+                    onClick={() => setMobileOpen(false)}
+                    href="/sobre-nosotros"
+                    className="flex items-center space-x-3 rounded-2xl p-3 hover:bg-[#FAF7F0] transition-colors"
+                  >
+                    <User className="w-4 h-4 text-[#16B8AA]" />
+                    <span>Sobre Nosotros</span>
+                  </Link>
+
+                  <Link
+                    onClick={() => setMobileOpen(false)}
+                    href="/contacto"
+                    className="flex items-center space-x-3 rounded-2xl p-3 hover:bg-[#FAF7F0] transition-colors"
+                  >
+                    <Mail className="w-4 h-4 text-[#16B8AA]" />
+                    <span>Contacto y Ayuda</span>
                   </Link>
                 </div>
               </div>

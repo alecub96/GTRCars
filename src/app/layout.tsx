@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import CookieConsent from '@/components/CookieConsent';
+import BackToTopButton from '@/components/BackToTopButton';
+import MobileStickyCTA from '@/components/MobileStickyCTA';
 
 export const viewport: Viewport = {
   themeColor: '#13322E',
@@ -249,6 +251,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-full flex flex-col font-sans overflow-x-hidden w-full max-w-full">
         {children}
         <CookieConsent />
+        <BackToTopButton />
+        <MobileStickyCTA />
       </body>
     </html>
   );
