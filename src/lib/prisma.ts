@@ -32,14 +32,14 @@ const adapter = new PrismaMariaDb({
   user: creds.user,
   password: creds.password,
   database: creds.database,
-  connectionLimit: 15,
-  connectTimeout: 15_000,
-  acquireTimeout: 15_000,
-  idleTimeout: 30_000,
+  connectionLimit: 10,
+  connectTimeout: 6_000,
+  acquireTimeout: 6_000,
+  idleTimeout: 60_000,
 });
 
 export const prisma =
   globalForPrisma.prisma ||
   new PrismaClient({ adapter, log: ['error'] });
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+globalForPrisma.prisma = prisma;

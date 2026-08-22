@@ -1,8 +1,15 @@
 import type { Metadata, Viewport } from "next";
+import { Plus_Jakarta_Sans } from 'next/font/google';
 import "./globals.css";
 import CookieConsent from '@/components/CookieConsent';
 import BackToTopButton from '@/components/BackToTopButton';
 import MobileStickyCTA from '@/components/MobileStickyCTA';
+
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-sans',
+});
 
 export const viewport: Viewport = {
   themeColor: '#13322E',
@@ -248,7 +255,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdGlobalOrg) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWebSite) }} />
       </head>
-      <body className="min-h-full flex flex-col font-sans overflow-x-hidden w-full max-w-full">
+      <body className={`min-h-full flex flex-col ${plusJakarta.className} overflow-x-hidden w-full max-w-full`}>
         {children}
         <CookieConsent />
         <BackToTopButton />
