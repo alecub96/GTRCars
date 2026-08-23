@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import HomeClientHero from '@/components/HomeClientHero';
 import { prisma } from '@/lib/prisma';
 import { getFeaturedAudience } from '@/lib/featured';
@@ -47,5 +47,9 @@ export default async function HomePage() {
     }
   }
 
-  return <HomeClientHero initialVehicles={combinedVehicles.slice(0, 9)} />;
+  return (
+    <Suspense fallback={null}>
+      <HomeClientHero initialVehicles={combinedVehicles.slice(0, 9)} />
+    </Suspense>
+  );
 }
