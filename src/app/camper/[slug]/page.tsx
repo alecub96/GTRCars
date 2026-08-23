@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import BookingWidget from '@/components/BookingWidget';
 import FavoriteButton from '@/components/FavoriteButton';
+import ShareVehicleButton from '@/components/ShareVehicleButton';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
 import VehicleViewTracker from '@/components/VehicleViewTracker';
@@ -248,7 +249,16 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
         
         {/* TITULO Y CABECERA */}
         <div className="mb-6 relative">
-          <div className="absolute right-0 top-0"><FavoriteButton vehicleId={vehicle.id} /></div>
+          <div className="absolute right-0 top-0 flex items-center space-x-2">
+            <ShareVehicleButton
+              vehicleTitle={vehicle.title}
+              slug={vehicle.slug}
+              island={vehicle.island}
+              price={vehicle.basePricePerDay}
+              variant="button"
+            />
+            <FavoriteButton vehicleId={vehicle.id} />
+          </div>
           <div className="flex items-center space-x-2 text-xs text-[#6B726E] font-medium mb-2">
             <span>{vehicle.island}</span>
             <span>•</span>

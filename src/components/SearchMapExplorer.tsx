@@ -20,6 +20,7 @@ import {
   Bed,
 } from 'lucide-react';
 import FavoriteButton from '@/components/FavoriteButton';
+import ShareVehicleButton from '@/components/ShareVehicleButton';
 import VehicleCardPhotoSlider from '@/components/VehicleCardPhotoSlider';
 import RealCanaryMapExplorer from './RealCanaryMapExplorer';
 
@@ -276,7 +277,14 @@ export default function SearchMapExplorer({
                     slug={vehicle.slug}
                     isFeatured={isFeatured}
                   />
-                  <div className="absolute top-3 right-3 z-30">
+                  <div className="absolute top-3 right-3 z-30 flex items-center space-x-1.5">
+                    <ShareVehicleButton
+                      vehicleTitle={vehicle.title}
+                      slug={vehicle.slug}
+                      island={vehicle.island}
+                      price={vehicle.basePricePerDay}
+                      variant="icon"
+                    />
                     <FavoriteButton vehicleId={vehicle.id} />
                   </div>
                 </div>

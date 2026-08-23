@@ -11,6 +11,7 @@ import VehicleViewTracker from '@/components/VehicleViewTracker';
 import VehicleCardPhotoSlider from '@/components/VehicleCardPhotoSlider';
 import FAQAccordion from '@/components/FAQAccordion';
 import SocialShareButtons from '@/components/SocialShareButtons';
+import ShareVehicleButton from '@/components/ShareVehicleButton';
 import Image from 'next/image';
 
 const ISLAND_HERO_IMAGES: Record<string, string> = {
@@ -184,8 +185,17 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                       slug={vehicle.slug}
                       isFeatured={isFeatured}
                     />
-                    <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black uppercase text-[#16B8AA] tracking-wider z-20 pointer-events-none">
-                      {vehicle.island}
+                    <div className="absolute top-3 right-3 flex items-center space-x-1.5 z-20">
+                      <ShareVehicleButton
+                        vehicleTitle={vehicle.title}
+                        slug={vehicle.slug}
+                        island={vehicle.island}
+                        price={vehicle.basePricePerDay}
+                        variant="icon"
+                      />
+                      <div className="bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black uppercase text-[#16B8AA] tracking-wider pointer-events-none shadow-xs">
+                        {vehicle.island}
+                      </div>
                     </div>
                   </div>
 

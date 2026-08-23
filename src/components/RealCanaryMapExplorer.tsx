@@ -16,6 +16,7 @@ import {
   Navigation,
 } from 'lucide-react';
 import FavoriteButton from './FavoriteButton';
+import ShareVehicleButton from './ShareVehicleButton';
 
 export interface MapCamperItem {
   id: string;
@@ -369,13 +370,23 @@ export default function RealCanaryMapExplorer({
       {/* 3. CARD FLOTANTE DEL VEHÍCULO SELECCIONADO (ESTILO AIRBNB/IDEALISTA) */}
       {selectedVehicle && (
         <div className="absolute bottom-4 left-4 right-4 sm:left-auto sm:right-4 z-30 sm:w-96 bg-white/95 backdrop-blur-xl rounded-3xl p-4 shadow-2xl border border-[#E9E1D2] animate-in slide-in-from-bottom-6">
-          <button
-            type="button"
-            onClick={() => setSelectedVehicle(null)}
-            className="absolute top-3 right-3 w-7 h-7 rounded-full bg-[#FAF7F0] text-[#13322E] flex items-center justify-center hover:bg-slate-200 cursor-pointer"
-          >
-            <X className="w-4 h-4" />
-          </button>
+          <div className="absolute top-3 right-3 flex items-center space-x-1.5 z-20">
+            <ShareVehicleButton
+              vehicleTitle={selectedVehicle.title}
+              slug={selectedVehicle.slug}
+              island={selectedVehicle.island}
+              price={selectedVehicle.basePricePerDay}
+              variant="icon"
+            />
+            <FavoriteButton vehicleId={selectedVehicle.id} />
+            <button
+              type="button"
+              onClick={() => setSelectedVehicle(null)}
+              className="w-8 h-8 rounded-full bg-white/90 text-[#13322E] flex items-center justify-center hover:bg-slate-100 shadow-md cursor-pointer transition-all"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
 
           <div className="flex space-x-3">
             <img
