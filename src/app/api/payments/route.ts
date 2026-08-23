@@ -145,6 +145,14 @@ export async function POST(request: Request) {
           stripePaymentIntentId: mockStripePaymentIntentId,
         },
       }),
+      prisma.availabilityBlock.create({
+        data: {
+          vehicleId: booking.vehicleId,
+          startDate: booking.pickupDate,
+          endDate: booking.returnDate,
+          reason: `BOOKING_${booking.code}`,
+        },
+      }),
     ]);
 
     return NextResponse.json({

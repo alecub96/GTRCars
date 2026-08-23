@@ -119,7 +119,8 @@ export async function POST(request: Request) {
     for (let attempt = 1; attempt <= MAX_BOOKING_ATTEMPTS; attempt += 1) {
       try {
         booking = await prisma.$transaction(async (tx) => {
-          const conflict = await tx.availabilityBlock.findFirst({
+          // Comprobar si hay conflicto con bloqueos de calendario o reservas ya confirmadas/pagadas
+          const blockConflict = await tx.availabilityBlock.findFirst({
             where: {
               vehicleId: vehicle.id,
               startDate: { lt: end },
@@ -127,50 +128,51 @@ export async function POST(request: Request) {
             },
             select: { id: true },
           });
-          if (conflict) throw new Error('BOOKING_DATES_CONFLICT');
+          if (blockConflict) throw new Error('BOOKING_DATES_CONFLICT');
+
+          const confirmedBookingConflict = await tx.booking.findFirst({
+            where: {
+              vehicleId: vehicle.id,
+              status: { in: ['CONFIRMED', 'ACTIVE', 'COMPLETED', 'CHECKIN_PENDING', 'CHECKOUT_PENDING'] },
+              pickupDate: { lt: end },
+              returnDate: { gt: start },
+            },
+            select: { id: true },
+          });
+          if (confirmedBookingConflict) throw new Error('BOOKING_DATES_CONFLICT');
 
           const bookingCode = `NC-${crypto.randomUUID().replaceAll('-', '').slice(0, 8).toUpperCase()}`;
           const newBooking = await tx.booking.create({
-        data: {
-          code: bookingCode,
-          travelerId: user.id,
-          ownerId: vehicle.ownerId,
-          vehicleId: vehicle.id,
-          pickupDate: start,
-          returnDate: end,
-          pickupTime: pickupTime || '10:00',
-          returnTime: returnTime || '18:00',
-          totalDays: pricing.totalDays,
-          basePrice: pricing.basePriceTotal,
-          extrasTotal: pricing.extrasTotal,
-          cleaningFee: pricing.cleaningFee,
-          travelerFee: pricing.travelerFee,
-          ownerFee: pricing.ownerFee,
-          ownerPayout: pricing.ownerPayout,
-          depositAmount: vehicle.securityDeposit,
-          totalAmount: pricing.totalAmount,
-          pricingSnapshot: JSON.stringify(pricing),
-          status: vehicle.bookingType === 'INSTANT_BOOKING' ? 'OWNER_ACCEPTED' : 'REQUESTED',
-          depositStatus: 'PENDING',
-          extras: {
-            create: chosenExtras
-              .map((e) => {
-                const found = vehicle.extras.find((ve) => ve.extraId === e.id);
-                return found ? { vehicleExtraId: found.id, name: e.name, price: e.price } : null;
-              })
-              .filter((item): item is { vehicleExtraId: string; name: string; price: number } => Boolean(item)),
-          },
-        },
-          });
-
-      // Crear bloqueo de calendario automáticamente
-          await tx.availabilityBlock.create({
-        data: {
-          vehicleId: vehicle.id,
-          startDate: start,
-          endDate: end,
-          reason: `BOOKING_${newBooking.code}`,
-        },
+            data: {
+              code: bookingCode,
+              travelerId: user.id,
+              ownerId: vehicle.ownerId,
+              vehicleId: vehicle.id,
+              pickupDate: start,
+              returnDate: end,
+              pickupTime: pickupTime || '10:00',
+              returnTime: returnTime || '18:00',
+              totalDays: pricing.totalDays,
+              basePrice: pricing.basePriceTotal,
+              extrasTotal: pricing.extrasTotal,
+              cleaningFee: pricing.cleaningFee,
+              travelerFee: pricing.travelerFee,
+              ownerFee: pricing.ownerFee,
+              ownerPayout: pricing.ownerPayout,
+              depositAmount: vehicle.securityDeposit,
+              totalAmount: pricing.totalAmount,
+              pricingSnapshot: JSON.stringify(pricing),
+              status: vehicle.bookingType === 'INSTANT_BOOKING' ? 'OWNER_ACCEPTED' : 'REQUESTED',
+              depositStatus: 'PENDING',
+              extras: {
+                create: chosenExtras
+                  .map((e) => {
+                    const found = vehicle.extras.find((ve) => ve.extraId === e.id);
+                    return found ? { vehicleExtraId: found.id, name: e.name, price: e.price } : null;
+                  })
+                  .filter((item): item is { vehicleExtraId: string; name: string; price: number } => Boolean(item)),
+              },
+            },
           });
 
           await tx.conversation.create({

@@ -34,13 +34,34 @@ async function confirmBookingPayment(bookingId: string, paymentIntentId: string 
     }
 
     if (updated.count === 0) return null;
-    return tx.booking.findUnique({
+    const confirmedBooking = await tx.booking.findUnique({
       where: { id: bookingId },
       include: {
         traveler: { select: { email: true, firstName: true } },
-        vehicle: { select: { title: true } },
+        vehicle: { select: { id: true, title: true } },
       },
     });
+
+    if (confirmedBooking) {
+      const existingBlock = await tx.availabilityBlock.findFirst({
+        where: {
+          vehicleId: confirmedBooking.vehicleId,
+          reason: `BOOKING_${confirmedBooking.code}`,
+        },
+      });
+      if (!existingBlock) {
+        await tx.availabilityBlock.create({
+          data: {
+            vehicleId: confirmedBooking.vehicleId,
+            startDate: confirmedBooking.pickupDate,
+            endDate: confirmedBooking.returnDate,
+            reason: `BOOKING_${confirmedBooking.code}`,
+          },
+        });
+      }
+    }
+
+    return confirmedBooking;
   });
 
   if (result) {

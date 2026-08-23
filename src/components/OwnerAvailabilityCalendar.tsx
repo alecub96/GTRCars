@@ -803,16 +803,23 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
                           </span>
                         </div>
 
-                        {!isBooking && (
-                          <button
-                            type="button"
-                            onClick={() => removeBlock(block.id)}
-                            aria-label="Eliminar bloqueo"
-                            className="rounded-xl p-2 text-red-500 hover:bg-red-50 transition-colors cursor-pointer"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </button>
-                        )}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (isBooking) {
+                              if (window.confirm('¿Deseas desbloquear estas fechas en tu calendario? Si la reserva no está pagada, se liberará el vehículo para otros viajeros.')) {
+                                removeBlock(block.id);
+                              }
+                            } else {
+                              removeBlock(block.id);
+                            }
+                          }}
+                          aria-label="Eliminar bloqueo"
+                          title="Eliminar bloqueo y liberar fechas"
+                          className="rounded-xl p-2 text-red-500 hover:bg-red-50 transition-colors cursor-pointer"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
                       </div>
                     );
                   })

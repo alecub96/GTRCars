@@ -47,9 +47,27 @@ export async function DELETE(request: Request, context: { params: Promise<{ id: 
  return respond(async () => {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: 'Debes iniciar sesión' }, { status: 401 });
-  const { id } = await context.params; const { blockId } = await request.json();
+  const { id } = await context.params;
+  const { blockId } = await request.json();
   const block = await prisma.availabilityBlock.findUnique({ where: { id: blockId }, include: { vehicle: { select: { ownerId: true } } } });
-  if (!block || block.vehicleId !== id || (block.vehicle.ownerId !== user.id && user.role !== 'ADMIN') || block.reason?.startsWith('BOOKING_')) return NextResponse.json({ error: 'Este bloqueo no se puede eliminar' }, { status: 403 });
+  if (!block || block.vehicleId !== id || (block.vehicle.ownerId !== user.id && user.role !== 'ADMIN')) {
+    return NextResponse.json({ error: 'No autorizado para eliminar este bloqueo' }, { status: 403 });
+  }
+
+  // Si el bloqueo proviene de una reserva, extraer el código de reserva y actualizar si no está confirmada
+  if (block.reason?.startsWith('BOOKING_')) {
+    const bookingCode = block.reason.replace('BOOKING_', '').trim();
+    if (bookingCode) {
+      await prisma.booking.updateMany({
+        where: {
+          code: bookingCode,
+          status: { in: ['REQUESTED', 'OWNER_ACCEPTED', 'PAYMENT_PENDING'] },
+        },
+        data: { status: 'CANCELLED' },
+      }).catch(() => {});
+    }
+  }
+
   await prisma.availabilityBlock.delete({ where: { id: block.id } });
   return NextResponse.json({ success: true });
  });
