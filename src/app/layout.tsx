@@ -256,7 +256,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWebSite) }} />
       </head>
       <body className={`min-h-full flex flex-col ${plusJakarta.className} overflow-x-hidden w-full max-w-full`}>
-        {children}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2.5 focus:rounded-full focus:bg-[#13322E] focus:text-white focus:font-bold focus:text-xs focus:shadow-xl focus:outline-none"
+        >
+          Saltar al contenido principal
+        </a>
+        <div id="main-content" className="flex-1 flex flex-col">
+          {children}
+        </div>
         <CookieConsent />
         <BackToTopButton />
         <MobileStickyCTA />
