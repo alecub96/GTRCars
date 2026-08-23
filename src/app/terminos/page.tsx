@@ -1,4 +1,14 @@
+import type { Metadata } from 'next';
 import Navbar from '@/components/Navbar';
+
+export const metadata: Metadata = {
+  title: 'Términos y Condiciones de Uso | vaneando.',
+  description: 'Condiciones de uso de Vaneando y del servicio de alquiler de furgonetas camperizadas en las Islas Canarias.',
+  robots: {
+    index: false,
+    follow: true,
+  },
+};
 
 const items = [
   ['1. Qué es Vaneando (Intermediario Tecnológico)', 'Vaneando es única y exclusivamente una plataforma tecnológica e intermediaria que facilita el contacto y la comunicación entre viajeros y propietarios particulares de vehículos camperizados en Canarias. Vaneando no es propietario de los vehículos, no presta servicios de transporte ni de alquiler, ni es parte en ningún caso de los contratos de alquiler celebrados directa y exclusivamente entre los particulares.'],

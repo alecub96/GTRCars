@@ -1,4 +1,14 @@
+import type { Metadata } from 'next';
 import Navbar from '@/components/Navbar';
+
+export const metadata: Metadata = {
+  title: 'Política de Privacidad | vaneando.',
+  description: 'Cómo protegemos tus datos cuando utilizas la plataforma Vaneando en Canarias.',
+  robots: {
+    index: false,
+    follow: true,
+  },
+};
 
 const sections = [
   ['1. Responsable del tratamiento', <>El responsable del tratamiento es <strong>Vaneando</strong>, plataforma canaria de alquiler de campers. Para cualquier consulta sobre privacidad puedes escribir a <a className="font-bold text-[#0F766E] underline" href="mailto:contacto@vaneando.com">contacto@vaneando.com</a>.</>],
