@@ -145,16 +145,32 @@ export async function generateMetadata({ params }: CamperDetailPageProps): Promi
   const vehicle = await fetchVehicleBySlugOrId(slug);
   if (!vehicle) return {};
   const description = `Alquila ${vehicle.title} en ${vehicle.municipality || 'Canarias'}, ${vehicle.island} desde ${vehicle.basePricePerDay}€/día. Directo entre particulares con contrato digital e identidad verificada.`;
+  const rawPhoto = vehicle.photos?.[0]?.url;
+  const photoUrl = rawPhoto
+    ? (rawPhoto.startsWith('http') ? rawPhoto : `https://vaneando.com${rawPhoto.startsWith('/') ? rawPhoto : `/${rawPhoto}`}`)
+    : 'https://vaneando.com/opengraph-image';
+
   return {
     title: `${vehicle.title} en ${vehicle.island} desde ${vehicle.basePricePerDay}€/día | vaneando.`,
     description,
     alternates: { canonical: `https://vaneando.com/camper/${vehicle.slug || slug}` },
     robots: vehicle.status === 'ACTIVE' ? { index: true, follow: true } : { index: false, follow: false },
     openGraph: {
-      title: `${vehicle.title} en ${vehicle.island}`,
+      title: `${vehicle.title} en ${vehicle.island} desde ${vehicle.basePricePerDay}€/día`,
       description,
       url: `https://vaneando.com/camper/${vehicle.slug || slug}`,
-      images: [vehicle.photos?.[0]?.url || 'https://vaneando.com/vaneando-lockup.svg'],
+      images: [
+        {
+          url: photoUrl,
+          alt: vehicle.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${vehicle.title} en ${vehicle.island} desde ${vehicle.basePricePerDay}€/día`,
+      description,
+      images: [photoUrl],
     },
   };
 }

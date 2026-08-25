@@ -43,6 +43,20 @@ export async function generateMetadata({ searchParams }: SearchPageProps): Promi
       title: `Alquiler de ${typeLabel} en ${islandName} | vaneando.`,
       description: `Compara precios y disponibilidad de ${typeLabel} en ${islandName}. Reserva con contratos directos entre particulares e identidades verificadas.`,
       url: `https://vaneando.com/buscar`,
+      images: [
+        {
+          url: 'https://vaneando.com/opengraph-image',
+          width: 1200,
+          height: 630,
+          alt: `Alquiler de ${typeLabel} en ${islandName}`,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `Alquiler de ${typeLabel} en ${islandName} | vaneando.`,
+      description: `Compara precios y disponibilidad de campers en ${islandName}.`,
+      images: ['https://vaneando.com/opengraph-image'],
     },
   };
 }
