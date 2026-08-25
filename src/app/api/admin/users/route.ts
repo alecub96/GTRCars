@@ -39,8 +39,9 @@ export async function GET(request: Request) {
       ];
     }
 
-    const [users, totalUsers, travelersCount, ownersCount, verifiedCount] = await Promise.all([
-      prisma.user.findMany({
+    let users: any[] = [];
+    try {
+      users = await prisma.user.findMany({
         where,
         select: {
           id: true,
@@ -64,17 +65,39 @@ export async function GET(request: Request) {
           },
         },
         orderBy: { createdAt: 'desc' },
-      }),
-      prisma.user.count(),
-      prisma.user.count({ where: { role: 'TRAVELER' } }),
-      prisma.user.count({ where: { role: 'OWNER' } }),
-      prisma.user.count({ where: { verification: 'VERIFIED' } }),
-    ]);
+      });
+    } catch (countError) {
+      console.warn('Admin users query with _count failed, trying simple select:', countError);
+      users = await prisma.user.findMany({
+        where,
+        select: {
+          id: true,
+          email: true,
+          firstName: true,
+          lastName: true,
+          phone: true,
+          avatarUrl: true,
+          role: true,
+          verification: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+        orderBy: { createdAt: 'desc' },
+      }).catch((e) => {
+        console.error('Admin users simple select fallback error:', e);
+        return [];
+      });
+    }
+
+    const totalUsers = await prisma.user.count().catch(() => users.length);
+    const travelersCount = await prisma.user.count({ where: { role: 'TRAVELER' } }).catch(() => 0);
+    const ownersCount = await prisma.user.count({ where: { role: 'OWNER' } }).catch(() => 0);
+    const verifiedCount = await prisma.user.count({ where: { verification: 'VERIFIED' } }).catch(() => 0);
 
     return NextResponse.json(
       {
         success: true,
-        users: users.map((u) => ({
+        users: (users || []).map((u) => ({
           ...u,
           avatarUrl: u.avatarUrl || '/default-avatar.svg',
         })),
