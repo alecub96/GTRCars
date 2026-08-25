@@ -294,11 +294,16 @@ export default function SearchMapExplorer({
                     <span className="font-bold text-[#16B8AA] uppercase text-[10px] tracking-wider">
                       {vehicle.island} • {vehicle.municipality}
                     </span>
-                    {avgRating > 0 && (
+                    {avgRating > 0 ? (
                       <div className="flex items-center space-x-1 font-bold text-[#13322E]">
                         <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
                         <span>{avgRating.toFixed(1)}</span>
+                        <span className="text-[10px] text-[#6B726E] font-normal">({vehicle.reviews?.length})</span>
                       </div>
+                    ) : (
+                      <span className="text-[10px] font-bold text-[#6B726E] bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200">
+                        Pendiente de calificar
+                      </span>
                     )}
                   </div>
 

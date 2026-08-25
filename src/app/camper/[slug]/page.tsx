@@ -268,12 +268,18 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
             {vehicle.title}
           </h1>
           <div className="flex items-center space-x-4 mt-3 text-xs text-[#4A4643]">
-            <div className="flex items-center space-x-1 font-semibold text-[#1C2826]">
-              <Star className="w-4 h-4 fill-[#E07A5F] text-[#E07A5F]" />
-              <span>{vehicle.reviews?.length ? `${avgRating.toFixed(1)} (${vehicle.reviews.length} opiniones)` : 'Nuevo · sin opiniones'}</span>
-            </div>
+            {vehicle.reviews?.length > 0 ? (
+              <div className="flex items-center space-x-1 font-semibold text-[#1C2826]">
+                <Star className="w-4 h-4 fill-[#D97706] text-[#D97706]" />
+                <span>{avgRating.toFixed(1)} ({vehicle.reviews.length} {vehicle.reviews.length === 1 ? 'opinión' : 'opiniones'})</span>
+              </div>
+            ) : (
+              <span className="bg-slate-100 text-[#6B726E] px-2.5 py-0.5 rounded-full text-xs font-bold border border-slate-200">
+                Pendiente de calificar
+              </span>
+            )}
             <span>•</span>
-            {vehicle.owner?.verification === 'VERIFIED' && <div className="flex items-center space-x-1 text-[#E07A5F]"><ShieldCheck className="w-4 h-4" /><span>Propietario verificado</span></div>}
+            {vehicle.owner?.verification === 'VERIFIED' && <div className="flex items-center space-x-1 text-[#16B8AA]"><ShieldCheck className="w-4 h-4" /><span>Propietario verificado</span></div>}
             {isFeatured && <div className="flex items-center space-x-1 text-[#D97706]"><ShieldCheck className="w-4 h-4" /><span>Usuario destacado</span></div>}
           </div>
         </div>
@@ -290,22 +296,22 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
             {/* CARACTERÍSTICAS PRINCIPALES */}
             <div className="grid grid-cols-4 gap-4 p-6 bg-white rounded-3xl border border-[#E9E1D2] text-center">
               <div>
-                <Users className="w-6 h-6 mx-auto text-[#E07A5F] mb-1" />
+                <Users className="w-6 h-6 mx-auto text-[#16B8AA] mb-1" />
                 <span className="block text-xs text-[#6B726E]">Capacidad</span>
                 <span className="font-serif text-lg font-semibold">{vehicle.passengers} plazas</span>
               </div>
               <div>
-                <Bed className="w-6 h-6 mx-auto text-[#E07A5F] mb-1" />
+                <Bed className="w-6 h-6 mx-auto text-[#16B8AA] mb-1" />
                 <span className="block text-xs text-[#6B726E]">Camas</span>
                 <span className="font-serif text-lg font-semibold">{vehicle.beds} camas</span>
               </div>
               <div>
-                <Settings2 className="w-6 h-6 mx-auto text-[#E07A5F] mb-1" />
+                <Settings2 className="w-6 h-6 mx-auto text-[#16B8AA] mb-1" />
                 <span className="block text-xs text-[#6B726E]">Cambio</span>
                 <span className="font-serif text-lg font-semibold">{vehicle.transmission}</span>
               </div>
               <div>
-                <Fuel className="w-6 h-6 mx-auto text-[#E07A5F] mb-1" />
+                <Fuel className="w-6 h-6 mx-auto text-[#16B8AA] mb-1" />
                 <span className="block text-xs text-[#6B726E]">Combustible</span>
                 <span className="font-serif text-lg font-semibold">{vehicle.fuelType}</span>
               </div>
@@ -319,18 +325,42 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
               </p>
             </div>
 
-            {/* EQUIPAMIENTO */}
-            <div className="space-y-4">
-              <h3 className="font-serif text-2xl font-normal border-b border-[#E9E1D2] pb-3">Equipamiento Incluido</h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {vehicle.features.map((f: any) => (
-                  <div key={f.id} className="flex items-center space-x-2 p-3 bg-white rounded-2xl border border-[#E9E1D2]">
-                    <Check className="w-4 h-4 text-[#E07A5F]" />
-                    <span className="text-xs capitalize font-medium">{f.name}</span>
-                  </div>
-                ))}
+            {/* EQUIPAMIENTO E INSTALACIONES */}
+            {vehicle.features && vehicle.features.length > 0 && (
+              <div className="space-y-4">
+                <h3 className="font-serif text-2xl font-normal border-b border-[#E9E1D2] pb-3">Equipamiento e instalaciones</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {vehicle.features.map((feat: any) => (
+                    <div key={feat.id || feat.name} className="flex items-center space-x-2 text-xs font-medium text-[#13322E] bg-white p-3 rounded-2xl border border-[#E9E1D2]">
+                      <span className="text-[#16B8AA]">✓</span>
+                      <span>{feat.name}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
+
+            {/* EXTRAS OPCIONALES */}
+            {vehicle.extras && vehicle.extras.length > 0 && (
+              <div className="space-y-4">
+                <h3 className="font-serif text-2xl font-normal border-b border-[#E9E1D2] pb-3">Extras disponibles para este viaje</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {vehicle.extras.map((ve: any) => (
+                    <div key={ve.id} className="flex items-center justify-between p-3.5 bg-white rounded-2xl border border-[#E9E1D2]">
+                      <div>
+                        <h4 className="text-xs font-bold text-[#13322E]">{ve.extra?.name}</h4>
+                        {ve.extra?.description && (
+                          <p className="text-[11px] text-[#6B726E] mt-0.5">{ve.extra.description}</p>
+                        )}
+                      </div>
+                      <span className="text-xs font-black text-[#16B8AA] shrink-0 ml-2">
+                        +{ve.price || ve.extra?.price}€
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* MAPA DE UBICACIÓN APROXIMADA Y PUNTOS CAMPER */}
             <CamperLocationMap
@@ -342,43 +372,49 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
               addressApprox={vehicle.addressApprox}
             />
 
-            {/* PROPIETARIO */}
-            <div className="p-6 bg-[#F3EFEA] rounded-3xl border border-[#E9E1D2] flex items-center space-x-4">
+            {/* SECCIÓN SOBRE EL PROPIETARIO */}
+            <div className="flex items-center space-x-4 p-6 bg-[#FAF7F0] rounded-3xl border border-[#E9E1D2]">
               <img
-                src={vehicle.owner?.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400'}
+                src={vehicle.owner?.avatarUrl || '/default-avatar.svg'}
                 alt={vehicle.owner?.firstName || 'Propietario'}
-                className="w-16 h-16 rounded-full object-cover border-2 border-white"
+                className="w-16 h-16 rounded-full object-cover border-2 border-white shadow-xs"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = '/default-avatar.svg';
+                }}
               />
               <div>
-                <span className="text-xs uppercase tracking-wider font-semibold text-[#E07A5F]">Propietario</span>
+                <span className="text-xs uppercase tracking-wider font-bold text-[#16B8AA]">Propietario</span>
                 <h4 className="font-serif text-xl font-medium">{vehicle.owner?.firstName || 'Propietario'} {vehicle.owner?.lastName || ''}</h4>
                 <p className="text-xs text-[#6B726E] mt-0.5">En vaneando. desde {vehicle.owner?.createdAt ? new Date(vehicle.owner.createdAt).getFullYear() : '2024'}{vehicle.owner?.verification === 'VERIFIED' ? ' · identidad verificada' : ''}{isFeatured ? ' · Usuario destacado' : ''}</p>
               </div>
             </div>
 
             {/* RESEÑAS */}
-            {vehicle.reviews.length > 0 && (
-              <div className="space-y-6 pt-6">
-                <h3 className="font-serif text-2xl font-normal border-b border-[#E9E1D2] pb-3">
-                  Opiniones de Viajeros ({vehicle.reviews.length})
-                </h3>
+            <div className="space-y-6 pt-6">
+              <h3 className="font-serif text-2xl font-normal border-b border-[#E9E1D2] pb-3">
+                Opiniones de Viajeros ({vehicle.reviews?.length || 0})
+              </h3>
+              {vehicle.reviews?.length > 0 ? (
                 <div className="space-y-4">
                   {vehicle.reviews.map((rev: any) => (
                     <div key={rev.id} className="p-6 bg-white rounded-3xl border border-[#E9E1D2]">
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center space-x-3">
                           <img
-                            src={rev.author.avatarUrl || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400'}
-                            alt={rev.author.firstName}
+                            src={rev.author?.avatarUrl || '/default-avatar.svg'}
+                            alt={rev.author?.firstName || 'Viajero'}
                             className="w-10 h-10 rounded-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = '/default-avatar.svg';
+                            }}
                           />
                           <div>
-                            <span className="font-medium text-sm block">{rev.author.firstName}</span>
-                            <span className="text-[10px] text-[#6B726E]">{new Date(rev.createdAt).toLocaleDateString()}</span>
+                            <span className="font-medium text-sm block">{rev.author?.firstName}</span>
+                            <span className="text-[10px] text-[#6B726E]">{new Date(rev.createdAt).toLocaleDateString('es-ES')}</span>
                           </div>
                         </div>
                         <div className="flex items-center space-x-1">
-                          <Star className="w-4 h-4 fill-[#E07A5F] text-[#E07A5F]" />
+                          <Star className="w-4 h-4 fill-[#D97706] text-[#D97706]" />
                           <span className="text-sm font-semibold">{rev.rating}.0</span>
                         </div>
                       </div>
@@ -386,8 +422,17 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
                     </div>
                   ))}
                 </div>
-              </div>
-            )}
+              ) : (
+                <div className="p-6 bg-white rounded-3xl border border-[#E9E1D2] text-center space-y-2">
+                  <span className="inline-block px-3 py-1 bg-slate-100 text-[#6B726E] text-xs font-bold rounded-full border border-slate-200">
+                    Pendiente de calificar
+                  </span>
+                  <p className="text-xs text-[#6B726E] max-w-md mx-auto">
+                    Este vehículo es nuevo en Vaneando y aún no tiene valoraciones de viajeros. Alquila esta camper y sé el primero en dejar una reseña tras tu aventura.
+                  </p>
+                </div>
+              )}
+            </div>
 
           </div>
 

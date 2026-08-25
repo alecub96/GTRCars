@@ -160,10 +160,11 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {initialVehicles.map((vehicle: any) => {
+            const hasReviews = vehicle.reviews && vehicle.reviews.length > 0;
             const avgRating =
-              vehicle.reviews?.length > 0
+              hasReviews
                 ? vehicle.reviews.reduce((acc: number, r: any) => acc + r.rating, 0) / vehicle.reviews.length
-                : 5.0;
+                : 0;
 
             const isFeatured = Boolean(vehicle.isFeatured);
 
@@ -201,10 +202,17 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
 
                   <div className="flex items-center justify-between text-xs text-[#6B726E] mb-2 font-bold">
                     <span>{vehicle.brand} {vehicle.model}</span>
-                    <div className="flex items-center space-x-1 text-[#13322E]">
-                      <Star className="w-3.5 h-3.5 fill-[#D97706] text-[#D97706]" />
-                      <span>{avgRating.toFixed(1)}</span>
-                    </div>
+                    {hasReviews ? (
+                      <div className="flex items-center space-x-1 text-[#13322E]">
+                        <Star className="w-3.5 h-3.5 fill-[#D97706] text-[#D97706]" />
+                        <span>{avgRating.toFixed(1)}</span>
+                        <span className="text-[10px] text-[#6B726E] font-normal">({vehicle.reviews.length})</span>
+                      </div>
+                    ) : (
+                      <span className="text-[10px] font-bold text-[#6B726E] bg-[#E9E1D2]/50 px-2 py-0.5 rounded-full">
+                        Pendiente de calificar
+                      </span>
+                    )}
                   </div>
 
                   <h3 className="font-serif text-xl font-bold text-[#13322E] group-hover:text-[#16B8AA] transition-colors line-clamp-1 mb-2">
