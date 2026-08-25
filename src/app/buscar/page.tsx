@@ -45,7 +45,7 @@ export async function generateMetadata({ searchParams }: SearchPageProps): Promi
       url: `https://vaneando.com/buscar`,
       images: [
         {
-          url: 'https://vaneando.com/opengraph-image',
+          url: 'https://vaneando.com/og-image.png',
           width: 1200,
           height: 630,
           alt: `Alquiler de ${typeLabel} en ${islandName}`,
@@ -56,7 +56,7 @@ export async function generateMetadata({ searchParams }: SearchPageProps): Promi
       card: 'summary_large_image',
       title: `Alquiler de ${typeLabel} en ${islandName} | vaneando.`,
       description: `Compara precios y disponibilidad de campers en ${islandName}.`,
-      images: ['https://vaneando.com/opengraph-image'],
+      images: ['https://vaneando.com/og-image.png'],
     },
   };
 }

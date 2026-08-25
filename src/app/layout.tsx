@@ -105,7 +105,7 @@ export const metadata: Metadata = {
     url: 'https://vaneando.com',
     images: [
       {
-        url: 'https://vaneando.com/opengraph-image',
+        url: 'https://vaneando.com/og-image.png',
         width: 1200,
         height: 630,
         type: 'image/png',
@@ -117,7 +117,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Alquiler de Campers en Canarias entre Particulares | vaneando.',
     description: 'Alquila furgonetas camperizadas, autocaravanas y 4x4 directamente a propietarios locales verificados en Canarias.',
-    images: ['https://vaneando.com/opengraph-image'],
+    images: ['https://vaneando.com/og-image.png'],
   },
   robots: {
     index: true,

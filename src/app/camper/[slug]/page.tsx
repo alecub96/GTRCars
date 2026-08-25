@@ -148,7 +148,7 @@ export async function generateMetadata({ params }: CamperDetailPageProps): Promi
   const rawPhoto = vehicle.photos?.[0]?.url;
   const photoUrl = rawPhoto
     ? (rawPhoto.startsWith('http') ? rawPhoto : `https://vaneando.com${rawPhoto.startsWith('/') ? rawPhoto : `/${rawPhoto}`}`)
-    : 'https://vaneando.com/opengraph-image';
+    : 'https://vaneando.com/og-image.png';
 
   return {
     title: `${vehicle.title} en ${vehicle.island} desde ${vehicle.basePricePerDay}€/día | vaneando.`,

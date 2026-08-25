@@ -80,13 +80,26 @@ export async function GET(request: Request) {
           role: true,
           verification: true,
           createdAt: true,
-          updatedAt: true,
         },
         orderBy: { createdAt: 'desc' },
       }).catch((e) => {
         console.error('Admin users simple select fallback error:', e);
         return [];
       });
+    }
+
+    // Fallback 3: Consulta SQL directa a MariaDB si los modelos ORM fallan
+    if (!users || users.length === 0) {
+      try {
+        const rawUsers = (await prisma.$queryRawUnsafe(
+          `SELECT id, email, firstName, lastName, phone, avatarUrl, role, verification, createdAt FROM User ORDER BY createdAt DESC`
+        ).catch(() => [])) as any[];
+        if (rawUsers && rawUsers.length > 0) {
+          users = rawUsers;
+        }
+      } catch (rawErr) {
+        console.error('Admin users raw SQL fallback error:', rawErr);
+      }
     }
 
     const totalUsers = await prisma.user.count().catch(() => users.length);
