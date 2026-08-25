@@ -301,7 +301,14 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
         </div>
 
         {/* GALERÍA DE FOTOS EDITORIAL Y TÁCTIL MÓVIL CON LIGHTBOX */}
-        <CamperDetailGallery photos={vehicle.photos} title={vehicle.title} />
+        <CamperDetailGallery
+          photos={(vehicle.photos || []).map((p: any, idx: number) => ({
+            id: String(p?.id || idx),
+            url: typeof p === 'string' ? p : String(p?.url || ''),
+            orderIndex: Number(p?.orderIndex || idx),
+          }))}
+          title={vehicle.title || 'Camper'}
+        />
 
         {/* CONTENIDO PRINCIPAL Y STICKY WIDGET */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -346,12 +353,16 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
               <div className="space-y-4">
                 <h3 className="font-serif text-2xl font-normal border-b border-[#E9E1D2] pb-3">Equipamiento e instalaciones</h3>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  {vehicle.features.map((feat: any) => (
-                    <div key={feat.id || feat.name} className="flex items-center space-x-2 text-xs font-medium text-[#13322E] bg-white p-3 rounded-2xl border border-[#E9E1D2]">
-                      <span className="text-[#16B8AA]">✓</span>
-                      <span>{feat.name}</span>
-                    </div>
-                  ))}
+                  {vehicle.features.map((feat: any, idx: number) => {
+                    const featName = typeof feat === 'string' ? feat : feat?.name || '';
+                    if (!featName) return null;
+                    return (
+                      <div key={feat?.id || featName || idx} className="flex items-center space-x-2 text-xs font-medium text-[#13322E] bg-white p-3 rounded-2xl border border-[#E9E1D2]">
+                        <span className="text-[#16B8AA]">✓</span>
+                        <span>{featName}</span>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -361,31 +372,36 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
               <div className="space-y-4">
                 <h3 className="font-serif text-2xl font-normal border-b border-[#E9E1D2] pb-3">Extras disponibles para este viaje</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {vehicle.extras.map((ve: any) => (
-                    <div key={ve.id} className="flex items-center justify-between p-3.5 bg-white rounded-2xl border border-[#E9E1D2]">
-                      <div>
-                        <h4 className="text-xs font-bold text-[#13322E]">{ve.extra?.name}</h4>
-                        {ve.extra?.description && (
-                          <p className="text-[11px] text-[#6B726E] mt-0.5">{ve.extra.description}</p>
-                        )}
+                  {vehicle.extras.map((ve: any, idx: number) => {
+                    const extraName = ve.extra?.name || ve.name || 'Extra';
+                    const extraDesc = ve.extra?.description || ve.description || '';
+                    const extraPrice = Number(ve.price ?? ve.extra?.price ?? 0);
+                    return (
+                      <div key={ve.id || extraName || idx} className="flex items-center justify-between p-3.5 bg-white rounded-2xl border border-[#E9E1D2]">
+                        <div>
+                          <h4 className="text-xs font-bold text-[#13322E]">{extraName}</h4>
+                          {extraDesc && (
+                            <p className="text-[11px] text-[#6B726E] mt-0.5">{extraDesc}</p>
+                          )}
+                        </div>
+                        <span className="text-xs font-black text-[#16B8AA] shrink-0 ml-2">
+                          +{extraPrice}€
+                        </span>
                       </div>
-                      <span className="text-xs font-black text-[#16B8AA] shrink-0 ml-2">
-                        +{ve.price || ve.extra?.price}€
-                      </span>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             )}
 
             {/* MAPA DE UBICACIÓN APROXIMADA Y PUNTOS CAMPER */}
             <CamperLocationMap
-              island={vehicle.island}
-              municipality={vehicle.municipality}
-              vehicleTitle={vehicle.title}
-              latitude={vehicle.latitude}
-              longitude={vehicle.longitude}
-              addressApprox={vehicle.addressApprox}
+              island={vehicle.island || 'Gran Canaria'}
+              municipality={vehicle.municipality || 'Canarias'}
+              vehicleTitle={vehicle.title || 'Camper'}
+              latitude={vehicle.latitude ? Number(vehicle.latitude) : null}
+              longitude={vehicle.longitude ? Number(vehicle.longitude) : null}
+              addressApprox={vehicle.addressApprox || null}
             />
 
             {/* SECCIÓN SOBRE EL PROPIETARIO */}
@@ -500,20 +516,33 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
                 <p className="mt-2 text-sm text-[#6B726E]">Estás en modo {currentUser.role === 'ADMIN' ? 'administrador' : 'propietario'}. Las solicitudes de fechas solo están disponibles en modo viajero.</p>
                 {vehicle.owner?.id === currentUser.id && <a href="/propietario" className="mt-5 block rounded-full bg-[#13322E] px-5 py-3 text-center text-xs font-bold uppercase tracking-wider text-white">Volver a gestionar mi anuncio</a>}
               </div>
-            ) : <BookingWidget
-              vehicle={{
-                id: vehicle.id,
-                basePricePerDay: vehicle.basePricePerDay,
-                cleaningFee: vehicle.cleaningFee,
-                ownershipType: vehicle.ownershipType as 'PLATFORM' | 'THIRD_PARTY',
-                securityDeposit: vehicle.securityDeposit,
-                bookingType: vehicle.bookingType,
-                minDays: vehicle.minDays,
-                maxDays: vehicle.maxDays,
-                pricingRules: vehicle.pricingRules,
-                extras: vehicle.extras as any,
-              }}
-            />}
+            ) : (
+              <BookingWidget
+                vehicle={{
+                  id: String(vehicle.id),
+                  basePricePerDay: Number(vehicle.basePricePerDay),
+                  cleaningFee: Number(vehicle.cleaningFee || 0),
+                  ownershipType: (vehicle.ownershipType || 'THIRD_PARTY') as 'PLATFORM' | 'THIRD_PARTY',
+                  securityDeposit: Number(vehicle.securityDeposit || 0),
+                  bookingType: vehicle.bookingType || 'REQUEST_TO_BOOK',
+                  minDays: Number(vehicle.minDays || 1),
+                  maxDays: Number(vehicle.maxDays || 90),
+                  pricingRules: (vehicle.pricingRules || []).map((r: any) => ({
+                    startDate: typeof r.startDate === 'object' && r.startDate instanceof Date ? r.startDate.toISOString() : String(r.startDate || ''),
+                    endDate: typeof r.endDate === 'object' && r.endDate instanceof Date ? r.endDate.toISOString() : String(r.endDate || ''),
+                    pricePerDay: Number(r.pricePerDay || 0),
+                  })),
+                  extras: (vehicle.extras || []).map((e: any) => ({
+                    extra: {
+                      id: String(e.extra?.id || e.id || ''),
+                      name: String(e.extra?.name || e.name || 'Extra'),
+                      price: Number(e.price ?? e.extra?.price ?? 0),
+                      priceType: (e.extra?.priceType || e.priceType || 'PER_RENTAL') as 'PER_RENTAL' | 'PER_DAY',
+                    },
+                  })),
+                }}
+              />
+            )}
           </div>
 
         </div>

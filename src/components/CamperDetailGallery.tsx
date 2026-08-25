@@ -21,10 +21,15 @@ export default function CamperDetailGallery({ photos, title }: CamperDetailGalle
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
-  const validPhotos =
-    Array.isArray(photos) && photos.length > 0
-      ? photos
-      : [{ id: 'default', url: 'https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=1200' }];
+  const validPhotos = React.useMemo(() => {
+    if (!Array.isArray(photos) || photos.length === 0) {
+      return [{ id: 'default', url: 'https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=1200' }];
+    }
+    return photos.map((p: any, idx) => {
+      if (typeof p === 'string') return { id: String(idx), url: p };
+      return { id: String(p?.id || idx), url: p?.url || 'https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=1200' };
+    });
+  }, [photos]);
 
   const total = validPhotos.length;
 
