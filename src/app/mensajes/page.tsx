@@ -251,10 +251,12 @@ export default function ChatPage() {
     <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]">
       <Navbar />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <main className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-2 sm:py-8">
         
-        {/* AVISO DE MENSAJERÍA PROTEGIDA */}
-        <div className="bg-[#13322E] text-white p-4 rounded-2xl mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-medium shadow-sm">
+        {/* AVISO DE MENSAJERÍA PROTEGIDA (Oculto en móvil cuando se está dentro de un chat para maximizar espacio vertical) */}
+        <div className={`bg-[#13322E] text-white p-3.5 sm:p-4 rounded-2xl mb-3 sm:mb-6 items-center justify-between gap-3 text-xs font-medium shadow-sm ${
+          mobileView === 'chat' ? 'hidden md:flex' : 'flex'
+        }`}>
           <div className="flex items-center space-x-3">
             <Lock className="w-5 h-5 text-[#16B8AA] shrink-0" />
             <span>
@@ -266,8 +268,8 @@ export default function ChatPage() {
           </span>
         </div>
 
-        {/* CONTENEDOR PRINCIPAL DEL CHAT */}
-        <div className="bg-white rounded-3xl border border-[#E9E1D2] shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-12 h-[750px]">
+        {/* CONTENEDOR PRINCIPAL DEL CHAT (Adaptable en móvil con 100dvh para no quedar bajo la barra del navegador) */}
+        <div className="bg-white rounded-3xl border border-[#E9E1D2] shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-12 h-[calc(100dvh-80px)] sm:h-[750px]">
           
           {/* COLUMNA IZQUIERDA: BANDEJA DE CONVERSACIONES (Oculta en móvil si está en vista 'chat') */}
           <div
@@ -536,7 +538,7 @@ export default function ChatPage() {
                 {/* 5. FORMULARIO DE ENVÍO DE MENSAJE */}
                 <form
                   onSubmit={handleSendMessage}
-                  className="p-3 sm:p-4 border-t border-[#E9E1D2] bg-white flex items-center space-x-2"
+                  className="p-3 sm:p-4 border-t border-[#E9E1D2] bg-white flex items-center space-x-2 shrink-0 pb-[calc(0.75rem+env(safe-area-inset-bottom))] sm:pb-4 shadow-xs"
                 >
                   <input
                     type="text"
@@ -550,7 +552,7 @@ export default function ChatPage() {
                   <button
                     type="submit"
                     disabled={sending || !inputContent.trim()}
-                    className="p-3 rounded-2xl bg-[#16B8AA] hover:bg-[#0F766E] disabled:opacity-50 text-white font-bold transition-all shadow-md active:scale-95 cursor-pointer flex items-center justify-center"
+                    className="p-3 rounded-2xl bg-[#16B8AA] hover:bg-[#0F766E] disabled:opacity-50 text-white font-bold transition-all shadow-md active:scale-95 cursor-pointer flex items-center justify-center shrink-0"
                     aria-label="Enviar mensaje"
                   >
                     {sending ? (

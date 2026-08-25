@@ -23,9 +23,11 @@ export default function MobileStickyCTA() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // No mostrar en páginas de administración, checkin/checkout o pagos
+  // No mostrar en páginas de administración, chat/mensajes, soporte, checkin/checkout o pagos
   if (
     pathname?.startsWith('/admin') ||
+    pathname?.startsWith('/mensajes') ||
+    pathname?.startsWith('/soporte') ||
     pathname?.startsWith('/reserva/') ||
     pathname?.startsWith('/checkin') ||
     pathname?.startsWith('/checkout')
