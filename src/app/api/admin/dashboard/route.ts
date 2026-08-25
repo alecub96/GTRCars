@@ -25,12 +25,22 @@ export async function GET() {
       .filter((b: any) => b.status === 'CONFIRMED' || b.status === 'COMPLETED')
       .reduce((sum: number, b: any) => sum + b.ownerPayout, 0);
 
-    const [pendingVehiclesCount, pendingVerificationsCount, pendingIncidentsCount, activeSupportChatsCount, totalUsersCount] = await Promise.all([
+    const [
+      pendingVehiclesCount,
+      pendingVerificationsCount,
+      pendingIncidentsCount,
+      activeSupportChatsCount,
+      totalUsersCount,
+      totalConversationsCount,
+      totalMessagesCount,
+    ] = await Promise.all([
       prisma.vehicle.count({ where: { status: 'PENDING_REVIEW' } }).catch(() => 0),
       prisma.user.count({ where: { verification: 'PENDING' } }).catch(() => 0),
       prisma.incident.count({ where: { status: { in: ['OPEN', 'UNDER_REVIEW', 'AWAITING_TRAVELER', 'AWAITING_OWNER'] } } }).catch(() => 0),
       prisma.supportConversation.count({ where: { status: 'OPEN' } }).catch(() => 0),
       prisma.user.count().catch(() => 0),
+      prisma.conversation.count().catch(() => 0),
+      prisma.message.count().catch(() => 0),
     ]);
 
     return NextResponse.json({
@@ -46,6 +56,8 @@ export async function GET() {
         pendingVerificationsCount,
         pendingIncidentsCount,
         totalUsersCount,
+        totalConversationsCount,
+        totalMessagesCount,
         unreadMessagesCount: activeSupportChatsCount,
         stripeConfigured: Boolean(process.env.STRIPE_SECRET_KEY && !process.env.STRIPE_SECRET_KEY.includes('mock')),
         connectedOwners: new Set(bookings.filter((booking: any) => booking.owner.stripeAccountId).map((booking: any) => booking.owner.email)).size,

@@ -110,6 +110,20 @@ export default function AdminPage() {
               <span>{metrics.stripeConfigured ? 'Stripe Connect Activo' : 'Stripe Config Pendiente'}</span>
             </div>
 
+            <button
+              type="button"
+              onClick={() => setActiveTab('conversations')}
+              className="inline-flex items-center space-x-2 rounded-full bg-[#16B8AA] hover:bg-[#0F766E] px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-sm transition-all cursor-pointer"
+            >
+              <MessageSquare className="w-4 h-4" />
+              <span>Auditoría de Chats (RGPD)</span>
+              {(metrics.totalConversationsCount || 0) > 0 && (
+                <span className="bg-[#13322E] text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
+                  {metrics.totalConversationsCount}
+                </span>
+              )}
+            </button>
+
             <Link
               href="/soporte"
               className="inline-flex items-center space-x-2 rounded-full bg-[#13322E] hover:bg-[#16B8AA] px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-sm transition-all"
@@ -126,7 +140,7 @@ export default function AdminPage() {
         </div>
 
         {/* ACCESOS RÁPIDOS Y RESUMEN OPERATIVO */}
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-8">
           <button
             type="button"
             onClick={() => setActiveTab('vehicles')}
@@ -170,6 +184,27 @@ export default function AdminPage() {
               {metrics.totalUsersCount || 0}
             </div>
             <p className="text-[11px] text-[#6B726E] mt-0.5">Usuarios registrados</p>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('conversations')}
+            className={`p-4 rounded-3xl border text-left transition-all cursor-pointer ${
+              activeTab === 'conversations'
+                ? 'border-[#16B8AA] bg-white ring-2 ring-[#16B8AA]/10 shadow-md'
+                : 'border-[#E9E1D2] bg-white/70 hover:bg-white hover:border-slate-300'
+            }`}
+          >
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[10px] font-black uppercase tracking-wider text-[#16B8AA] flex items-center gap-1.5">
+                <MessageSquare className="w-3.5 h-3.5" />
+                Chats Usuarios
+              </span>
+            </div>
+            <div className="text-2xl font-black text-[#13322E]">
+              {metrics.totalConversationsCount || 0}
+            </div>
+            <p className="text-[11px] text-[#6B726E] mt-0.5">Hilos anonimizados</p>
           </button>
 
           <button
@@ -277,7 +312,7 @@ export default function AdminPage() {
                 : 'bg-white border border-[#E9E1D2] text-[#13322E] hover:bg-[#FAF7F0]'
             }`}
           >
-            💬 Chats entre Usuarios
+            💬 Chats entre Usuarios (RGPD: {metrics.totalConversationsCount || 0})
           </button>
 
           <button

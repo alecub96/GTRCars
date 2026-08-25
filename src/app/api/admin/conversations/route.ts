@@ -6,6 +6,30 @@ import { ensureDbSchema } from '@/lib/prisma-ensure-schema';
 
 export const dynamic = 'force-dynamic';
 
+function maskEmail(email?: string | null) {
+  if (!email) return 'anonimo@privacidad.vaneando';
+  const parts = email.split('@');
+  if (parts.length !== 2) return 'u***@***.com';
+  const name = parts[0];
+  const domain = parts[1];
+  const maskedName = name.length > 2 ? `${name[0]}***${name[name.length - 1]}` : `${name[0]}***`;
+  return `${maskedName}@***.${domain.split('.').pop() || 'com'}`;
+}
+
+function anonymizeUser(user: any, defaultRole: 'Viajero' | 'Propietario') {
+  if (!user) return null;
+  const shortId = (user.id || '').replace(/-/g, '').slice(0, 6).toUpperCase();
+  return {
+    id: user.id,
+    firstName: `${defaultRole} #${shortId}`,
+    lastName: '',
+    email: maskEmail(user.email),
+    phone: '[Protegido por RGPD]',
+    avatarUrl: '/default-avatar.svg',
+    isAnonymous: true,
+  };
+}
+
 export async function GET(request: Request) {
   try {
     const admin = await requireAdmin();
@@ -51,7 +75,36 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: 'Conversación no encontrada' }, { status: 404 });
       }
 
-      return NextResponse.json({ success: true, conversation });
+      // Anonimizar participantes y mensajes para proteger la privacidad de los usuarios
+      const anonTraveler = anonymizeUser(conversation.traveler, 'Viajero');
+      const anonOwner = anonymizeUser(conversation.owner, 'Propietario');
+
+      const anonymizedMessages = (conversation.messages || []).map((m: any) => {
+        const isTraveler = m.sender?.id === conversation.travelerId;
+        const shortId = (m.sender?.id || '').replace(/-/g, '').slice(0, 6).toUpperCase();
+        return {
+          ...m,
+          sender: {
+            id: m.sender?.id,
+            firstName: isTraveler ? `Viajero #${shortId}` : `Propietario #${shortId}`,
+            lastName: '',
+            email: maskEmail(m.sender?.email),
+            role: isTraveler ? 'TRAVELER' : 'OWNER',
+            avatarUrl: '/default-avatar.svg',
+          },
+        };
+      });
+
+      return NextResponse.json({
+        success: true,
+        conversation: {
+          ...conversation,
+          traveler: anonTraveler,
+          owner: anonOwner,
+          messages: anonymizedMessages,
+          rgpdComplianceNotice: 'Identidades anonimizadas conforme al Art. 5.1.c RGPD (Principio de minimización de datos).',
+        },
+      });
     }
 
     // 2. Listar todas las conversaciones de la plataforma para auditoría
@@ -96,11 +149,19 @@ export async function GET(request: Request) {
       }).catch(() => []);
     }
 
+    // Anonimizar listado completo
+    const anonymizedList = conversations.map((c) => ({
+      ...c,
+      traveler: anonymizeUser(c.traveler, 'Viajero'),
+      owner: anonymizeUser(c.owner, 'Propietario'),
+    }));
+
     // Filtrar si hay término de búsqueda
+    let filteredList = anonymizedList;
     if (q) {
-      conversations = conversations.filter((c) => {
-        const travelerName = `${c.traveler?.firstName || ''} ${c.traveler?.lastName || ''} ${c.traveler?.email || ''}`.toLowerCase();
-        const ownerName = `${c.owner?.firstName || ''} ${c.owner?.lastName || ''} ${c.owner?.email || ''}`.toLowerCase();
+      filteredList = anonymizedList.filter((c) => {
+        const travelerName = `${c.traveler?.firstName || ''} ${c.traveler?.email || ''}`.toLowerCase();
+        const ownerName = `${c.owner?.firstName || ''} ${c.owner?.email || ''}`.toLowerCase();
         const vehicleTitle = (c.vehicle?.title || '').toLowerCase();
         const lastMsg = (c.messages?.[0]?.content || '').toLowerCase();
         return travelerName.includes(q) || ownerName.includes(q) || vehicleTitle.includes(q) || lastMsg.includes(q);
@@ -112,11 +173,12 @@ export async function GET(request: Request) {
 
     return NextResponse.json({
       success: true,
-      conversations,
+      conversations: filteredList,
       metrics: {
         totalConversations,
         totalMessages,
       },
+      rgpdProtection: 'Modo Anonimizado Activo',
     });
   } catch (error: any) {
     console.error('API Admin Conversations Error:', error);
