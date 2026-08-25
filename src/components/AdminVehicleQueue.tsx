@@ -215,7 +215,18 @@ export default function AdminVehicleQueue() {
 
                     <h4 className="text-lg font-bold text-[#13322E] line-clamp-1">{v.title}</h4>
                     <p className="text-xs text-[#6B726E] font-medium">
-                      Propietario: <strong className="text-[#13322E]">{v.owner?.firstName} {v.owner?.lastName}</strong> ({v.owner?.email})
+                      Propietario:{' '}
+                      {v.owner ? (
+                        <>
+                          <strong className="text-[#13322E]">
+                            {v.owner.firstName || ''} {v.owner.lastName || ''}
+                          </strong>{' '}
+                          ({v.owner.email || 'Sin email'})
+                          {v.owner.phone ? ` • Tel: ${v.owner.phone}` : ''}
+                        </>
+                      ) : (
+                        <span className="italic text-slate-400">Propietario no disponible</span>
+                      )}
                     </p>
                     <p className="text-xs font-bold text-[#16B8AA]">{v.basePricePerDay}€ / día</p>
                   </div>
