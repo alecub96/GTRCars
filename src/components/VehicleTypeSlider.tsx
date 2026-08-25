@@ -1,8 +1,19 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { CarFront, Truck, Caravan, BusFront, Mountain, Ship, LayoutGrid, ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useRef } from 'react';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import {
+  CarFront,
+  Truck,
+  Caravan,
+  BusFront,
+  Mountain,
+  Ship,
+  LayoutGrid,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-react';
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   CarFront,
@@ -33,58 +44,28 @@ export default function VehicleTypeSlider({
   onSelectType,
   showAllOption = true,
 }: VehicleTypeSliderProps) {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const sliderRef = useRef<HTMLDivElement>(null);
 
-  const [isMouseDown, setIsMouseDown] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeftState, setScrollLeftState] = useState(0);
-
-  const currentType = selectedType !== undefined ? selectedType : searchParams?.get('vehicleType') || '';
+  const currentType =
+    selectedType !== undefined ? selectedType : searchParams?.get('vehicleType') || '';
 
   const scroll = (direction: 'left' | 'right') => {
     if (sliderRef.current) {
-      const scrollAmount = direction === 'left' ? -220 : 220;
+      const scrollAmount = direction === 'left' ? -240 : 240;
       sliderRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
   };
 
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (!sliderRef.current) return;
-    setIsMouseDown(true);
-    setStartX(e.pageX - sliderRef.current.offsetLeft);
-    setScrollLeftState(sliderRef.current.scrollLeft);
-  };
-
-  const handleMouseLeave = () => {
-    setIsMouseDown(false);
-  };
-
-  const handleMouseUp = () => {
-    setIsMouseDown(false);
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isMouseDown || !sliderRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - sliderRef.current.offsetLeft;
-    const walk = (x - startX) * 1.8;
-    sliderRef.current.scrollLeft = scrollLeftState - walk;
-  };
-
-  const handleSelect = (id: string) => {
-    if (onSelectType) {
-      onSelectType(id);
+  const buildUrl = (id: string) => {
+    const params = new URLSearchParams(searchParams ? searchParams.toString() : '');
+    if (id) {
+      params.set('vehicleType', id);
     } else {
-      const currentParams = new URLSearchParams(searchParams ? searchParams.toString() : '');
-      if (id) {
-        currentParams.set('vehicleType', id);
-      } else {
-        currentParams.delete('vehicleType');
-      }
-      router.push(`/buscar?${currentParams.toString()}`);
+      params.delete('vehicleType');
     }
+    const query = params.toString();
+    return `/buscar${query ? `?${query}` : ''}`;
   };
 
   return (
@@ -99,41 +80,51 @@ export default function VehicleTypeSlider({
         <ChevronLeft className="w-4 h-4" />
       </button>
 
-      {/* CONTENEDOR SLIDER: ALINEADO SIN CORTES LATERALES */}
+      {/* CONTENEDOR SLIDER DE CATEGORÍAS */}
       <div
         ref={sliderRef}
-        onMouseDown={handleMouseDown}
-        onMouseLeave={handleMouseLeave}
-        onMouseUp={handleMouseUp}
-        onMouseMove={handleMouseMove}
-        className="flex items-center justify-start lg:justify-center flex-nowrap gap-2 sm:gap-2.5 overflow-x-auto py-2 px-10 lg:px-2 scrollbar-none cursor-grab active:cursor-grabbing select-none touch-pan-x"
+        className="flex items-center justify-start lg:justify-center flex-nowrap gap-2 sm:gap-2.5 overflow-x-auto py-2 px-10 lg:px-2 scrollbar-none touch-pan-x scroll-smooth"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {showAllOption && (
-          <button
-            type="button"
-            onClick={() => handleSelect('')}
-            className={`flex items-center space-x-1.5 sm:space-x-2 px-3.5 py-2 sm:py-2.5 rounded-2xl border text-[11px] sm:text-xs font-bold shrink-0 transition-all shadow-sm cursor-pointer whitespace-nowrap ${
-              !currentType
-                ? 'border-[#16B8AA] bg-[#16B8AA] text-white ring-2 ring-[#16B8AA]/30'
-                : 'border-white/70 bg-white/95 text-[#13322E] hover:bg-white hover:border-[#16B8AA]'
-            }`}
-          >
-            <LayoutGrid className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
-            <span>Todas las opciones</span>
-          </button>
+          onSelectType ? (
+            <button
+              type="button"
+              onClick={() => onSelectType('')}
+              className={`flex items-center space-x-1.5 sm:space-x-2 px-3.5 py-2 sm:py-2.5 rounded-2xl border text-[11px] sm:text-xs font-bold shrink-0 transition-all shadow-sm cursor-pointer whitespace-nowrap active:scale-95 ${
+                !currentType
+                  ? 'border-[#16B8AA] bg-[#16B8AA] text-white ring-2 ring-[#16B8AA]/30'
+                  : 'border-white/70 bg-white/95 text-[#13322E] hover:bg-white hover:border-[#16B8AA]'
+              }`}
+            >
+              <LayoutGrid className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+              <span>Todas las opciones</span>
+            </button>
+          ) : (
+            <Link
+              href={buildUrl('')}
+              className={`flex items-center space-x-1.5 sm:space-x-2 px-3.5 py-2 sm:py-2.5 rounded-2xl border text-[11px] sm:text-xs font-bold shrink-0 transition-all shadow-sm cursor-pointer whitespace-nowrap active:scale-95 ${
+                !currentType
+                  ? 'border-[#16B8AA] bg-[#16B8AA] text-white ring-2 ring-[#16B8AA]/30'
+                  : 'border-white/70 bg-white/95 text-[#13322E] hover:bg-white hover:border-[#16B8AA]'
+              }`}
+            >
+              <LayoutGrid className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+              <span>Todas las opciones</span>
+            </Link>
+          )
         )}
 
         {VEHICLE_SLIDER_ITEMS.map(({ id, label, iconName }) => {
           const IconComponent = ICON_MAP[iconName] || CarFront;
           const isActive = currentType === id;
 
-          return (
+          return onSelectType ? (
             <button
               key={id}
               type="button"
-              onClick={() => handleSelect(id)}
-              className={`flex items-center space-x-1.5 sm:space-x-2 px-3.5 py-2 sm:py-2.5 rounded-2xl border text-[11px] sm:text-xs font-bold shrink-0 transition-all shadow-sm cursor-pointer whitespace-nowrap ${
+              onClick={() => onSelectType(id)}
+              className={`flex items-center space-x-1.5 sm:space-x-2 px-3.5 py-2 sm:py-2.5 rounded-2xl border text-[11px] sm:text-xs font-bold shrink-0 transition-all shadow-sm cursor-pointer whitespace-nowrap active:scale-95 ${
                 isActive
                   ? 'border-[#16B8AA] bg-[#16B8AA] text-white ring-2 ring-[#16B8AA]/30'
                   : 'border-white/70 bg-white/95 text-[#13322E] hover:bg-white hover:border-[#16B8AA]'
@@ -142,6 +133,19 @@ export default function VehicleTypeSlider({
               <IconComponent className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
               <span>{label}</span>
             </button>
+          ) : (
+            <Link
+              key={id}
+              href={buildUrl(id)}
+              className={`flex items-center space-x-1.5 sm:space-x-2 px-3.5 py-2 sm:py-2.5 rounded-2xl border text-[11px] sm:text-xs font-bold shrink-0 transition-all shadow-sm cursor-pointer whitespace-nowrap active:scale-95 ${
+                isActive
+                  ? 'border-[#16B8AA] bg-[#16B8AA] text-white ring-2 ring-[#16B8AA]/30'
+                  : 'border-white/70 bg-white/95 text-[#13322E] hover:bg-white hover:border-[#16B8AA]'
+              }`}
+            >
+              <IconComponent className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+              <span>{label}</span>
+            </Link>
           );
         })}
       </div>

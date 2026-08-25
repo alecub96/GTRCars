@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import MainSearchWidget from '@/components/MainSearchWidget';
 import VehicleTypeSlider from '@/components/VehicleTypeSlider';
@@ -29,6 +30,7 @@ interface HeroSectionProps {
 }
 
 export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
+  const router = useRouter();
   const [selectedIsland, setSelectedIsland] = useState<string>('Gran Canaria');
   const [selectedVehicleType, setSelectedVehicleType] = useState<string>('');
   const [role, setRole] = useState<string | null>(null);
@@ -103,7 +105,13 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
               <div className="pt-2 max-w-6xl mx-auto w-full">
                 <VehicleTypeSlider
                   selectedType={selectedVehicleType}
-                  onSelectType={(newType) => setSelectedVehicleType(newType)}
+                  onSelectType={(newType) => {
+                    setSelectedVehicleType(newType);
+                    const params = new URLSearchParams();
+                    if (selectedIsland) params.set('island', selectedIsland);
+                    if (newType) params.set('vehicleType', newType);
+                    router.push(`/buscar${params.toString() ? `?${params.toString()}` : ''}`);
+                  }}
                   showAllOption={true}
                 />
               </div>
