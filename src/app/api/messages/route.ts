@@ -51,7 +51,7 @@ export async function POST(request: Request) {
     // Validar Menciones a Plataformas Competidoras
     if (COMPETITORS_REGEX.test(cleanContent)) {
       return NextResponse.json(
-        { error: '🛡️ Seguridad: No está permitido mencionar plataformas externas o de la competencia (Yescapa, Booking, etc.).' },
+        { error: '🛡️ Seguridad: No está permitido mencionar marcas de la competencia o plataformas externas.' },
         { status: 422 }
       );
     }

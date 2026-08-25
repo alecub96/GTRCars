@@ -328,7 +328,7 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
             Disponibilidad y Sincronización Automática
           </h2>
           <p className="mt-1 text-xs sm:text-sm text-[#6B726E]">
-            Vincula tus calendarios de Airbnb, Yescapa, Booking y Google Calendar para evitar reservas duplicadas y actualizar tu disponibilidad automáticamente.
+            Vincula tus calendarios de Airbnb, marcas de la competencia, Booking y Google Calendar para evitar reservas duplicadas y actualizar tu disponibilidad automáticamente.
           </p>
         </div>
 
@@ -378,7 +378,7 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
             </div>
           )}
 
-          {/* MÓDULO DESTACADO: SINCRONIZACIÓN AUTOMÁTICA ICAL (AIRBNB, YESCAPA, ETC.) */}
+          {/* MÓDULO DESTACADO: SINCRONIZACIÓN AUTOMÁTICA ICAL (AIRBNB, EMPRESAS DEL SECTOR, ETC.) */}
           <div className="rounded-3xl border-2 border-teal-600/30 bg-gradient-to-br from-teal-50/50 via-white to-amber-50/20 p-5 sm:p-7 shadow-sm">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
               <div className="flex items-center space-x-3">
@@ -393,7 +393,7 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
                     </span>
                   </h3>
                   <p className="text-xs text-[#6B726E]">
-                    Conecta tus anuncios de Airbnb, Yescapa, Booking.com y Google Calendar en ambos sentidos.
+                    Conecta tus anuncios de Airbnb, empresas del sector, Booking.com y Google Calendar en ambos sentidos.
                   </p>
                 </div>
               </div>
@@ -450,7 +450,7 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
                   <div className="flex flex-wrap gap-2">
                     {[
                       { id: 'AIRBNB', name: 'Airbnb', defaultName: 'Airbnb Calendar', color: 'hover:border-[#FF5A5F]' },
-                      { id: 'YESCAPA', name: 'Yescapa', defaultName: 'Yescapa Camper', color: 'hover:border-[#008489]' },
+                      { id: 'COMPETITOR', name: 'Empresas del sector', defaultName: 'Plataforma del sector', color: 'hover:border-[#008489]' },
                       { id: 'BOOKING', name: 'Booking.com', defaultName: 'Booking.com', color: 'hover:border-[#003580]' },
                       { id: 'GOOGLE', name: 'Google Calendar', defaultName: 'Google Calendar', color: 'hover:border-blue-500' },
                       { id: 'INDIE_CAMPERS', name: 'Indie Campers', defaultName: 'Indie Campers', color: 'hover:border-amber-600' },
@@ -582,7 +582,7 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
                     Arrastra o selecciona un archivo .ics / .ical
                   </h4>
                   <p className="text-xs text-[#6B726E] max-w-md mx-auto mb-4">
-                    Exporta el archivo de calendario desde Airbnb (Precios y disponibilidad) o Yescapa e impórtalo aquí directamente.
+                    Exporta el archivo de calendario desde Airbnb (Precios y disponibilidad) u otras empresas del sector e impórtalo aquí directamente.
                   </p>
                   <label className="inline-flex items-center gap-2 rounded-full bg-[#13322E] hover:bg-[#16B8AA] px-5 py-2.5 text-xs font-bold text-white transition-all cursor-pointer shadow-sm">
                     <Upload className="h-4 w-4" />
@@ -600,10 +600,10 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
                 <div className="bg-[#FAF7F0] p-4 rounded-2xl border border-[#E9E1D2] text-xs text-[#6B726E] space-y-1">
                   <p className="font-bold text-[#13322E] flex items-center gap-1.5">
                     <Info className="h-4 w-4 text-[#16B8AA]" />
-                    ¿Cómo exportar tu archivo .ics desde Airbnb o Yescapa?
+                    ¿Cómo exportar tu archivo .ics desde Airbnb u otras empresas del sector?
                   </p>
                   <p>1. En <strong>Airbnb</strong>: Ve a <em>Anuncios &gt; Precios y disponibilidad &gt; Sincronización de calendarios &gt; Exportar calendario</em>.</p>
-                  <p>2. En <strong>Yescapa</strong>: Ve a <em>Mi vehículo &gt; Calendario &gt; Exportar iCal</em>.</p>
+                  <p>2. En <strong>otras empresas del sector</strong>: Ve a <em>Mi vehículo &gt; Calendario &gt; Exportar iCal</em>.</p>
                 </div>
               </div>
             )}
@@ -616,7 +616,7 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
                     Tu enlace oficial de exportación iCal de Vaneando
                   </h4>
                   <p className="text-xs text-[#6B726E]">
-                    Pega este enlace en Airbnb, Yescapa o Booking.com para que esas plataformas bloqueen automáticamente las fechas cuando recibas reservas en Vaneando.
+                    Pega este enlace en Airbnb, marcas de la competencia o Booking.com para que esas plataformas bloqueen automáticamente las fechas cuando recibas reservas en Vaneando.
                   </p>
                 </div>
 
@@ -652,7 +652,7 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
                     <span>Ve a tu anuncio en Airbnb &gt; Precios y disponibilidad &gt; Sincronizar calendarios &gt; Importar calendario y pega el enlace anterior.</span>
                   </div>
                   <div className="p-3.5 rounded-xl bg-[#FAF7F0] border border-[#E9E1D2]">
-                    <strong className="text-[#13322E] block mb-1">🚐 Cómo pegarlo en Yescapa / Booking:</strong>
+                    <strong className="text-[#13322E] block mb-1">🚐 Cómo pegarlo en empresas del sector / Booking:</strong>
                     <span>En el menú de tu vehículo &gt; Calendario &gt; Importar iCal &gt; Pega la URL generada.</span>
                   </div>
                 </div>
@@ -782,7 +782,7 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
                       badgeColor = 'bg-blue-100 text-blue-900 border-blue-200';
                     } else if (isSync) {
                       if (block.reason?.includes('AIRBNB')) tag = 'Sincronizado Airbnb';
-                      else if (block.reason?.includes('YESCAPA')) tag = 'Sincronizado Yescapa';
+                      else if (block.reason?.includes('YESCAPA') || block.reason?.includes('COMPETITOR')) tag = 'Sincronizado plataforma del sector';
                       else if (block.reason?.includes('BOOKING')) tag = 'Sincronizado Booking';
                       else if (block.reason?.includes('GOOGLE')) tag = 'Google Calendar';
                       else tag = 'Calendario iCal';

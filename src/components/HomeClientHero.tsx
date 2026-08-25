@@ -112,7 +112,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
         </div>
       </section>
 
-      {/* 2. BARRA DE CONFIANZA Y VALORACIÓN (ESTILO YESCAPA) */}
+      {/* 2. BARRA DE CONFIANZA Y VALORACIÓN DE USUARIOS */}
       <section className="bg-white border-y border-[#E9E1D2] py-6 px-4">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-6 text-center sm:text-left">
           <div className="flex items-center justify-center space-x-3 mx-auto sm:mx-0">
@@ -238,7 +238,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
         </div>
       </section>
 
-      {/* 4. GUÍA DE SELECCIÓN DE VEHÍCULO (ELEGIR EL VEHÍCULO ADECUADO - ESTILO YESCAPA) */}
+      {/* 4. GUÍA DE SELECCIÓN DE VEHÍCULO */}
       <section className="py-20 bg-white border-t border-[#E9E1D2]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
@@ -598,7 +598,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
             <h4 className="text-xs font-black uppercase tracking-widest text-[#16B8AA] mb-4">Blog & Guías</h4>
             <ul className="space-y-2 text-xs text-white/70 font-medium">
               <li><Link href="/guias/hotel-vs-camper-gran-canaria-ahorro-experiencia" className="hover:text-white">Hotel vs Camper Gran Canaria</Link></li>
-              <li><Link href="/guias/vaneando-vs-yescapa-indie-campers-roadsurfer-canarias" className="hover:text-white">Vaneando vs Yescapa</Link></li>
+              <li><Link href="/guias/vaneando-vs-yescapa-indie-campers-roadsurfer-canarias" className="hover:text-white">Vaneando vs Empresas del sector</Link></li>
               <li><Link href="/guias/pernocta-legal-zonas-acampada-gran-canaria-tenerife" className="hover:text-white">Mapa de Pernocta Legal</Link></li>
               <li><Link href="/guias" className="hover:text-white">Ver todas las guías</Link></li>
             </ul>

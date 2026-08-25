@@ -47,7 +47,7 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
 
     const vehicleId = vehicle.id;
 
-    // MODO EXPORTACIÓN ICAL (.ics) PARA AIRBNB, YESCAPA, GOOGLE, ETC.
+    // MODO EXPORTACIÓN ICAL (.ics) PARA AIRBNB, EMPRESAS DEL SECTOR, GOOGLE, ETC.
     if (isExport) {
       const icsString = generateIcsCalendar({
         vehicleTitle: vehicle.title,
@@ -106,7 +106,7 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
 }
 
 /**
- * POST: Importa un calendario externo mediante archivo .ics o URL de sincronización (Airbnb, Yescapa, Booking, etc.)
+ * POST: Importa un calendario externo mediante archivo .ics o URL de sincronización (Airbnb, marcas de la competencia, Booking, etc.)
  */
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
   try {
@@ -147,7 +147,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
       sourcePlatform = detectPlatformFromIcs(icsContent, file.name);
       feedName = `Archivo ${file.name.replace(/\.ics$/i, '')}`;
     }
-    // CASO 2: IMPORTACIÓN MEDIANTE URL AUTOMÁTICA (AIRBNB, YESCAPA, BOOKING, GOOGLE)
+    // CASO 2: IMPORTACIÓN MEDIANTE URL AUTOMÁTICA (AIRBNB, MARCAS DE LA COMPETENCIA, BOOKING, GOOGLE)
     else {
       const body = await request.json().catch(() => ({}));
       let targetUrl = String(body.url || '').trim();

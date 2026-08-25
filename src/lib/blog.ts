@@ -11,18 +11,18 @@ export const BLOG_ARTICLES: BlogArticle[] = [
   {
     slug: 'vaneando-vs-yescapa-indie-campers-roadsurfer-canarias',
     category: 'Viajeros',
-    title: 'Vaneando vs Yescapa, Indie Campers & Roadsurfer: Por qué la plataforma local gana en Canarias (Campervan Hire)',
+    title: 'Vaneando vs marcas de la competencia: Por qué la plataforma local gana en Canarias (Campervan Hire)',
     excerpt: 'Comparativa detallada 2026: ahorra hasta un 60% frente a multinacionales con propietarios canarios locales, entrega sin comisiones ocultas y fianza acordada directamente entre particulares.',
-    metaDescription: 'Comparativa Vaneando vs Yescapa, Indie Campers y Roadsurfer en Gran Canaria y Tenerife. Vehículos locales, entrega en aeropuerto, 0% sobrecargas y contratos directos entre particulares.',
+    metaDescription: 'Comparativa Vaneando vs marcas de la competencia y empresas del sector en Gran Canaria y Tenerife. Vehículos locales, entrega en aeropuerto, 0% sobrecargas y contratos directos entre particulares.',
     image: '/Islas/fuerteventura.png',
     publishedAt: '2026-08-14',
     readingTime: '10 min',
-    keywords: ['vaneando vs yescapa', 'vaneando vs indie campers', 'roadsurfer gran canaria', 'campervan hire gran canaria', 'camper mieten gran canaria', 'location van gran canaria'],
+    keywords: ['vaneando vs marcas de la competencia', 'vaneando vs empresas del sector', 'alquiler camper gran canaria', 'campervan hire gran canaria', 'camper mieten gran canaria', 'location van gran canaria'],
     sections: [
       {
         heading: 'La batalla del alquiler de campers en Canarias: Plataforma Local vs Multinacionales',
         paragraphs: [
-          'Cuando un viajero de España, Reino Unido, Alemania o Francia planea recorrer Gran Canaria, Tenerife, Fuerteventura o Lanzarote en camper, suele encontrarse con grandes intermediarios internacionales como Yescapa, Indie Campers o Roadsurfer.',
+          'Cuando un viajero de España, Reino Unido, Alemania o Francia planea recorrer Gran Canaria, Tenerife, Fuerteventura o Lanzarote en camper, suele encontrarse con grandes intermediarios internacionales y marcas de la competencia.',
           'Sin embargo, operar en un archipiélago atlántico exige una logística local única que las multinacionales no pueden igualar. En esta guía desglosamos por qué Vaneando se ha consolidado como la opción número 1 para alquilar una furgoneta camperizada, caravana, 4x4 o autocaravana en las Islas Canarias.',
         ],
       },
@@ -231,12 +231,12 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     slug: 'vaneando-vs-empresas-alquiler-camper-canarias',
     category: 'Viajeros',
     title: 'Por qué Vaneando es la mejor opción para alquilar camper en Canarias (Locales vs Empresas)',
-    excerpt: 'Descubre las ventajas de alquilar en la plataforma nativa de Canarias frente a multinacionales como Yescapa, Roadsurfer e Indy Campers.',
-    metaDescription: 'Comparativa 2026: Vaneando vs empresas multinacionales de camper. Trato local, transparencia sin comisiones ocultas, atención inmediata y apoyo al comercio canario.',
+    excerpt: 'Descubre las ventajas de alquilar en la plataforma nativa de Canarias frente a marcas de la competencia y empresas del sector.',
+    metaDescription: 'Comparativa 2026: Vaneando vs empresas del sector y marcas de la competencia de camper. Trato local, transparencia sin comisiones ocultas, atención inmediata y apoyo al comercio canario.',
     image: '/Islas/fuerteventura.png',
     publishedAt: '2026-08-08',
     readingTime: '8 min',
-    keywords: ['vaneando opiniones', 'alquiler camper Canarias empresas vs particulares', 'mejor web alquiler camper Canarias', 'vaneando vs yescapa'],
+    keywords: ['vaneando opiniones', 'alquiler camper Canarias empresas vs particulares', 'mejor web alquiler camper Canarias', 'vaneando vs empresas del sector'],
     sections: [
       {
         heading: 'La diferencia entre una flota impersonal y la hospitalidad canaria',

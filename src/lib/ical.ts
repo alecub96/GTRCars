@@ -1,6 +1,6 @@
 /**
  * Utilidades para sincronización bidireccional de calendarios iCal (RFC 5545)
- * Compatible con Airbnb, Yescapa, Booking.com, Google Calendar, Indie Campers, VRBO y Apple Calendar.
+ * Compatible con Airbnb, empresas del sector, Booking.com, Google Calendar, Indie Campers, VRBO y Apple Calendar.
  */
 
 export interface ParsedIcsEvent {
