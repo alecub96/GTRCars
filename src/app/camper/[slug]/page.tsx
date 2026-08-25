@@ -12,6 +12,7 @@ import type { Metadata } from 'next';
 import { getFeaturedAudience } from '@/lib/featured';
 import CamperDetailGallery from '@/components/CamperDetailGallery';
 import CamperLocationMap from '@/components/CamperLocationMap';
+import ContactOwnerButton from '@/components/ContactOwnerButton';
 import { isConfiguredAdmin } from '@/lib/admin';
 import { REALISTIC_CANARIAN_CAMPERS } from '@/lib/demo-campers-data';
 import Link from 'next/link';
@@ -405,16 +406,29 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
             />
 
             {/* SECCIÓN SOBRE EL PROPIETARIO */}
-            <div className="flex items-center space-x-4 p-6 bg-[#FAF7F0] rounded-3xl border border-[#E9E1D2]">
-              <img
-                src={vehicle.owner?.avatarUrl || '/default-avatar.svg'}
-                alt={vehicle.owner?.firstName || 'Propietario'}
-                className="w-16 h-16 rounded-full object-cover border-2 border-white shadow-xs"
-              />
-              <div>
-                <span className="text-xs uppercase tracking-wider font-bold text-[#16B8AA]">Propietario</span>
-                <h4 className="font-serif text-xl font-medium">{vehicle.owner?.firstName || 'Propietario'} {vehicle.owner?.lastName || ''}</h4>
-                <p className="text-xs text-[#6B726E] mt-0.5">En vaneando. desde {vehicle.owner?.createdAt ? new Date(vehicle.owner.createdAt).getFullYear() : '2024'}{vehicle.owner?.verification === 'VERIFIED' ? ' · identidad verificada' : ''}{isFeatured ? ' · Usuario destacado' : ''}</p>
+            <div className="p-6 bg-[#FAF7F0] rounded-3xl border border-[#E9E1D2] space-y-4">
+              <div className="flex items-center space-x-4">
+                <img
+                  src={vehicle.owner?.avatarUrl || '/default-avatar.svg'}
+                  alt={vehicle.owner?.firstName || 'Propietario'}
+                  className="w-16 h-16 rounded-full object-cover border-2 border-white shadow-xs"
+                />
+                <div className="flex-1 min-w-0">
+                  <span className="text-xs uppercase tracking-wider font-bold text-[#16B8AA]">Propietario</span>
+                  <h4 className="font-serif text-xl font-medium truncate">{vehicle.owner?.firstName || 'Propietario'} {vehicle.owner?.lastName || ''}</h4>
+                  <p className="text-xs text-[#6B726E] mt-0.5">En vaneando. desde {vehicle.owner?.createdAt ? new Date(vehicle.owner.createdAt).getFullYear() : '2024'}{vehicle.owner?.verification === 'VERIFIED' ? ' · identidad verificada' : ''}{isFeatured ? ' · Usuario destacado' : ''}</p>
+                </div>
+              </div>
+
+              <div className="pt-2 border-t border-[#E9E1D2]/80">
+                <ContactOwnerButton
+                  ownerId={String(vehicle.owner?.id || vehicle.ownerId)}
+                  ownerName={vehicle.owner?.firstName || 'el propietario'}
+                  vehicleId={String(vehicle.id)}
+                  vehicleTitle={vehicle.title}
+                  isOwner={currentUser?.id === (vehicle.owner?.id || vehicle.ownerId)}
+                  variant="card"
+                />
               </div>
             </div>
 
@@ -511,31 +525,50 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
                 {vehicle.owner?.id === currentUser.id && <a href="/propietario" className="mt-5 block rounded-full bg-[#13322E] px-5 py-3 text-center text-xs font-bold uppercase tracking-wider text-white">Volver a gestionar mi anuncio</a>}
               </div>
             ) : (
-              <BookingWidget
-                vehicle={{
-                  id: String(vehicle.id),
-                  basePricePerDay: Number(vehicle.basePricePerDay),
-                  cleaningFee: Number(vehicle.cleaningFee || 0),
-                  ownershipType: (vehicle.ownershipType || 'THIRD_PARTY') as 'PLATFORM' | 'THIRD_PARTY',
-                  securityDeposit: Number(vehicle.securityDeposit || 0),
-                  bookingType: vehicle.bookingType || 'REQUEST_TO_BOOK',
-                  minDays: Number(vehicle.minDays || 1),
-                  maxDays: Number(vehicle.maxDays || 90),
-                  pricingRules: (vehicle.pricingRules || []).map((r: any) => ({
-                    startDate: typeof r.startDate === 'object' && r.startDate instanceof Date ? r.startDate.toISOString() : String(r.startDate || ''),
-                    endDate: typeof r.endDate === 'object' && r.endDate instanceof Date ? r.endDate.toISOString() : String(r.endDate || ''),
-                    pricePerDay: Number(r.pricePerDay || 0),
-                  })),
-                  extras: (vehicle.extras || []).map((e: any) => ({
-                    extra: {
-                      id: String(e.extra?.id || e.id || ''),
-                      name: String(e.extra?.name || e.name || 'Extra'),
-                      price: Number(e.price ?? e.extra?.price ?? 0),
-                      priceType: (e.extra?.priceType || e.priceType || 'PER_RENTAL') as 'PER_RENTAL' | 'PER_DAY',
-                    },
-                  })),
-                }}
-              />
+              <div className="space-y-4">
+                <BookingWidget
+                  vehicle={{
+                    id: String(vehicle.id),
+                    basePricePerDay: Number(vehicle.basePricePerDay),
+                    cleaningFee: Number(vehicle.cleaningFee || 0),
+                    ownershipType: (vehicle.ownershipType || 'THIRD_PARTY') as 'PLATFORM' | 'THIRD_PARTY',
+                    securityDeposit: Number(vehicle.securityDeposit || 0),
+                    bookingType: vehicle.bookingType || 'REQUEST_TO_BOOK',
+                    minDays: Number(vehicle.minDays || 1),
+                    maxDays: Number(vehicle.maxDays || 90),
+                    pricingRules: (vehicle.pricingRules || []).map((r: any) => ({
+                      startDate: typeof r.startDate === 'object' && r.startDate instanceof Date ? r.startDate.toISOString() : String(r.startDate || ''),
+                      endDate: typeof r.endDate === 'object' && r.endDate instanceof Date ? r.endDate.toISOString() : String(r.endDate || ''),
+                      pricePerDay: Number(r.pricePerDay || 0),
+                    })),
+                    extras: (vehicle.extras || []).map((e: any) => ({
+                      extra: {
+                        id: String(e.extra?.id || e.id || ''),
+                        name: String(e.extra?.name || e.name || 'Extra'),
+                        price: Number(e.price ?? e.extra?.price ?? 0),
+                        priceType: (e.extra?.priceType || e.priceType || 'PER_RENTAL') as 'PER_RENTAL' | 'PER_DAY',
+                      },
+                    })),
+                  }}
+                />
+
+                {currentUser?.id !== (vehicle.owner?.id || vehicle.ownerId) && (
+                  <div className="p-4 rounded-2xl bg-white border border-[#E9E1D2] text-center shadow-xs">
+                    <p className="text-xs text-[#6B726E] mb-2.5 font-medium">
+                      ¿Tienes dudas sobre recogida, equipamiento o fechas?
+                    </p>
+                    <ContactOwnerButton
+                      ownerId={String(vehicle.owner?.id || vehicle.ownerId)}
+                      ownerName={vehicle.owner?.firstName || 'el propietario'}
+                      vehicleId={String(vehicle.id)}
+                      vehicleTitle={vehicle.title}
+                      isOwner={false}
+                      variant="outline"
+                      className="w-full justify-center"
+                    />
+                  </div>
+                )}
+              </div>
             )}
           </div>
 

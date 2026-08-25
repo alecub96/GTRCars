@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
-import { User, X, LogIn, UserPlus, LogOut, ShieldCheck, Truck, KeyRound, RefreshCw, Compass, Mail, UserCircle, CheckCircle2, Sparkles } from 'lucide-react';
+import { User, X, LogIn, UserPlus, LogOut, ShieldCheck, Truck, KeyRound, RefreshCw, Compass, Mail, UserCircle, CheckCircle2, Sparkles, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AuthModal() {
@@ -275,8 +275,8 @@ export default function AuthModal() {
                     onClick={() => setIsOpen(false)}
                     className="flex items-center space-x-2.5 p-2.5 rounded-2xl hover:bg-slate-50 transition-colors"
                   >
-                    <Mail className="w-4 h-4 text-[#16B8AA]" />
-                    <span>Mensajes de reservas</span>
+                    <MessageSquare className="w-4 h-4 text-[#16B8AA]" />
+                    <span>Mensajes & Chats</span>
                   </Link>
                 )}
 

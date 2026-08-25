@@ -16,6 +16,7 @@ import {
   Compass,
   Truck,
   Mail,
+  MessageSquare,
   KeyRound,
   RefreshCw,
   LogOut,
@@ -302,8 +303,8 @@ export default function Navbar() {
                         href="/mensajes"
                         className="flex items-center space-x-3 rounded-2xl p-3 hover:bg-[#FAF7F0] transition-colors"
                       >
-                        <Mail className="w-4 h-4 text-[#16B8AA]" />
-                        <span>Mensajes de reservas</span>
+                        <MessageSquare className="w-4 h-4 text-[#16B8AA]" />
+                        <span>Mensajes & Chats</span>
                       </Link>
                     )}
 

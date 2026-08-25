@@ -65,15 +65,19 @@ export async function POST(request: Request) {
       }
     }
 
-    // Si es la primera interacción, crear la conversación
+    // Si es la primera interacción, crear o encontrar la conversación por vehicleId + recipientId
     if (!activeConversationId) {
       if (!vehicleId || !recipientId) {
         return NextResponse.json({ error: 'Parámetros de conversación incompletos' }, { status: 400 });
       }
 
-      const vehicle = await prisma.vehicle.findUnique({ where: { id: vehicleId }, select: { ownerId: true, status: true } });
-      if (!vehicle || vehicle.status !== 'ACTIVE' || vehicle.ownerId !== recipientId || recipientId === user.id) {
-        return NextResponse.json({ error: 'No se puede iniciar esta conversación' }, { status: 403 });
+      if (recipientId === user.id) {
+        return NextResponse.json({ error: 'No puedes iniciar una conversación contigo mismo' }, { status: 400 });
+      }
+
+      const vehicle = await prisma.vehicle.findUnique({ where: { id: vehicleId }, select: { id: true, ownerId: true } });
+      if (!vehicle) {
+        return NextResponse.json({ error: 'Vehículo no encontrado' }, { status: 404 });
       }
 
       // Buscar si ya existe una conversación entre estos usuarios para este vehículo
@@ -107,9 +111,15 @@ export async function POST(request: Request) {
         content: cleanContent,
       },
       include: {
-        sender: { select: { firstName: true, lastName: true, avatarUrl: true } },
+        sender: { select: { id: true, firstName: true, lastName: true, avatarUrl: true } },
       },
     });
+
+    // Actualizar fecha de la conversación para ordenarla primera
+    await prisma.conversation.update({
+      where: { id: activeConversationId },
+      data: { updatedAt: new Date() },
+    }).catch(() => {});
 
     return NextResponse.json({ success: true, message, conversationId: activeConversationId });
   } catch (error) {
@@ -129,28 +139,76 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const conversationId = searchParams.get('conversationId');
     const bookingId = searchParams.get('bookingId');
+    const vehicleId = searchParams.get('vehicleId');
+    const recipientId = searchParams.get('recipientId');
 
     let requestedConversationId: string | null = null;
+
+    // Caso 1: Inicializar / consultar por bookingId
     if (bookingId) {
       const booking = await prisma.booking.findUnique({ where: { id: bookingId }, select: { id: true, travelerId: true, ownerId: true, vehicleId: true } });
-      if (!booking || ![booking.travelerId, booking.ownerId].includes(user.id)) {
-        return NextResponse.json({ error: 'No tienes acceso a esta reserva' }, { status: 403 });
+      if (booking && [booking.travelerId, booking.ownerId].includes(user.id)) {
+        let conversation = await prisma.conversation.findFirst({ where: { bookingId: booking.id }, select: { id: true } });
+        if (!conversation) {
+          conversation = await prisma.conversation.create({
+            data: { bookingId: booking.id, travelerId: booking.travelerId, ownerId: booking.ownerId, vehicleId: booking.vehicleId },
+            select: { id: true },
+          });
+        }
+        requestedConversationId = conversation.id;
       }
-      let conversation = await prisma.conversation.findFirst({ where: { bookingId: booking.id }, select: { id: true } });
-      if (!conversation) {
-        conversation = await prisma.conversation.create({
-          data: { bookingId: booking.id, travelerId: booking.travelerId, ownerId: booking.ownerId, vehicleId: booking.vehicleId },
-          select: { id: true },
-        });
-      }
-      requestedConversationId = conversation.id;
     }
 
+    // Caso 2: Inicializar / consultar pre-reserva por vehicleId + recipientId (desde el botón del anuncio)
+    if (!requestedConversationId && vehicleId && recipientId && recipientId !== user.id) {
+      let conv = await prisma.conversation.findFirst({
+        where: {
+          vehicleId,
+          OR: [
+            { travelerId: user.id, ownerId: recipientId },
+            { travelerId: recipientId, ownerId: user.id },
+          ],
+        },
+        select: { id: true },
+      });
+
+      if (!conv) {
+        const targetVehicle = await prisma.vehicle.findUnique({ where: { id: vehicleId }, select: { id: true, ownerId: true } });
+        if (targetVehicle) {
+          conv = await prisma.conversation.create({
+            data: {
+              vehicleId: targetVehicle.id,
+              travelerId: user.id,
+              ownerId: targetVehicle.ownerId,
+            },
+            select: { id: true },
+          });
+        }
+      }
+
+      if (conv) {
+        requestedConversationId = conv.id;
+      }
+    }
+
+    // Si se pide una conversación concreta
+    const targetConvId = conversationId || requestedConversationId;
     if (conversationId) {
       const conversation = await prisma.conversation.findUnique({ where: { id: conversationId }, select: { travelerId: true, ownerId: true } });
       if (!conversation || (conversation.travelerId !== user.id && conversation.ownerId !== user.id)) {
         return NextResponse.json({ error: 'No tienes acceso a esta conversación' }, { status: 403 });
       }
+
+      // Marcar mensajes no leídos como leídos
+      await prisma.message.updateMany({
+        where: {
+          conversationId,
+          senderId: { not: user.id },
+          read: false,
+        },
+        data: { read: true },
+      }).catch(() => {});
+
       const messages = await prisma.message.findMany({
         where: { conversationId },
         include: {
@@ -167,15 +225,31 @@ export async function GET(request: Request) {
         OR: [{ travelerId: user.id }, { ownerId: user.id }],
       },
       include: {
-        vehicle: { select: { title: true, photos: { take: 1 } } },
+        vehicle: {
+          select: {
+            id: true,
+            title: true,
+            slug: true,
+            island: true,
+            municipality: true,
+            basePricePerDay: true,
+            photos: { take: 1, orderBy: { orderIndex: 'asc' } },
+          },
+        },
         traveler: { select: { id: true, firstName: true, lastName: true, avatarUrl: true } },
         owner: { select: { id: true, firstName: true, lastName: true, avatarUrl: true } },
+        booking: { select: { id: true, code: true, status: true, pickupDate: true, returnDate: true } },
         messages: { orderBy: { createdAt: 'desc' }, take: 1 },
       },
       orderBy: { updatedAt: 'desc' },
     });
 
-    return NextResponse.json({ success: true, conversations, requestedConversationId });
+    return NextResponse.json({
+      success: true,
+      currentUser: { id: user.id, firstName: user.firstName, lastName: user.lastName, avatarUrl: user.avatarUrl },
+      conversations,
+      requestedConversationId: targetConvId,
+    });
   } catch (error) {
     console.error('API Get Messages Error:', error);
     if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
