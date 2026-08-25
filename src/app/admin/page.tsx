@@ -125,11 +125,11 @@ export default function AdminPage() {
         </div>
 
         {/* ACCESOS RÁPIDOS Y RESUMEN OPERATIVO */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-8">
           <button
             type="button"
             onClick={() => setActiveTab('vehicles')}
-            className={`p-4 sm:p-5 rounded-3xl border text-left transition-all cursor-pointer ${
+            className={`p-4 rounded-3xl border text-left transition-all cursor-pointer ${
               activeTab === 'vehicles'
                 ? 'border-[#16B8AA] bg-white ring-2 ring-[#16B8AA]/10 shadow-md'
                 : 'border-[#E9E1D2] bg-white/70 hover:bg-white hover:border-slate-300'
@@ -144,16 +144,37 @@ export default function AdminPage() {
                 <span className="h-2.5 w-2.5 rounded-full bg-amber-500 animate-pulse" />
               )}
             </div>
-            <div className="text-2xl sm:text-3xl font-black text-[#13322E]">
+            <div className="text-2xl font-black text-[#13322E]">
               {metrics.pendingVehiclesCount || 0}
             </div>
-            <p className="text-xs text-[#6B726E] mt-0.5">Campers por revisar</p>
+            <p className="text-[11px] text-[#6B726E] mt-0.5">Campers por revisar</p>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('users')}
+            className={`p-4 rounded-3xl border text-left transition-all cursor-pointer ${
+              activeTab === 'users'
+                ? 'border-[#16B8AA] bg-white ring-2 ring-[#16B8AA]/10 shadow-md'
+                : 'border-[#E9E1D2] bg-white/70 hover:bg-white hover:border-slate-300'
+            }`}
+          >
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[10px] font-black uppercase tracking-wider text-teal-700 flex items-center gap-1.5">
+                <Users className="w-3.5 h-3.5" />
+                Clientes
+              </span>
+            </div>
+            <div className="text-2xl font-black text-[#13322E]">
+              {metrics.totalUsersCount || 0}
+            </div>
+            <p className="text-[11px] text-[#6B726E] mt-0.5">Usuarios registrados</p>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('verifications')}
-            className={`p-4 sm:p-5 rounded-3xl border text-left transition-all cursor-pointer ${
+            className={`p-4 rounded-3xl border text-left transition-all cursor-pointer ${
               activeTab === 'verifications'
                 ? 'border-[#16B8AA] bg-white ring-2 ring-[#16B8AA]/10 shadow-md'
                 : 'border-[#E9E1D2] bg-white/70 hover:bg-white hover:border-slate-300'
@@ -168,16 +189,16 @@ export default function AdminPage() {
                 <span className="h-2.5 w-2.5 rounded-full bg-sky-500 animate-pulse" />
               )}
             </div>
-            <div className="text-2xl sm:text-3xl font-black text-[#13322E]">
+            <div className="text-2xl font-black text-[#13322E]">
               {metrics.pendingVerificationsCount || 0}
             </div>
-            <p className="text-xs text-[#6B726E] mt-0.5">Conductores pendientes</p>
+            <p className="text-[11px] text-[#6B726E] mt-0.5">Conductores pendientes</p>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('incidents')}
-            className={`p-4 sm:p-5 rounded-3xl border text-left transition-all cursor-pointer ${
+            className={`p-4 rounded-3xl border text-left transition-all cursor-pointer ${
               activeTab === 'incidents'
                 ? 'border-[#16B8AA] bg-white ring-2 ring-[#16B8AA]/10 shadow-md'
                 : 'border-[#E9E1D2] bg-white/70 hover:bg-white hover:border-slate-300'
@@ -192,16 +213,16 @@ export default function AdminPage() {
                 <span className="h-2.5 w-2.5 rounded-full bg-red-500 animate-pulse" />
               )}
             </div>
-            <div className="text-2xl sm:text-3xl font-black text-[#13322E]">
+            <div className="text-2xl font-black text-[#13322E]">
               {metrics.pendingIncidentsCount || 0}
             </div>
-            <p className="text-xs text-[#6B726E] mt-0.5">Partes de viaje abiertos</p>
+            <p className="text-[11px] text-[#6B726E] mt-0.5">Partes abiertos</p>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('finances')}
-            className={`p-4 sm:p-5 rounded-3xl border text-left transition-all cursor-pointer ${
+            className={`p-4 rounded-3xl border text-left transition-all cursor-pointer ${
               activeTab === 'finances'
                 ? 'border-[#16B8AA] bg-white ring-2 ring-[#16B8AA]/10 shadow-md'
                 : 'border-[#E9E1D2] bg-white/70 hover:bg-white hover:border-slate-300'
@@ -213,10 +234,10 @@ export default function AdminPage() {
                 Finanzas
               </span>
             </div>
-            <div className="text-2xl sm:text-3xl font-black text-[#13322E]">
+            <div className="text-2xl font-black text-[#13322E]">
               {metrics.totalVolume ? `${metrics.totalVolume.toFixed(0)}€` : '0€'}
             </div>
-            <p className="text-xs text-[#6B726E] mt-0.5">Volumen procesado</p>
+            <p className="text-[11px] text-[#6B726E] mt-0.5">Volumen procesado</p>
           </button>
         </div>
 
