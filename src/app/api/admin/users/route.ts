@@ -137,6 +137,10 @@ export async function PATCH(request: Request) {
 
     const existingUser = await prisma.user.findUnique({
       where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+      },
     });
 
     if (!existingUser) {
@@ -156,6 +160,7 @@ export async function PATCH(request: Request) {
       if (cleanEmail !== existingUser.email) {
         const emailTaken = await prisma.user.findUnique({
           where: { email: cleanEmail },
+          select: { id: true },
         });
         if (emailTaken) {
           return NextResponse.json({ error: 'El correo electrónico ya pertenece a otra cuenta' }, { status: 409 });

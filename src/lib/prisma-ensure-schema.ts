@@ -191,6 +191,8 @@ export async function ensureDbSchema() {
       `ALTER TABLE Vehicle ADD COLUMN vehicleType VARCHAR(191) NOT NULL DEFAULT 'CAMPER'`,
       `ALTER TABLE User ADD COLUMN iban VARCHAR(191) NULL`,
       `ALTER TABLE User ADD COLUMN bankHolder VARCHAR(191) NULL`,
+      `ALTER TABLE User ADD COLUMN resetTokenHash VARCHAR(191) NULL`,
+      `ALTER TABLE User ADD COLUMN resetTokenExpiresAt DATETIME(3) NULL`,
     ];
 
     for (const q of alterQueries) {
