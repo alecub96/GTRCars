@@ -537,7 +537,7 @@ export default function AdminUserManagement() {
                 <input
                   type="file"
                   ref={fileInputRef}
-                  accept="image/jpeg,image/png,image/webp"
+                  accept="image/*,.heic,.heif"
                   className="hidden"
                   onChange={handleAvatarFileChange}
                 />

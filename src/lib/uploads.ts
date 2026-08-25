@@ -10,24 +10,47 @@ const ENCRYPTED_FILE_MAGIC = 'VANEANDO-DOCUMENT-V1';
 
 const extensions: Record<string, string> = {
   'image/jpeg': '.jpg',
+  'image/jpg': '.jpg',
+  'image/pjpeg': '.jpg',
   'image/png': '.png',
   'image/webp': '.webp',
+  'image/avif': '.avif',
+  'image/gif': '.gif',
+  'image/svg+xml': '.svg',
+  'image/heic': '.heic',
+  'image/heif': '.heif',
+  'image/bmp': '.bmp',
+  'image/x-ms-bmp': '.bmp',
+  'image/tiff': '.tiff',
+  'image/x-icon': '.ico',
   'application/pdf': '.pdf',
 };
+
+export function resolveExtension(file: File): string {
+  const mimeType = (file.type || '').toLowerCase();
+  if (extensions[mimeType]) return extensions[mimeType];
+
+  const extFromName = path.extname(file.name || '').toLowerCase();
+  if (extFromName && Object.values(extensions).includes(extFromName)) {
+    return extFromName;
+  }
+
+  if (mimeType.startsWith('image/')) return '.jpg';
+  throw new Error('Tipo de archivo no permitido. Formatos soportados: JPG, PNG, WEBP, AVIF, HEIC, GIF, SVG, BMP y PDF.');
+}
 
 export function getUploadRoot() {
   return path.resolve(process.env.UPLOAD_DIR || path.join(process.cwd(), 'storage'));
 }
 
 export async function saveUpload(file: File, kind: UploadKind) {
-  const extension = extensions[file.type];
-  if (!extension) throw new Error('Tipo de archivo no permitido');
+  const extension = resolveExtension(file);
   const directory = path.join(getUploadRoot(), kind);
   await mkdir(directory, { recursive: true });
   const contents = Buffer.from(await file.arrayBuffer());
   const encrypted = kind === 'documents' || kind === 'inspections';
   const filename = encrypted ? `${randomUUID()}.enc` : `${randomUUID()}${extension}`;
-  const storedContents = encrypted ? encryptDocument(contents, file.type) : contents;
+  const storedContents = encrypted ? encryptDocument(contents, file.type || 'application/octet-stream') : contents;
   await writeFile(path.join(directory, filename), storedContents, { flag: 'wx', mode: 0o600 });
   return `/api/uploads/${kind}/${filename}`;
 }

@@ -17,8 +17,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Debes seleccionar un archivo de imagen válido' }, { status: 400 });
     }
 
-    if (avatar.size > 5 * 1024 * 1024 || !['image/jpeg', 'image/png', 'image/webp'].includes(avatar.type)) {
-      return NextResponse.json({ error: 'La foto debe ser JPG, PNG o WEBP y pesar menos de 5 MB' }, { status: 400 });
+    if (avatar.size > 10 * 1024 * 1024) {
+      return NextResponse.json({ error: 'La foto de perfil no puede superar los 10 MB' }, { status: 400 });
     }
 
     const avatarUrl = await saveUpload(avatar, 'avatars');
