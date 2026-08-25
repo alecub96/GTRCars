@@ -410,9 +410,6 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
                 src={vehicle.owner?.avatarUrl || '/default-avatar.svg'}
                 alt={vehicle.owner?.firstName || 'Propietario'}
                 className="w-16 h-16 rounded-full object-cover border-2 border-white shadow-xs"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = '/default-avatar.svg';
-                }}
               />
               <div>
                 <span className="text-xs uppercase tracking-wider font-bold text-[#16B8AA]">Propietario</span>
@@ -436,9 +433,6 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
                             src={rev.author?.avatarUrl || '/default-avatar.svg'}
                             alt={rev.author?.firstName || 'Viajero'}
                             className="w-10 h-10 rounded-full object-cover"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src = '/default-avatar.svg';
-                            }}
                           />
                           <div>
                             <span className="font-medium text-sm block">{rev.author?.firstName}</span>
