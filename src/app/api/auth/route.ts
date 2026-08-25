@@ -55,8 +55,9 @@ export async function POST(request: Request) {
           firstName: cleanFirstName,
           lastName: cleanLastName,
           role: userRole,
+          avatarUrl: '/default-avatar.svg',
         },
-        select: { id: true, email: true, firstName: true, lastName: true, role: true },
+        select: { id: true, email: true, firstName: true, lastName: true, role: true, avatarUrl: true },
       });
 
       const token = signToken({ userId: user.id, email: user.email, role: userRole as any });

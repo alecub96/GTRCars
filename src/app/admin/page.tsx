@@ -14,8 +14,10 @@ import {
   RefreshCw,
   ArrowUpRight,
   SlidersHorizontal,
+  Users,
 } from 'lucide-react';
 import AdminVehicleQueue from '@/components/AdminVehicleQueue';
+import AdminUserManagement from '@/components/AdminUserManagement';
 import AdminVerificationQueue from '@/components/AdminVerificationQueue';
 import AdminIncidentQueue from '@/components/AdminIncidentQueue';
 import AdminEmailDiagnostics from '@/components/AdminEmailDiagnostics';
@@ -27,7 +29,7 @@ export default function AdminPage() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [authorized, setAuthorized] = useState<boolean | null>(null);
-  const [activeTab, setActiveTab] = useState<'vehicles' | 'verifications' | 'incidents' | 'finances' | 'system'>('vehicles');
+  const [activeTab, setActiveTab] = useState<'vehicles' | 'users' | 'verifications' | 'incidents' | 'finances' | 'system'>('vehicles');
 
   const fetchDashboardData = async () => {
     try {
@@ -234,6 +236,18 @@ export default function AdminPage() {
 
           <button
             type="button"
+            onClick={() => setActiveTab('users')}
+            className={`px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
+              activeTab === 'users'
+                ? 'bg-[#13322E] text-white shadow-sm'
+                : 'bg-white border border-[#E9E1D2] text-[#13322E] hover:bg-[#FAF7F0]'
+            }`}
+          >
+            👥 Clientes & Usuarios
+          </button>
+
+          <button
+            type="button"
             onClick={() => setActiveTab('verifications')}
             className={`px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
               activeTab === 'verifications'
@@ -285,6 +299,12 @@ export default function AdminPage() {
         {activeTab === 'vehicles' && (
           <section className="space-y-6">
             <AdminVehicleQueue />
+          </section>
+        )}
+
+        {activeTab === 'users' && (
+          <section className="space-y-6">
+            <AdminUserManagement />
           </section>
         )}
 

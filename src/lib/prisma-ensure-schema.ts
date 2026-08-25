@@ -204,6 +204,7 @@ export async function ensureDbSchema() {
       `UPDATE Vehicle SET vehicleType = 'CAMPER' WHERE vehicleType = '' OR vehicleType IS NULL`,
       `UPDATE Vehicle SET cancellationPolicy = 'FLEXIBLE' WHERE cancellationPolicy = '' OR cancellationPolicy IS NULL`,
       `UPDATE Vehicle SET status = 'ACTIVE' WHERE status = '' OR status IS NULL`,
+      `UPDATE User SET avatarUrl = '/default-avatar.svg' WHERE avatarUrl = '' OR avatarUrl IS NULL`,
     ];
 
     for (const sq of dataSanitizations) {
