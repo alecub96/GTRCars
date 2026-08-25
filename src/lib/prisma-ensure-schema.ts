@@ -197,6 +197,19 @@ export async function ensureDbSchema() {
       await prisma.$executeRawUnsafe(q).catch(() => {});
     }
 
+    const dataSanitizations = [
+      `UPDATE Vehicle SET fuelType = 'GASOLINE' WHERE fuelType = 'GASOLINA'`,
+      `UPDATE Vehicle SET fuelType = 'DIESEL' WHERE fuelType = '' OR fuelType IS NULL OR fuelType NOT IN ('DIESEL', 'GASOLINE', 'HYBRID', 'ELECTRIC')`,
+      `UPDATE Vehicle SET transmission = 'MANUAL' WHERE transmission = '' OR transmission IS NULL OR transmission NOT IN ('MANUAL', 'AUTOMATIC')`,
+      `UPDATE Vehicle SET vehicleType = 'CAMPER' WHERE vehicleType = '' OR vehicleType IS NULL`,
+      `UPDATE Vehicle SET cancellationPolicy = 'FLEXIBLE' WHERE cancellationPolicy = '' OR cancellationPolicy IS NULL`,
+      `UPDATE Vehicle SET status = 'ACTIVE' WHERE status = '' OR status IS NULL`,
+    ];
+
+    for (const sq of dataSanitizations) {
+      await prisma.$executeRawUnsafe(sq).catch(() => {});
+    }
+
     // Sincronizar marcas y modelos exactos de los anuncios de demostración con sus fotos
     const demoCorrections = [
       {
@@ -205,7 +218,7 @@ export async function ensureDbSchema() {
         brand: 'Volkswagen',
         model: 'T2 Bulli Camper Clásica',
         vehicleType: 'TURISMO_CAMPERIZADO',
-        fuelType: 'GASOLINA',
+        fuelType: 'GASOLINE',
         fuelConsumption: '9.5 L/100km',
         year: 1982,
       },

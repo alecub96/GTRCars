@@ -125,11 +125,18 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
     if (typeof addressApprox === 'string') dataToUpdate.addressApprox = addressApprox.trim();
     if (typeof description === 'string' && description.trim().length >= 10) dataToUpdate.description = description.trim();
     if (typeof rules === 'string') dataToUpdate.rules = rules.trim();
-    if (typeof transmission === 'string') dataToUpdate.transmission = transmission;
-    if (typeof fuelType === 'string') dataToUpdate.fuelType = fuelType;
+    if (typeof transmission === 'string') {
+      const norm = transmission.toUpperCase().trim();
+      if (['MANUAL', 'AUTOMATIC'].includes(norm)) dataToUpdate.transmission = norm;
+    }
+    if (typeof fuelType === 'string') {
+      let norm = fuelType.toUpperCase().trim();
+      if (norm === 'GASOLINA') norm = 'GASOLINE';
+      if (['DIESEL', 'GASOLINE', 'HYBRID', 'ELECTRIC'].includes(norm)) dataToUpdate.fuelType = norm;
+    }
     if (typeof fuelConsumption === 'string') dataToUpdate.fuelConsumption = fuelConsumption.trim();
-    if (typeof bookingType === 'string') dataToUpdate.bookingType = bookingType;
-    if (typeof cancellationPolicy === 'string') dataToUpdate.cancellationPolicy = cancellationPolicy;
+    if (typeof bookingType === 'string' && ['INSTANT_BOOKING', 'REQUEST_REQUIRED'].includes(bookingType)) dataToUpdate.bookingType = bookingType;
+    if (typeof cancellationPolicy === 'string' && ['FLEXIBLE', 'MODERATE', 'STRICT'].includes(cancellationPolicy)) dataToUpdate.cancellationPolicy = cancellationPolicy;
 
     if (latitude !== undefined) dataToUpdate.latitude = Number(latitude) || null;
     if (longitude !== undefined) dataToUpdate.longitude = Number(longitude) || null;
