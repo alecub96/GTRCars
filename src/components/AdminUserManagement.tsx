@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Users,
   Search,
@@ -21,6 +21,9 @@ import {
   KeyRound,
   Image as ImageIcon,
   BadgeAlert,
+  Upload,
+  Camera,
+  RotateCcw,
 } from 'lucide-react';
 
 interface AdminUser {
@@ -68,19 +71,21 @@ export default function AdminUserManagement() {
     bankHolder: '',
   });
 
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+  const [modalFeedback, setModalFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [processingId, setProcessingId] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const loadUsers = async () => {
     setLoading(true);
-    setFeedback(null);
     try {
       const params = new URLSearchParams();
       if (searchTerm.trim()) params.set('q', searchTerm.trim());
       if (selectedRole !== 'ALL') params.set('role', selectedRole);
       if (selectedVerification !== 'ALL') params.set('verification', selectedVerification);
 
-      const res = await fetch(`/api/admin/users?${params.toString()}`);
+      const res = await fetch(`/api/admin/users?${params.toString()}`, { cache: 'no-store' });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Error al cargar usuarios');
 
@@ -114,11 +119,41 @@ export default function AdminUserManagement() {
       iban: '',
       bankHolder: '',
     });
-    setFeedback(null);
+    setModalFeedback(null);
   };
 
   const closeEditModal = () => {
     setEditingUser(null);
+    setModalFeedback(null);
+  };
+
+  const handleAvatarFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploadingAvatar(true);
+    setModalFeedback(null);
+
+    try {
+      const formData = new FormData();
+      formData.set('avatar', file);
+
+      const res = await fetch('/api/admin/users/avatar', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Error al subir la imagen');
+
+      setEditForm((prev) => ({ ...prev, avatarUrl: data.avatarUrl }));
+      setModalFeedback({ type: 'success', message: 'Foto cargada correctamente. Pulsa «Guardar Cambios» para confirmar.' });
+    } catch (err: any) {
+      setModalFeedback({ type: 'error', message: err.message || 'No se pudo subir la foto' });
+    } finally {
+      setIsUploadingAvatar(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
   };
 
   const handleSaveProfile = async (e: React.FormEvent) => {
@@ -126,6 +161,7 @@ export default function AdminUserManagement() {
     if (!editingUser) return;
 
     setProcessingId(editingUser.id);
+    setModalFeedback(null);
     setFeedback(null);
 
     try {
@@ -148,11 +184,18 @@ export default function AdminUserManagement() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'No se pudo actualizar el perfil');
 
+      // Actualizar estado local de usuarios de inmediato
+      if (data.user) {
+        setUsers((prev) =>
+          prev.map((u) => (u.id === data.user.id ? { ...u, ...data.user } : u))
+        );
+      }
+
       setFeedback({ type: 'success', message: data.message || 'Perfil actualizado con éxito' });
       closeEditModal();
       await loadUsers();
     } catch (err: any) {
-      setFeedback({ type: 'error', message: err.message || 'Error al guardar cambios' });
+      setModalFeedback({ type: 'error', message: err.message || 'Error al guardar cambios' });
     } finally {
       setProcessingId(null);
     }
@@ -190,7 +233,7 @@ export default function AdminUserManagement() {
           </span>
           <h2 className="text-2xl font-bold tracking-tight text-[#13322E]">Gestión de Perfiles y Clientes</h2>
           <p className="text-xs text-[#6B726E] mt-0.5 font-medium">
-            Edita datos personales, corrige emails, cambia contraseñas o actualiza estados de verificación directamente.
+            Edita datos personales, sube fotos de perfil, corrige emails, cambia contraseñas o actualiza estados de verificación directamente.
           </p>
         </div>
 
@@ -225,7 +268,7 @@ export default function AdminUserManagement() {
         </div>
       </div>
 
-      {/* ALERTA FEEDBACK */}
+      {/* ALERTA FEEDBACK GENERAL */}
       {feedback && (
         <div
           className={`mb-6 p-4 rounded-2xl text-xs font-bold flex items-center space-x-2 border animate-in fade-in ${
@@ -437,27 +480,103 @@ export default function AdminUserManagement() {
               <X className="w-5 h-5" />
             </button>
 
-            <div className="flex items-center space-x-3 mb-6 pb-4 border-b border-[#E9E1D2]">
-              <img
-                src={editForm.avatarUrl || '/default-avatar.svg'}
-                alt="Avatar"
-                className="w-14 h-14 rounded-full object-cover border-2 border-[#16B8AA] shadow-sm bg-white"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = '/default-avatar.svg';
-                }}
-              />
+            {/* CABECERA MODAL */}
+            <div className="flex items-center space-x-4 mb-6 pb-4 border-b border-[#E9E1D2]">
+              <div className="relative group">
+                <img
+                  src={editForm.avatarUrl || '/default-avatar.svg'}
+                  alt="Avatar"
+                  className="w-16 h-16 rounded-full object-cover border-2 border-[#16B8AA] shadow-md bg-white"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = '/default-avatar.svg';
+                  }}
+                />
+                {isUploadingAvatar && (
+                  <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center">
+                    <RefreshCw className="w-5 h-5 text-white animate-spin" />
+                  </div>
+                )}
+              </div>
+
               <div>
                 <span className="text-[10px] font-black uppercase tracking-wider text-[#16B8AA]">
                   Editor Administrador
                 </span>
                 <h3 className="text-xl font-bold text-[#13322E]">
-                  Modificar Perfil de {editingUser.firstName}
+                  Modificar Perfil de {editingUser.firstName} {editingUser.lastName}
                 </h3>
                 <p className="text-xs text-[#6B726E]">ID: {editingUser.id}</p>
               </div>
             </div>
 
+            {/* ALERTA MODAL FEEDBACK */}
+            {modalFeedback && (
+              <div
+                className={`mb-4 p-3.5 rounded-2xl text-xs font-bold flex items-center space-x-2 border animate-in fade-in ${
+                  modalFeedback.type === 'success'
+                    ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                    : 'bg-red-50 text-red-800 border-red-200'
+                }`}
+              >
+                {modalFeedback.type === 'success' ? (
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                ) : (
+                  <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
+                )}
+                <span>{modalFeedback.message}</span>
+              </div>
+            )}
+
             <form onSubmit={handleSaveProfile} className="space-y-4">
+              {/* CAMBIO DE FOTO DE PERFIL */}
+              <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-[#E9E1D2] space-y-2.5">
+                <label className="block text-xs font-bold text-[#13322E]">
+                  Foto de Perfil del Usuario
+                </label>
+                
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  accept="image/jpeg,image/png,image/webp"
+                  className="hidden"
+                  onChange={handleAvatarFileChange}
+                />
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    disabled={isUploadingAvatar}
+                    onClick={() => fileInputRef.current?.click()}
+                    className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-[#13322E] hover:bg-[#16B8AA] text-white text-xs font-bold transition-all shadow-xs cursor-pointer disabled:opacity-50"
+                  >
+                    <Upload className="w-3.5 h-3.5" />
+                    <span>{isUploadingAvatar ? 'Subiendo foto...' : 'Subir foto desde este dispositivo'}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditForm((prev) => ({ ...prev, avatarUrl: '/default-avatar.svg' }));
+                      setModalFeedback({ type: 'success', message: 'Restablecido al avatar genérico. Pulsa «Guardar Cambios».' });
+                    }}
+                    className="inline-flex items-center space-x-1 px-3 py-2 text-xs font-bold text-[#6B726E] hover:text-[#13322E] border border-[#E9E1D2] bg-white rounded-xl hover:bg-slate-50 transition-colors cursor-pointer"
+                  >
+                    <RotateCcw className="w-3 h-3 text-[#16B8AA]" />
+                    <span>Avatar Genérico</span>
+                  </button>
+                </div>
+
+                <div className="pt-1">
+                  <input
+                    type="text"
+                    value={editForm.avatarUrl}
+                    onChange={(e) => setEditForm({ ...editForm, avatarUrl: e.target.value })}
+                    placeholder="O pega una URL de imagen: https://..."
+                    className="w-full px-3 py-1.5 rounded-xl border border-[#E9E1D2] text-[11px] font-medium text-[#13322E] bg-white focus:outline-none focus:ring-1 focus:ring-[#16B8AA]"
+                  />
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-[#13322E] mb-1">Nombre</label>
@@ -512,9 +631,9 @@ export default function AdminUserManagement() {
                     onChange={(e) => setEditForm({ ...editForm, role: e.target.value as any })}
                     className="w-full px-3.5 py-2 rounded-xl border border-[#E9E1D2] text-xs font-bold text-[#13322E] focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
                   >
-                    <option value="TRAVELER">Viajero</option>
-                    <option value="OWNER">Propietario</option>
-                    <option value="ADMIN">Administrador</option>
+                    <option value="TRAVELER">🎒 Viajero</option>
+                    <option value="OWNER">🚐 Propietario</option>
+                    <option value="ADMIN">👑 Administrador</option>
                   </select>
                 </div>
                 <div>
@@ -525,33 +644,10 @@ export default function AdminUserManagement() {
                     className="w-full px-3.5 py-2 rounded-xl border border-[#E9E1D2] text-xs font-bold text-[#13322E] focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
                   >
                     <option value="UNVERIFIED">Sin verificar</option>
-                    <option value="PENDING">Pendiente de revisión</option>
+                    <option value="PENDING">⏳ Pendiente de revisión</option>
                     <option value="VERIFIED">✅ Verificado (Aprobado)</option>
                     <option value="REJECTED">❌ Rechazado</option>
                   </select>
-                </div>
-              </div>
-
-              {/* FOTO DE PERFIL */}
-              <div>
-                <label className="block text-xs font-bold text-[#13322E] mb-1">
-                  URL de Foto de Perfil
-                </label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={editForm.avatarUrl}
-                    onChange={(e) => setEditForm({ ...editForm, avatarUrl: e.target.value })}
-                    placeholder="https://... o /default-avatar.svg"
-                    className="w-full px-3.5 py-2 rounded-xl border border-[#E9E1D2] text-xs font-medium text-[#13322E] focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setEditForm({ ...editForm, avatarUrl: '/default-avatar.svg' })}
-                    className="px-3 py-2 text-[11px] font-bold text-[#16B8AA] border border-[#16B8AA]/30 hover:bg-[#16B8AA]/10 rounded-xl whitespace-nowrap cursor-pointer transition-colors"
-                  >
-                    Avatar Genérico
-                  </button>
                 </div>
               </div>
 
@@ -585,10 +681,17 @@ export default function AdminUserManagement() {
                 </button>
                 <button
                   type="submit"
-                  disabled={processingId !== null}
-                  className="px-6 py-2.5 rounded-full bg-[#16B8AA] hover:bg-[#0F766E] text-white text-xs font-bold uppercase tracking-wider shadow-md transition-all cursor-pointer disabled:opacity-50"
+                  disabled={processingId !== null || isUploadingAvatar}
+                  className="px-6 py-2.5 rounded-full bg-[#16B8AA] hover:bg-[#0F766E] text-white text-xs font-bold uppercase tracking-wider shadow-md transition-all cursor-pointer disabled:opacity-50 flex items-center space-x-1.5"
                 >
-                  {processingId !== null ? 'Guardando...' : 'Guardar Cambios'}
+                  {processingId !== null ? (
+                    <>
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                      <span>Guardando...</span>
+                    </>
+                  ) : (
+                    <span>Guardar Cambios</span>
+                  )}
                 </button>
               </div>
             </form>

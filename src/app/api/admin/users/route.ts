@@ -5,10 +5,12 @@ import { requireAdmin } from '@/lib/admin';
 import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 import { ensureDbSchema } from '@/lib/prisma-ensure-schema';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: Request) {
   try {
     const admin = await requireAdmin();
-    if (!admin) return NextResponse.json({ error: 'No autorizado como administrador' }, { status: 403 });
+    if (!admin) return NextResponse.json({ error: 'No autorizado como administrador' }, { status: 403, headers: { 'Cache-Control': 'no-store' } });
 
     await ensureDbSchema().catch(() => {});
 
@@ -69,23 +71,30 @@ export async function GET(request: Request) {
       prisma.user.count({ where: { verification: 'VERIFIED' } }),
     ]);
 
-    return NextResponse.json({
-      success: true,
-      users: users.map((u) => ({
-        ...u,
-        avatarUrl: u.avatarUrl || '/default-avatar.svg',
-      })),
-      metrics: {
-        totalUsers,
-        travelersCount,
-        ownersCount,
-        verifiedCount,
+    return NextResponse.json(
+      {
+        success: true,
+        users: users.map((u) => ({
+          ...u,
+          avatarUrl: u.avatarUrl || '/default-avatar.svg',
+        })),
+        metrics: {
+          totalUsers,
+          travelersCount,
+          ownersCount,
+          verifiedCount,
+        },
       },
-    });
+      {
+        headers: {
+          'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+        },
+      }
+    );
   } catch (error: any) {
     console.error('API Admin Users GET Error:', error);
     if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();
-    return NextResponse.json({ error: error?.message || 'Error al listar usuarios' }, { status: 500 });
+    return NextResponse.json({ error: error?.message || 'Error al listar usuarios' }, { status: 500, headers: { 'Cache-Control': 'no-store' } });
   }
 }
 
