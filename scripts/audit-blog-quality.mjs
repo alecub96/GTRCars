@@ -1,8 +1,6 @@
 import fs from 'node:fs';
 
 const source = fs.readFileSync('src/lib/blog.ts', 'utf8');
-const guidance = source.slice(source.indexOf('const LONGFORM_GUIDANCE = ['), source.indexOf('function expandArticle'));
-const guidanceWords = (guidance.match(/[A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9]+(?:[-'][A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9]+)*/g) || []).length;
 const profileSource = source.slice(source.indexOf('const profiles:'), source.indexOf('const profile = profiles'));
 const profileCount = (profileSource.match(/^    '[^']+': \{/gm) || []).length;
 const articles = [...source.matchAll(/(?:^|\n)    slug: '([^']+)'[\s\S]*?(?=\n  \},\n|\n\];)/g)];
@@ -16,12 +14,11 @@ const fingerprints = new Map();
 for (const match of articles) {
   const block = match[0];
   const slug = match[1];
-  // The rendered article includes one copy of the shared checklist and ten
-  // profile-driven sections. Count the actual expansion, not an arbitrary
-  // multiplier that could make a short source article appear complete.
-  const profileWords = (source.match(/Esta parte de la guía está pensada[\s\S]*?una valoración justa\.`/) || [''])[0];
-  const words = (block.match(/[A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9]+(?:[-'][A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9]+)*/g) || []).length + guidanceWords + (profileWords.match(/[A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9]+/g) || []).length * 10;
-  const sections = (block.match(/heading:/g) || []).length + 17 + 10;
+  // Only count words physically authored inside the article object. Shared
+  // runtime expansion is deliberately excluded: it cannot prove 3,000 words
+  // of original editorial content for this specific URL.
+  const words = (block.match(/[A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9]+(?:[-'][A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9]+)*/g) || []).length;
+  const sections = (block.match(/heading:/g) || []).length;
   const faqs = (block.match(/question:/g) || []).length + 3;
   const internalLinks = (block.match(/vaneando|camper|Canarias/gi) || []).length;
   const uniquePhrases = [...block.matchAll(/paragraphs:\s*\['([^']+)/g)].map((item) => item[1].slice(0, 80));
