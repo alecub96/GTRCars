@@ -8,6 +8,8 @@ export const revalidate = 60;
 export default async function HomePage() {
   let featuredVehicles: any[] = [];
   try {
+    const { ensureDbSchema } = await import('@/lib/prisma-ensure-schema');
+    await ensureDbSchema().catch(() => {});
     const fetchVehiclesPromise = prisma.vehicle.findMany({
       where: { status: 'ACTIVE' },
       include: {
@@ -35,7 +37,7 @@ export default async function HomePage() {
       }))
       .sort((a, b) => Number(b.isFeatured) - Number(a.isFeatured));
   } catch (err) {
-    // Modo fallback ultrarrápido con campers canarias
+    // Si la base de datos no responde, la home muestra estado vacío; nunca inventa inventario.
   }
 
   return (

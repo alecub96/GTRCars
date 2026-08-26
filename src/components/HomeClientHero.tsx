@@ -134,14 +134,14 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-[#D97706] text-[#D97706]" />
                 ))}
-                <span className="font-bold text-sm text-[#13322E] ml-1">4.9 / 5</span>
+                <span className="font-bold text-sm text-[#13322E] ml-1">Valoraciones de reservas</span>
               </div>
-              <p className="text-xs text-[#6B726E] font-medium">Basado en opiniones reales en las Islas Canarias</p>
+              <p className="text-xs text-[#6B726E] font-medium">Las valoraciones se muestran cuando existen reservas completadas</p>
             </div>
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-6 text-xs font-bold text-[#13322E] mx-auto sm:mx-0">
-            <span className="flex items-center space-x-2"><ShieldCheck className="w-4 h-4 text-[#16B8AA]" /><span>0% Comisiones Ocultas</span></span>
+            <span className="flex items-center space-x-2"><ShieldCheck className="w-4 h-4 text-[#16B8AA]" /><span>Precio y condiciones visibles</span></span>
             <span className="flex items-center space-x-2"><HeartHandshake className="w-4 h-4 text-[#16B8AA]" /><span>Directo con Propietarios Locales</span></span>
             <span className="flex items-center space-x-2"><KeyRound className="w-4 h-4 text-[#16B8AA]" /><span>Entrega en Aeropuerto</span></span>
           </div>
@@ -464,7 +464,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                   ))}
                 </div>
                 <p className="text-xs text-[#13322E] font-medium leading-relaxed mb-6 italic">
-                  &ldquo;Ahorramos más del 50% en comparación con reservar hotel y coche de alquiler en Tenerife. La camper estaba impecable, con tablas de surf e inventario completo de cocina.&rdquo;
+                  Las experiencias verificadas de viajeros aparecerán aquí cuando existan reservas completadas y autorización para publicarlas.
                 </p>
               </div>
               <div className="flex items-center space-x-3 pt-4 border-t border-[#E9E1D2]">
@@ -484,7 +484,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                   ))}
                 </div>
                 <p className="text-xs text-[#13322E] font-medium leading-relaxed mb-6 italic">
-                  &ldquo;Transparencia absoluta. La fianza se liberó inmediatamente al devolver el vehículo y el trato con el propietario canario fue cercano y familiar. Repetiremos 100%.&rdquo;
+                  No mostramos testimonios, ahorros ni resultados que no podamos atribuir a una operación verificable.
                 </p>
               </div>
               <div className="flex items-center space-x-3 pt-4 border-t border-[#E9E1D2]">

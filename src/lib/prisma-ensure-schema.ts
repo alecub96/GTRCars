@@ -215,13 +215,31 @@ export async function ensureDbSchema() {
 
     // Retirar del inventario público cualquier fixture histórico conocido.
     await prisma.$executeRawUnsafe(
-      `UPDATE Vehicle SET status = 'ARCHIVED' WHERE slug IN (?, ?, ?) OR title IN (?, ?, ?)`,
+      `UPDATE Vehicle SET status = 'ARCHIVED' WHERE slug IN (?, ?, ?, ?, ?, ?, ?, ?) OR title IN (?, ?, ?, ?, ?, ?, ?, ?) OR ownerId IN (SELECT id FROM User WHERE email IN (?, ?, ?, ?, ?, ?, ?, ?))`,
       'volkswagen-transporter-t6-custom-camper-gran-canaria',
       'fiat-ducato-maxi-gran-volumen-l3h2-tenerife',
       'toyota-proace-nomad-camper-fuerteventura',
+      'volkswagen-california-ocean-gran-canaria',
+      'mercedes-marco-polo-tenerife',
+      'ford-transit-camper-lanzarote',
+      'fiat-ducato-autocaravana-fuerteventura',
+      'citroen-spacetourer-la-palma',
       'Volkswagen T2 Bulli Clásica Vintage con Techo Elevable',
       'Dacia Dokker Stepway Camperizada con Mueble Camper y Cama Doble',
       'Autocaravana Rimor Seal Perfilada con Cama en Isla y Salón Comedor'
+      ,'Volkswagen California Ocean T6.1 "Maspalomas Freedom"'
+      ,'Mercedes-Benz Marco Polo AMG "Teide Explorer"'
+      ,'Ford Transit Custom Camper Gran Volumen "Timanfaya Spirit"'
+      ,'Fiat Ducato Autocaravana Capuchina "Corralejo Wave"'
+      ,'Citroën SpaceTourer Camper "La Caldera Nomade"'
+      ,'owner-yeray-1@example.invalid'
+      ,'owner-ayoze-2@example.invalid'
+      ,'owner-guacimara-3@example.invalid'
+      ,'propietario.grancanaria@canariascampers.es'
+      ,'propietario.tenerife@canariascampers.es'
+      ,'yeray.santana@vaneando.canarias'
+      ,'ayoze.tenerife@vaneando.canarias'
+      ,'guacimara.fuerteventura@vaneando.canarias'
     ).catch(() => {});
 
     // Las correcciones históricas se conservan solo para instalaciones antiguas.

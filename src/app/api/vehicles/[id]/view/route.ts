@@ -11,7 +11,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     const user = await getCurrentUser().catch(() => null);
 
     const vehicle = await prisma.vehicle.findUnique({ where: { id }, select: { ownerId: true, status: true } }).catch(() => null);
-    if (!vehicle) return NextResponse.json({ success: true, tracked: false, demo: true });
+    if (!vehicle) return NextResponse.json({ success: true, tracked: false });
     if (user?.id === vehicle.ownerId || user?.role === 'ADMIN') return NextResponse.json({ success: true, tracked: false });
 
     const country = request.headers.get('x-vercel-ip-country') || request.headers.get('cf-ipcountry') || null;
