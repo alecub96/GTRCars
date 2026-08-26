@@ -14,8 +14,8 @@ import CamperDetailGallery from '@/components/CamperDetailGallery';
 import CamperLocationMap from '@/components/CamperLocationMap';
 import ContactOwnerButton from '@/components/ContactOwnerButton';
 import { isConfiguredAdmin } from '@/lib/admin';
-import { REALISTIC_CANARIAN_CAMPERS } from '@/lib/demo-campers-data';
 import Link from 'next/link';
+import { formatDateSafe } from '@/lib/date-utils';
 
 export const dynamic = 'force-dynamic';
 
@@ -36,14 +36,13 @@ async function fetchVehicleBySlugOrId(slugParam: string) {
     // Intento 1: Prisma con todas las relaciones
     let v: any = await prisma.vehicle.findFirst({
       where: {
+        status: 'ACTIVE',
         OR: [
           { slug: raw },
           { slug: decoded },
           { id: raw },
           { id: decoded },
-          { slug: { contains: slugClean } },
-          { slug: { contains: decoded } },
-          { title: { contains: titleSearch } },
+          { slug: slugClean },
         ],
       },
       include: {
@@ -61,12 +60,13 @@ async function fetchVehicleBySlugOrId(slugParam: string) {
     // Intento 2: Prisma con relaciones esenciales
     v = await prisma.vehicle.findFirst({
       where: {
+        status: 'ACTIVE',
         OR: [
           { slug: raw },
           { slug: decoded },
           { id: raw },
           { id: decoded },
-          { slug: { contains: slugClean } },
+          { slug: slugClean },
         ],
       },
       include: {
@@ -85,11 +85,9 @@ async function fetchVehicleBySlugOrId(slugParam: string) {
 
     // Intento 3: Consulta raw directa a MySQL / MariaDB
     const rawRows = ((await prisma.$queryRawUnsafe(
-      `SELECT * FROM Vehicle WHERE LOWER(slug) = ? OR id = ? OR slug LIKE ? OR LOWER(title) LIKE ? LIMIT 1`,
+      `SELECT * FROM Vehicle WHERE status = 'ACTIVE' AND (LOWER(slug) = ? OR id = ?) LIMIT 1`,
       decoded,
-      raw,
-      `%${slugClean}%`,
-      `%${titleSearch}%`
+      raw
     ).catch(() => [])) || []) as any[];
 
     if (rawRows && rawRows.length > 0) {
@@ -116,26 +114,6 @@ async function fetchVehicleBySlugOrId(slugParam: string) {
     }
   } catch (err) {
     console.error('Error fetching vehicle by slug/id:', err);
-  }
-
-  // Intento 4: Demo / fallback local
-  const demo = REALISTIC_CANARIAN_CAMPERS.find(
-    (c) =>
-      c.slug.toLowerCase() === decoded ||
-      c.id.toLowerCase() === decoded ||
-      c.slug.toLowerCase().includes(slugClean) ||
-      c.title.toLowerCase().includes(titleSearch.toLowerCase())
-  );
-  if (demo) {
-    return {
-      ...demo,
-      owner: {
-        ...demo.owner,
-        createdAt: new Date('2024-01-15'),
-      },
-      pricingRules: [],
-      extras: [],
-    };
   }
 
   return null;
@@ -450,7 +428,7 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
                           />
                           <div>
                             <span className="font-medium text-sm block">{rev.author?.firstName}</span>
-                            <span className="text-[10px] text-[#6B726E]">{new Date(rev.createdAt).toLocaleDateString('es-ES')}</span>
+                            {formatDateSafe(rev.createdAt) && <span className="text-[10px] text-[#6B726E]">{formatDateSafe(rev.createdAt)}</span>}
                           </div>
                         </div>
                         <div className="flex items-center space-x-1">

@@ -33,7 +33,7 @@ export default async function GuidesPage() {
   const jsonLdCollection = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: 'Blog Camper Canarias: Guías y Consejos Oficiales',
+    name: 'Blog Camper Canarias: Guías y Consejos',
     description: 'Guías completas para viajar en camper, furgoneta camperizada, autocaravana y 4x4 por las Islas Canarias.',
     url: 'https://vaneando.com/guias',
     hasPart: BLOG_ARTICLES.map((article) => ({
@@ -62,7 +62,7 @@ export default async function GuidesPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center max-w-4xl mx-auto mb-16">
           <span className="text-[11px] font-black uppercase tracking-[0.25em] text-[#16B8AA] bg-[#16B8AA]/10 px-4 py-1.5 rounded-full inline-block mb-3 border border-[#16B8AA]/20">
-            Blog & Guías Oficiales de Canarias
+            Blog y guías de Canarias
           </span>
           <h1 className="font-serif text-4xl sm:text-6xl font-bold mt-2 mb-5 leading-tight">
             Viajar en Camper por Gran Canaria y las Islas Canarias

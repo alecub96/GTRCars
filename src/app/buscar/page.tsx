@@ -11,7 +11,7 @@ import type { Metadata } from 'next';
 import VehicleTypeSlider from '@/components/VehicleTypeSlider';
 import { VEHICLE_TYPES_CONFIG } from '@/lib/vehicle-types';
 import SearchMapExplorer from '@/components/SearchMapExplorer';
-import { REALISTIC_CANARIAN_CAMPERS } from '@/lib/demo-campers-data';
+import { parseDateOnly } from '@/lib/date-utils';
 
 export const dynamic = 'force-dynamic';
 
@@ -37,8 +37,11 @@ export async function generateMetadata({ searchParams }: SearchPageProps): Promi
 
   return {
     title: `Alquiler de ${typeLabel} en ${islandName} barato entre particulares | vaneando.`,
-    description: `Busca y compara entre ${typeLabel} disponibles en ${islandName}. Alquiler directamente a propietarios particulares verificados, con contratos directos y sin comisiones ocultas. Ahorra hasta el 60% frente a un hotel.`,
-    alternates: { canonical: `https://vaneando.com/buscar${params.island ? `?island=${encodeURIComponent(params.island)}` : ''}` },
+    description: `Busca y compara ${typeLabel} publicados en ${islandName}. Revisa precio, disponibilidad y condiciones antes de contactar.`,
+    alternates: { canonical: 'https://vaneando.com/buscar' },
+    robots: params.island || params.vehicleType || params.minPrice || params.maxPrice || params.passengers || params.startDate || params.endDate || params.sort
+      ? { index: false, follow: true }
+      : { index: true, follow: true },
     openGraph: {
       title: `Alquiler de ${typeLabel} en ${islandName} | vaneando.`,
       description: `Compara precios y disponibilidad de ${typeLabel} en ${islandName}. Reserva con contratos directos entre particulares e identidades verificadas.`,
@@ -98,9 +101,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     if (minPrice) whereClause.basePricePerDay.gte = minPrice;
     if (maxPrice) whereClause.basePricePerDay.lte = maxPrice;
   }
-  const parsedStartDate = startDate ? new Date(`${startDate}T00:00:00`) : null;
-  const parsedEndDate = endDate ? new Date(`${endDate}T00:00:00`) : null;
-  if (parsedStartDate && parsedEndDate && !Number.isNaN(parsedStartDate.getTime()) && !Number.isNaN(parsedEndDate.getTime()) && parsedStartDate < parsedEndDate) {
+  const parsedStartDate = parseDateOnly(startDate);
+  const parsedEndDate = parseDateOnly(endDate);
+  if (parsedStartDate && parsedEndDate && parsedStartDate < parsedEndDate) {
     whereClause.availabilityBlocks = { none: { startDate: { lt: parsedEndDate }, endDate: { gt: parsedStartDate } } };
   }
 
@@ -155,23 +158,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     console.error('Error fetching database vehicles:', error);
   }
 
-  // Filtrar e integrar el catálogo de campers realistas
-  const filteredDemo = REALISTIC_CANARIAN_CAMPERS.filter((demo) => {
-    if (selectedIsland && selectedIsland !== 'todas' && !demo.island.toLowerCase().includes(selectedIsland.replace(/-/g, ' ').toLowerCase())) return false;
-    if (vehicleType && vehicleType !== 'TODOS' && demo.vehicleType !== vehicleType) return false;
-    if (passengers && demo.passengers < passengers) return false;
-    if (minPrice && demo.basePricePerDay < minPrice) return false;
-    if (maxPrice && demo.basePricePerDay > maxPrice) return false;
-    return true;
-  });
-
   const allVehiclesMap = new Map<string, any>();
   vehicles.forEach((v) => allVehiclesMap.set(v.slug || v.id, v));
-  filteredDemo.forEach((d) => {
-    if (!allVehiclesMap.has(d.slug) && !allVehiclesMap.has(d.id)) {
-      allVehiclesMap.set(d.slug, d);
-    }
-  });
 
   const finalVehiclesList = Array.from(allVehiclesMap.values());
   vehicles = sortVehiclesWithHalfHourFeaturedRotation(finalVehiclesList);
@@ -346,7 +334,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         <section className="mt-20 border-t border-[#E9E1D2] pt-12 space-y-8 text-[#13322E]">
           <div className="max-w-4xl mx-auto text-center space-y-3">
             <span className="text-[11px] font-black uppercase tracking-[0.25em] text-[#16B8AA] bg-[#16B8AA]/10 px-4 py-1.5 rounded-full inline-block">
-              La Plataforma Oficial nº 1 de Canarias
+              Vehículos publicados en Canarias
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl font-bold">
               Alquiler de Campers en Gran Canaria, Tenerife y las 8 Islas
@@ -358,7 +346,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
           <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto pt-4 text-xs font-medium text-[#6B726E]">
             <div className="bg-white p-6 rounded-3xl border border-[#E9E1D2] shadow-sm">
-              <h3 className="font-serif text-lg font-bold text-[#13322E] mb-2">Ahorra hasta un 60% frente a un hotel</h3>
+              <h3 className="font-serif text-lg font-bold text-[#13322E] mb-2">Compara antes de reservar</h3>
               <p className="leading-relaxed">Al combinar transporte y alojamiento en un solo vehículo y cocinar a bordo, ahorras más de 1.000€ a la semana frente al coste habitual de hotel + coche de alquiler en Canarias.</p>
             </div>
             <div className="bg-white p-6 rounded-3xl border border-[#E9E1D2] shadow-sm">

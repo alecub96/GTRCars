@@ -1,7 +1,6 @@
 import { MetadataRoute } from 'next';
 import { CANARY_ISLANDS } from '@/lib/pricing';
 import { BLOG_ARTICLES } from '@/lib/blog';
-import { REALISTIC_CANARIAN_CAMPERS } from '@/lib/demo-campers-data';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://vaneando.com';
@@ -18,19 +17,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const campers = await (await import('@/lib/prisma')).prisma.vehicle.findMany({ where: { status: 'ACTIVE' }, select: { slug: true, updatedAt: true } });
     camperUrls = campers.map((camper) => ({ url: `${baseUrl}/camper/${camper.slug}`, lastModified: camper.updatedAt, changeFrequency: 'weekly', priority: 0.8 }));
   } catch {}
-
-  // Enriquecer con los 10 anuncios realistas
-  const existingSlugs = new Set(camperUrls.map((c) => c.url.replace(`${baseUrl}/camper/`, '')));
-  for (const demo of REALISTIC_CANARIAN_CAMPERS) {
-    if (!existingSlugs.has(demo.slug)) {
-      camperUrls.push({
-        url: `${baseUrl}/camper/${demo.slug}`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly',
-        priority: 0.8,
-      });
-    }
-  }
 
   return [
     {

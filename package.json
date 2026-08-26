@@ -9,7 +9,8 @@
     "db:push": "prisma db push",
     "db:deploy": "prisma db push",
     "db:check": "prisma validate",
-    "lint": "eslint"
+    "lint": "eslint",
+    "audit:integrity": "node scripts/audit-integrity.mjs"
   },
   "dependencies": {
     "@prisma/adapter-mariadb": "^7.9.1",

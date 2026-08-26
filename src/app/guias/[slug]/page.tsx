@@ -113,7 +113,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
           <div className="relative mb-8 rounded-3xl overflow-hidden shadow-lg border border-[#E9E1D2]">
             <img src={article.image} alt={article.title} className="w-full h-[26rem] sm:h-[32rem] object-cover" />
             <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6 text-white text-xs">
-              Fotografía e itinerarios oficiales verificados para recorrer Canarias en camper.
+              Información editorial y rutas para planificar tu viaje por Canarias.
             </div>
           </div>
 

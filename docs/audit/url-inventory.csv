@@ -1,0 +1,8 @@
+URL,HTTP status,indexable,canonical,TITLE,meta description,H1,robots,sitemap,language,page type,entity ID,vehicle ID,island,vehicle type,source real/demo,notes
+/,,,,,,,,,es,home,,,,,real,
+/buscar,,,,,,,,,es,search,,,,,real,faceted queries noindex
+/seguridad,,,,,,,,,es,trust,,,,,real,
+/historias,,,,,,,,,es,stories,,,,,real,
+/guias,,,,,,,,,es,blog,,,,,real,
+/alquiler-camper/{island},,,,,,,,,es,island landing,,,,,real,
+/camper/{slug},,,,,,,,,es,vehicle detail,,,{slug},,real only ACTIVE DB vehicles,

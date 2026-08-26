@@ -6,7 +6,7 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 import Link from 'next/link';
 import { Star, MapPin, Compass, ArrowRight, Quote, Heart } from 'lucide-react';
 
-const STORIES = [
+const STORIES: any[] = [
   {
     id: 'ayoze-tenerife',
     title: 'De furgoneta parada a generar más de 2.200€ al mes en Tenerife',
@@ -38,6 +38,7 @@ const STORIES = [
     badge: 'Experiencia Local',
   },
 ];
+const SHOW_VERIFIED_STORIES = false;
 
 export default function HistoriasPage() {
   return (
@@ -54,16 +55,23 @@ export default function HistoriasPage() {
             <span>Comunidad Vaneando</span>
           </div>
           <h1 className="font-serif text-3xl sm:text-5xl font-bold tracking-tight">
-            Historias Reales en Canarias
+            Historias de la comunidad en Canarias
           </h1>
           <p className="text-xs sm:text-sm text-[#6B726E] font-medium leading-relaxed">
-            Descubre cómo viajeros y propietarios de las islas viven y comparten la pasión por viajar sobre ruedas.
+            Publicaremos experiencias verificadas cuando existan reservas y autorizaciones suficientes para compartirlas.
           </p>
         </section>
 
         {/* LISTADO DE HISTORIAS */}
         <div className="space-y-8 mb-16">
-          {STORIES.map((story) => (
+          {!SHOW_VERIFIED_STORIES && (
+            <div className="rounded-3xl border border-[#E9E1D2] bg-white p-10 text-center shadow-sm">
+              <h2 className="font-serif text-2xl font-bold">Todavía no hay historias verificadas</h2>
+              <p className="mx-auto mt-3 max-w-xl text-sm text-[#6B726E]">No mostramos testimonios, ingresos ni experiencias inventadas. Explora los vehículos publicados o vuelve más adelante.</p>
+              <Link href="/buscar" className="mt-6 inline-flex rounded-full bg-[#13322E] px-6 py-3 text-xs font-bold text-white">Explorar vehículos</Link>
+            </div>
+          )}
+          {SHOW_VERIFIED_STORIES && STORIES.map((story) => (
             <article
               key={story.id}
               className="bg-white rounded-3xl border border-[#E9E1D2] overflow-hidden shadow-sm hover:shadow-md transition-all grid grid-cols-1 md:grid-cols-12 gap-6 p-6 sm:p-8 items-center"

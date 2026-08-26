@@ -87,11 +87,11 @@ function renderEmailLayout({
       ` : ''}
     </div>
     <div class="footer">
-      <p><strong>vaneando.com</strong> — La plataforma nº1 de alquiler de campers en las Islas Canarias.</p>
+  <p><strong>vaneando.com</strong> — Alquiler de campers y vehículos recreativos en las Islas Canarias.</p>
       <p>¿Tienes alguna duda? Contáctanos en <a href="mailto:contacto@vaneando.com">contacto@vaneando.com</a></p>
       <p style="margin-top:12px;font-size:11px;color:#A0AEC0;">
         Las Palmas de Gran Canaria / Santa Cruz de Tenerife · España<br>
-        Pagos 100% Seguros · Verificación de Propietarios Locales
+        Desglose de precio · Información del anuncio · Soporte de reserva
       </p>
     </div>
   </div>
@@ -128,7 +128,7 @@ export async function sendWelcomeEmail(to: string, firstName: string) {
     <ul style="padding-left: 20px; color: #4A5568;">
       <li><strong>Explorar el archipiélago:</strong> Encuentra campers en Gran Canaria, Tenerife, Lanzarote, Fuerteventura y más.</li>
       <li><strong>Alquilar a locales:</strong> Vehículos únicos, económicos y con recomendaciones secretas de pernocta.</li>
-      <li><strong>Publicar tu camper:</strong> Si tienes una furgoneta o autocaravana, rentabilízala con seguro e ingresos garantizados.</li>
+      <li><strong>Publicar tu camper:</strong> Si tienes una furgoneta o autocaravana, consulta las condiciones y publica información precisa del vehículo.</li>
     </ul>
 
     <p style="margin-top: 24px;">¡Nos vemos en la carretera!</p>
@@ -228,7 +228,7 @@ export async function sendPaymentInvoiceEmail(
     </div>
 
     <p style="margin-top: 28px; font-size: 13px; color: #6B726E;">
-      Esta confirmación sirve como comprobante de pago oficial y factura simplificada de tu reserva. Puedes consultar la ficha completa y las instrucciones de entrega en tu perfil.
+      Esta confirmación sirve como comprobante del pago registrado para tu reserva. Consulta la ficha completa y las instrucciones de entrega en tu perfil.
     </p>
   `;
 

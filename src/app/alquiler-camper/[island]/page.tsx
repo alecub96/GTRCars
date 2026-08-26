@@ -5,13 +5,15 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import VehicleViewTracker from '@/components/VehicleViewTracker';
 import { CANARY_ISLANDS } from '@/lib/pricing';
+import { notFound } from 'next/navigation';
 
 export async function generateMetadata({ params }: SeoIslandPageProps): Promise<Metadata> {
   const { island } = await params;
-  const name = CANARY_ISLANDS.find((candidate) => candidate.id === island)?.name || island.split('-').map((part) => part[0]?.toUpperCase() + part.slice(1)).join(' ');
+  const name = CANARY_ISLANDS.find((candidate) => candidate.id === island)?.name;
+  if (!name) notFound();
   return {
     title: `Alquiler de campers en ${name} barato entre particulares | vaneando.`,
-    description: `Alquila furgonetas camperizadas, autocaravanas, caravanas y 4x4 en ${name} directamente a propietarios particulares verificados. Ahorra hasta un 60% frente a un hotel.`,
+    description: `Consulta los vehículos activos publicados para alquilar en ${name} y revisa sus condiciones antes de contactar.`,
     alternates: { canonical: `https://vaneando.com/alquiler-camper/${island}` },
     openGraph: {
       title: `Alquiler de campers en ${name} barato entre particulares`,
@@ -28,7 +30,8 @@ interface SeoIslandPageProps {
 
 export default async function SeoIslandPage({ params }: SeoIslandPageProps) {
   const { island } = await params;
-  const fallbackName = CANARY_ISLANDS.find((candidate) => candidate.id === island)?.name || island.split('-').map((part) => part[0]?.toUpperCase() + part.slice(1)).join(' ');
+  const fallbackName = CANARY_ISLANDS.find((candidate) => candidate.id === island)?.name;
+  if (!fallbackName) notFound();
   let locationData: Awaited<ReturnType<typeof prisma.seoLocation.findUnique>> = null;
   let vehicles: Awaited<ReturnType<typeof prisma.vehicle.findMany>> = [];
   let databaseUnavailable = false;
@@ -48,9 +51,9 @@ export default async function SeoIslandPage({ params }: SeoIslandPageProps) {
   }
 
   const faqs = locationData?.faq ? JSON.parse(locationData.faq) : [
-    { q: `¿Cuánto cuesta alquilar una camper en ${fallbackName}?`, a: `El precio medio en ${fallbackName} oscila entre 45€ y 90€ por día según la temporada y el tipo de vehículo (camper pequeña, gran volumen o autocaravana).` },
-    { q: `¿Puedo recoger la camper en el aeropuerto de ${fallbackName}?`, a: `Sí. La mayoría de los propietarios locales en vaneando entregan el vehículo directamente en el aeropuerto o puntos clave de la isla.` },
-    { q: `¿Por qué es mejor alquilar en camper que alojarse en un hotel en ${fallbackName}?`, a: `Viajar en camper elimina la necesidad de reservar hotel + coche de alquiler, ahorrando hasta un 60% del presupuesto y permitiéndote despertar en acantilados, miradores y playas naturales.` },
+    { q: `¿Cuánto cuesta alquilar una camper en ${fallbackName}?`, a: `El precio depende del vehículo, las fechas, los extras y las condiciones del anuncio. Revisa el precio por día y el desglose antes de contactar.` },
+    { q: `¿Puedo recoger la camper en el aeropuerto de ${fallbackName}?`, a: `La entrega depende de cada propietario y debe confirmarse en el anuncio o durante la conversación previa a la reserva.` },
+    { q: `¿Qué debo revisar antes de reservar en ${fallbackName}?`, a: `Comprueba disponibilidad, fianza, seguro, kilometraje, lugar de entrega, política de cancelación y condiciones del contrato.` },
   ];
 
   const jsonLdItemList = {
@@ -100,19 +103,19 @@ export default async function SeoIslandPage({ params }: SeoIslandPageProps) {
       <section className="relative py-20 bg-[#13322E] text-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <span className="text-xs font-black uppercase tracking-[0.25em] text-[#F2CC8F]">
-            Guía Oficial & Alquiler entre Particulares
+            Guía local & vehículos publicados
           </span>
           <h1 className="font-serif text-4xl sm:text-6xl font-bold mt-2 mb-6">
             Alquiler de Campers en {locationData?.name || fallbackName}
           </h1>
           <p className="text-sm sm:text-base text-white/90 max-w-3xl mx-auto font-medium leading-relaxed">
-            {locationData?.description || `Descubre ${fallbackName} con total libertad. Ahorra hasta un 60% frente a un hotel reservando campers, autocaravanas y 4x4 directamente a propietarios locales verificados.`}
+            {locationData?.description || `Consulta los vehículos activos disponibles en ${fallbackName}, compara sus condiciones y contacta con el propietario.`}
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4 text-xs font-bold">
-            <span className="bg-white/10 border border-white/20 px-4 py-2 rounded-full">✓ 0% Comisiones Ocultas</span>
-            <span className="bg-white/10 border border-white/20 px-4 py-2 rounded-full">✓ Verificación de Licencia DNI</span>
-            <span className="bg-white/10 border border-white/20 px-4 py-2 rounded-full">✓ Entrega en Aeropuerto</span>
+            <span className="bg-white/10 border border-white/20 px-4 py-2 rounded-full">✓ Condiciones visibles</span>
+            <span className="bg-white/10 border border-white/20 px-4 py-2 rounded-full">✓ Contacto directo</span>
+            <span className="bg-white/10 border border-white/20 px-4 py-2 rounded-full">✓ Disponibilidad por fechas</span>
           </div>
         </div>
       </section>
@@ -125,7 +128,7 @@ export default async function SeoIslandPage({ params }: SeoIslandPageProps) {
               Campers disponibles en {locationData?.name || fallbackName} ({vehicles.length})
             </h2>
             <p className="text-xs text-[#6B726E] font-medium mt-1">
-              Vehículos equipados con cocina, camas e inventario completo revisados por locales.
+              Solo se muestran vehículos activos registrados en la plataforma.
             </p>
           </div>
           <Link href={`/buscar?island=${encodeURIComponent(fallbackName)}`} className="inline-flex items-center text-xs font-black uppercase tracking-wider text-[#16B8AA] hover:underline">
@@ -193,20 +196,20 @@ export default async function SeoIslandPage({ params }: SeoIslandPageProps) {
             <span className="text-xs font-black uppercase tracking-widest text-[#D97706]">Por qué los viajeros eligen camper</span>
             <h3 className="font-serif text-3xl font-bold mt-2 mb-4 text-[#13322E]">Hotel vs Camper en {locationData?.name || fallbackName}</h3>
             <p className="text-sm text-[#6B726E] font-medium leading-relaxed max-w-2xl mx-auto mb-8">
-              Alojarse en un hotel convencional en {fallbackName} implica depender de desplazamientos diarios y pagar habitualmente más de 1.800€ por semana sumando habitación, coche de alquiler y comidas fuera. En camper combinas todo en una única tarifa transparente.
+              Compara el coste y las condiciones de cada opción según tus fechas y necesidades. El precio final depende del vehículo y de los servicios contratados.
             </p>
             <div className="grid sm:grid-cols-3 gap-4 text-left">
               <div className="bg-white p-5 rounded-2xl border border-[#E9E1D2]">
-                <h4 className="font-bold text-sm text-[#13322E] mb-1">Ahorro hasta el 60%</h4>
-                <p className="text-xs text-[#6B726E] font-medium">Cocina a bordo y elimina el alquiler doble de coche y hotel.</p>
+                <h4 className="font-bold text-sm text-[#13322E] mb-1">Precio desglosado</h4>
+                <p className="text-xs text-[#6B726E] font-medium">Consulta precio diario, fianza, extras y condiciones del anuncio.</p>
               </div>
               <div className="bg-white p-5 rounded-2xl border border-[#E9E1D2]">
-                <h4 className="font-bold text-sm text-[#13322E] mb-1">Libertad Total</h4>
-                <p className="text-xs text-[#6B726E] font-medium">Cambia de ubicación cada día y despierta frente al Atlántico.</p>
+                <h4 className="font-bold text-sm text-[#13322E] mb-1">Disponibilidad</h4>
+                <p className="text-xs text-[#6B726E] font-medium">Selecciona fechas y confirma la disponibilidad con el propietario.</p>
               </div>
               <div className="bg-white p-5 rounded-2xl border border-[#E9E1D2]">
-                <h4 className="font-bold text-sm text-[#13322E] mb-1">Consejo Local</h4>
-                <p className="text-xs text-[#6B726E] font-medium">Propietarios canarios verificados que te recomiendan los mejores rincones.</p>
+                <h4 className="font-bold text-sm text-[#13322E] mb-1">Información local</h4>
+                <p className="text-xs text-[#6B726E] font-medium">Consulta las guías y las condiciones concretas de cada anuncio.</p>
               </div>
             </div>
           </div>

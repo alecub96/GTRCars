@@ -566,7 +566,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
               </span>
             </div>
             <p className="text-xs text-white/70 font-medium leading-relaxed max-w-sm">
-              La plataforma oficial de alquiler de furgonetas camperizadas y autocaravanas entre particulares en las 8 Islas Canarias.
+              Vehículos recreativos publicados para alquilar en las Islas Canarias.
             </p>
             <div className="flex flex-wrap items-center gap-2 text-xs text-white/80">
               <span className="bg-white/10 px-3 py-1 rounded-full border border-white/10">💳 Pagos Seguros SSL</span>
@@ -614,7 +614,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-xs text-white/50 font-medium gap-4">
-          <p>© 2026 Vaneando.com — La plataforma oficial de alquiler entre particulares en Canarias.</p>
+          <p>© 2026 Vaneando.com — Marketplace de vehículos recreativos en Canarias.</p>
           <div className="flex space-x-4">
             <Link href="/terminos" className="hover:text-white">Términos</Link>
             <Link href="/privacidad" className="hover:text-white">Privacidad</Link>
