@@ -16,6 +16,8 @@ Se completó la revisión y saneamiento verificable del repositorio. La base que
 - Fecha ISO y formato seguro centralizados.
 - Landings de isla validan slug y muestran estado vacío honesto.
 - Reviews condicionadas a reservas completadas.
+- Seeds demo bloqueados salvo opt-in explícito local; secretos de JWT/documentos fallan cerrados en producción.
+- Quality gate de GitHub Actions añadido para validar Prisma, integridad, TypeScript y build.
 - Claims de confianza y autoridad no demostrados retirados de superficies principales.
 - Historias no verificadas sustituidas por estado vacío.
 

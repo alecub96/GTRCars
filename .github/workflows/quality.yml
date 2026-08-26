@@ -1,0 +1,26 @@
+name: Quality gate
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      DATABASE_URL: mysql://ci:ci@127.0.0.1:3306/vaneando
+      JWT_SECRET: ci-only-secret-that-is-longer-than-32-characters
+      DOCUMENT_ENCRYPTION_KEY: ci-only-document-key-that-is-longer-than-32-characters
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx prisma validate
+      - run: npm run audit:integrity
+      - run: npx tsc --noEmit
+      - run: npm run build
