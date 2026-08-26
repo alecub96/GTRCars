@@ -2,7 +2,6 @@ import React, { Suspense } from 'react';
 import HomeClientHero from '@/components/HomeClientHero';
 import { prisma } from '@/lib/prisma';
 import { getFeaturedAudience } from '@/lib/featured';
-import { REALISTIC_CANARIAN_CAMPERS } from '@/lib/demo-campers-data';
 
 export const revalidate = 60;
 
@@ -39,17 +38,9 @@ export default async function HomePage() {
     // Modo fallback ultrarrápido con campers canarias
   }
 
-  // Si hay pocos vehículos en base de datos, enriquecer con las campers hiperrealistas de Canarias
-  const combinedVehicles = [...featuredVehicles];
-  for (const demo of REALISTIC_CANARIAN_CAMPERS) {
-    if (!combinedVehicles.some((v) => v.slug === demo.slug)) {
-      combinedVehicles.push(demo);
-    }
-  }
-
   return (
     <Suspense fallback={null}>
-      <HomeClientHero initialVehicles={combinedVehicles.slice(0, 9)} />
+      <HomeClientHero initialVehicles={featuredVehicles.slice(0, 9)} />
     </Suspense>
   );
 }

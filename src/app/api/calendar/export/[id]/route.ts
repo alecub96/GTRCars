@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { generateIcsCalendar } from '@/lib/ical';
 import { ensureDbSchema } from '@/lib/prisma-ensure-schema';
-import { REALISTIC_CANARIAN_CAMPERS } from '@/lib/demo-campers-data';
 
 export const dynamic = 'force-dynamic';
 
@@ -35,20 +34,6 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
         },
       });
     } catch {}
-
-    // Fallback a camper demo si no está en la BD
-    if (!vehicle) {
-      const demo = REALISTIC_CANARIAN_CAMPERS.find((d) => d.id === id || d.slug === id);
-      if (demo) {
-        vehicle = {
-          id: demo.id,
-          slug: demo.slug,
-          title: demo.title,
-          bookings: [],
-          availabilityBlocks: [],
-        };
-      }
-    }
 
     if (!vehicle) {
       return NextResponse.json({ error: 'Vehículo no encontrado' }, { status: 404 });

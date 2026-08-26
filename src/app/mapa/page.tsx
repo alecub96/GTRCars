@@ -2,7 +2,6 @@ import React from 'react';
 import Navbar from '@/components/Navbar';
 import RealCanaryMapExplorer from '@/components/RealCanaryMapExplorer';
 import { prisma } from '@/lib/prisma';
-import { REALISTIC_CANARIAN_CAMPERS } from '@/lib/demo-campers-data';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowLeft, Filter } from 'lucide-react';
@@ -51,19 +50,7 @@ export default async function MapaPage({ searchParams }: MapPageProps) {
     // Modo fallback
   }
 
-  // Integrar catálogo completo de campers realistas
-  const allVehiclesMap = new Map<string, any>();
-  dbVehicles.forEach((v) => allVehiclesMap.set(v.slug, v));
-  
-  REALISTIC_CANARIAN_CAMPERS.forEach((demo) => {
-    if (!selectedIsland || demo.island.toLowerCase() === selectedIsland.toLowerCase()) {
-      if (!allVehiclesMap.has(demo.slug)) {
-        allVehiclesMap.set(demo.slug, demo);
-      }
-    }
-  });
-
-  const vehicles = Array.from(allVehiclesMap.values());
+  const vehicles = dbVehicles;
 
   return (
     <div className="min-h-screen bg-[#F7F6F2] text-[#13322E] flex flex-col">

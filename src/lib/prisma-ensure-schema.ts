@@ -213,7 +213,18 @@ export async function ensureDbSchema() {
       await prisma.$executeRawUnsafe(sq).catch(() => {});
     }
 
-    // Sincronizar marcas y modelos exactos de los anuncios de demostración con sus fotos
+    // Retirar del inventario público cualquier fixture histórico conocido.
+    await prisma.$executeRawUnsafe(
+      `UPDATE Vehicle SET status = 'ARCHIVED' WHERE slug IN (?, ?, ?) OR title IN (?, ?, ?)`,
+      'volkswagen-transporter-t6-custom-camper-gran-canaria',
+      'fiat-ducato-maxi-gran-volumen-l3h2-tenerife',
+      'toyota-proace-nomad-camper-fuerteventura',
+      'Volkswagen T2 Bulli Clásica Vintage con Techo Elevable',
+      'Dacia Dokker Stepway Camperizada con Mueble Camper y Cama Doble',
+      'Autocaravana Rimor Seal Perfilada con Cama en Isla y Salón Comedor'
+    ).catch(() => {});
+
+    // Las correcciones históricas se conservan solo para instalaciones antiguas.
     const demoCorrections = [
       {
         slug: 'volkswagen-transporter-t6-custom-camper-gran-canaria',

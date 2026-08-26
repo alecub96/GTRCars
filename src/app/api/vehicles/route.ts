@@ -3,7 +3,6 @@ import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
 import { getFeaturedAudience, sortVehiclesWithHalfHourFeaturedRotation } from '@/lib/featured';
 import { ensureDbSchema } from '@/lib/prisma-ensure-schema';
-import { REALISTIC_CANARIAN_CAMPERS } from '@/lib/demo-campers-data';
 
 export async function GET(request: Request) {
   try {
@@ -51,15 +50,6 @@ export async function GET(request: Request) {
       console.warn('Prisma findMany vehicles warning:', dbErr);
     }
 
-    // Si no hay campers en BD y no es consulta privada de propietario, usar campers de respaldo
-    if ((!vehicles || vehicles.length === 0) && !ownerOnly) {
-      vehicles = REALISTIC_CANARIAN_CAMPERS.filter((c) => {
-        if (island && island !== 'todas' && !c.island.toLowerCase().includes(island.toLowerCase())) return false;
-        if (minPassengers && c.passengers < Number(minPassengers)) return false;
-        return true;
-      });
-    }
-
     const featured = await getFeaturedAudience().catch(() => ({ ownerIds: new Set<string>(), vehicleIds: new Set<string>(), subscriptionOwnerIds: new Set<string>() }));
     const featuredVehicles = vehicles.map((vehicle) => ({
       ...vehicle,
@@ -81,10 +71,6 @@ export async function GET(request: Request) {
     );
   } catch (error: any) {
     console.error('API Vehicles Search Error:', error);
-    // Fallback garantizado a campers de Canarias
-    return NextResponse.json(
-      { success: true, vehicles: REALISTIC_CANARIAN_CAMPERS },
-      { headers: { 'Cache-Control': 'no-store, max-age=0' } }
-    );
+    return NextResponse.json({ error: 'No se pudo consultar el inventario' }, { status: 503 });
   }
 }

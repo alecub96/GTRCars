@@ -3,7 +3,6 @@ import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
 import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 import { ensureDbSchema } from '@/lib/prisma-ensure-schema';
-import { REALISTIC_CANARIAN_CAMPERS } from '@/lib/demo-campers-data';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,6 +19,7 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
 
     let vehicle = await prisma.vehicle.findFirst({
       where: {
+        status: 'ACTIVE',
         OR: [{ id }, { slug: id }],
       },
       include: {
@@ -40,13 +40,7 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
       },
     });
 
-    if (!vehicle) {
-      const demo = REALISTIC_CANARIAN_CAMPERS.find((d) => d.id === id || d.slug === id);
-      if (demo) {
-        return NextResponse.json({ success: true, vehicle: demo, isDemo: true });
-      }
-      return NextResponse.json({ error: 'Vehículo no encontrado' }, { status: 404 });
-    }
+    if (!vehicle) return NextResponse.json({ error: 'Vehículo no encontrado' }, { status: 404 });
 
     return NextResponse.json({ success: true, vehicle });
   } catch (error) {
