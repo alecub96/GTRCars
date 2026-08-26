@@ -21,6 +21,7 @@ import {
   RefreshCw,
   LogOut,
   User,
+  HeartHandshake,
 } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -175,6 +176,9 @@ export default function Navbar() {
               Contacto
             </Link>
           )}
+          <Link href="/colaboradores" className="hover:text-[#16B8AA] transition-colors">
+            Colaboradores
+          </Link>
         </div>
 
         {/* CONTROLES DERECHA (DESKTOP) */}
@@ -413,6 +417,15 @@ export default function Navbar() {
                   >
                     <User className="w-4 h-4 text-[#16B8AA]" />
                     <span>Sobre Nosotros</span>
+                  </Link>
+
+                  <Link
+                    onClick={() => setMobileOpen(false)}
+                    href="/colaboradores"
+                    className="flex items-center space-x-3 rounded-2xl p-3 hover:bg-[#FAF7F0] transition-colors"
+                  >
+                    <HeartHandshake className="w-4 h-4 text-[#16B8AA]" />
+                    <span>Colaboradores locales</span>
                   </Link>
 
                   <Link

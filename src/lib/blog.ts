@@ -381,6 +381,39 @@ export const BLOG_ARTICLES: BlogArticle[] = [
       { heading: 'Comunicación durante el viaje', paragraphs: ['Define cuándo estás disponible y cómo actuar ante una avería. Responder con calma y dar instrucciones concretas vale más que contestar con mensajes largos.', 'Después de la devolución, agradece el cuidado y pide una valoración honesta. Esa conversación también forma parte de la experiencia.'] },
     ],
   },
+  {
+    slug: 'viajar-gran-canaria-camper-picnic-romantico', category: 'Viajeros',
+    title: 'Viajar por Gran Canaria en camper y disfrutar de un picnic sorpresa',
+    excerpt: 'Combina libertad sobre ruedas con una experiencia romántica preparada por un negocio local.',
+    metaDescription: 'Ideas para recorrer Gran Canaria en camper y añadir un picnic romántico sorpresa con Alisios Picnic.',
+    image: '/Islas/gran%20canaria.png', publishedAt: '2026-08-26', readingTime: '6 min', keywords: ['camper y picnic Gran Canaria', 'picnic romántico Gran Canaria'],
+    sections: [
+      { heading: 'Una ruta que termina en sorpresa', paragraphs: ['Gran Canaria permite combinar costa, cumbre y pueblos en pocos kilómetros. Alquila una camper en Vaneando, prepara una ruta sin prisas y reserva una experiencia romántica para cerrar el día.', 'Alisios Picnic organiza picnics, aniversarios y pedidas de mano en distintos rincones de la isla.'] },
+      { heading: 'Una colaboración local', paragraphs: ['Vaneando te ayuda a encontrar el vehículo y organizar la ruta. Alisios Picnic se ocupa del montaje, la ambientación y el menú elegido. Consulta su web para conocer disponibilidad, ubicaciones y condiciones.'] },
+    ],
+  },
+  {
+    slug: 'picnic-romantico-finca-alisios-arucas-camper', category: 'Viajeros',
+    title: 'Picnic romántico en Gran Canaria durante tu escapada camper',
+    excerpt: 'Ideas para añadir gastronomía, decoración y tiempo de calidad a una ruta por la isla.',
+    metaDescription: 'Planifica una escapada camper en Gran Canaria con un picnic romántico en la Finca Alisios o en un mirador.',
+    image: '/Islas/gran%20canaria.png', publishedAt: '2026-08-26', readingTime: '5 min', keywords: ['Finca Alisios picnic', 'escapada romántica camper'],
+    sections: [
+      { heading: 'De la carretera a una mesa preparada', paragraphs: ['Una camper te permite diseñar un viaje flexible. Para una ocasión especial, puedes cambiar una comida improvisada por un montaje cuidado con vajilla, decoración, flores y un menú adaptado.'] },
+      { heading: 'Reserva con tiempo', paragraphs: ['Alisios Picnic ofrece menús románticos, opciones personalizadas y experiencias para aniversarios o pedidas de mano, incluida su finca privada en Arucas. Consulta alergias, punto de encuentro, duración y política de cancelación antes de confirmar.'] },
+    ],
+  },
+  {
+    slug: 'gran-canaria-en-camper-experiencias-locales', category: 'Viajeros',
+    title: 'Gran Canaria en camper: rutas, atardeceres y experiencias locales',
+    excerpt: 'Diseña un viaje con paisajes de la isla y actividades de negocios canarios.',
+    metaDescription: 'Organiza una ruta por Gran Canaria en camper y suma experiencias locales como un picnic al atardecer.',
+    image: '/Islas/gran%20canaria.png', publishedAt: '2026-08-26', readingTime: '6 min', keywords: ['Gran Canaria en camper', 'experiencias locales Canarias'],
+    sections: [
+      { heading: 'Una isla para viajar a tu ritmo', paragraphs: ['Desde Las Palmas y Arucas hasta Agaete, Tejeda y el sur, una camper permite adaptar el itinerario al ritmo del grupo. Respeta siempre las normas de estacionamiento y los espacios protegidos.'] },
+      { heading: 'Añade un plan especial', paragraphs: ['Un picnic romántico al atardecer, una celebración o una tabla gourmet pueden convertirse en el momento central de una escapada. Descubre las propuestas de Alisios Picnic y combina su experiencia con tu ruta en camper.'] },
+    ],
+  },
 ];
 
 export function getBlogArticle(slug: string) {

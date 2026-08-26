@@ -33,6 +33,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     ...islandUrls,
     { url: `${baseUrl}/guias`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${baseUrl}/colaboradores`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
     ...blogUrls,
     ...camperUrls,
   ];
