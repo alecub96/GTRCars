@@ -2,13 +2,10 @@ import jwt from 'jsonwebtoken';
 
 function getJwtSecret() {
   const secret = process.env.JWT_SECRET?.trim();
-  if (secret && secret.length >= 32) {
+  if (secret) {
     return secret;
   }
-  if (process.env.NODE_ENV === 'production') {
-    throw new Error('JWT_SECRET debe estar configurado y tener al menos 32 caracteres en producción');
-  }
-  return 'secret-jwt-key-canarias-2026-vaneando-secure-fallback';
+  throw new Error('JWT_SECRET debe estar configurado en producción');
 }
 
 export interface TokenPayload {

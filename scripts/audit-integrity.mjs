@@ -24,7 +24,7 @@ assert.equal(home.includes('REALISTIC_CANARIAN_CAMPERS'), false, 'demo inventory
 assert.equal(map.includes('REALISTIC_CANARIAN_CAMPERS'), false, 'demo inventory must not be public map inventory');
 assert.equal(vehiclesApi.includes('REALISTIC_CANARIAN_CAMPERS'), false, 'vehicles API must not return demo inventory');
 assert.equal(vehicleApi.includes('REALISTIC_CANARIAN_CAMPERS'), false, 'vehicle API must not return demo inventory');
-assert.match(jwt, /NODE_ENV === 'production'/, 'JWT must fail closed without a production secret');
+assert.match(jwt, /JWT_SECRET debe estar configurado/, 'JWT must fail closed without a production secret');
 assert.match(uploads, /NODE_ENV === 'production'/, 'document encryption must fail closed without a production secret');
 assert.match(seed, /ALLOW_DEMO_SEED !== 'true'/, 'demo seed must require explicit opt-in');
 assert.equal(fs.existsSync('docs/audit/VANEANDO_BASELINE_2026-08-26.md'), true);

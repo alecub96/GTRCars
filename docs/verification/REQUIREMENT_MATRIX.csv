@@ -23,7 +23,7 @@ V-021,English /en operational,FAIL,No /en route exists,src/app, /en,route invent
 V-022,German phase order,PASS,No premature German routes,docs/audit/INTERNATIONAL_SEO_2026-08-26.md,/,code/docs inspection,PASS,DE deferred until EN stable,None
 V-023,Featured badge rule real,PASS,Featured service reads subscriptions/IDs,src/lib/featured.ts,/,code inspection,PASS,Existing rule retained,DB subscription QA
 V-024,CWV before/after,BLOCKED_EXTERNAL,No Lighthouse/CrUX evidence available,docs/verification/PRODUCTION_SMOKE_TEST.md,/,Lighthouse,BLOCKED_EXTERNAL,CI build added,Staging/real users
-V-025,PII protection and auth,BLOCKED_EXTERNAL,Requires authenticated route and DB/API penetration tests,src/lib/auth.ts;src/app/api,/,security test,BLOCKED_EXTERNAL,Production secret fail-closed added,Security review credentials
+V-025,PII protection and auth,BLOCKED_EXTERNAL,Requires authenticated route and DB/API penetration tests,src/lib/auth.ts;src/app/api,/,security test,BLOCKED_EXTERNAL,Restored compatibility fallback; provider secret must be configured before removing it,Production secret configuration
 V-026,Analytics events,FAIL,No event taxonomy implementation found,src,/,rg analytics,FAIL,Cookie consent exists only,Analytics configuration
 V-027,Mobile/accessibility resolutions,BLOCKED_EXTERNAL,No browser/device matrix executed,src/app;src/components,/,manual QA,BLOCKED_EXTERNAL,Responsive classes retained,Device/browser access
 V-028,Production build/lint/CI,PASS local,Build/typecheck/audit commands and workflow exist,.github/workflows/quality.yml;package.json,/,CI config inspection,PASS,Added quality gate,GitHub runner result
