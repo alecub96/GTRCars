@@ -5,6 +5,9 @@ function getJwtSecret() {
   if (secret && secret.length >= 32) {
     return secret;
   }
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('JWT_SECRET debe estar configurado y tener al menos 32 caracteres en producción');
+  }
   return 'secret-jwt-key-canarias-2026-vaneando-secure-fallback';
 }
 

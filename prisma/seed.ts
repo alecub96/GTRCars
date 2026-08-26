@@ -2,6 +2,9 @@ import { prisma } from '../src/lib/prisma';
 import bcrypt from 'bcryptjs';
 
 async function main() {
+  if (process.env.NODE_ENV === 'production' || process.env.ALLOW_DEMO_SEED !== 'true') {
+    throw new Error('Seed demo bloqueado. Usa ALLOW_DEMO_SEED=true únicamente en un entorno local desechable.');
+  }
   console.log('🌱 Iniciando datos de demostración de Vaneando en MySQL/MariaDB...');
 
   // Limpiar base de datos

@@ -3,6 +3,9 @@ import bcrypt from 'bcryptjs';
 import { REALISTIC_CANARIAN_CAMPERS } from '../src/lib/demo-campers-data';
 
 async function main() {
+  if (process.env.NODE_ENV === 'production' || process.env.ALLOW_DEMO_SEED !== 'true') {
+    throw new Error('Seed demo bloqueado. Usa ALLOW_DEMO_SEED=true únicamente en un entorno local desechable.');
+  }
   console.log('🌱 Inicializando los 3 anuncios realistas canarios con fotos de public/anuncios/ ...');
 
   const passwordHash = await bcrypt.hash('VaneandoDemo2026!', 10);

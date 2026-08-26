@@ -61,7 +61,11 @@ export function resolveUploadPath(kind: UploadKind, filename: string) {
 }
 
 function documentKey() {
-  const secret = process.env.DOCUMENT_ENCRYPTION_KEY || process.env.JWT_SECRET || 'vaneando-secure-document-encryption-fallback-key-32chars';
+  const configuredSecret = process.env.DOCUMENT_ENCRYPTION_KEY || process.env.JWT_SECRET;
+  if (!configuredSecret && process.env.NODE_ENV === 'production') {
+    throw new UploadConfigurationError('DOCUMENT_ENCRYPTION_KEY o JWT_SECRET es obligatorio en producción');
+  }
+  const secret = configuredSecret || 'vaneando-local-document-encryption-key-32chars';
   const validSecret = secret.length >= 32 ? secret : `${secret}-vaneando-secure-fallback-encryption-key-extended`;
   return createHash('sha256').update(validSecret).digest();
 }
