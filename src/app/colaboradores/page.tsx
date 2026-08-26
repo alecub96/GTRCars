@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Breadcrumbs from '@/components/Breadcrumbs';
-import { ArrowUpRight, HeartHandshake, MapPin, Sparkles } from 'lucide-react';
+import { ArrowUpRight, MapPin, Sparkles } from 'lucide-react';
 
 export const metadata = {
   title: 'Colaboradores locales | Vaneando',
@@ -10,5 +10,31 @@ export const metadata = {
 };
 
 export default function ColaboradoresPage() {
-  return <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]"><Navbar /><main className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6 lg:px-8"><Breadcrumbs items={[{ name: 'Colaboradores', url: '/colaboradores' }]} /><section className="mx-auto max-w-3xl text-center"><div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#16B8AA]/10 text-[#16B8AA]"><HeartHandshake className="h-7 w-7" /></div><p className="text-[11px] font-black uppercase tracking-[.25em] text-[#16B8AA]">Comunidad local</p><h1 className="mt-2 font-serif text-4xl font-bold sm:text-5xl">Colaboradores que hacen especial Canarias</h1><p className="mt-4 text-sm leading-7 text-[#6B726E]">Conectamos tu ruta en camper con experiencias locales seleccionadas para disfrutar más de cada isla.</p></section><section className="mx-auto mt-10 max-w-3xl rounded-3xl border border-[#E9E1D2] bg-white p-6 shadow-sm sm:p-9"><div className="flex flex-wrap items-start justify-between gap-5"><div><span className="inline-flex rounded-full bg-[#F0FDFA] px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#0F766E]">Colaborador destacado</span><h2 className="mt-4 font-serif text-3xl font-bold">Alisios Picnic</h2><p className="mt-2 text-sm font-semibold text-[#16B8AA]">Picnics románticos premium en Gran Canaria</p></div><Sparkles className="h-8 w-8 text-amber-500" /></div><p className="mt-5 text-sm leading-7 text-[#4A4643]">Convierte una escapada en un recuerdo: Alisios Picnic organiza picnics románticos, aniversarios y pedidas de mano en playas, miradores, espacios naturales y una finca privada en Arucas.</p><div className="mt-5 grid gap-3 text-xs font-semibold text-[#6B726E] sm:grid-cols-2"><span className="flex items-center gap-2"><MapPin className="h-4 w-4 text-[#16B8AA]" /> Gran Canaria</span><span className="flex items-center gap-2"><Sparkles className="h-4 w-4 text-[#16B8AA]" /> Menús personalizados y decoración</span></div><a href="https://alisiospicnic.es/" target="_blank" rel="sponsored noopener noreferrer" className="mt-7 inline-flex items-center gap-2 rounded-full bg-[#13322E] px-5 py-3 text-xs font-black uppercase tracking-wider text-white transition-colors hover:bg-[#16B8AA]">Conocer Alisios Picnic <ArrowUpRight className="h-4 w-4" /></a></section><section className="mx-auto mt-10 max-w-3xl rounded-3xl bg-[#13322E] p-7 text-center text-white"><h2 className="font-serif text-2xl font-bold">Planifica tu ruta y añade una experiencia especial</h2><p className="mt-2 text-sm leading-6 text-white/75">Explora nuestras campers y descubre ideas para viajar por Gran Canaria con más personalidad.</p><Link href="/buscar" className="mt-5 inline-flex rounded-full bg-[#16B8AA] px-5 py-3 text-xs font-black uppercase tracking-wider text-white hover:bg-[#0F766E]">Ver campers</Link></section></main></div>;
+  return (
+    <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]">
+      <Navbar />
+      <main className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
+        <Breadcrumbs items={[{ name: 'Colaboradores', url: '/colaboradores' }]} />
+        <section className="mx-auto max-w-3xl text-center">
+          <p className="text-[11px] font-black uppercase tracking-[.25em] text-[#16B8AA]">Comunidad local</p>
+          <h1 className="mt-2 font-serif text-4xl font-bold sm:text-5xl">Colaboradores que hacen especial Canarias</h1>
+          <p className="mt-4 text-sm leading-7 text-[#6B726E]">Conectamos tu ruta en camper con experiencias locales seleccionadas.</p>
+        </section>
+        <section className="mx-auto mt-10 max-w-3xl overflow-hidden rounded-3xl border border-[#E9E1D2] bg-white shadow-sm">
+          <img src="/colaboradores/alisios-blog-1.webp" alt="Picnic romántico de Alisios Picnic en Gran Canaria" className="h-64 w-full object-cover" />
+          <div className="p-6 sm:p-9">
+            <span className="inline-flex rounded-full bg-[#F0FDFA] px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#0F766E]">Colaborador destacado</span>
+            <div className="mt-4 flex items-start justify-between gap-5">
+              <div><h2 className="font-serif text-3xl font-bold">Alisios Picnic</h2><p className="mt-2 text-sm font-semibold text-[#16B8AA]">Picnics románticos premium en Gran Canaria</p></div>
+              <Sparkles className="h-8 w-8 text-amber-500" />
+            </div>
+            <p className="mt-5 text-sm leading-7 text-[#4A4643]">Picnics, aniversarios y pedidas de mano en playas, miradores, espacios naturales y una finca privada en Arucas.</p>
+            <div className="mt-5 grid gap-3 text-xs font-semibold text-[#6B726E] sm:grid-cols-2"><span className="flex items-center gap-2"><MapPin className="h-4 w-4 text-[#16B8AA]" /> Gran Canaria</span><span className="flex items-center gap-2"><Sparkles className="h-4 w-4 text-[#16B8AA]" /> Menús y decoración</span></div>
+            <a href="https://alisiospicnic.es/" target="_blank" rel="sponsored noopener noreferrer" className="mt-7 inline-flex items-center gap-2 rounded-full bg-[#13322E] px-5 py-3 text-xs font-black uppercase tracking-wider text-white hover:bg-[#16B8AA]">Conocer Alisios Picnic <ArrowUpRight className="h-4 w-4" /></a>
+          </div>
+        </section>
+        <section className="mx-auto mt-10 max-w-3xl rounded-3xl bg-[#13322E] p-7 text-center text-white"><h2 className="font-serif text-2xl font-bold">Planifica tu ruta y añade una experiencia especial</h2><Link href="/buscar" className="mt-5 inline-flex rounded-full bg-[#16B8AA] px-5 py-3 text-xs font-black uppercase tracking-wider text-white hover:bg-[#0F766E]">Ver campers</Link></section>
+      </main>
+    </div>
+  );
 }
