@@ -4,8 +4,8 @@ export interface PricingBreakdown {
   basePriceTotal: number;
   cleaningFee: number;
   extrasTotal: number;
-  travelerFee: number;       // Tarifa de servicio al viajero (4.5% vs ~15% en marcas de la competencia)
-  ownerFee: number;          // Comisión descontada al propietario (10.0% vs 12%-15% en empresas del sector)
+  travelerFee: number;       // Tarifa de servicio al viajero (4.3%)
+  ownerFee: number;          // Comisión descontada al propietario (9.7%)
   ownerPayout: number;       // Lo que transfieres al propietario tras tu comisión
   subtotalBeforeFees: number;
   totalAmount: number;       // Lo que cobras tú al viajero
@@ -56,12 +56,11 @@ export function calculatePricing({
 
   const subtotalBeforeFees = basePriceTotal + extrasTotal + cleaningFee;
 
-  // COMISIONES MÁS COMPETITIVAS QUE LAS MARCAS DE LA COMPETENCIA (Cobran hasta un 15% al viajero y 12% al propietario)
-  // Viajero: 4.5% de gastos de gestión
-  const travelerFee = Math.round(subtotalBeforeFees * 0.045 * 100) / 100;
+  // Viajero: 4.3% de gastos de gestión
+  const travelerFee = Math.round(subtotalBeforeFees * 0.043 * 100) / 100;
   
-  // Propietario: 10.0% de comisión si es de un tercero (0% si es camper propia de tu plataforma)
-  const ownerFeeRatio = ownershipType === 'PLATFORM' ? 0.0 : 0.10;
+  // Propietario: 9.7% de comisión si es de un tercero (0% si es camper propia de tu plataforma)
+  const ownerFeeRatio = ownershipType === 'PLATFORM' ? 0.0 : 0.097;
   const ownerFee = Math.round(subtotalBeforeFees * ownerFeeRatio * 100) / 100;
 
   // Total cobrado al viajero = Subtotal + comisión viajero

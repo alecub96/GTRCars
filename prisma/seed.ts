@@ -338,8 +338,8 @@ async function main() {
   // 6. Configuración global
   const settings = [
     { key: 'BRAND_NAME', value: 'Nomad Canarias' },
-    { key: 'TRAVELER_SERVICE_FEE_PCT', value: '4.9' },
-    { key: 'OWNER_PLATFORM_FEE_PCT', value: '12.0' },
+    { key: 'TRAVELER_SERVICE_FEE_PCT', value: '4.3' },
+    { key: 'OWNER_PLATFORM_FEE_PCT', value: '9.7' },
     { key: 'BRAND_EMAIL', value: 'hola@nomadcanarias.com' },
     { key: 'BRAND_PHONE', value: '+34 928 990 011' }
   ];
