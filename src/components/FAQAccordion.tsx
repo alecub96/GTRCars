@@ -13,7 +13,7 @@ const FAQS: FAQItem[] = [
   {
     category: 'viajeros',
     question: '¿Cómo funciona el alquiler de campers entre particulares en Vaneando?',
-    answer: 'Vaneando conecta directamente a viajeros con propietarios locales verificados en las Islas Canarias. Puedes buscar por isla, filtrar por tipo de furgoneta o plazas, y reservar con contrato digital oficial eIDAS. No hay comisiones abusivas ocultas y el pago se custodia de forma 100% segura hasta que recoges el vehículo.',
+    answer: 'Vaneando conecta anuncios de vehículos con viajeros en las Islas Canarias. Puedes buscar por isla, filtrar por tipo de vehículo o plazas y revisar las condiciones del anuncio antes de contactar. El contrato y el pago aplicables se muestran según la reserva.',
   },
   {
     category: 'viajeros',

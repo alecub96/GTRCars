@@ -159,7 +159,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
         ],
       },
       {
-        heading: 'Rrangos de precios según el tipo de vehículo camper en Gran Canaria',
+        heading: 'Rangos de precios según el tipo de vehículo camper en Gran Canaria',
         paragraphs: [
           'En Vaneando encontrarás una amplia diversidad de vehículos adaptados a todos los presupuestos:',
         ],

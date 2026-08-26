@@ -334,7 +334,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                 </p>
               </div>
               <Link href="/buscar?vehicleType=BARCO" className="inline-flex items-center text-xs font-black uppercase tracking-wider text-[#13322E] hover:underline">
-                Ver Barcos Habitales →
+                Ver barcos habitables →
               </Link>
             </div>
           </div>
@@ -448,10 +448,10 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                 </p>
               </div>
               <div className="flex items-center space-x-3 pt-4 border-t border-[#E9E1D2]">
-                <img className="w-10 h-10 rounded-full object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" alt="Laura M." />
+                <div className="w-10 h-10 rounded-full bg-[#E9E1D2]" aria-hidden="true" />
                 <div>
-                  <h4 className="font-bold text-sm text-[#13322E]">Laura M.</h4>
-                  <span className="text-[10px] text-[#6B726E]">Viaje por Gran Canaria · Marzo 2026</span>
+                  <h4 className="font-bold text-sm text-[#13322E]">Experiencias verificadas</h4>
+                  <span className="text-[10px] text-[#6B726E]">Se publicarán con autorización</span>
                 </div>
               </div>
             </div>
@@ -468,10 +468,10 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                 </p>
               </div>
               <div className="flex items-center space-x-3 pt-4 border-t border-[#E9E1D2]">
-                <img className="w-10 h-10 rounded-full object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" alt="Markus S." />
+                <div className="w-10 h-10 rounded-full bg-[#E9E1D2]" aria-hidden="true" />
                 <div>
-                  <h4 className="font-bold text-sm text-[#13322E]">Markus S. (Alemania)</h4>
-                  <span className="text-[10px] text-[#6B726E]">Viaje por Tenerife · Febrero 2026</span>
+                  <h4 className="font-bold text-sm text-[#13322E]">Sin testimonios publicados</h4>
+                  <span className="text-[10px] text-[#6B726E]">No mostramos experiencias inventadas</span>
                 </div>
               </div>
             </div>
@@ -488,10 +488,10 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                 </p>
               </div>
               <div className="flex items-center space-x-3 pt-4 border-t border-[#E9E1D2]">
-                <img className="w-10 h-10 rounded-full object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" alt="Elena y Carlos" />
+                <div className="w-10 h-10 rounded-full bg-[#E9E1D2]" aria-hidden="true" />
                 <div>
-                  <h4 className="font-bold text-sm text-[#13322E]">Elena y Carlos</h4>
-                  <span className="text-[10px] text-[#6B726E]">Viaje por Fuerteventura · Enero 2026</span>
+                  <h4 className="font-bold text-sm text-[#13322E]">Datos pendientes de reservas</h4>
+                  <span className="text-[10px] text-[#6B726E]">Valoraciones solo de operaciones completadas</span>
                 </div>
               </div>
             </div>

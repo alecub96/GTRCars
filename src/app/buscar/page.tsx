@@ -36,7 +36,7 @@ export async function generateMetadata({ searchParams }: SearchPageProps): Promi
   const typeLabel = typeObj ? typeObj.label : 'campers y autocaravanas';
 
   return {
-    title: `Alquiler de ${typeLabel} en ${islandName} barato entre particulares | vaneando.`,
+    title: `Alquiler de ${typeLabel} en ${islandName} | vaneando.`,
     description: `Busca y compara ${typeLabel} publicados en ${islandName}. Revisa precio, disponibilidad y condiciones antes de contactar.`,
     alternates: { canonical: 'https://vaneando.com/buscar' },
     robots: params.island || params.vehicleType || params.minPrice || params.maxPrice || params.passengers || params.startDate || params.endDate || params.sort

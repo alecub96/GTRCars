@@ -1,0 +1,29 @@
+ID,Prompt requirement,Status,Evidence,Files,Route,Test performed,Test result,Fix applied,Remaining blocker
+V-001,No demo vehicles exposed in public code,PASS,Static audit passed,scripts/audit-integrity.mjs;src/app/page.tsx;src/app/buscar/page.tsx,/,/buscar,npm run audit:integrity,PASS,Removed public demo fallbacks,None
+V-002,Demo DB fixtures archived on startup,PASS,Archive SQL present,src/lib/prisma-ensure-schema.ts,/,Code inspection,PASS,Archives known seed slugs and owners,Remote DB execution
+V-003,No fictitious reviews or stories in public UI,PASS,Home and stories use empty/verification copy with no named testimonials,src/components/HomeClientHero.tsx;src/app/historias/page.tsx,/,/historias,rg and tsc,PASS,Removed named fictional testimonials,Production deploy recheck
+V-004,No hardcoded ratings,PASS,No 4.9 public rating after local fix,src/components/HomeClientHero.tsx,/,rg scan,PASS,Replaced rating bar with reservation-based copy,None
+V-005,Slug historical migration with 301,FAIL,No alias table or redirect route exists,src/app/camper/[slug]/page.tsx;docs/audit/REDIRECT_MAP_2026-08-26.md,/camper/[slug],Code inspection,FAIL,Exact slug lookup only,Need historical production slug export
+V-006,Invalid Date prevention,PASS,Central safe formatter and date-only parser,src/lib/date-utils.ts,/,npx tsc and rg,PASS,Added parseDateOnly/formatDateSafe,None
+V-007,Island filters exact and no demo fallback,PASS,DB where clause plus no public fixture imports,src/app/buscar/page.tsx;src/app/mapa/page.tsx,/buscar,/mapa,npm run audit:integrity,PASS,Removed fallback merge,None
+V-008,Faceted search noindex/canonical,PASS,Metadata conditional robots and clean canonical,src/app/buscar/page.tsx,/buscar?island=La%20Palma,HTML/code inspection,PASS,Added noindex follow and canonical,None
+V-009,Robots does not block noindex facets,PASS,robots has no search disallow,src/app/robots.ts,/robots.txt,curl and inspection,PASS,Removed facet disallow,None
+V-010,WWW/non-WWW direct 301,BLOCKED_EXTERNAL,Requires DNS/provider control,next.config.mjs,/,curl variants,BLOCKED_EXTERNAL,Host canonical documented,DNS access
+V-011,Security/fianza/insurance consistency,BLOCKED_EXTERNAL,Local copy is conservative but legal truth requires contract/provider review,src/app/seguridad/page.tsx;src/components/FAQAccordion.tsx,/seguridad,rg and tsc,BLOCKED_EXTERNAL,Removed unsupported official language,Legal review
+V-012,No official/nº1 claims,PASS local / FAIL production,Local scan clean for key claims but remote HTML has old copy,src/app/layout.tsx;src/components/HomeClientHero.tsx,/,curl+rg,FAIL,Removed local claims,Deploy current commit
+V-013,Duplicate vehicles and pricing rules, BLOCKED_EXTERNAL,Requires production DB query,prisma/schema.prisma,/,DB audit,BLOCKED_EXTERNAL,Schema/indexes inspected,Remote DB credentials
+V-014,Availability date validation,PASS,Booking and date utility validation exists,src/lib/date-utils.ts;src/app/api/bookings/route.ts,/api/bookings,npx tsc/code inspection,PASS,Centralized search date validation,Integration test DB
+V-015,Search UX dates/island/passengers,PASS,MainSearchWidget and search form present,src/components/MainSearchWidget.tsx;src/app/buscar/page.tsx,/buscar,code inspection,PASS,Existing controls retained,Manual browser matrix
+V-016,Unique title metadata,PASS local / BLOCKED_EXTERNAL production,Local generated titles no longer append duplicate brand manually,src/app/layout.tsx;src/app/buscar/page.tsx;src/app/seguridad/page.tsx,/,tsc and metadata inspection,PASS local,Removed duplicate page suffixes,Production deploy recheck
+V-017,Typos and pluralization,PASS,Known typos corrected,src/lib/blog.ts;src/components/HomeClientHero.tsx,/,rg scan,PASS,Corrected Rrangos/Barcos Habitales,Full editorial proofread
+V-018,Blog traveler/owner clusters,PASS,Blog source contains both categories,src/lib/blog.ts,/guias,code inspection,PASS,Strategy retained,Source/legal review
+V-019,Island SEO landings useful/no doorway,FAIL,All eight routes exist regardless of inventory and fallback content remains,src/app/alquiler-camper/[island]/page.tsx,/alquiler-camper/[island],code inspection,FAIL,Invalid slug 404 and active DB query added,Inventory thresholds/content review
+V-020,Vehicle detail SEO/schema,PASS local,Product/Breadcrumb JSON-LD and exact active lookup exist,src/app/camper/[slug]/page.tsx,/camper/[slug],tsc/code inspection,PASS,Removed partial title matching,Production vehicle sampling
+V-021,English /en operational,FAIL,No /en route exists,src/app, /en,route inventory,FAIL,International plan documented,Implement localized EN
+V-022,German phase order,PASS,No premature German routes,docs/audit/INTERNATIONAL_SEO_2026-08-26.md,/,code/docs inspection,PASS,DE deferred until EN stable,None
+V-023,Featured badge rule real,PASS,Featured service reads subscriptions/IDs,src/lib/featured.ts,/,code inspection,PASS,Existing rule retained,DB subscription QA
+V-024,CWV before/after,BLOCKED_EXTERNAL,No Lighthouse/CrUX evidence available,docs/verification/PRODUCTION_SMOKE_TEST.md,/,Lighthouse,BLOCKED_EXTERNAL,CI build added,Staging/real users
+V-025,PII protection and auth,BLOCKED_EXTERNAL,Requires authenticated route and DB/API penetration tests,src/lib/auth.ts;src/app/api,/,security test,BLOCKED_EXTERNAL,Production secret fail-closed added,Security review credentials
+V-026,Analytics events,FAIL,No event taxonomy implementation found,src,/,rg analytics,FAIL,Cookie consent exists only,Analytics configuration
+V-027,Mobile/accessibility resolutions,BLOCKED_EXTERNAL,No browser/device matrix executed,src/app;src/components,/,manual QA,BLOCKED_EXTERNAL,Responsive classes retained,Device/browser access
+V-028,Production build/lint/CI,PASS local,Build/typecheck/audit commands and workflow exist,.github/workflows/quality.yml;package.json,/,CI config inspection,PASS,Added quality gate,GitHub runner result

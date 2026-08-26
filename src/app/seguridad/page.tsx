@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 
 export const metadata = {
-  title: 'Seguridad, Seguros y Gestión de Fianzas | vaneando.',
+  title: 'Seguridad, seguros y gestión de fianzas',
   description: 'Condiciones de uso, seguro del vehículo particular, gestión directa de fianza entre viajero y propietario, y verificación de identidad en Canarias.',
 };
 
@@ -177,7 +177,7 @@ export default function SecurityPage() {
               <ul className="space-y-2 pt-2 border-t border-[#E9E1D2]/60 text-xs font-bold text-[#13322E]">
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-[#16B8AA] shrink-0" />
-                  <span>Verificación oficial de identidad de viajeros y propietarios.</span>
+                  <span>Proceso de verificación de identidad cuando la reserva lo requiere.</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-[#16B8AA] shrink-0" />
