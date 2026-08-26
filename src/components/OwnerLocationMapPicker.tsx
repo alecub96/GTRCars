@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { MapPin, Compass, ShieldCheck, Info, CheckCircle2 } from 'lucide-react';
+import { MapPin, Compass, ShieldCheck, Info, CheckCircle2, LocateFixed } from 'lucide-react';
 
 interface OwnerLocationMapPickerProps {
   island: string;
@@ -137,6 +137,25 @@ export default function OwnerLocationMapPicker({
 
   const presets = MUNICIPALITY_PRESETS[island] || [];
 
+  const updateCoordinate = (key: 'lat' | 'lng', value: string) => {
+    const numericValue = Number(value);
+    if (!Number.isFinite(numericValue)) return;
+    const next = { ...selectedCoords, [key]: numericValue };
+    setSelectedCoords(next);
+    onChange({ latitude: next.lat, longitude: next.lng, addressApprox });
+  };
+
+  const useBrowserLocation = () => {
+    if (!navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(({ coords }) => {
+      const { minLat, maxLat, minLng, maxLng } = currentIslandConfig.bounds;
+      if (coords.latitude < minLat || coords.latitude > maxLat || coords.longitude < minLng || coords.longitude > maxLng) return;
+      const next = { lat: Number(coords.latitude.toFixed(6)), lng: Number(coords.longitude.toFixed(6)) };
+      setSelectedCoords(next);
+      onChange({ latitude: next.lat, longitude: next.lng, addressApprox });
+    });
+  };
+
   return (
     <div className="space-y-4 bg-white p-5 sm:p-6 rounded-3xl border border-[#E9E1D2] shadow-sm">
       <div>
@@ -212,6 +231,20 @@ export default function OwnerLocationMapPicker({
         <div className="absolute bottom-2 right-2 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-bold text-[#13322E] shadow border border-[#E9E1D2] pointer-events-none">
           📍 Haz clic en el mapa para mover la zona
         </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <label className="text-[10px] font-black uppercase tracking-wider text-[#6B726E]">
+          Latitud
+          <input type="number" step="0.000001" value={selectedCoords.lat} onChange={(event) => updateCoordinate('lat', event.target.value)} className="mt-1 w-full rounded-xl border border-[#E9E1D2] p-3 text-sm font-semibold text-[#13322E]" />
+        </label>
+        <label className="text-[10px] font-black uppercase tracking-wider text-[#6B726E]">
+          Longitud
+          <input type="number" step="0.000001" value={selectedCoords.lng} onChange={(event) => updateCoordinate('lng', event.target.value)} className="mt-1 w-full rounded-xl border border-[#E9E1D2] p-3 text-sm font-semibold text-[#13322E]" />
+        </label>
+        <button type="button" onClick={useBrowserLocation} className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl border border-[#16B8AA]/40 bg-[#16B8AA]/10 px-3 py-3 text-xs font-bold text-[#0F766E] hover:bg-[#16B8AA] hover:text-white">
+          <LocateFixed className="h-4 w-4" /> Usar mi ubicación
+        </button>
       </div>
 
       {/* DESCRIPCIÓN DE LA ZONA / REFERENCIA */}

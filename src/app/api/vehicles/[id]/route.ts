@@ -16,10 +16,10 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
   try {
     await ensureDbSchema();
     const { id } = await context.params;
+    const currentUser = await getCurrentUser().catch(() => null);
 
     let vehicle = await prisma.vehicle.findFirst({
       where: {
-        status: 'ACTIVE',
         OR: [{ id }, { slug: id }],
       },
       include: {
@@ -41,6 +41,11 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
     });
 
     if (!vehicle) return NextResponse.json({ error: 'Vehículo no encontrado' }, { status: 404 });
+
+    const canViewPrivateVehicle = Boolean(currentUser && (currentUser.role === 'ADMIN' || currentUser.id === vehicle.ownerId));
+    if (vehicle.status !== 'ACTIVE' && !canViewPrivateVehicle) {
+      return NextResponse.json({ error: 'Vehículo no encontrado' }, { status: 404 });
+    }
 
     return NextResponse.json({ success: true, vehicle });
   } catch (error) {

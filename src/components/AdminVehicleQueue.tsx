@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { CheckCircle2, XCircle, ExternalLink, RefreshCw, AlertCircle, ShieldCheck, Eye, Trash2 } from 'lucide-react';
+import { CheckCircle2, XCircle, ExternalLink, RefreshCw, AlertCircle, ShieldCheck, Eye, Trash2, Pencil } from 'lucide-react';
 
 export default function AdminVehicleQueue() {
   const [vehicles, setVehicles] = useState<any[]>([]);
@@ -241,6 +241,14 @@ export default function AdminVehicleQueue() {
                   >
                     <Eye className="w-3.5 h-3.5 text-[#16B8AA]" />
                     <span>Ver Ficha</span>
+                  </a>
+
+                  <a
+                    href={`/propietario/editar/${encodeURIComponent(v.id)}`}
+                    className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-full border border-[#16B8AA]/40 bg-[#16B8AA]/10 text-xs font-bold text-[#0F766E] hover:bg-[#16B8AA] hover:text-white transition-all"
+                  >
+                    <Pencil className="w-3.5 h-3.5" />
+                    <span>Editar</span>
                   </a>
 
                   {v.status !== 'ACTIVE' && (
