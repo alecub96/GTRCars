@@ -213,6 +213,7 @@ export async function ensureDbSchema() {
       await prisma.$executeRawUnsafe(sq).catch(() => {});
     }
 
+    /*
     // Retirar del inventario público cualquier fixture histórico conocido.
     await prisma.$executeRawUnsafe(
       `UPDATE Vehicle SET status = 'ARCHIVED' WHERE slug IN (?, ?, ?, ?, ?, ?, ?, ?) OR title IN (?, ?, ?, ?, ?, ?, ?, ?)`,
@@ -283,6 +284,7 @@ export async function ensureDbSchema() {
         `%${c.brand}%`
       ).catch(() => {});
     }
+    */
 
     schemaEnsured = true;
     } catch (err) {

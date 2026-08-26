@@ -12,6 +12,8 @@ const vehicleApi = fs.readFileSync('src/app/api/vehicles/[id]/route.ts', 'utf8')
 const jwt = fs.readFileSync('src/lib/jwt.ts', 'utf8');
 const uploads = fs.readFileSync('src/lib/uploads.ts', 'utf8');
 const seed = fs.readFileSync('prisma/seed.ts', 'utf8');
+const schemaEnsure = fs.readFileSync('src/lib/prisma-ensure-schema.ts', 'utf8');
+const executableSchemaEnsure = schemaEnsure.replace(/\/\*[\s\S]*?\*\//g, '');
 
 assert.equal(search.includes('REALISTIC_CANARIAN_CAMPERS'), false, 'demo inventory must not be public search inventory');
 assert.equal(sitemap.includes('REALISTIC_CANARIAN_CAMPERS'), false, 'demo inventory must not be in sitemap');
@@ -27,5 +29,7 @@ assert.equal(vehicleApi.includes('REALISTIC_CANARIAN_CAMPERS'), false, 'vehicle 
 assert.match(jwt, /JWT_SECRET debe estar configurado/, 'JWT must fail closed without a production secret');
 assert.match(uploads, /NODE_ENV === 'production'/, 'document encryption must fail closed without a production secret');
 assert.match(seed, /ALLOW_DEMO_SEED !== 'true'/, 'demo seed must require explicit opt-in');
+assert.equal(executableSchemaEnsure.includes("UPDATE Vehicle SET status = 'ARCHIVED'"), false, 'startup schema check must not change vehicle status');
+assert.equal(executableSchemaEnsure.includes('title LIKE'), false, 'startup schema check must not rewrite vehicles by title');
 assert.equal(fs.existsSync('docs/audit/VANEANDO_BASELINE_2026-08-26.md'), true);
 console.log('Integrity audit passed');
