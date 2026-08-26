@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { MapPin, Compass, ShieldCheck, Info, CheckCircle2, LocateFixed } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Compass, ShieldCheck, LocateFixed } from 'lucide-react';
 
 interface OwnerLocationMapPickerProps {
   island: string;
@@ -99,6 +99,77 @@ export default function OwnerLocationMapPicker({
     lng: initialLng || currentIslandConfig.lng,
   });
   const [addressApprox, setAddressApprox] = useState<string>(initialAddressApprox || municipality);
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<any>(null);
+  const markerRef = useRef<any>(null);
+  const circleRef = useRef<any>(null);
+  const [mapReady, setMapReady] = useState(false);
+
+  useEffect(() => {
+    const cssId = 'owner-location-leaflet-css';
+    const scriptId = 'owner-location-leaflet-js';
+    if (!document.getElementById(cssId)) {
+      const link = document.createElement('link');
+      link.id = cssId;
+      link.rel = 'stylesheet';
+      link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      document.head.appendChild(link);
+    }
+
+    const initialiseMap = () => {
+      if (!mapContainerRef.current || mapRef.current || !(window as any).L) return;
+      const L = (window as any).L;
+      const map = L.map(mapContainerRef.current, { scrollWheelZoom: true }).setView(
+        [selectedCoords.lat, selectedCoords.lng],
+        10,
+      );
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 19,
+      }).addTo(map);
+      map.on('click', (event: any) => {
+        const next = { lat: Number(event.latlng.lat.toFixed(6)), lng: Number(event.latlng.lng.toFixed(6)) };
+        setSelectedCoords(next);
+        onChange({ latitude: next.lat, longitude: next.lng, addressApprox });
+      });
+      mapRef.current = map;
+      setMapReady(true);
+    };
+
+    const existing = document.getElementById(scriptId);
+    if (existing) {
+      initialiseMap();
+    } else {
+      const script = document.createElement('script');
+      script.id = scriptId;
+      script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+      script.onload = initialiseMap;
+      document.body.appendChild(script);
+    }
+    return () => {
+      mapRef.current?.remove();
+      mapRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    const L = (window as any).L;
+    if (!map || !L) return;
+    map.setView([selectedCoords.lat, selectedCoords.lng]);
+    markerRef.current?.remove();
+    circleRef.current?.remove();
+    markerRef.current = L.marker([selectedCoords.lat, selectedCoords.lng], { draggable: true })
+      .addTo(map)
+      .bindTooltip('Arrastra el pin a la zona elegida', { permanent: true, direction: 'top' });
+    markerRef.current.on('dragend', () => {
+      const position = markerRef.current.getLatLng();
+      const next = { lat: Number(position.lat.toFixed(6)), lng: Number(position.lng.toFixed(6)) };
+      setSelectedCoords(next);
+      onChange({ latitude: next.lat, longitude: next.lng, addressApprox });
+    });
+    circleRef.current = L.circle([selectedCoords.lat, selectedCoords.lng], { radius: 1500, color: '#16B8AA', fillColor: '#16B8AA', fillOpacity: 0.18 }).addTo(map);
+  }, [selectedCoords, mapReady]);
 
   useEffect(() => {
     // Si cambia la isla en el formulario, reubicar el centro
@@ -107,33 +178,11 @@ export default function OwnerLocationMapPicker({
     onChange({ latitude: newConfig.lat, longitude: newConfig.lng, addressApprox });
   }, [island]);
 
-  // Click en el mapa para marcar punto exacto
-  const handleMapClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    const percentX = x / rect.width;
-    const percentY = y / rect.height;
-
-    const { minLat, maxLat, minLng, maxLng } = currentIslandConfig.bounds;
-    const newLng = minLng + percentX * (maxLng - minLng);
-    const newLat = maxLat - percentY * (maxLat - minLat);
-
-    setSelectedCoords({ lat: newLat, lng: newLng });
-    onChange({ latitude: newLat, longitude: newLng, addressApprox });
-  };
-
   const handleSelectPreset = (preset: { lat: number; lng: number; label: string }) => {
     setSelectedCoords({ lat: preset.lat, lng: preset.lng });
     setAddressApprox(preset.label);
     onChange({ latitude: preset.lat, longitude: preset.lng, addressApprox: preset.label });
   };
-
-  // Convertir coordenadas a porcentaje visual
-  const { minLat, maxLat, minLng, maxLng } = currentIslandConfig.bounds;
-  const pinX = Math.max(5, Math.min(95, ((selectedCoords.lng - minLng) / (maxLng - minLng)) * 100));
-  const pinY = Math.max(5, Math.min(95, 100 - ((selectedCoords.lat - minLat) / (maxLat - minLat)) * 100));
 
   const presets = MUNICIPALITY_PRESETS[island] || [];
 
@@ -167,7 +216,7 @@ export default function OwnerLocationMapPicker({
           Ubicación aproximada en el mapa ({island})
         </h3>
         <p className="text-xs text-[#6B726E] font-medium mt-1">
-          Haz clic en el mapa o selecciona un punto de referencia para marcar la <strong>zona aproximada de recogida/entrega</strong> de tu camper.
+          Arrastra el pin hasta la <strong>zona aproximada de recogida/entrega</strong> de tu camper. También puedes hacer clic en el mapa o usar las coordenadas.
         </p>
       </div>
 
@@ -197,41 +246,7 @@ export default function OwnerLocationMapPicker({
       )}
 
       {/* MAPA INTERACTIVO DE SELECCIÓN DE UBICACIÓN */}
-      <div
-        onClick={handleMapClick}
-        className="relative h-64 sm:h-72 w-full rounded-2xl bg-[#EBE7DF] border border-[#E9E1D2] overflow-hidden cursor-crosshair shadow-inner select-none group"
-      >
-        {/* FONDO DEL MAPA */}
-        <div className="absolute inset-0 bg-[radial-gradient(#16b8aa_1px,transparent_1px)] [background-size:14px_14px] bg-[#EAE6DE]">
-          <div className="absolute inset-0 flex items-center justify-center opacity-25 pointer-events-none">
-            <Compass className="w-48 h-48 text-[#13322E]" />
-          </div>
-        </div>
-
-        {/* CÍRCULO TRANSLÚCIDO DE RADIO APROXIMADO (~1.5 KM) */}
-        <div
-          style={{ left: `${pinX}%`, top: `${pinY}%` }}
-          className="absolute -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-[#16B8AA]/20 border-2 border-[#16B8AA] pointer-events-none animate-pulse"
-        />
-
-        {/* PIN MARCADOR */}
-        <div
-          style={{ left: `${pinX}%`, top: `${pinY}%` }}
-          className="absolute -translate-x-1/2 -translate-y-full pointer-events-none transition-all duration-200 z-20"
-        >
-          <div className="flex flex-col items-center">
-            <div className="bg-[#13322E] text-white text-[10px] font-bold px-2 py-1 rounded-md shadow-lg whitespace-nowrap mb-1 flex items-center space-x-1 border border-white/20">
-              <MapPin className="w-3 h-3 text-[#16B8AA]" />
-              <span>Zona Elegida</span>
-            </div>
-            <div className="w-4 h-4 rounded-full bg-[#16B8AA] border-2 border-white shadow-md" />
-          </div>
-        </div>
-
-        <div className="absolute bottom-2 right-2 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-bold text-[#13322E] shadow border border-[#E9E1D2] pointer-events-none">
-          📍 Haz clic en el mapa para mover la zona
-        </div>
-      </div>
+      <div ref={mapContainerRef} className="relative z-0 h-64 sm:h-72 w-full rounded-2xl border border-[#E9E1D2] overflow-hidden cursor-crosshair shadow-inner" />
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         <label className="text-[10px] font-black uppercase tracking-wider text-[#6B726E]">
