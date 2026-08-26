@@ -262,6 +262,24 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
           <h1 className="font-serif text-3xl sm:text-5xl font-normal text-[#1C2826]">
             {vehicle.title}
           </h1>
+          {(currentUser?.role === 'ADMIN' || currentUser?.id === (vehicle.owner?.id || vehicle.ownerId)) && (
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <Link
+                href={`/propietario/editar/${encodeURIComponent(String(vehicle.id))}`}
+                className="inline-flex items-center rounded-full bg-[#13322E] px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-sm transition-colors hover:bg-[#16B8AA]"
+              >
+                Editar anuncio
+              </Link>
+              {currentUser?.role === 'ADMIN' && (
+                <Link
+                  href="/admin"
+                  className="inline-flex items-center rounded-full border border-[#E9E1D2] bg-white px-5 py-2.5 text-xs font-black uppercase tracking-wider text-[#13322E] transition-colors hover:border-[#16B8AA]"
+                >
+                  Panel de administración
+                </Link>
+              )}
+            </div>
+          )}
           <div className="flex items-center space-x-4 mt-3 text-xs text-[#4A4643]">
             {vehicle.reviews?.length > 0 ? (
               <div className="flex items-center space-x-1 font-semibold text-[#1C2826]">
