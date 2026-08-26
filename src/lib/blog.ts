@@ -180,6 +180,75 @@ const BASE_BLOG_ARTICLES: BlogArticle[] = [
           'Todos los vehículos pasan por una verificación de identidad y documentación exigente (DNI/NIE y carné de conducir de propietarios y viajeros), las fianzas se gestionan de forma transparente entre particulares y los precios no tienen costes ocultos.',
         ],
       },
+      {
+        heading: 'Hotel o camper: cómo calcular el coste completo',
+        paragraphs: [
+          'La comparación empieza por separar gastos fijos y variables. En un hotel, la habitación puede parecer el importe principal, pero normalmente se suman transporte desde el aeropuerto, alquiler de coche, aparcamiento, desayunos, comidas y desplazamientos diarios. En una camper, el alquiler reúne alojamiento y movilidad, aunque hay que añadir combustible, compra de alimentos, limpieza o servicios que indique el anuncio. La cifra correcta es la que refleja tus fechas y tu forma de viajar, no una tarifa publicitaria aislada.',
+          'Haz una hoja sencilla con siete columnas: alojamiento, transporte, comida, aparcamiento o camping, actividades, extras y margen para imprevistos. Después completa la misma hoja para hotel y camper. Si sois una pareja que quiere cambiar de zona cada dos días, el vehículo vivienda puede ahorrar traslados; si prefieres permanecer toda la semana en un resort con servicios incluidos, el hotel puede resultar más cómodo. La decisión debe basarse en el uso real que darás a cada opción.',
+          'También debes contar el valor del tiempo. Un hotel en el sur obliga a volver a la misma base después de visitar el norte o la cumbre. Esa vuelta no siempre aparece en el precio, pero sí en horas de conducción y combustible. La camper permite dormir más cerca de la siguiente actividad cuando existe un lugar autorizado, aunque exige organizar agua, residuos y estacionamiento. La libertad tiene responsabilidades y conviene incorporarlas al presupuesto y al itinerario.'
+        ],
+      },
+      {
+        heading: 'Las mejores zonas de Gran Canaria para cada estilo de viaje',
+        paragraphs: [
+          'La capital ofrece museos, barrios históricos, mercados y servicios; es una base práctica para quien quiere combinar cultura urbana con salidas de un día. El norte, con Arucas, Firgas, Guía y Agaete, aporta paisaje verde, arquitectura y gastronomía. El sur reúne playas, dunas y una oferta turística amplia. El interior cambia por completo el clima y el paisaje, con carreteras de montaña, miradores y pueblos donde el ritmo es más pausado.',
+          'Con hotel tendrás que elegir una base y aceptar los tiempos de ida y vuelta. Con camper puedes dividir el recorrido en zonas, pero no significa que puedas estacionar o pernoctar en cualquier lugar. Consulta siempre la señalización local, las áreas autorizadas y las normas de espacios protegidos. Dormir cerca de un paisaje no justifica ocupar un acceso, desplegar elementos exteriores o dejar residuos.',
+          'Para una semana equilibrada, reserva varias noches para la capital y el norte, una jornada de cumbre si la meteorología acompaña y tiempo suficiente para la costa. Evita cambiar de ubicación cada noche solo para marcar más puntos en el mapa. El viaje mejora cuando puedes desayunar sin prisa, caminar, comer un producto local y dejar margen para una carretera lenta o una conversación con el propietario.'
+        ],
+      },
+      {
+        heading: 'Comer en restaurante o cocinar durante el viaje',
+        paragraphs: [
+          'La comida es una de las partidas que más modifica la comparación. Dos personas que comen siempre fuera pueden gastar una cantidad importante incluso eligiendo menús económicos. Una camper equipada permite preparar desayunos, ensaladas, bocadillos o cenas sencillas, pero hay que comprobar si incluye fogón, nevera, menaje, mesa y espacio de trabajo. No des por hecho que todas las conversiones tienen la misma cocina.',
+          'Cocinar no significa renunciar a la gastronomía de Gran Canaria. Puedes comprar fruta, queso, pan, pescado o productos locales y reservar algunas comidas en restaurantes. La combinación suele ser más flexible que un régimen de hotel porque decides dónde y cuándo comer. Organiza la compra después de la entrega, guarda los alimentos de forma segura y evita conducir con objetos sueltos dentro del habitáculo.',
+          'Si viajas con alergias, niños o necesidades especiales, pregunta por el equipamiento y planifica un menú de emergencia. La autonomía resulta valiosa cuando una ruta termina lejos de una zona turística, pero también requiere limpiar, gestionar residuos y respetar las condiciones del propietario. Es otra diferencia práctica que debe valorarse junto al ahorro.'
+        ],
+      },
+      {
+        heading: 'Libertad de horarios sin perder la planificación',
+        paragraphs: [
+          'El hotel proporciona una rutina cómoda: recepción, desayuno, limpieza y servicios disponibles a unas horas concretas. La camper cambia esa estructura por autonomía. Puedes salir temprano para evitar calor, parar en un mirador o modificar el plan si el viento aumenta. Esta flexibilidad es uno de los motivos principales para elegirla, pero necesita una mínima organización diaria.',
+          'Cada noche revisa la previsión meteorológica, el combustible, el agua, la batería y el siguiente punto de parada. Lleva una alternativa por si el aparcamiento está lleno o la carretera no resulta adecuada para el tamaño del vehículo. En temporada alta, la improvisación puede terminar en un desplazamiento largo al final del día. Planificar no elimina la aventura; permite disfrutarla con menos estrés.',
+          'El respeto por los horarios también afecta a la entrega y devolución. Confirma la hora con el propietario, avisa si el vuelo cambia y no prolongues una ruta que te obligue a llegar tarde. La flexibilidad funciona cuando existe comunicación. Dentro de Vaneando puedes mantener los acuerdos registrados y consultar la información durante el alquiler.'
+        ],
+      },
+      {
+        heading: 'Comodidad, espacio y convivencia en una camper',
+        paragraphs: [
+          'Una habitación de hotel ofrece un espacio estable, baño privado y servicios que no dependen de una instalación móvil. Una camper ofrece cercanía al paisaje y una experiencia compartida, pero el espacio es limitado. Antes de elegirla, comprueba las plazas homologadas para viajar, las plazas para dormir, la distribución de la cama, la altura interior, el almacenamiento y la ventilación. La cifra de ocupantes del anuncio no siempre describe cómo se duerme.',
+          'Para una pareja, una camper compacta puede resultar suficiente y sencilla de conducir. Para una familia, el espacio de almacenamiento, la seguridad de las plazas y la facilidad para montar camas adquieren más importancia. Un grupo de amigos debe hablar de turnos, equipaje, intimidad y uso del baño antes de reservar. Las expectativas claras evitan que la primera noche se convierta en una negociación incómoda.',
+          'La limpieza también requiere colaboración. Ventila sin dejar puertas abiertas con viento fuerte, cocina con cuidado, utiliza productos adecuados y devuelve cada elemento a su lugar. La comodidad de la siguiente persona depende de esos hábitos. Si necesitas una ducha o un baño interior, filtra por esas características y confirma que el equipamiento está operativo.'
+        ],
+      },
+      {
+        heading: 'Temporada, clima y disponibilidad en la isla',
+        paragraphs: [
+          'Gran Canaria mantiene demanda turística durante todo el año, pero el precio cambia con vacaciones, puentes y meses de mayor llegada internacional. Los hoteles pueden tener ofertas de última hora en determinadas zonas; las campers particulares pueden agotarse rápido cuando coinciden vuelos y buen tiempo. Compara fechas alternativas si tienes margen y pregunta por descuentos de estancias largas sin dar por hecho que existirán.',
+          'El clima tampoco es uniforme. La costa sur puede estar soleada mientras el interior presenta nubes o temperaturas más bajas. Lleva capas, protege alimentos y dispositivos, y no programes una noche al aire libre sin una alternativa. El viento afecta especialmente a toldos, sillas y puertas. Si el vehículo incluye elementos exteriores, pregunta cómo deben utilizarse y en qué lugares están permitidos.',
+          'En temporada alta reserva con tiempo y confirma el punto de entrega antes de comprar actividades con horario cerrado. En temporada baja podrás encontrar más disponibilidad, pero debes revisar días festivos, horarios de comercios y servicios abiertos. Una buena planificación combina la flexibilidad de la camper con la previsión necesaria para no depender de la suerte.'
+        ],
+      },
+      {
+        heading: 'Decisión final: qué viajero debería elegir cada opción',
+        paragraphs: [
+          'El hotel suele encajar con quien busca servicio continuo, baño privado, piscina, recepción y una base fija. Es una elección razonable si el viaje se concentra en una zona, si no quieres ocuparte de suministros o si prefieres pagar por una experiencia estructurada. No es una opción peor; responde a prioridades distintas y puede resultar ideal para descansar después de una actividad exigente.',
+          'La camper encaja con quien quiere combinar alojamiento y transporte, cambiar de paisaje, cocinar algunas comidas y acercarse a diferentes zonas sin repetir trayectos. Requiere conducir, cuidar el vehículo, revisar condiciones y respetar la normativa de estacionamiento y pernocta. La libertad se disfruta más cuando el viajero acepta esas responsabilidades desde el primer día.',
+          'Para decidir, responde a cinco preguntas: ¿quieres cambiar de zona?, ¿necesitas una cocina?, ¿te gusta conducir?, ¿aceptas planificar suministros?, ¿el presupuesto mejora al sumar todos los gastos? Si la mayoría apunta a movilidad y autonomía, compara campers en Vaneando. Lee la ficha, consulta al propietario y reserva solo cuando el precio, el vehículo y las condiciones sean claros.'
+        ],
+      },
+      {
+        heading: 'Cómo organizar siete días y medir el ahorro de verdad',
+        paragraphs: [
+          'Un ejemplo práctico ayuda a entender la diferencia. Imagina una pareja que llega un lunes por la mañana y quiere conocer varios paisajes sin pasar todas las vacaciones en una carretera. Con hotel puede reservar una base en el sur y utilizar un coche para las excursiones, regresando cada noche al mismo alojamiento. Con camper puede recoger el vehículo, comprar provisiones y dedicar la primera tarde a una zona cercana; después puede avanzar hacia el norte, reservar una jornada para la cumbre y terminar junto a la costa oeste, siempre utilizando lugares de estacionamiento y pernocta permitidos.',
+          'El itinerario no debe tratarse como una carrera. El lunes necesita margen para el vuelo, la entrega y la explicación. El martes puede combinar una visita cultural con una ruta corta. El miércoles conviene revisar combustible y agua antes de cambiar de zona. El jueves puede reservarse para un mirador o una experiencia local, como un picnic previamente contratado. El viernes debe contar con una alternativa si el viento o la niebla impiden subir a la cumbre. El fin de semana puede cerrarse cerca del punto de devolución para evitar una última jornada agotadora. Esta estructura es más importante que acumular nombres de lugares.',
+          'Para medir el ahorro, suma primero lo que realmente habrías pagado con hotel: habitación, coche, aparcamiento, comidas, combustible y traslados. Después suma camper, compra de supermercado, combustible, servicios, camping si lo necesitas, actividades y comisión de la plataforma. No incluyas la fianza como gasto definitivo, pero sí recuerda que inmoviliza dinero temporalmente. Si la diferencia resulta pequeña, decide por comodidad y preferencias; si resulta amplia, comprueba que ambas opciones ofrecen la misma capacidad y el mismo nivel de cobertura.',
+          'La camper también puede reducir gastos que no son tan visibles. Preparar un desayuno antes de salir evita buscar un restaurante cada mañana; llevar agua y fruta reduce compras impulsivas; dormir más cerca de una excursión acorta trayectos. Pero esos beneficios desaparecen si compras demasiados alimentos, conduces sin plan o pagas servicios inesperados por no leer el anuncio. La economía de la camper nace de organizarse, no de asumir que todo será gratis.',
+          'En una familia, el cálculo cambia porque una habitación puede requerir dos habitaciones o una suite. La camper puede reunir a todos en un solo espacio, pero hay que verificar camas, plazas homologadas, sillas infantiles y almacenamiento. En una pareja, una camper pequeña puede ser más eficiente que una autocaravana grande. Para cada grupo existe un punto de equilibrio distinto y la mejor decisión es la que permite descansar, conducir con seguridad y cumplir las condiciones de la reserva.',
+          'Antes de confirmar, revisa las opiniones con criterio. Una valoración positiva puede destacar la atención del propietario, pero no decir si el vehículo tiene baño, si la cama es cómoda o si la entrega se hizo cerca del aeropuerto. Lee la descripción completa y formula preguntas concretas. En Vaneando, mantener la conversación dentro de la plataforma ayuda a que precio, horarios, equipamiento y acuerdos queden disponibles para ambas partes. Esa trazabilidad es parte del valor de la reserva.',
+          'La conclusión no es que el hotel sea siempre caro ni que la camper sea siempre barata. Son productos diferentes. El hotel compra comodidad fija y servicios; la camper compra movilidad y autonomía. Gran Canaria recompensa ambas formas de viajar: puedes descansar en un resort, recorrer la isla en coche, cocinar frente a un paisaje o combinar una experiencia gastronómica con una noche en otra zona. La comparación solo es honesta cuando se reconocen las obligaciones de cada opción y se calcula el coste completo. Antes de salir, comparte el plan con tus acompañantes, confirma la hora de entrega y guarda la documentación necesaria para disfrutar sin sorpresas. Revisa también la previsión, el combustible y la ubicación aproximada del siguiente descanso. Así podrás disfrutar de la libertad con responsabilidad y volver con una experiencia positiva, buenas fotografías y recuerdos compartidos para siempre. La planificación previa transforma un gasto en una experiencia completa, cómoda y memorable.'
+          'Si eliges camper, empieza por tus prioridades y no por una fotografía espectacular. Filtra fechas, isla, número de personas y equipamiento. Compara tres anuncios, anota todos los importes y pregunta por lo que no esté claro. Si eliges hotel, calcula también los trayectos diarios y el precio de las comidas. En ambos casos, reserva margen para el clima y las carreteras. Una semana bien diseñada vale más que una lista interminable de lugares visitados deprisa.'
+        ],
+      },
     ],
     faqs: [
       {
