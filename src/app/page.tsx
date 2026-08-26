@@ -4,12 +4,15 @@ import { prisma } from '@/lib/prisma';
 import { getFeaturedAudience } from '@/lib/featured';
 
 export const revalidate = 60;
+const isBuild = process.env.NEXT_PHASE === 'phase-production-build';
 
 export default async function HomePage() {
   let featuredVehicles: any[] = [];
   try {
-    const { ensureDbSchema } = await import('@/lib/prisma-ensure-schema');
-    await ensureDbSchema().catch(() => {});
+    if (!isBuild) {
+      const { ensureDbSchema } = await import('@/lib/prisma-ensure-schema');
+      await ensureDbSchema().catch(() => {});
+    }
     const fetchVehiclesPromise = prisma.vehicle.findMany({
       where: { status: 'ACTIVE' },
       include: {
