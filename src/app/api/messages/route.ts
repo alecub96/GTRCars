@@ -6,14 +6,14 @@ import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-er
 // REGEX DE BLINDAJE ANTI-BYPASS Y ANTI-FRAUDE
 // 1. Detección de números de teléfono (españoles o internacionales, con espacios, puntos, guiones o texto disimulado "seis doce...")
 const PHONE_REGEX = /(\+?34|0034)?[\s\.\-_]*[6789](\s*\d){8}/i;
-const SPELLED_NUMBERS_REGEX = /(seis|siete|ocho|nueve|cero|uno|dos|tres|cuatro|cinco)[\s\.\-_]+(seis|siete|ocho|nueve|cero|uno|dos|tres|cuatro|cinco)/i;
+const SPELLED_NUMBERS_REGEX = /\b(cero|uno|dos|tres|cuatro|cinco|seis|siete|ocho|nueve)([\s\.\-_]+(cero|uno|dos|tres|cuatro|cinco|seis|siete|ocho|nueve)){3,}\b/i;
 
-// 2. Detección de correos electrónicos
+// 2. Detección de correos electrónicos y dominios
 const EMAIL_REGEX = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/i;
-const AT_SPELLED_REGEX = /(arroba|at|gmail|hotmail|yahoo|outlook|icloud)/i;
+const AT_SPELLED_REGEX = /\b(arroba|gmail(\.com)?|hotmail(\.com)?|yahoo(\.com)?|outlook(\.com)?|icloud(\.com)?|protonmail)\b/i;
 
 // 3. Detección de competidores y plataformas externas
-const COMPETITORS_REGEX = /(yescapa|booking|airbnb|wikiloc|milanuncios|wallapop|idealista|furgovw|campercontact|park4night)/i;
+const COMPETITORS_REGEX = /\b(yescapa|booking|airbnb|wikiloc|milanuncios|wallapop|idealista|furgovw|campercontact|park4night)\b/i;
 
 export async function POST(request: Request) {
   try {
@@ -31,29 +31,33 @@ export async function POST(request: Request) {
 
     // === SISTEMA DE BLINDAJE DE MENSAJERÍA SEGURA ===
     const cleanContent = content.trim();
+    const isAdmin = user.role === 'ADMIN';
 
-    // Validar Teléfonos
-    if (PHONE_REGEX.test(cleanContent) || SPELLED_NUMBERS_REGEX.test(cleanContent)) {
-      return NextResponse.json(
-        { error: '🛡️ Seguridad: Por tu protección, no está permitido compartir números de teléfono antes de confirmar la reserva.' },
-        { status: 422 }
-      );
-    }
+    // Los administradores de la plataforma no tienen restricciones de filtrado
+    if (!isAdmin) {
+      // Validar Teléfonos
+      if (PHONE_REGEX.test(cleanContent) || SPELLED_NUMBERS_REGEX.test(cleanContent)) {
+        return NextResponse.json(
+          { error: '🛡️ Seguridad: Por tu protección, no está permitido compartir números de teléfono antes de confirmar la reserva.' },
+          { status: 422 }
+        );
+      }
 
-    // Validar Correos Electrónicos
-    if (EMAIL_REGEX.test(cleanContent) || AT_SPELLED_REGEX.test(cleanContent)) {
-      return NextResponse.json(
-        { error: '🛡️ Seguridad: No se permite enviar emails externos por política de protección de datos de la plataforma.' },
-        { status: 422 }
-      );
-    }
+      // Validar Correos Electrónicos
+      if (EMAIL_REGEX.test(cleanContent) || AT_SPELLED_REGEX.test(cleanContent)) {
+        return NextResponse.json(
+          { error: '🛡️ Seguridad: No se permite enviar emails externos por política de protección de datos de la plataforma.' },
+          { status: 422 }
+        );
+      }
 
-    // Validar Menciones a Plataformas Competidoras
-    if (COMPETITORS_REGEX.test(cleanContent)) {
-      return NextResponse.json(
-        { error: '🛡️ Seguridad: No está permitido mencionar marcas de la competencia o plataformas externas.' },
-        { status: 422 }
-      );
+      // Validar Menciones a Plataformas Competidoras
+      if (COMPETITORS_REGEX.test(cleanContent)) {
+        return NextResponse.json(
+          { error: '🛡️ Seguridad: No está permitido mencionar marcas de la competencia o plataformas externas.' },
+          { status: 422 }
+        );
+      }
     }
 
     let activeConversationId = conversationId;
