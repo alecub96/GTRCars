@@ -80,6 +80,19 @@ export default function RealCanaryMapExplorer({
   const [showPois, setShowPois] = useState<boolean>(true);
   const [mapType, setMapType] = useState<'streets' | 'satellite'>('streets');
   const [leafletLoaded, setLeafletLoaded] = useState<boolean>(false);
+  const [mapVehicles, setMapVehicles] = useState<MapCamperItem[]>(vehicles);
+
+  // El mapa se refresca desde el mismo endpoint público que usa el buscador.
+  // Así no depende de una respuesta server-side antigua al cambiar de isla.
+  useEffect(() => {
+    setMapVehicles(vehicles);
+    fetch('/api/vehicles', { cache: 'no-store' })
+      .then((response) => response.ok ? response.json() : null)
+      .then((data) => {
+        if (Array.isArray(data?.vehicles)) setMapVehicles(data.vehicles);
+      })
+      .catch(() => {});
+  }, [vehicles]);
 
   // 1. Cargar dinámicamente Leaflet CSS y JS sin bloquear la página
   useEffect(() => {
@@ -183,8 +196,8 @@ export default function RealCanaryMapExplorer({
     markersLayerRef.current.clearLayers();
 
     const visibleVehicles = activeIsland === 'Canarias'
-      ? vehicles
-      : vehicles.filter((vehicle) => vehicle.island === activeIsland);
+      ? mapVehicles
+      : mapVehicles.filter((vehicle) => vehicle.island === activeIsland);
 
     visibleVehicles.forEach((vehicle, idx) => {
       let lat = vehicle.latitude;
@@ -238,7 +251,7 @@ export default function RealCanaryMapExplorer({
 
       markersLayerRef.current.addLayer(marker);
     });
-  }, [vehicles, selectedVehicle, leafletLoaded, activeIsland]);
+  }, [mapVehicles, selectedVehicle, leafletLoaded, activeIsland]);
 
   // 5. Dibujar Puntos Camper (POIs)
   useEffect(() => {
