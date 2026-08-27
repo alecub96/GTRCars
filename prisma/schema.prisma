@@ -340,6 +340,7 @@ model Booking {
   
   stripePaymentIntentId String?
   stripeTransferId      String?
+  payoutStatus          String        @default("HELD")
 
   createdAt          DateTime      @default(now())
   updatedAt          DateTime      @updatedAt

@@ -3,11 +3,13 @@ import Stripe from 'stripe';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
 import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
+import { ensureDbSchema } from '@/lib/prisma-ensure-schema';
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY || '';
 
 export async function POST(request: Request) {
   try {
+    await ensureDbSchema();
     if (process.env.NODE_ENV === 'production' && (!stripeSecretKey || stripeSecretKey.includes('mock'))) {
       return NextResponse.json({ error: 'Los pagos reales de Stripe no están configurados' }, { status: 503 });
     }
@@ -84,9 +86,10 @@ export async function POST(request: Request) {
       const paymentIntentData: Stripe.Checkout.SessionCreateParams.PaymentIntentData = {
         metadata: { bookingId: booking.id, bookingCode: booking.code, vehicleTitle: booking.vehicle.title },
       };
-      if (booking.owner.stripeAccountId) {
+      const ownerHasPayoutDetails = Boolean(booking.owner.stripeAccountId && booking.owner.iban && booking.owner.bankHolder);
+      if (ownerHasPayoutDetails) {
         paymentIntentData.application_fee_amount = platformFeeCents;
-        paymentIntentData.transfer_data = { destination: booking.owner.stripeAccountId };
+        paymentIntentData.transfer_data = { destination: booking.owner.stripeAccountId as string };
       }
       const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
       const checkout = await stripe.checkout.sessions.create({
@@ -115,7 +118,10 @@ export async function POST(request: Request) {
           type: 'RENTAL_CHARGE',
         },
       });
-      await prisma.booking.update({ where: { id: booking.id }, data: { status: 'PAYMENT_PENDING' } });
+      await prisma.booking.update({
+        where: { id: booking.id },
+        data: { status: 'PAYMENT_PENDING', payoutStatus: ownerHasPayoutDetails ? 'READY' : 'HELD' },
+      });
 
       return NextResponse.json({
         success: true,
@@ -143,6 +149,7 @@ export async function POST(request: Request) {
         data: {
           status: 'CONFIRMED',
           stripePaymentIntentId: mockStripePaymentIntentId,
+          payoutStatus: booking.owner.iban && booking.owner.bankHolder ? 'READY' : 'HELD',
         },
       }),
       prisma.availabilityBlock.create({

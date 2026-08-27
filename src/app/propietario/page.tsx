@@ -22,6 +22,14 @@ export default function OwnerDashboardPage() {
   const [stripeSetupUrl, setStripeSetupUrl] = useState('');
   const [showBankSetup, setShowBankSetup] = useState(false);
   const [serviceError, setServiceError] = useState('');
+  const [payoutReady, setPayoutReady] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    fetch('/api/owner/bank-account', { cache: 'no-store' })
+      .then((res) => res.ok ? res.json() : null)
+      .then((data) => setPayoutReady(data ? Boolean(data.iban && data.bankHolder) : null))
+      .catch(() => setPayoutReady(null));
+  }, []);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.search.includes('anuncio=creado')) {
@@ -140,6 +148,13 @@ export default function OwnerDashboardPage() {
           <div className="mb-8 p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-bold flex items-center space-x-3">
             <BadgeCheck className="w-5 h-5 text-[#D97706] shrink-0" />
             <span>{msg}</span>
+          </div>
+        )}
+        {payoutReady === false && (
+          <div className="mb-8 rounded-2xl border border-amber-300 bg-amber-50 p-5 text-sm text-amber-950">
+            <strong className="block">Tienes campos pendientes para recibir tus cobros</strong>
+            <span className="mt-1 block text-xs">Puedes aceptar reservas y los pagos quedarán retenidos de forma segura hasta que completes tus datos bancarios.</span>
+            <button onClick={handleStripeConnect} className="mt-3 rounded-full bg-[#13322E] px-4 py-2 text-xs font-bold text-white">Completar datos bancarios</button>
           </div>
         )}
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#E9E1D2] bg-white p-5">
