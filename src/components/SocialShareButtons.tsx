@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Share2, Check, Copy, MessageCircle, Send } from 'lucide-react';
+import { trackEvent } from '@/lib/analytics';
 
 interface SocialShareButtonsProps {
   title?: string;
@@ -23,6 +24,7 @@ export default function SocialShareButtons({
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(shareUrl);
+      trackEvent('social_share_click', { channel: 'copy' });
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     } catch (_) {}
@@ -40,6 +42,7 @@ export default function SocialShareButtons({
         href={`https://api.whatsapp.com/send?text=${encodedTitle}%20${encodedUrl}`}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={() => trackEvent('whatsapp_clicked', { placement: 'share' })}
         aria-label="Compartir en WhatsApp"
         className="h-8 w-8 rounded-full bg-[#25D366]/15 hover:bg-[#25D366] text-[#128C7E] hover:text-white flex items-center justify-center transition-all shadow-xs"
       >

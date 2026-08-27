@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Share2, Check, Copy, MessageCircle, Send, X } from 'lucide-react';
+import { trackEvent } from '@/lib/analytics';
 
 interface ShareVehicleButtonProps {
   vehicleTitle: string;
@@ -43,6 +44,7 @@ export default function ShareVehicleButton({
 
     const shareUrl = getFullUrl();
     const shareText = getShareText();
+    trackEvent('vehicle_share', { channel: 'share' in navigator ? 'native' : 'fallback' });
 
     // Intentar Web Share API nativa (WhatsApp, Instagram, AirDrop, Telegram en móviles)
     if (typeof navigator !== 'undefined' && navigator.share) {
@@ -66,6 +68,7 @@ export default function ShareVehicleButton({
   const handleCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(getFullUrl());
+      trackEvent('social_share_click', { channel: 'copy', placement: 'vehicle' });
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     } catch (_) {}

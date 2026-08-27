@@ -3,6 +3,7 @@ import "./globals.css";
 import CookieConsent from '@/components/CookieConsent';
 import BackToTopButton from '@/components/BackToTopButton';
 import MobileStickyCTA from '@/components/MobileStickyCTA';
+import { activeSocialLinks } from '@/lib/social-links';
 
 export const viewport: Viewport = {
   themeColor: '#13322E',
@@ -156,10 +157,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       addressRegion: 'Canarias',
       addressCountry: 'ES',
     },
-    sameAs: [
-      'https://www.facebook.com/vaneando',
-      'https://www.instagram.com/vaneando_canarias',
-    ],
+    sameAs: activeSocialLinks.map(([, url]) => url),
   };
 
   const jsonLdWebSite = {

@@ -13,6 +13,8 @@ import VehicleCardPhotoSlider from '@/components/VehicleCardPhotoSlider';
 import FAQAccordion from '@/components/FAQAccordion';
 import SocialShareButtons from '@/components/SocialShareButtons';
 import ShareVehicleButton from '@/components/ShareVehicleButton';
+import { activeSocialLinks } from '@/lib/social-links';
+import { trackEvent } from '@/lib/analytics';
 import Image from 'next/image';
 
 const ISLAND_HERO_IMAGES: Record<string, string> = {
@@ -577,6 +579,15 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
             <div className="pt-2">
               <SocialShareButtons className="text-white/80" />
             </div>
+            {activeSocialLinks.length > 0 && (
+              <nav aria-label="Perfiles sociales de Vaneando" className="flex flex-wrap gap-x-4 gap-y-2 text-xs font-bold text-white/75">
+                {activeSocialLinks.map(([network, url]) => (
+                  <a key={network} href={url} target="_blank" rel="noopener noreferrer" aria-label={`Vaneando en ${network}`} onClick={() => trackEvent('social_profile_click', { network })} className="capitalize hover:text-white">
+                    {network}
+                  </a>
+                ))}
+              </nav>
+            )}
           </div>
 
           <div>

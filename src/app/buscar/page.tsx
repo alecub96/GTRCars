@@ -26,6 +26,9 @@ interface SearchPageProps {
     startDate?: string;
     endDate?: string;
     view?: string;
+    utm_source?: string;
+    utm_medium?: string;
+    utm_campaign?: string;
   }>;
 }
 
@@ -86,6 +89,11 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const sort = params.sort || 'recommended';
   const startDate = params.startDate;
   const endDate = params.endDate;
+  const attribution = {
+    utm_source: params.utm_source,
+    utm_medium: params.utm_medium,
+    utm_campaign: params.utm_campaign,
+  };
 
   const whereClause: any = { status: 'ACTIVE' };
   if (selectedIsland && selectedIsland !== 'todas') {
@@ -260,6 +268,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             </div>
 
             <form action="/buscar" method="GET" className="space-y-6 text-sm">
+              {Object.entries(attribution).map(([name, value]) => value ? <input key={name} type="hidden" name={name} value={value} /> : null)}
               {/* FILTRO ISLA */}
               <div>
                 <label className="block text-xs font-semibold uppercase tracking-wider text-[#6B726E] mb-2">Isla</label>
