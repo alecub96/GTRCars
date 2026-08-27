@@ -182,7 +182,11 @@ export default function RealCanaryMapExplorer({
 
     markersLayerRef.current.clearLayers();
 
-    vehicles.forEach((vehicle, idx) => {
+    const visibleVehicles = activeIsland === 'Canarias'
+      ? vehicles
+      : vehicles.filter((vehicle) => vehicle.island === activeIsland);
+
+    visibleVehicles.forEach((vehicle, idx) => {
       let lat = vehicle.latitude;
       let lng = vehicle.longitude;
 
@@ -234,7 +238,7 @@ export default function RealCanaryMapExplorer({
 
       markersLayerRef.current.addLayer(marker);
     });
-  }, [vehicles, selectedVehicle, leafletLoaded]);
+  }, [vehicles, selectedVehicle, leafletLoaded, activeIsland]);
 
   // 5. Dibujar Puntos Camper (POIs)
   useEffect(() => {

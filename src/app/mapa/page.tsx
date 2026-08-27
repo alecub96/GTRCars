@@ -28,8 +28,6 @@ export default async function MapaPage({ searchParams }: MapPageProps) {
   try {
     await ensureDbSchema();
     const query: any = { status: 'ACTIVE' };
-    if (selectedIsland) query.island = selectedIsland;
-
     dbVehicles = await prisma.vehicle.findMany({
       where: query,
       select: {
@@ -51,11 +49,8 @@ export default async function MapaPage({ searchParams }: MapPageProps) {
   } catch (err) {
     console.error('Map vehicle query failed:', err);
     try {
-      const islandFilter = selectedIsland && selectedIsland !== 'Canarias' ? ' AND island LIKE ?' : '';
-      const params = selectedIsland && selectedIsland !== 'Canarias' ? [`%${selectedIsland.replace(/-/g, ' ')}%`] : [];
       const rows = await prisma.$queryRawUnsafe(
-        `SELECT id, slug, title, island, municipality, basePricePerDay, passengers, beds, latitude, longitude, addressApprox FROM Vehicle WHERE status = 'ACTIVE'${islandFilter} ORDER BY createdAt DESC`,
-        ...params,
+        `SELECT id, slug, title, island, municipality, basePricePerDay, passengers, beds, latitude, longitude, addressApprox FROM Vehicle WHERE status = 'ACTIVE' ORDER BY createdAt DESC`,
       ) as any[];
       dbVehicles = await Promise.all(rows.map(async (row) => ({
         ...row,
