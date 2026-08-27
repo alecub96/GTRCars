@@ -341,10 +341,14 @@ export default function EditCamperPage({ params }: { params: Promise<{ id: strin
                   type="text"
                   required
                   value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  readOnly
+                  aria-describedby="title-immutable-help"
                   placeholder="Ej. Volkswagen T2 Bulli Clásica Vintage con Techo Elevable"
-                  className="w-full rounded-xl border border-[#E9E1D2] p-3 text-sm font-bold bg-[#FAF7F0] focus:bg-white focus:border-[#16B8AA] focus:outline-none"
+                  className="w-full cursor-not-allowed rounded-xl border border-[#E9E1D2] bg-gray-50 p-3 text-sm font-bold text-[#6B726E] outline-none"
                 />
+                <p id="title-immutable-help" className="mt-1.5 text-[11px] text-[#6B726E]">
+                  El título original del anuncio no se modifica al editarlo.
+                </p>
               </div>
 
               <div>

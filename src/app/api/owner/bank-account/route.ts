@@ -2,9 +2,11 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
 import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
+import { ensureDbSchema } from '@/lib/prisma-ensure-schema';
 
 export async function GET() {
   try {
+    await ensureDbSchema();
     const user = await getCurrentUser();
     if (!user) return NextResponse.json({ error: 'Debes iniciar sesión' }, { status: 401 });
     if (user.role !== 'OWNER' && user.role !== 'ADMIN') {
@@ -30,6 +32,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    await ensureDbSchema();
     const user = await getCurrentUser();
     if (!user) return NextResponse.json({ error: 'Debes iniciar sesión' }, { status: 401 });
     if (user.role !== 'OWNER' && user.role !== 'ADMIN') {
