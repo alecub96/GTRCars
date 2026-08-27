@@ -128,12 +128,13 @@ export default function RealCanaryMapExplorer({
       attributionControl: false,
     });
 
-    // Capa base de calles (CartoDB Positron / OSM limpio estilo Idealista/Airbnb)
+    // OpenStreetMap no requiere token ni clave privada.
     const streetLayer = L.tileLayer(
-      'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       {
         maxZoom: 19,
         subdomains: 'abcd',
+        attribution: '&copy; OpenStreetMap contributors',
       }
     );
 
@@ -166,9 +167,9 @@ export default function RealCanaryMapExplorer({
     const tileUrl =
       mapType === 'satellite'
         ? 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-        : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
+        : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
-    const newLayer = L.tileLayer(tileUrl, { maxZoom: 19, subdomains: 'abcd' });
+    const newLayer = L.tileLayer(tileUrl, { maxZoom: 19, subdomains: 'abc', attribution: '&copy; OpenStreetMap contributors' });
     newLayer.addTo(mapInstanceRef.current);
     newLayer.bringToBack();
   }, [mapType]);
