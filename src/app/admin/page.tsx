@@ -278,7 +278,7 @@ export default function AdminPage() {
         </div>
 
         {/* PESTAÑAS DE NAVEGACIÓN */}
-        <div className="flex items-center space-x-2 border-b border-[#E9E1D2] mb-8 overflow-x-auto pb-2 scrollbar-none">
+        <div className="flex flex-wrap items-center gap-2 border-b border-[#E9E1D2] mb-8 pb-2">
           <button
             type="button"
             onClick={() => setActiveTab('vehicles')}
@@ -300,7 +300,7 @@ export default function AdminPage() {
                 : 'bg-white border border-[#E9E1D2] text-[#13322E] hover:bg-[#FAF7F0]'
             }`}
           >
-            👥 Clientes & Usuarios
+            👥 Clientes & Usuarios ({metrics.totalUsersCount || 0})
           </button>
 
           <button

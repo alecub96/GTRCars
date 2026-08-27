@@ -2,9 +2,11 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/admin';
 import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
+import { ensureDbSchema } from '@/lib/prisma-ensure-schema';
 
 export async function GET() {
   try {
+    await ensureDbSchema();
     const user = await requireAdmin();
     if (!user) return NextResponse.json({ error: 'Acceso restringido' }, { status: 403 });
 
