@@ -82,6 +82,7 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
 
     const body = await request.json();
     const {
+      title,
       brand,
       model,
       vehicleType,
@@ -114,6 +115,7 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
 
     const dataToUpdate: any = {};
 
+    if (typeof title === 'string' && title.trim().length >= 5) dataToUpdate.title = title.trim();
     if (typeof brand === 'string' && brand.trim()) dataToUpdate.brand = brand.trim();
     if (typeof model === 'string' && model.trim()) dataToUpdate.model = model.trim();
     if (typeof vehicleType === 'string' && VEHICLE_TYPES.has(vehicleType)) dataToUpdate.vehicleType = vehicleType;

@@ -244,7 +244,7 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
         
         {/* TITULO Y CABECERA */}
         <div className="mb-6 relative">
-          <div className="absolute right-0 top-0 flex items-center space-x-2">
+          <div className="relative z-10 mb-4 flex justify-end items-center space-x-2">
             <ShareVehicleButton
               vehicleTitle={vehicle.title}
               slug={vehicle.slug}
