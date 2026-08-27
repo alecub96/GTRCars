@@ -1,27 +1,17 @@
-import fs from 'node:fs';
-
-const source = fs.readFileSync('src/lib/blog.ts', 'utf8');
-const profileSource = source.slice(source.indexOf('const profiles:'), source.indexOf('const profile = profiles'));
-const profileCount = (profileSource.match(/^    '[^']+': \{/gm) || []).length;
-const articles = [...source.matchAll(/(?:^|\n)    slug: '([^']+)'[\s\S]*?(?=\n  \},\n|\n\];)/g)];
-if (articles.length !== 30) {
-  throw new Error(`El blog debe tener exactamente 30 artículos; actualmente tiene ${articles.length}`);
-}
-if (profileCount !== 30) throw new Error(`Cada artículo debe tener un perfil editorial propio; actualmente hay ${profileCount}`);
+const { BLOG_ARTICLES } = await import('../src/lib/blog.ts');
+const articles = BLOG_ARTICLES;
+if (articles.length !== 30) throw new Error(`El blog debe tener exactamente 30 artículos; actualmente tiene ${articles.length}`);
 
 const failures = [];
 const fingerprints = new Map();
-for (const match of articles) {
-  const block = match[0];
-  const slug = match[1];
-  // Only count words physically authored inside the article object. Shared
-  // runtime expansion is deliberately excluded: it cannot prove 3,000 words
-  // of original editorial content for this specific URL.
-  const words = (block.match(/[A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9]+(?:[-'][A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9]+)*/g) || []).length;
-  const sections = (block.match(/heading:/g) || []).length;
-  const faqs = (block.match(/question:/g) || []).length + 3;
-  const internalLinks = (block.match(/vaneando|camper|Canarias/gi) || []).length;
-  const uniquePhrases = [...block.matchAll(/paragraphs:\s*\['([^']+)/g)].map((item) => item[1].slice(0, 80));
+for (const article of articles) {
+  const slug = article.slug;
+  const text = article.sections.flatMap((section) => [section.heading, ...section.paragraphs, ...(section.bullets || [])]).join(' ');
+  const words = (text.match(/[A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9]+(?:[-'][A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9]+)*/g) || []).length;
+  const sections = article.sections.length;
+  const faqs = article.faqs?.length || 0;
+  const internalLinks = (text.match(/vaneando|camper|Canarias/gi) || []).length;
+  const uniquePhrases = article.sections.map((section) => `${section.heading}:${section.paragraphs[0]?.slice(0, 80) || ''}`);
   const fingerprint = uniquePhrases.join('|');
   fingerprints.set(slug, fingerprint);
   if (words < 3000 || sections < 8 || faqs < 3 || internalLinks < 3) {

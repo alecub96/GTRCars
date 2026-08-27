@@ -759,7 +759,6 @@ const BASE_BLOG_ARTICLES: BlogArticle[] = [
       { question: '¿Qué debo comprobar antes de reservar?', answer: 'Plazas, camas, equipamiento, precio total, limpieza, kilometraje, fianza, seguro, entrega, devolución y cancelación.' },
       { question: '¿Puedo resolver dudas con el propietario?', answer: 'Sí. Utiliza la mensajería de Vaneando antes de confirmar y deja por escrito cualquier condición importante.' },
       { question: '¿Dónde encuentro vehículos disponibles?', answer: 'En Vaneando puedes buscar anuncios activos y filtrar por isla, fechas, capacidad y características.' },
-      { heading: 'Última comprobación antes de salir', paragraphs: ['Confirma la reserva, revisa el inventario, carga el teléfono y consulta la previsión. Lleva agua, conduce con calma y recuerda que el paisaje volcánico se disfruta mejor cuando se respetan sus límites.'] },
     ],
   },
   {
