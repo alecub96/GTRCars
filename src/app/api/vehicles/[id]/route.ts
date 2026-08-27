@@ -18,7 +18,7 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
     const { id } = await context.params;
     const currentUser = await getCurrentUser().catch(() => null);
 
-    let vehicle = await prisma.vehicle.findFirst({
+    const vehicle = await prisma.vehicle.findFirst({
       where: {
         OR: [{ id }, { slug: id }],
       },

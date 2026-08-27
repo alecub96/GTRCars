@@ -6,15 +6,6 @@ import { useEffect, useState } from 'react';
 export default function CookieConsent() {
   const [visible, setVisible] = useState(false);
 
-  useEffect(() => {
-    const consent = localStorage.getItem('vaneando-cookie-consent');
-    if (!consent) {
-      setVisible(true);
-    } else if (consent === 'all') {
-      updateGoogleConsent(true);
-    }
-  }, []);
-
   const updateGoogleConsent = (granted: boolean) => {
     if (typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('consent', 'update', {
@@ -25,6 +16,15 @@ export default function CookieConsent() {
       });
     }
   };
+
+  useEffect(() => {
+    const consent = localStorage.getItem('vaneando-cookie-consent');
+    if (!consent) {
+      setVisible(true);
+    } else if (consent === 'all') {
+      updateGoogleConsent(true);
+    }
+  }, []);
 
   const handleAcceptAll = () => {
     localStorage.setItem('vaneando-cookie-consent', 'all');

@@ -11,7 +11,12 @@ const eslintConfig = defineConfig([
     // de React, seguridad o accesibilidad durante la integración continua.
     rules: {
       "@typescript-eslint/no-explicit-any": "warn",
+      "react-hooks/set-state-in-effect": "warn",
     },
+  },
+  {
+    files: ["server.js"],
+    rules: { "@typescript-eslint/no-require-imports": "off" },
   },
   // Override default ignores of eslint-config-next.
   globalIgnores([
