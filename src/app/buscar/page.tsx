@@ -130,8 +130,32 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       });
     } catch (queryErr) {
       console.warn('Prisma findMany fallback:', queryErr);
+      const rawConditions = ['status = ?'];
+      const rawParams: unknown[] = ['ACTIVE'];
+      if (selectedIsland && selectedIsland !== 'todas') {
+        rawConditions.push('island LIKE ?');
+        rawParams.push(`%${selectedIsland.replace(/-/g, ' ')}%`);
+      }
+      if (vehicleType && vehicleType !== 'TODOS') {
+        rawConditions.push('vehicleType = ?');
+        rawParams.push(vehicleType);
+      }
+      if (passengers) {
+        rawConditions.push('passengers >= ?');
+        rawParams.push(passengers);
+      }
+      if (minPrice !== undefined) {
+        rawConditions.push('basePricePerDay >= ?');
+        rawParams.push(minPrice);
+      }
+      if (maxPrice !== undefined) {
+        rawConditions.push('basePricePerDay <= ?');
+        rawParams.push(maxPrice);
+      }
+      const rawOrder = sort === 'price_asc' ? 'basePricePerDay ASC' : sort === 'price_desc' ? 'basePricePerDay DESC' : 'createdAt DESC';
       const rawRows = ((await prisma.$queryRawUnsafe(
-        `SELECT id, ownerId, slug, title, island, municipality, passengers, beds, transmission, basePricePerDay, description, latitude, longitude, addressApprox FROM Vehicle WHERE status = 'ACTIVE' ORDER BY createdAt DESC`
+        `SELECT id, ownerId, slug, title, island, municipality, passengers, beds, transmission, basePricePerDay, description, latitude, longitude, addressApprox FROM Vehicle WHERE ${rawConditions.join(' AND ')} ORDER BY ${rawOrder}`,
+        ...rawParams
       ).catch(() => [])) || []) as any[];
 
       for (const row of rawRows) {
