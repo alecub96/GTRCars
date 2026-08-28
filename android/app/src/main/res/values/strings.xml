@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Vaneando</string>
+    <string name="title_activity_main">Vaneando</string>
+    <string name="package_name">com.vaneando.app</string>
+    <string name="custom_url_scheme">com.vaneando.app</string>
+</resources>
