@@ -151,6 +151,11 @@ export default function Navbar() {
               Campers
             </Link>
           )}
+          {(role === 'TRAVELER' || role === 'ANONYMOUS') && (
+            <Link href="/alquilar-mi-camper" className="rounded-full bg-[#16B8AA] px-4 py-2 text-white hover:bg-[#0F766E] transition-colors">
+              Alquila tu camper
+            </Link>
+          )}
           {role !== 'ADMIN' && (
             <Link href="/guias" className="hover:text-[#16B8AA] transition-colors">
               Blog & Guías

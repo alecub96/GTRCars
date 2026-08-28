@@ -32,6 +32,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     ...islandUrls,
+    { url: `${baseUrl}/alquilar-mi-camper`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
     { url: `${baseUrl}/guias`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
     { url: `${baseUrl}/colaboradores`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
     ...blogUrls,
