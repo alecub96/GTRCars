@@ -7,8 +7,8 @@ export default function OwnerBrowserNotifications() {
 
   useEffect(() => {
     setEnabled(typeof Notification !== 'undefined' && Notification.permission === 'granted');
-    if (Notification.permission === 'granted') registerPush();
     if (typeof Notification === 'undefined' || Notification.permission === 'denied') return;
+    if (Notification.permission === 'granted') registerPush();
     let firstRun = true;
     const check = async () => {
       try {

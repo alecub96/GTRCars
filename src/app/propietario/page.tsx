@@ -77,7 +77,7 @@ export default function OwnerDashboardPage() {
 
   if (serviceError) return <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]"><Navbar /><main className="mx-auto max-w-xl px-4 py-20 text-center"><h1 className="font-serif text-3xl font-bold">No podemos cargar el panel ahora mismo</h1><p className="mt-3 text-sm text-[#6B726E]">{serviceError}</p><button type="button" onClick={() => window.location.reload()} className="mt-6 rounded-full bg-[#13322E] px-5 py-3 text-xs font-bold text-white">Reintentar</button></main></div>;
   if (authorized !== true) {
-    return <div className="min-h-screen bg-[#F7F6F2]" />;
+    return <div className="flex min-h-screen items-center justify-center bg-[#F7F6F2] px-6 text-center text-[#13322E]"><div><div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-4 border-[#E9E1D2] border-t-[#16B8AA]" /><p className="text-sm font-bold">Cargando tu panel de propietario…</p></div></div>;
   }
 
 
