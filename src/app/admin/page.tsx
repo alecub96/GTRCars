@@ -25,6 +25,7 @@ import AdminEmailDiagnostics from '@/components/AdminEmailDiagnostics';
 import AdminLogin from '@/components/AdminLogin';
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
+import OwnerBrowserNotifications from '@/components/OwnerBrowserNotifications';
 
 export default function AdminPage() {
   const [data, setData] = useState<any>(null);
@@ -99,6 +100,7 @@ export default function AdminPage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
+            <OwnerBrowserNotifications audience="admin" />
             <div
               className={`flex items-center space-x-2 text-xs font-bold px-4 py-2 rounded-full border ${
                 metrics.stripeConfigured

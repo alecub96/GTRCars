@@ -206,6 +206,7 @@ export async function POST(request: Request) {
       reservationId: booking.id,
     }).catch((error) => console.error('Booking owner notification email error:', error));
     sendPushToUser(vehicle.ownerId, 'Nueva reserva en Vaneando', `${vehicle.title} · ${booking.code}`, `/reserva/${booking.id}`).catch((error) => console.error('Booking owner push error:', error));
+    prisma.user.findMany({ where: { role: 'ADMIN' }, select: { id: true } }).then((admins) => Promise.all(admins.map((admin) => sendPushToUser(admin.id, 'Nueva reserva en Vaneando', `${vehicle.title} · ${booking.code}`, `/admin`)))).catch((error) => console.error('Booking admin push error:', error));
 
     return NextResponse.json({
       success: true,

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-export default function OwnerBrowserNotifications() {
+export default function OwnerBrowserNotifications({ audience = 'owner' }: { audience?: 'owner' | 'admin' }) {
   const [enabled, setEnabled] = useState(false);
   const [showPrompt, setShowPrompt] = useState(false);
 
@@ -18,6 +18,7 @@ export default function OwnerBrowserNotifications() {
     let firstRun = true;
     const check = async () => {
       try {
+        if (audience === 'admin') return;
         const response = await fetch('/api/bookings?as=owner', { cache: 'no-store' });
         const data = await response.json();
         const pending = (data.bookings || []).filter((booking: { status: string }) => booking.status === 'REQUESTED');
@@ -32,7 +33,7 @@ export default function OwnerBrowserNotifications() {
     check();
     const timer = window.setInterval(check, 30000);
     return () => window.clearInterval(timer);
-  }, []);
+  }, [audience]);
 
   async function registerPush() {
     if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
@@ -57,6 +58,6 @@ export default function OwnerBrowserNotifications() {
   if (typeof Notification === 'undefined') return null;
   return <>
     <button type="button" onClick={enable} className="rounded-full bg-[#16B8AA] px-4 py-2.5 text-xs font-black text-white shadow-sm">🔔 Activar avisos de reservas</button>
-    {showPrompt && <div className="fixed inset-0 z-[100] flex items-end justify-center bg-[#13322E]/45 p-4 sm:items-center"><div role="dialog" aria-modal="true" className="w-full max-w-md rounded-3xl bg-white p-6 text-[#13322E] shadow-2xl"><div className="mb-3 text-3xl">🔔</div><h2 className="font-serif text-2xl font-bold">No te pierdas ninguna reserva</h2><p className="mt-2 text-sm leading-6 text-[#6B726E]">Activa los avisos para recibir en este dispositivo las nuevas solicitudes y reservas de tus campers, aunque no tengas Vaneando abierto.</p><div className="mt-5 flex gap-3"><button type="button" onClick={async () => { await enable(); setShowPrompt(false); }} className="flex-1 rounded-full bg-[#13322E] px-4 py-3 text-xs font-black text-white">Activar avisos</button><button type="button" onClick={() => setShowPrompt(false)} className="rounded-full border border-[#E9E1D2] px-4 py-3 text-xs font-bold">Ahora no</button></div></div></div>}
+    {showPrompt && <div className="fixed inset-0 z-[100] flex items-end justify-center bg-[#13322E]/45 p-4 sm:items-center"><div role="dialog" aria-modal="true" className="w-full max-w-md rounded-3xl bg-white p-6 text-[#13322E] shadow-2xl"><div className="mb-3 text-3xl">🔔</div><h2 className="font-serif text-2xl font-bold">Activa tus avisos de Vaneando</h2><p className="mt-2 text-sm leading-6 text-[#6B726E]">Recibirás avisos importantes de reservas y actividad de la plataforma aunque no tengas Vaneando abierto.</p><div className="mt-5 flex gap-3"><button type="button" onClick={async () => { await enable(); setShowPrompt(false); }} className="flex-1 rounded-full bg-[#13322E] px-4 py-3 text-xs font-black text-white">Activar avisos</button><button type="button" onClick={() => setShowPrompt(false)} className="rounded-full border border-[#E9E1D2] px-4 py-3 text-xs font-bold">Ahora no</button></div></div></div>}
   </>;
 }
