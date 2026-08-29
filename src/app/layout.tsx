@@ -15,7 +15,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL('https://vaneando.com'),
   title: {
-    default: 'Alquiler de Campers en Canarias | Gran Canaria & Tenerife | vaneando.',
+    default: 'Vaneando | Alquiler de campers en Canarias',
     template: '%s | vaneando.',
   },
   description: 'Busca y compara campers, autocaravanas, caravanas y vehículos recreativos disponibles en las Islas Canarias.',
@@ -86,7 +86,7 @@ export const metadata: Metadata = {
     locale: 'es_ES',
     alternateLocale: ['en_GB', 'de_DE', 'fr_FR', 'it_IT', 'no_NO', 'ro_RO', 'nl_NL', 'sv_SE', 'pl_PL'],
     siteName: 'vaneando. — Canarias sobre ruedas',
-    title: 'Alquiler de Campers y Autocaravanas en Canarias | vaneando.',
+    title: 'Vaneando | Alquiler de campers y autocaravanas en Canarias',
     description: 'Campers y autocaravanas disponibles en Canarias, con información clara del anuncio y contacto con propietarios.',
     url: 'https://vaneando.com',
     images: [
@@ -101,7 +101,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Alquiler de Campers en Canarias entre Particulares | vaneando.',
+    title: 'Vaneando | Campers en Canarias entre particulares',
     description: 'Alquila furgonetas camperizadas, autocaravanas y 4x4 directamente a propietarios locales verificados en Canarias.',
     images: ['https://vaneando.com/og-image.png'],
   },
