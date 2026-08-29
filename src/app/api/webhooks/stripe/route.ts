@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { prisma } from '@/lib/prisma';
 import { sendBookingStatusEmail, sendPaymentInvoiceEmail } from '@/lib/email';
+import { sendPushToAdmins } from '@/lib/push';
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY || '';
 
@@ -94,6 +95,7 @@ async function confirmBookingPayment(bookingId: string, paymentIntentId: string 
       vehicle: result.vehicle.title,
       reservationId: result.id,
     }).catch((error) => console.error('Payment confirmation email error:', error));
+    sendPushToAdmins('Pago de reserva recibido', `La reserva ${result.code} está confirmada`, '/admin').catch((error) => console.error('Admin payment push error:', error));
   }
 }
 

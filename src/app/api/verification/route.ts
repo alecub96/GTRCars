@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
 import { saveUpload, UploadConfigurationError } from '@/lib/uploads';
 import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
+import { sendPushToAdmins } from '@/lib/push';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
@@ -84,6 +85,7 @@ export async function POST(request: Request) {
         select: { id: true, verification: true },
       }),
     ]);
+    sendPushToAdmins('Nueva verificación pendiente', `Un usuario ha enviado documentación para revisar`, '/admin').catch((error) => console.error('Admin verification push error:', error));
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Verification upload error:', error);

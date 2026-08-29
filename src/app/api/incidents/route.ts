@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { getCurrentUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
+import { sendPushToAdmins } from '@/lib/push';
 
 const incidentSchema = z.object({
   bookingId: z.string().min(1),
@@ -54,6 +55,7 @@ export async function POST(request: Request) {
       await tx.booking.update({ where: { id: parsed.data.bookingId }, data: { status: 'DISPUTED' } });
       return created;
     });
+    sendPushToAdmins('Nueva incidencia pendiente', `Incidencia ${parsed.data.type.toLowerCase()} en una reserva`, '/admin').catch((error) => console.error('Admin incident push error:', error));
     return NextResponse.json({ success: true, incident }, { status: 201 });
   } catch (error) {
     if (isDatabaseUnavailable(error)) return databaseUnavailableResponse();

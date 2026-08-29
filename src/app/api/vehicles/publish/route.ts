@@ -9,6 +9,7 @@ const ISLANDS = new Set(['Gran Canaria', 'Tenerife', 'Lanzarote', 'Fuerteventura
 import { ensureDbSchema } from '@/lib/prisma-ensure-schema';
 
 import { signToken } from '@/lib/jwt';
+import { sendPushToAdmins } from '@/lib/push';
 
 export async function POST(request: Request) {
   try {
@@ -204,6 +205,7 @@ export async function POST(request: Request) {
       }
     }
 
+    sendPushToAdmins('Nuevo anuncio pendiente de moderación', `${vehicle.title} necesita revisión`, '/admin').catch((error) => console.error('Admin vehicle push error:', error));
     const response = NextResponse.json({ success: true, vehicle });
     if (updatedToken) {
       response.cookies.set('auth_token', updatedToken, {
