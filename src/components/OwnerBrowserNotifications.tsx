@@ -7,6 +7,7 @@ export default function OwnerBrowserNotifications() {
 
   useEffect(() => {
     setEnabled(typeof Notification !== 'undefined' && Notification.permission === 'granted');
+    if (Notification.permission === 'granted') registerPush();
     if (typeof Notification === 'undefined' || Notification.permission === 'denied') return;
     let firstRun = true;
     const check = async () => {
@@ -27,10 +28,23 @@ export default function OwnerBrowserNotifications() {
     return () => window.clearInterval(timer);
   }, []);
 
+  async function registerPush() {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+    const response = await fetch('/api/notifications/subscribe');
+    const { publicKey } = await response.json();
+    if (!publicKey) return;
+    const registration = await navigator.serviceWorker.register('/sw.js');
+    const raw = atob(publicKey.replace(/-/g, '+').replace(/_/g, '/'));
+    const applicationServerKey = Uint8Array.from(raw, (char) => char.charCodeAt(0));
+    const subscription = await registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey });
+    await fetch('/api/notifications/subscribe', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(subscription) });
+  }
+
   async function enable() {
     if (typeof Notification === 'undefined') return;
     const permission = await Notification.requestPermission();
     setEnabled(permission === 'granted');
+    if (permission === 'granted') await registerPush();
   }
 
   if (enabled) return <span className="text-xs font-bold text-[#16B8AA]">🔔 Avisos del navegador activos</span>;

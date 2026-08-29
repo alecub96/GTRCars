@@ -5,6 +5,7 @@ import { calculatePricing } from '@/lib/pricing';
 import { sendBookingCreatedOwnerEmail } from '@/lib/email';
 import { Prisma } from '@/generated/prisma/client';
 import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
+import { sendPushToUser } from '@/lib/push';
 
 const MAX_BOOKING_ATTEMPTS = 3;
 
@@ -204,6 +205,7 @@ export async function POST(request: Request) {
       instant: booking.status === 'OWNER_ACCEPTED',
       reservationId: booking.id,
     }).catch((error) => console.error('Booking owner notification email error:', error));
+    sendPushToUser(vehicle.ownerId, 'Nueva reserva en Vaneando', `${vehicle.title} · ${booking.code}`, `/reserva/${booking.id}`).catch((error) => console.error('Booking owner push error:', error));
 
     return NextResponse.json({
       success: true,
