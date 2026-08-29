@@ -365,6 +365,35 @@ export async function sendBookingRequestEmail(
   });
 }
 
+/** Aviso al propietario para cualquier reserva creada, incluida la reserva instantánea. */
+export async function sendBookingCreatedOwnerEmail(
+  to: string,
+  ownerName: string,
+  details: { code: string; vehicle: string; traveler: string; start: Date; end: Date; instant: boolean; reservationId: string }
+) {
+  if (!transporter) throw new Error('Faltan SMTP_USER o SMTP_PASSWORD');
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://vaneando.com';
+  const title = details.instant ? '¡Reserva instantánea recibida!' : '¡Nueva solicitud de reserva!';
+  const contentHtml = `
+    <h2 style="font-family: Georgia, serif; color: #13322E; margin-top: 0;">${title} 🚐</h2>
+    <p>Hola ${escapeHtml(ownerName)}, ${details.instant ? 'un viajero ha reservado' : 'un viajero ha enviado una solicitud para'} tu camper.</p>
+    <div class="card">
+      <p style="margin: 4px 0;"><strong>Viajero:</strong> ${escapeHtml(details.traveler)}</p>
+      <p style="margin: 4px 0;"><strong>Vehículo:</strong> ${escapeHtml(details.vehicle)}</p>
+      <p style="margin: 4px 0;"><strong>Fechas:</strong> Del ${details.start.toLocaleDateString('es-ES')} al ${details.end.toLocaleDateString('es-ES')}</p>
+      <p style="margin: 4px 0;"><strong>Código:</strong> ${escapeHtml(details.code)}</p>
+    </div>
+    <p>${details.instant ? 'La reserva está pendiente de completar el proceso de pago y contrato.' : 'Revisa la solicitud y responde desde tu panel de propietario.'}</p>
+  `;
+  await transporter.sendMail({
+    from,
+    to,
+    subject: `${title} · ${details.vehicle}`,
+    text: `Hola ${ownerName}, ${details.traveler} ${details.instant ? 'ha reservado' : 'ha solicitado'} ${details.vehicle} del ${details.start.toLocaleDateString('es-ES')} al ${details.end.toLocaleDateString('es-ES')}. Código: ${details.code}. Gestiona la reserva: ${appUrl}/reserva/${details.reservationId}`,
+    html: renderEmailLayout({ title, previewText: `${title} para ${details.vehicle}`, contentHtml, ctaText: 'Gestionar reserva', ctaUrl: `${appUrl}/reserva/${details.reservationId}` }),
+  });
+}
+
 export async function sendChatSummaryEmail(
   to: string,
   participantName: string,

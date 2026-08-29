@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
 import { calculatePricing } from '@/lib/pricing';
-import { sendBookingRequestEmail } from '@/lib/email';
+import { sendBookingCreatedOwnerEmail } from '@/lib/email';
 import { Prisma } from '@/generated/prisma/client';
 import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 
@@ -195,9 +195,15 @@ export async function POST(request: Request) {
 
     if (!booking) throw new Error('No se pudo confirmar la reserva');
 
-    if (booking.status === 'REQUESTED') {
-      sendBookingRequestEmail(vehicle.owner.email, vehicle.owner.firstName, { code: booking.code, vehicle: vehicle.title, traveler: `${user.firstName} ${user.lastName}`, start, end }).catch((error) => console.error('Booking request email error:', error));
-    }
+    sendBookingCreatedOwnerEmail(vehicle.owner.email, vehicle.owner.firstName, {
+      code: booking.code,
+      vehicle: vehicle.title,
+      traveler: `${user.firstName} ${user.lastName}`,
+      start,
+      end,
+      instant: booking.status === 'OWNER_ACCEPTED',
+      reservationId: booking.id,
+    }).catch((error) => console.error('Booking owner notification email error:', error));
 
     return NextResponse.json({
       success: true,
