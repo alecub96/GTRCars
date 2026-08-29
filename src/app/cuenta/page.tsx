@@ -19,7 +19,7 @@ export default async function TravelerAccountPage() {
       where: { travelerId: user.id },
       include: {
         vehicle: { select: { title: true, island: true, photos: { take: 1 } } },
-        owner: { select: { firstName: true, phone: true } },
+        owner: { select: { firstName: true } },
         conversations: { select: { id: true }, take: 1 },
       },
       orderBy: { createdAt: 'desc' },

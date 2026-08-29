@@ -50,7 +50,7 @@ async function fetchVehicleBySlugOrId(slugParam: string) {
         features: true,
         extras: { include: { extra: true } },
         pricingRules: { orderBy: { startDate: 'asc' } },
-        owner: { select: { id: true, firstName: true, lastName: true, avatarUrl: true, verification: true, createdAt: true, phone: true, email: true } },
+        owner: { select: { id: true, firstName: true, lastName: true, avatarUrl: true, verification: true, createdAt: true } },
         reviews: { include: { author: { select: { firstName: true, avatarUrl: true } } } },
       },
     }).catch(() => null);

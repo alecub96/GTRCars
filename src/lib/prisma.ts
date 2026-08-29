@@ -16,13 +16,7 @@ function getMariaDbCredentials() {
       database: decodeURIComponent((match[5] || '').split('?')[0]),
     };
   }
-  return {
-    host: '127.0.0.1',
-    port: 3306,
-    user: 'u896809627_vaneando',
-    password: 'Sillaman1537912537912',
-    database: 'u896809627_vaneando',
-  };
+  throw new Error('DATABASE_URL o VANEANDO_DATABASE_URL es obligatorio');
 }
 
 const creds = getMariaDbCredentials();

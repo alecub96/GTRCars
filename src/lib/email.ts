@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 
-const smtpPassword = process.env.SMTP_PASSWORD || 'Vaneando2026!Smtp';
-const smtpUser = process.env.SMTP_USER || 'contacto@vaneando.com';
+const smtpPassword = process.env.SMTP_PASSWORD || '';
+const smtpUser = process.env.SMTP_USER || '';
 const smtpHost = process.env.SMTP_HOST || 'smtp.hostinger.com';
 const smtpPort = Number(process.env.SMTP_PORT || 465);
 const smtpSecure = process.env.SMTP_SECURE !== 'false';
@@ -20,7 +20,7 @@ const transporter = smtpPassword && smtpUser
     })
   : null;
 
-const from = process.env.EMAIL_FROM || `vaneando. <${smtpUser}>`;
+const from = process.env.EMAIL_FROM || (smtpUser ? `vaneando. <${smtpUser}>` : 'vaneando. <contacto@vaneando.com>');
 
 function escapeHtml(value: string) {
   return value.replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[character] || character);
