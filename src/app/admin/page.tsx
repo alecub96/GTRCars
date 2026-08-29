@@ -100,7 +100,7 @@ export default function AdminPage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <OwnerBrowserNotifications audience="admin" />
+            <div className="w-full md:w-auto"><OwnerBrowserNotifications audience="admin" /></div>
             <div
               className={`flex items-center space-x-2 text-xs font-bold px-4 py-2 rounded-full border ${
                 metrics.stripeConfigured
