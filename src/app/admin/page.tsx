@@ -101,6 +101,9 @@ export default function AdminPage() {
 
           <div className="flex flex-wrap items-center gap-3">
             <div className="w-full md:w-auto"><OwnerBrowserNotifications audience="admin" /></div>
+            <button type="button" onClick={() => setActiveTab('users')} className="inline-flex items-center gap-2 rounded-full bg-[#13322E] px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-sm transition hover:bg-[#16B8AA]">
+              <Users className="h-4 w-4" /> Gestionar usuarios y clientes
+            </button>
             <div
               className={`flex items-center space-x-2 text-xs font-bold px-4 py-2 rounded-full border ${
                 metrics.stripeConfigured
