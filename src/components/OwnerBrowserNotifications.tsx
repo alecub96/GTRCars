@@ -4,9 +4,15 @@ import { useEffect, useState } from 'react';
 
 export default function OwnerBrowserNotifications() {
   const [enabled, setEnabled] = useState(false);
+  const [showPrompt, setShowPrompt] = useState(false);
 
   useEffect(() => {
     setEnabled(typeof Notification !== 'undefined' && Notification.permission === 'granted');
+    if (typeof Notification !== 'undefined' && Notification.permission === 'default' && !sessionStorage.getItem('vaneando-push-prompt')) {
+      const timer = window.setTimeout(() => setShowPrompt(true), 900);
+      sessionStorage.setItem('vaneando-push-prompt', '1');
+      return () => window.clearTimeout(timer);
+    }
     if (typeof Notification === 'undefined' || Notification.permission === 'denied') return;
     if (Notification.permission === 'granted') registerPush();
     let firstRun = true;
@@ -49,5 +55,8 @@ export default function OwnerBrowserNotifications() {
 
   if (enabled) return <span className="text-xs font-bold text-[#16B8AA]">🔔 Avisos del navegador activos</span>;
   if (typeof Notification === 'undefined') return null;
-  return <button type="button" onClick={enable} className="rounded-full border border-[#16B8AA] px-3 py-2 text-xs font-bold text-[#13322E]">Activar avisos en este dispositivo</button>;
+  return <>
+    <button type="button" onClick={enable} className="rounded-full bg-[#16B8AA] px-4 py-2.5 text-xs font-black text-white shadow-sm">🔔 Activar avisos de reservas</button>
+    {showPrompt && <div className="fixed inset-0 z-[100] flex items-end justify-center bg-[#13322E]/45 p-4 sm:items-center"><div role="dialog" aria-modal="true" className="w-full max-w-md rounded-3xl bg-white p-6 text-[#13322E] shadow-2xl"><div className="mb-3 text-3xl">🔔</div><h2 className="font-serif text-2xl font-bold">No te pierdas ninguna reserva</h2><p className="mt-2 text-sm leading-6 text-[#6B726E]">Activa los avisos para recibir en este dispositivo las nuevas solicitudes y reservas de tus campers, aunque no tengas Vaneando abierto.</p><div className="mt-5 flex gap-3"><button type="button" onClick={async () => { await enable(); setShowPrompt(false); }} className="flex-1 rounded-full bg-[#13322E] px-4 py-3 text-xs font-black text-white">Activar avisos</button><button type="button" onClick={() => setShowPrompt(false)} className="rounded-full border border-[#E9E1D2] px-4 py-3 text-xs font-bold">Ahora no</button></div></div></div>}
+  </>;
 }
