@@ -124,7 +124,7 @@ export default function SobreNosotrosPage() {
           </div>
           <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-2">
           <article className="grid items-center overflow-hidden rounded-3xl border border-[#E9E1D2] bg-white shadow-sm">
-            <img src="/alejandro-fundador.png" alt="Alejandro, fundador y CEO de Vaneando" className="h-full min-h-[280px] w-full object-cover object-center" />
+            <img src="/alejandro-fundador.webp" alt="Alejandro, fundador y CEO de Vaneando" className="h-full min-h-[280px] w-full object-cover object-center" />
             <div className="p-7 sm:p-10">
               <span className="text-xs font-black uppercase tracking-widest text-[#16B8AA]">Fundador y CEO</span>
               <h3 className="mt-2 font-serif text-3xl font-bold">Alejandro</h3>
@@ -137,7 +137,7 @@ export default function SobreNosotrosPage() {
             </div>
           </article>
           <article className="grid items-center overflow-hidden rounded-3xl border border-[#E9E1D2] bg-white shadow-sm">
-            <img src="/leonardo-equipo.jpg" alt="Leonardo, programador y creador técnico de Vaneando" className="h-full min-h-[280px] w-full object-cover object-center" />
+            <img src="/leonardo-equipo.webp" alt="Leonardo, programador y creador técnico de Vaneando" className="h-full min-h-[280px] w-full object-cover object-center" />
             <div className="p-7 sm:p-10">
               <span className="text-xs font-black uppercase tracking-widest text-[#16B8AA]">Programador y co-creador</span>
               <h3 className="mt-2 font-serif text-3xl font-bold">Leonardo</h3>
