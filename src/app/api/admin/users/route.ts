@@ -7,6 +7,27 @@ import { ensureDbSchema } from '@/lib/prisma-ensure-schema';
 
 export const dynamic = 'force-dynamic';
 
+async function loadUsersWithSqlFallback(where: any) {
+  const rawUsers = (await prisma.$queryRawUnsafe(
+    `SELECT id, email, firstName, lastName, phone, avatarUrl, role, verification, createdAt, updatedAt
+     FROM User ORDER BY createdAt DESC`
+  ).catch(() => [])) as any[];
+
+  return rawUsers.filter((user) => {
+    if (where.role && user.role !== where.role) return false;
+    if (where.verification && user.verification !== where.verification) return false;
+    if (where.OR?.length) {
+      const query = String(where.OR[0].firstName?.contains || '').toLowerCase();
+      const haystack = [user.firstName, user.lastName, user.email, user.phone, user.id]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
+      if (query && !haystack.includes(query)) return false;
+    }
+    return true;
+  });
+}
+
 export async function GET(request: Request) {
   try {
     const admin = await requireAdmin();
@@ -91,9 +112,7 @@ export async function GET(request: Request) {
     // Fallback 3: Consulta SQL directa a MariaDB si los modelos ORM fallan
     if (!users || users.length === 0) {
       try {
-        const rawUsers = (await prisma.$queryRawUnsafe(
-          `SELECT id, email, firstName, lastName, phone, avatarUrl, role, verification, createdAt FROM User ORDER BY createdAt DESC`
-        ).catch(() => [])) as any[];
+        const rawUsers = await loadUsersWithSqlFallback(where);
         if (rawUsers && rawUsers.length > 0) {
           users = rawUsers;
         }
@@ -102,10 +121,13 @@ export async function GET(request: Request) {
       }
     }
 
-    const totalUsers = await prisma.user.count().catch(() => users.length);
-    const travelersCount = await prisma.user.count({ where: { role: 'TRAVELER' } }).catch(() => 0);
-    const ownersCount = await prisma.user.count({ where: { role: 'OWNER' } }).catch(() => 0);
-    const verifiedCount = await prisma.user.count({ where: { verification: 'VERIFIED' } }).catch(() => 0);
+    const allUsers = users.length > 0 && !q && !roleFilter && !verificationFilter
+      ? users
+      : await loadUsersWithSqlFallback({});
+    const totalUsers = await prisma.user.count().catch(() => allUsers.length);
+    const travelersCount = await prisma.user.count({ where: { role: 'TRAVELER' } }).catch(() => allUsers.filter((u) => u.role === 'TRAVELER').length);
+    const ownersCount = await prisma.user.count({ where: { role: 'OWNER' } }).catch(() => allUsers.filter((u) => u.role === 'OWNER').length);
+    const verifiedCount = await prisma.user.count({ where: { verification: 'VERIFIED' } }).catch(() => allUsers.filter((u) => u.verification === 'VERIFIED').length);
 
     return NextResponse.json(
       {
