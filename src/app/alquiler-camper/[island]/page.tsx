@@ -12,8 +12,8 @@ export async function generateMetadata({ params }: SeoIslandPageProps): Promise<
   const name = CANARY_ISLANDS.find((candidate) => candidate.id === island)?.name;
   if (!name) notFound();
   return {
-    title: `Alquiler de campers en ${name} barato entre particulares | vaneando.`,
-    description: `Consulta los vehículos activos publicados para alquilar en ${name} y revisa sus condiciones antes de contactar.`,
+    title: `Alquiler de campers y autocaravanas en ${name} | vaneando.`,
+    description: `Encuentra campers y autocaravanas de alquiler en ${name}. Compara precios, disponibilidad y condiciones de propietarios locales.`,
     alternates: { canonical: `https://vaneando.com/alquiler-camper/${island}` },
     openGraph: {
       title: `Alquiler de campers en ${name} barato entre particulares`,

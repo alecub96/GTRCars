@@ -433,70 +433,26 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
               Vuestras opiniones: una historia sobre ruedas
             </h2>
             <p className="text-sm text-[#6B726E] font-medium leading-relaxed">
-              Viajeros que han descubierto la magia de despertar frente al mar en Gran Canaria, Tenerife, Fuerteventura y Lanzarote.
+              Experiencias reales de viajeros que han disfrutado de Canarias sobre ruedas.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-8 rounded-3xl border border-[#E9E1D2] shadow-sm flex flex-col justify-between">
-              <div>
-                <div className="flex items-center space-x-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-[#D97706] text-[#D97706]" />
-                  ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {[
+              { name: 'Giulia', date: '10 de septiembre de 2025', text: 'El Van è stato perfetto per la nostra esperienza, ci ha permesso di visitare posti stupendi e di goderci a pieno l’isola. È attrezzato di tutto il necessario per vivere in tranquillità e comodità. Molto consigliato.' },
+              { name: 'Izaskun', date: '4 de agosto de 2025', text: 'Alejandro se mostró muy amable desde el primer momento, dispuesto a ayudarnos con cualquier duda o asunto que necesitáramos. Además, la experiencia con la furgoneta ha sido muy buena, es muy cómoda y pudimos disfrutar de una manera diferente de nuestra experiencia en Gran Canaria, viajando y durmiendo en ella. ¡Lo recomendamos, sin duda!' },
+              { name: 'Carmen', date: '4 de diciembre de 2025', text: 'Fue una experiencia única, me encantó la isla y me encantó recorrerla con esta camper. Alejandro es un anfitrión estupendo para todo, siempre súper amable. La camper tiene todas las comodidades que una desea. ¡Muy recomendable! Repetiría sin duda.' },
+              { name: 'Esperanza', date: '13 de septiembre de 2025', text: 'Viajamos durante 4 días en la camper de Alejandro y solo tenemos buenas palabras. La comunicación fue amena y fácil en todo momento y se adaptó a nosotros. La camper una pasada. La recomiendo 100% y sin duda volveríamos a repetir.' },
+            ].map((review) => (
+              <article key={review.name} className="bg-white p-8 rounded-3xl border border-[#E9E1D2] shadow-sm">
+                <div className="flex items-center justify-between gap-3 mb-4">
+                  <div><h4 className="font-bold text-sm text-[#13322E]">{review.name}</h4><span className="text-[10px] text-[#6B726E]">{review.date}</span></div>
+                  <span className="inline-flex items-center gap-1 text-sm font-black text-[#D97706]" aria-label="Valoración 5 de 5">★★★★★ <span className="text-[#13322E]">5/5</span></span>
                 </div>
-                <p className="text-xs text-[#13322E] font-medium leading-relaxed mb-6 italic">
-                  &ldquo;Alquilar la camper en Gran Canaria a través de Vaneando fue la mejor decisión. El propietario nos entregó la furgoneta directamente en el aeropuerto LPA con recomendaciones secretas de pernocta.&rdquo;
-                </p>
-              </div>
-              <div className="flex items-center space-x-3 pt-4 border-t border-[#E9E1D2]">
-                <div className="w-10 h-10 rounded-full bg-[#E9E1D2]" aria-hidden="true" />
-                <div>
-                  <h4 className="font-bold text-sm text-[#13322E]">Experiencias verificadas</h4>
-                  <span className="text-[10px] text-[#6B726E]">Se publicarán con autorización</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white p-8 rounded-3xl border border-[#E9E1D2] shadow-sm flex flex-col justify-between">
-              <div>
-                <div className="flex items-center space-x-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-[#D97706] text-[#D97706]" />
-                  ))}
-                </div>
-                <p className="text-xs text-[#13322E] font-medium leading-relaxed mb-6 italic">
-                  Las experiencias verificadas de viajeros aparecerán aquí cuando existan reservas completadas y autorización para publicarlas.
-                </p>
-              </div>
-              <div className="flex items-center space-x-3 pt-4 border-t border-[#E9E1D2]">
-                <div className="w-10 h-10 rounded-full bg-[#E9E1D2]" aria-hidden="true" />
-                <div>
-                  <h4 className="font-bold text-sm text-[#13322E]">Sin testimonios publicados</h4>
-                  <span className="text-[10px] text-[#6B726E]">No mostramos experiencias inventadas</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white p-8 rounded-3xl border border-[#E9E1D2] shadow-sm flex flex-col justify-between">
-              <div>
-                <div className="flex items-center space-x-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-[#D97706] text-[#D97706]" />
-                  ))}
-                </div>
-                <p className="text-xs text-[#13322E] font-medium leading-relaxed mb-6 italic">
-                  No mostramos testimonios, ahorros ni resultados que no podamos atribuir a una operación verificable.
-                </p>
-              </div>
-              <div className="flex items-center space-x-3 pt-4 border-t border-[#E9E1D2]">
-                <div className="w-10 h-10 rounded-full bg-[#E9E1D2]" aria-hidden="true" />
-                <div>
-                  <h4 className="font-bold text-sm text-[#13322E]">Datos pendientes de reservas</h4>
-                  <span className="text-[10px] text-[#6B726E]">Valoraciones solo de operaciones completadas</span>
-                </div>
-              </div>
-            </div>
+                <p className="text-sm text-[#13322E] font-medium leading-relaxed italic">&ldquo;{review.text}&rdquo;</p>
+                <p className="mt-5 border-t border-[#E9E1D2] pt-4 text-[10px] font-bold uppercase tracking-wider text-[#6B726E]">Opinión real de viajero</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>

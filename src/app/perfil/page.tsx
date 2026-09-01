@@ -8,21 +8,24 @@ import { CalendarDays, ShieldCheck, Star, Truck } from 'lucide-react';
 export default async function ProfilePage() {
   const user = await getCurrentUser().catch(() => null);
   if (!user) redirect('/');
+  const isAdmin = user.role === 'ADMIN';
   const profileRole = user.role === 'OWNER' ? 'OWNER' : 'TRAVELER';
 
   let reviews: any[] = [];
   try {
-    reviews = await prisma.review.findMany({
-      where: { subjectId: user.id, subjectRole: profileRole },
-      select: {
-        rating: true,
-        comment: true,
-        author: { select: { firstName: true, avatarUrl: true } },
-        createdAt: true,
-      },
-      orderBy: { createdAt: 'desc' },
-      take: 5,
-    });
+    if (!isAdmin) {
+      reviews = await prisma.review.findMany({
+        where: { subjectId: user.id, subjectRole: profileRole },
+        select: {
+          rating: true,
+          comment: true,
+          author: { select: { firstName: true, avatarUrl: true } },
+          createdAt: true,
+        },
+        orderBy: { createdAt: 'desc' },
+        take: 5,
+      });
+    }
   } catch (error) {
     console.error('Perfil page reviews query error:', error);
   }
@@ -36,7 +39,7 @@ export default async function ProfilePage() {
 
   let bookingsCount = 0;
   try {
-    bookingsCount = await prisma.booking.count({
+    if (!isAdmin) bookingsCount = await prisma.booking.count({
       where: user.role === 'OWNER' ? { ownerId: user.id } : { travelerId: user.id },
     });
   } catch (error) {
@@ -52,27 +55,27 @@ export default async function ProfilePage() {
         <div className="mb-8">
           <span className="text-[11px] font-black uppercase tracking-[.25em] text-[#16B8AA]">Tu identidad en vaneando.</span>
           <h1 className="font-serif text-4xl font-bold">Mi perfil</h1>
-          <p className="mt-2 text-sm text-[#6B726E]">Tu identidad, valoración y experiencia de {user.role === 'OWNER' ? 'propietario' : 'viajero'} se gestionan por separado.</p>
+          <p className="mt-2 text-sm text-[#6B726E]">{isAdmin ? 'Perfil interno para supervisar la gestión de la plataforma.' : `Tu identidad, valoración y experiencia de ${user.role === 'OWNER' ? 'propietario' : 'viajero'} se gestionan por separado.`}</p>
         </div>
         <div className="mb-6 grid gap-4 sm:grid-cols-3">
-          <div className="rounded-3xl bg-[#13322E] p-5 text-white">
+          {!isAdmin && <div className="rounded-3xl bg-[#13322E] p-5 text-white">
             <Star className="mb-3 h-6 w-6 text-[#16B8AA]" />
             <strong className="font-serif text-3xl">{rating ? rating.toFixed(1) : '—'}</strong>
             <p className="text-xs text-white/70">Valoración como {user.role === 'OWNER' ? 'propietario' : 'viajero'} · {reviews.length} opiniones</p>
-          </div>
-          <div className="rounded-3xl border border-[#E9E1D2] bg-white p-5">
+          </div>}
+          {!isAdmin && <div className="rounded-3xl border border-[#E9E1D2] bg-white p-5">
             <CalendarDays className="mb-3 h-6 w-6 text-[#16B8AA]" />
             <strong className="font-serif text-3xl">{bookingsCount}</strong>
             <p className="text-xs text-[#6B726E]">Reservas gestionadas</p>
-          </div>
+          </div>}
           <div className="rounded-3xl border border-[#E9E1D2] bg-white p-5">
             {user.role === 'OWNER' ? <Truck className="mb-3 h-6 w-6 text-[#16B8AA]" /> : <ShieldCheck className="mb-3 h-6 w-6 text-[#16B8AA]" />}
-            <strong className="font-serif text-3xl">{user.role === 'OWNER' ? vehiclesCount : user.verification === 'VERIFIED' ? 'Sí' : 'Pendiente'}</strong>
-            <p className="text-xs text-[#6B726E]">{user.role === 'OWNER' ? 'Campers publicadas' : 'Identidad verificada'}</p>
+            <strong className="font-serif text-3xl">{isAdmin ? 'Interno' : user.role === 'OWNER' ? vehiclesCount : user.verification === 'VERIFIED' ? 'Sí' : 'Pendiente'}</strong>
+            <p className="text-xs text-[#6B726E]">{isAdmin ? 'Perfil de administración' : user.role === 'OWNER' ? 'Campers publicadas' : 'Identidad verificada'}</p>
           </div>
         </div>
         <ProfileEditor user={user} />
-        <section className="mt-8 rounded-3xl border border-[#E9E1D2] bg-white p-6">
+        {!isAdmin && <section className="mt-8 rounded-3xl border border-[#E9E1D2] bg-white p-6">
           <h2 className="font-serif text-2xl font-bold">Opiniones sobre ti como {user.role === 'OWNER' ? 'propietario' : 'viajero'}</h2>
           {reviews.length === 0 ? (
             <p className="mt-3 text-sm text-[#6B726E]">Todavía no tienes valoraciones en este modo.</p>
@@ -87,7 +90,7 @@ export default async function ProfilePage() {
               </div>
             ))
           )}
-        </section>
+        </section>}
       </main>
     </div>
   );

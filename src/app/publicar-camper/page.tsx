@@ -37,8 +37,9 @@ export default function PublishCamperPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [authorized, setAuthorized] = useState<boolean | null>(null);
-  const [photoFile, setPhotoFile] = useState<File | null>(null);
-  const [photoPreview, setPhotoPreview] = useState('');
+  const [photoFiles, setPhotoFiles] = useState<File[]>([]);
+  const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
+  const [coverPhotoIndex, setCoverPhotoIndex] = useState(0);
 
   useEffect(() => {
     fetch('/api/auth/me')
@@ -171,8 +172,12 @@ export default function PublishCamperPage() {
       setError(`Las normas y condiciones deben tener al menos 10 caracteres (llevas ${formData.rules.trim().length}/10).`);
       return false;
     }
-    if (!photoFile) {
-      setError('Debes adjuntar al menos una foto principal de la camper.');
+    if (photoFiles.length < 5) {
+      setError(`Debes adjuntar al menos 5 fotos (${photoFiles.length}/5). Exterior, habitáculo, conducción, cama/interior y baño.`);
+      return false;
+    }
+    if (photoFiles.length > 10) {
+      setError('Puedes adjuntar como máximo 10 fotos.');
       return false;
     }
     return true;
@@ -203,9 +208,11 @@ export default function PublishCamperPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Error al publicar camper');
 
-      if (photoFile) {
+      for (let index = 0; index < photoFiles.length; index += 1) {
         const upload = new FormData();
-        upload.set('file', photoFile);
+        upload.set('file', photoFiles[index]);
+        upload.set('caption', ['Exterior', 'Zona de habitáculo', 'Zona de conducción', 'Zona de cama e interior', 'Baño'][index] || 'Foto adicional');
+        upload.set('isCover', String(index === coverPhotoIndex));
         const photoResponse = await fetch(`/api/vehicles/${data.vehicle.id}/photos`, { method: 'POST', body: upload });
         if (!photoResponse.ok) {
           const photoData = await photoResponse.json();
@@ -847,19 +854,21 @@ export default function PublishCamperPage() {
                   />
                 </div>
 
-                {/* FOTO PRINCIPAL */}
+                  {/* GALERÍA OBLIGATORIA */}
                 <div>
                   <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">
-                    Foto principal (Requerida)
+                    Fotos del vehículo (5 mínimas, 10 máximas)
                   </label>
                   <label className="flex min-h-44 cursor-pointer items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-[#16B8AA]/40 bg-[#F0FDFA] text-center hover:bg-[#E6FFFA] transition-colors">
-                    {photoPreview ? (
-                      <img src={photoPreview} alt="Vista previa" className="h-56 w-full object-cover" />
+                    {photoPreviews.length ? (
+                      <div className="grid w-full grid-cols-2 gap-2 p-3 sm:grid-cols-5">
+                        {photoPreviews.map((preview, index) => <img key={preview} src={preview} alt={`Foto ${index + 1}`} className={`h-28 w-full rounded-xl object-cover ${index === coverPhotoIndex ? 'ring-4 ring-[#16B8AA]' : ''}`} />)}
+                      </div>
                     ) : (
                       <div className="p-6 text-center space-y-2">
                         <Upload className="w-8 h-8 text-[#16B8AA] mx-auto" />
                         <span className="block text-sm font-bold text-[#0F766E]">
-                          Pulsa para subir una foto JPG, PNG o WEBP
+                          Pulsa para subir entre 5 y 10 fotos JPG, PNG o WEBP
                         </span>
                         <span className="block text-[11px] text-[#6B726E]">Máximo 5 MB</span>
                       </div>
@@ -867,17 +876,20 @@ export default function PublishCamperPage() {
                     <input
                       type="file"
                       required
+                      multiple
+                      maxLength={10}
                       accept="image/jpeg,image/png,image/webp"
                       className="hidden"
                       onChange={(event) => {
-                        const file = event.target.files?.[0];
-                        if (file) {
-                          setPhotoFile(file);
-                          setPhotoPreview(URL.createObjectURL(file));
-                        }
+                        const files = Array.from(event.target.files || []);
+                        if (files.length > 10) { setError('Puedes adjuntar como máximo 10 fotos.'); return; }
+                        setPhotoFiles(files);
+                        setPhotoPreviews(files.map((file) => URL.createObjectURL(file)));
+                        setCoverPhotoIndex(0);
                       }}
                     />
                   </label>
+                  {photoPreviews.length > 0 && <div className="mt-3 grid gap-2 sm:grid-cols-2"><p className="text-xs font-bold text-[#6B726E]">Orden recomendado: 1 exterior · 2 habitáculo · 3 conducción · 4 cama/interior · 5 baño.</p><label className="text-xs font-bold text-[#6B726E]">Foto de portada<select value={coverPhotoIndex} onChange={(event) => setCoverPhotoIndex(Number(event.target.value))} className="ml-2 rounded-lg border border-[#E9E1D2] p-1.5">{photoPreviews.map((_, index) => <option key={index} value={index}>Foto {index + 1}</option>)}</select></label></div>}
                 </div>
 
                 <div className="rounded-2xl border border-[#16B8AA]/30 bg-[#F0FDFA] p-4 text-xs font-medium text-[#0F766E] flex items-center space-x-2">

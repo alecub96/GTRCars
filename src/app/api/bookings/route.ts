@@ -6,6 +6,7 @@ import { sendBookingCreatedOwnerEmail } from '@/lib/email';
 import { Prisma } from '@/generated/prisma/client';
 import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 import { sendPushToUser } from '@/lib/push';
+import { isRequestOnlyVehicle } from '@/lib/booking-policy';
 
 const MAX_BOOKING_ATTEMPTS = 3;
 
@@ -65,7 +66,7 @@ export async function POST(request: Request) {
         extras: { include: { extra: true } },
         availabilityBlocks: true,
         pricingRules: true,
-        owner: { select: { email: true, firstName: true } },
+        owner: { select: { email: true, firstName: true, lastName: true } },
       },
     });
 
@@ -75,6 +76,7 @@ export async function POST(request: Request) {
     if (vehicle.ownerId === user.id) {
       return NextResponse.json({ error: 'No puedes reservar tu propio vehículo' }, { status: 400 });
     }
+    const requestOnly = isRequestOnlyVehicle(vehicle);
 
     const start = new Date(startDate);
     const end = new Date(endDate);
@@ -163,7 +165,7 @@ export async function POST(request: Request) {
               depositAmount: vehicle.securityDeposit,
               totalAmount: pricing.totalAmount,
               pricingSnapshot: JSON.stringify(pricing),
-              status: vehicle.bookingType === 'INSTANT_BOOKING' ? 'OWNER_ACCEPTED' : 'REQUESTED',
+              status: !requestOnly && vehicle.bookingType === 'INSTANT_BOOKING' ? 'OWNER_ACCEPTED' : 'REQUESTED',
               depositStatus: 'PENDING',
               extras: {
                 create: chosenExtras

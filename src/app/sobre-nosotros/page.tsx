@@ -116,6 +116,42 @@ export default function SobreNosotrosPage() {
           </div>
         </section>
 
+        {/* EQUIPO */}
+        <section className="mb-16" aria-labelledby="equipo-heading">
+          <div className="mb-8 text-center">
+            <span className="text-[11px] font-black uppercase tracking-[0.2em] text-[#16B8AA]">El equipo detrás de Vaneando</span>
+            <h2 id="equipo-heading" className="mt-2 font-serif text-2xl font-bold sm:text-3xl">Una idea nacida en Canarias</h2>
+          </div>
+          <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-2">
+          <article className="grid items-center overflow-hidden rounded-3xl border border-[#E9E1D2] bg-white shadow-sm">
+            <img src="/alejandro-fundador.png" alt="Alejandro, fundador y CEO de Vaneando" className="h-full min-h-[280px] w-full object-cover object-center" />
+            <div className="p-7 sm:p-10">
+              <span className="text-xs font-black uppercase tracking-widest text-[#16B8AA]">Fundador y CEO</span>
+              <h3 className="mt-2 font-serif text-3xl font-bold">Alejandro</h3>
+              <p className="mt-4 text-sm leading-7 text-[#4A5568]">
+                Soy Alejandro, creador de la idea de Vaneando. Me apasionan la naturaleza, el mundo del camping y las Islas Canarias. Creé esta plataforma para conectar a viajeros y propietarios locales y ayudar a descubrir el archipiélago de una forma más libre, cercana y responsable.
+              </p>
+              <p className="mt-4 text-sm leading-7 text-[#4A5568]">
+                Vaneando nace de esa pasión: convertir cada camper en una puerta de entrada a nuestras islas y apoyar a quienes comparten su vehículo con la comunidad.
+              </p>
+            </div>
+          </article>
+          <article className="grid items-center overflow-hidden rounded-3xl border border-[#E9E1D2] bg-white shadow-sm">
+            <img src="/leo-programador.jpg" alt="Leonardo, programador y creador técnico de Vaneando" className="h-full min-h-[280px] w-full object-cover object-center" />
+            <div className="p-7 sm:p-10">
+              <span className="text-xs font-black uppercase tracking-widest text-[#16B8AA]">Programador y co-creador</span>
+              <h3 className="mt-2 font-serif text-3xl font-bold">Leonardo</h3>
+              <p className="mt-4 text-sm leading-7 text-[#4A5568]">
+                Soy Leonardo, hermano de Alejandro y programador. Amante de la naturaleza y del campo, convertí la idea de Vaneando en una plataforma real para conectar a viajeros y propietarios en Canarias.
+              </p>
+              <p className="mt-4 text-sm leading-7 text-[#4A5568]">
+                Mi objetivo es que la tecnología sea sencilla, segura y útil para disfrutar del mundo camper y de nuestro territorio.
+              </p>
+            </div>
+          </article>
+          </div>
+        </section>
+
         {/* BANNER FINAL CTA */}
         <div className="bg-[#13322E] text-white rounded-3xl p-8 sm:p-10 text-center shadow-xl space-y-4">
           <h3 className="font-serif text-2xl sm:text-4xl font-bold">

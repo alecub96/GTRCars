@@ -16,6 +16,7 @@ import ContactOwnerButton from '@/components/ContactOwnerButton';
 import { isConfiguredAdmin } from '@/lib/admin';
 import Link from 'next/link';
 import { formatDateSafe } from '@/lib/date-utils';
+import { isRequestOnlyVehicle } from '@/lib/booking-policy';
 
 export const dynamic = 'force-dynamic';
 
@@ -529,7 +530,7 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
                     cleaningFee: Number(vehicle.cleaningFee || 0),
                     ownershipType: (vehicle.ownershipType || 'THIRD_PARTY') as 'PLATFORM' | 'THIRD_PARTY',
                     securityDeposit: Number(vehicle.securityDeposit || 0),
-                    bookingType: vehicle.bookingType || 'REQUEST_TO_BOOK',
+                    bookingType: isRequestOnlyVehicle(vehicle) ? 'REQUEST_TO_BOOK' : vehicle.bookingType || 'REQUEST_TO_BOOK',
                     minDays: Number(vehicle.minDays || 1),
                     maxDays: Number(vehicle.maxDays || 90),
                     pricingRules: (vehicle.pricingRules || []).map((r: any) => ({

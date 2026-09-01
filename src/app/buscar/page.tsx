@@ -34,14 +34,18 @@ interface SearchPageProps {
 
 export async function generateMetadata({ searchParams }: SearchPageProps): Promise<Metadata> {
   const params = await searchParams;
-  const islandName = params.island ? params.island : 'las Islas Canarias';
+  const islandName = params.island ? params.island.replace(/-/g, ' ') : 'las Islas Canarias';
   const typeObj = VEHICLE_TYPES_CONFIG.find((v) => v.id === params.vehicleType);
   const typeLabel = typeObj ? typeObj.label : 'campers y autocaravanas';
+  const isSimpleIslandSearch = Boolean(params.island && !params.vehicleType && !params.minPrice && !params.maxPrice && !params.passengers && !params.startDate && !params.endDate && !params.sort);
+  const canonical = isSimpleIslandSearch
+    ? `https://vaneando.com/alquiler-camper/${params.island!.toLowerCase().replace(/\s+/g, '-')}`
+    : 'https://vaneando.com/buscar';
 
   return {
     title: `Alquiler de ${typeLabel} en ${islandName} | vaneando.`,
     description: `Busca y compara ${typeLabel} publicados en ${islandName}. Revisa precio, disponibilidad y condiciones antes de contactar.`,
-    alternates: { canonical: 'https://vaneando.com/buscar' },
+    alternates: { canonical },
     robots: params.island || params.vehicleType || params.minPrice || params.maxPrice || params.passengers || params.startDate || params.endDate || params.sort
       ? { index: false, follow: true }
       : { index: true, follow: true },

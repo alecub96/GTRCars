@@ -99,12 +99,10 @@ export default function AdminPage() {
             </h1>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="w-full md:w-auto"><OwnerBrowserNotifications audience="admin" /></div>
-            <button type="button" onClick={() => setActiveTab('users')} className="inline-flex items-center gap-2 rounded-full bg-[#13322E] px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-sm transition hover:bg-[#16B8AA]">
-              <Users className="h-4 w-4" /> Gestionar usuarios y clientes
-            </button>
-            <div
+          <div className="w-full max-w-3xl space-y-3 md:w-auto">
+            <div className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2 text-xs">
+              <div className="text-[#16B8AA]"><OwnerBrowserNotifications audience="admin" /></div>
+              <div
               className={`flex items-center space-x-2 text-xs font-bold px-4 py-2 rounded-full border ${
                 metrics.stripeConfigured
                   ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
@@ -113,12 +111,18 @@ export default function AdminPage() {
             >
               <ShieldCheck className="w-4 h-4" />
               <span>{metrics.stripeConfigured ? 'Stripe Connect Activo' : 'Stripe Config Pendiente'}</span>
+              </div>
             </div>
+
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+            <button type="button" onClick={() => setActiveTab('users')} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#13322E] px-4 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-sm transition hover:bg-[#16B8AA]">
+              <Users className="h-4 w-4" /> Usuarios y clientes
+            </button>
 
             <button
               type="button"
               onClick={() => setActiveTab('conversations')}
-              className="inline-flex items-center space-x-2 rounded-full bg-[#16B8AA] hover:bg-[#0F766E] px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-sm transition-all cursor-pointer"
+              className="inline-flex min-h-11 items-center justify-center space-x-2 rounded-full bg-[#16B8AA] px-4 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-sm transition-all hover:bg-[#0F766E]"
             >
               <MessageSquare className="w-4 h-4" />
               <span>Auditoría de Chats (RGPD)</span>
@@ -131,7 +135,7 @@ export default function AdminPage() {
 
             <Link
               href="/soporte"
-              className="inline-flex items-center space-x-2 rounded-full bg-[#13322E] hover:bg-[#16B8AA] px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-sm transition-all"
+              className="inline-flex min-h-11 items-center justify-center space-x-2 rounded-full bg-[#13322E] px-4 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-sm transition-all hover:bg-[#16B8AA]"
             >
               <MessageSquare className="w-4 h-4" />
               <span>Bandeja de Soporte</span>
@@ -141,6 +145,7 @@ export default function AdminPage() {
                 </span>
               )}
             </Link>
+            </div>
           </div>
         </div>
 
