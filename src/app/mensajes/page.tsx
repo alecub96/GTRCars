@@ -264,7 +264,7 @@ export default function ChatPage() {
             </span>
           </div>
           <span className="bg-white/10 text-[#F2CC8F] px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider shrink-0 self-start sm:self-auto">
-            🛡️ Canal Encriptado
+            Canal encriptado
           </span>
         </div>
 
@@ -360,7 +360,7 @@ export default function ChatPage() {
                         </div>
 
                         <p className="text-[11px] font-bold text-[#16B8AA] truncate">
-                          🚐 {c.vehicle?.title || 'Consulta de camper'}
+                          {c.vehicle?.title || 'Consulta de camper'}
                         </p>
 
                         <p className="text-[11px] text-[#6B726E] truncate font-normal mt-1">

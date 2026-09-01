@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     // Validar Teléfonos
     if (PHONE_REGEX.test(cleanContent) || SPELLED_NUMBERS_REGEX.test(cleanContent)) {
       return NextResponse.json(
-        { error: '🛡️ Seguridad: Por tu protección, no está permitido compartir números de teléfono antes de confirmar la reserva.' },
+        { error: 'Seguridad: Por tu protección, no está permitido compartir números de teléfono antes de confirmar la reserva.' },
         { status: 422 }
       );
     }
@@ -45,7 +45,7 @@ export async function POST(request: Request) {
     // Validar Correos Electrónicos
     if (EMAIL_REGEX.test(cleanContent) || AT_SPELLED_REGEX.test(cleanContent)) {
       return NextResponse.json(
-        { error: '🛡️ Seguridad: No se permite enviar emails externos por política de protección de datos de la plataforma.' },
+        { error: 'Seguridad: No se permite enviar emails externos por política de protección de datos de la plataforma.' },
         { status: 422 }
       );
     }
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
     // Validar Menciones a Plataformas Competidoras
     if (COMPETITORS_REGEX.test(cleanContent)) {
       return NextResponse.json(
-        { error: '🛡️ Seguridad: No está permitido mencionar marcas de la competencia o plataformas externas.' },
+        { error: 'Seguridad: No está permitido mencionar marcas de la competencia o plataformas externas.' },
         { status: 422 }
       );
     }

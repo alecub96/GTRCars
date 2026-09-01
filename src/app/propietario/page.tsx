@@ -34,7 +34,7 @@ export default function OwnerDashboardPage() {
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.search.includes('anuncio=creado')) {
-      setMsg('🎉 ¡Tu furgoneta camper ha sido enviada a revisión con éxito! Ya aparece en tu lista de anuncios abajo en estado "Pendiente de revisión".');
+      setMsg('¡Tu furgoneta camper ha sido enviada a revisión con éxito! Ya aparece en tu lista de anuncios abajo en estado "Pendiente de revisión".');
     }
   }, []);
 

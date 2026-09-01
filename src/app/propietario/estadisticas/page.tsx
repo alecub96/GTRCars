@@ -259,7 +259,7 @@ export default function OwnerStatsPage() {
             </div>
 
             <div className="mt-6 p-4 rounded-2xl bg-[#FAF7F0] border border-[#E9E1D2] text-xs text-[#6B726E] font-medium">
-              💡 <strong>Consejo de optimización:</strong> Mantén tu calendario actualizado y añade fotos de alta resolución para multiplicar tus visitas por 3.
+              <strong>Consejo de optimización:</strong> Mantén tu calendario actualizado y añade fotos de alta resolución para multiplicar tus visitas por 3.
             </div>
           </div>
         </section>

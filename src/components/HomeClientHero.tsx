@@ -7,7 +7,7 @@ import Navbar from '@/components/Navbar';
 import MainSearchWidget from '@/components/MainSearchWidget';
 import VehicleTypeSlider from '@/components/VehicleTypeSlider';
 import { CANARY_ISLANDS } from '@/lib/pricing';
-import { Star, ChevronRight, MapPin, ShieldCheck, HeartHandshake, KeyRound } from 'lucide-react';
+import { Star, ChevronRight, MapPin, Map, Users, Compass, ShieldCheck, HeartHandshake, KeyRound } from 'lucide-react';
 import VehicleViewTracker from '@/components/VehicleViewTracker';
 import VehicleCardPhotoSlider from '@/components/VehicleCardPhotoSlider';
 import FAQAccordion from '@/components/FAQAccordion';
@@ -90,7 +90,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                   href={`/mapa?island=${encodeURIComponent(selectedIsland)}`}
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#13322E]/80 hover:bg-[#16B8AA] backdrop-blur-md text-white text-xs font-black uppercase tracking-wider transition-all border border-white/30 shadow-xl hover:scale-105"
                 >
-                  <span>🗺️ Ver Mapa Interactivo de {selectedIsland}</span>
+                  <span className="inline-flex items-center gap-2"><Map className="h-4 w-4" /> Ver Mapa Interactivo de {selectedIsland}</span>
                   <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full">Pines & Precios</span>
                 </Link>
               </div>
@@ -353,22 +353,22 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Link href="/buscar?passengers=4" className="bg-white p-6 rounded-3xl border border-[#E9E1D2] text-center hover:border-[#16B8AA] transition-colors shadow-sm">
-              <span className="text-3xl mb-2 block">👨‍👩‍👧‍👦</span>
+              <Users className="mb-2 h-8 w-8" />
               <h3 className="font-bold text-sm text-[#13322E]">Viajes con Niños</h3>
               <p className="text-[11px] text-[#6B726E] mt-1 font-medium">Campers amplias de 4 a 6 plazas</p>
             </Link>
             <Link href="/buscar?pets=true" className="bg-white p-6 rounded-3xl border border-[#E9E1D2] text-center hover:border-[#16B8AA] transition-colors shadow-sm">
-              <span className="text-3xl mb-2 block">🐾</span>
+              <HeartHandshake className="mb-2 h-8 w-8" />
               <h3 className="font-bold text-sm text-[#13322E]">Pet-Friendly</h3>
               <p className="text-[11px] text-[#6B726E] mt-1 font-medium">Viaja con tu mascota libremente</p>
             </Link>
             <Link href="/buscar?surf=true" className="bg-white p-6 rounded-3xl border border-[#E9E1D2] text-center hover:border-[#16B8AA] transition-colors shadow-sm">
-              <span className="text-3xl mb-2 block">🏄</span>
+              <Compass className="mb-2 h-8 w-8" />
               <h3 className="font-bold text-sm text-[#13322E]">Surf Trip en Camper</h3>
               <p className="text-[11px] text-[#6B726E] mt-1 font-medium">Con soportes para tablas y ducha exterior</p>
             </Link>
             <Link href="/buscar?maxPrice=70" className="bg-white p-6 rounded-3xl border border-[#E9E1D2] text-center hover:border-[#16B8AA] transition-colors shadow-sm">
-              <span className="text-3xl mb-2 block">💶</span>
+              <KeyRound className="mb-2 h-8 w-8" />
               <h3 className="font-bold text-sm text-[#13322E]">Campers Económicas</h3>
               <p className="text-[11px] text-[#6B726E] mt-1 font-medium">Furgonetas por menos de 70€/día</p>
             </Link>
@@ -527,7 +527,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
               Vehículos recreativos publicados para alquilar en las Islas Canarias.
             </p>
             <div className="flex flex-wrap items-center gap-2 text-xs text-white/80">
-              <span className="bg-white/10 px-3 py-1 rounded-full border border-white/10">💳 Pagos Seguros SSL</span>
+              <span className="bg-white/10 px-3 py-1 rounded-full border border-white/10">Pagos seguros SSL</span>
               <span className="bg-white/10 px-3 py-1 rounded-full border border-white/10">⚖️ Contratos eIDAS</span>
               <span className="bg-white/10 px-3 py-1 rounded-full border border-white/10">⚡ Respuesta &lt; 15 min</span>
             </div>

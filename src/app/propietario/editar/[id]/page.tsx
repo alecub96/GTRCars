@@ -254,7 +254,7 @@ export default function EditCamperPage({ params }: { params: Promise<{ id: strin
         throw new Error(data.error || 'No se pudieron guardar los cambios');
       }
 
-      setSuccessMsg('🎉 ¡Tu anuncio ha sido actualizado correctamente!');
+      setSuccessMsg('¡Tu anuncio ha sido actualizado correctamente!');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err: any) {
       setSaving(false);

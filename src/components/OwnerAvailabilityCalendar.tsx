@@ -525,7 +525,7 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
                 {feeds.length > 0 && (
                   <div className="mt-4 border-t border-teal-200/60 pt-4">
                     <h4 className="text-xs font-black uppercase tracking-wider text-[#13322E] mb-3 flex items-center gap-1.5">
-                      <span>🔗 Calendarios Conectados para este vehículo ({feeds.length})</span>
+                      <span>Calendarios conectados para este vehículo ({feeds.length})</span>
                     </h4>
                     <div className="grid gap-3 sm:grid-cols-2">
                       {feeds.map((feed) => (
@@ -648,11 +648,11 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
 
                 <div className="grid gap-3 sm:grid-cols-2 text-xs text-[#6B726E]">
                   <div className="p-3.5 rounded-xl bg-[#FAF7F0] border border-[#E9E1D2]">
-                    <strong className="text-[#13322E] block mb-1">📍 Cómo pegarlo en Airbnb:</strong>
+                    <strong className="text-[#13322E] block mb-1">Cómo pegarlo en Airbnb:</strong>
                     <span>Ve a tu anuncio en Airbnb &gt; Precios y disponibilidad &gt; Sincronizar calendarios &gt; Importar calendario y pega el enlace anterior.</span>
                   </div>
                   <div className="p-3.5 rounded-xl bg-[#FAF7F0] border border-[#E9E1D2]">
-                    <strong className="text-[#13322E] block mb-1">🚐 Cómo pegarlo en empresas del sector / Booking:</strong>
+                    <strong className="text-[#13322E] block mb-1">Cómo pegarlo en empresas del sector / Booking:</strong>
                     <span>En el menú de tu vehículo &gt; Calendario &gt; Importar iCal &gt; Pega la URL generada.</span>
                   </div>
                 </div>

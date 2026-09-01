@@ -253,7 +253,7 @@ export default function SupportPage() {
                     >
                       <strong className="mb-1 block text-[10px] uppercase tracking-wider opacity-70">
                         {message.system
-                          ? '🤖 Asistente Vaneando'
+                          ? 'Asistente Vaneando'
                           : message.sender?.role === 'ADMIN'
                           ? '⭐ Equipo Vaneando'
                           : `${message.sender?.firstName || ''} ${message.sender?.lastName || ''}`}

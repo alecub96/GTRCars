@@ -219,7 +219,7 @@ export default function SearchMapExplorer({
             }`}
           >
             <MapIcon className="w-3.5 h-3.5" />
-            <span>Ver en Mapa 🗺️</span>
+            <span>Ver en el mapa</span>
           </button>
 
           {/* BOTÓN DIVIDIDO (PC) */}

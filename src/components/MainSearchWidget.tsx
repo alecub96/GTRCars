@@ -13,17 +13,6 @@ interface MainSearchWidgetProps {
   onVehicleTypeChange?: (newType: string) => void;
 }
 
-const ISLAND_EMOJIS: Record<string, string> = {
-  'Gran Canaria': '🏝️',
-  'Tenerife': '🌋',
-  'Lanzarote': '🌋',
-  'Fuerteventura': '🏖️',
-  'La Palma': '🌲',
-  'La Gomera': '🌲',
-  'El Hierro': '🌊',
-  'La Graciosa': '⛵',
-};
-
 export default function MainSearchWidget({
   selectedIsland,
   onIslandChange,
@@ -84,7 +73,7 @@ export default function MainSearchWidget({
   const passengerLabelText = () => {
     let text = `${adults} ${adults === 1 ? 'Adulto' : 'Adultos'}`;
     if (children > 0) text += `, ${children} ${children === 1 ? 'Niño' : 'Niños'}`;
-    if (hasPet) text += ' 🐾';
+    if (hasPet) text += ' · mascota a bordo';
     return text;
   };
 
@@ -114,7 +103,7 @@ export default function MainSearchWidget({
             </label>
             <div className="flex items-center justify-between">
               <span className="font-extrabold text-sm text-[#13322E] truncate">
-                {ISLAND_EMOJIS[activeIsland] || '🏝️'} {activeIsland}
+                <MapPin className="inline h-4 w-4" /> {activeIsland}
               </span>
               <ChevronDown
                 className={`w-4 h-4 text-[#94A3B8] transition-transform duration-200 ${
@@ -149,7 +138,7 @@ export default function MainSearchWidget({
                     }`}
                   >
                     <span className="flex items-center space-x-2">
-                      <span className="text-base">{ISLAND_EMOJIS[is.name] || '🏝️'}</span>
+                      <MapPin className="h-4 w-4" />
                       <span>{is.name}</span>
                     </span>
                     {isSelected && <Check className="w-4 h-4 text-[#16B8AA]" />}
@@ -267,7 +256,7 @@ export default function MainSearchWidget({
                 <label className="flex items-center justify-between cursor-pointer">
                   <div>
                     <h4 className="text-xs font-bold text-[#13322E] flex items-center gap-1.5">
-                      <span>Mascota a bordo</span> 🐾
+                      <span>Mascota a bordo</span>
                     </h4>
                     <p className="text-[10px] text-[#6B726E]">Buscar campers Pet-Friendly</p>
                   </div>

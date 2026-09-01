@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Bell } from 'lucide-react';
 
 export default function OwnerBrowserNotifications({ audience = 'owner' }: { audience?: 'owner' | 'admin' }) {
   const [enabled, setEnabled] = useState(false);
@@ -54,11 +55,11 @@ export default function OwnerBrowserNotifications({ audience = 'owner' }: { audi
     if (permission === 'granted') await registerPush();
   }
 
-  if (enabled) return <span className="text-xs font-bold text-[#16B8AA]">🔔 Avisos del navegador activos</span>;
+  if (enabled) return <span className="inline-flex items-center gap-1 text-xs font-bold text-[#16B8AA]"><Bell className="h-3.5 w-3.5" /> Avisos del navegador activos</span>;
   const supported = typeof Notification !== 'undefined' && 'serviceWorker' in navigator && 'PushManager' in window;
-  if (!supported) return <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs font-bold text-amber-900">🔔 Para recibir avisos en este móvil, añade Vaneando a la pantalla de inicio y activa las notificaciones del sistema.</div>;
+  if (!supported) return <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs font-bold text-amber-900">Para recibir avisos en este móvil, añade Vaneando a la pantalla de inicio y activa las notificaciones del sistema.</div>;
   return <>
-    <button type="button" onClick={enable} className="rounded-full bg-[#16B8AA] px-4 py-2.5 text-xs font-black text-white shadow-sm">🔔 Activar avisos de reservas</button>
+    <button type="button" onClick={enable} className="rounded-full bg-[#16B8AA] px-4 py-2.5 text-xs font-black text-white shadow-sm">Activar avisos de reservas</button>
     {showPrompt && <div className="fixed inset-0 z-[100] flex items-end justify-center bg-[#13322E]/45 p-4 sm:items-center"><div role="dialog" aria-modal="true" className="w-full max-w-md rounded-3xl bg-white p-6 text-[#13322E] shadow-2xl"><div className="mb-3 text-3xl">🔔</div><h2 className="font-serif text-2xl font-bold">Activa tus avisos de Vaneando</h2><p className="mt-2 text-sm leading-6 text-[#6B726E]">Recibirás avisos importantes de reservas y actividad de la plataforma aunque no tengas Vaneando abierto.</p><div className="mt-5 flex gap-3"><button type="button" onClick={async () => { await enable(); setShowPrompt(false); }} className="flex-1 rounded-full bg-[#13322E] px-4 py-3 text-xs font-black text-white">Activar avisos</button><button type="button" onClick={() => setShowPrompt(false)} className="rounded-full border border-[#E9E1D2] px-4 py-3 text-xs font-bold">Ahora no</button></div></div></div>}
   </>;
 }

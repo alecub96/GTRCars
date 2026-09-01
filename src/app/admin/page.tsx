@@ -298,7 +298,7 @@ export default function AdminPage() {
                 : 'bg-white border border-[#E9E1D2] text-[#13322E] hover:bg-[#FAF7F0]'
             }`}
           >
-            🚐 Moderación de Campers ({metrics.pendingVehiclesCount || 0})
+            <><Car className="inline h-4 w-4" /> Moderación de Campers ({metrics.pendingVehiclesCount || 0})</>
           </button>
 
           <button
@@ -310,7 +310,7 @@ export default function AdminPage() {
                 : 'bg-white border border-[#E9E1D2] text-[#13322E] hover:bg-[#FAF7F0]'
             }`}
           >
-            👥 Clientes & Usuarios ({metrics.totalUsersCount || 0})
+            <><Users className="inline h-4 w-4" /> Clientes & Usuarios ({metrics.totalUsersCount || 0})</>
           </button>
 
           <button
@@ -322,7 +322,7 @@ export default function AdminPage() {
                 : 'bg-white border border-[#E9E1D2] text-[#13322E] hover:bg-[#FAF7F0]'
             }`}
           >
-            💬 Chats entre Usuarios (RGPD: {metrics.totalConversationsCount || 0})
+            <><MessageSquare className="inline h-4 w-4" /> Chats entre Usuarios (RGPD: {metrics.totalConversationsCount || 0})</>
           </button>
 
           <button
@@ -334,7 +334,7 @@ export default function AdminPage() {
                 : 'bg-white border border-[#E9E1D2] text-[#13322E] hover:bg-[#FAF7F0]'
             }`}
           >
-            🪪 Verificaciones DNI ({metrics.pendingVerificationsCount || 0})
+            <><FileCheck className="inline h-4 w-4" /> Verificaciones DNI ({metrics.pendingVerificationsCount || 0})</>
           </button>
 
           <button
@@ -346,7 +346,7 @@ export default function AdminPage() {
                 : 'bg-white border border-[#E9E1D2] text-[#13322E] hover:bg-[#FAF7F0]'
             }`}
           >
-            ⚠️ Incidencias ({metrics.pendingIncidentsCount || 0})
+            <><AlertTriangle className="inline h-4 w-4" /> Incidencias ({metrics.pendingIncidentsCount || 0})</>
           </button>
 
           <button
@@ -358,7 +358,7 @@ export default function AdminPage() {
                 : 'bg-white border border-[#E9E1D2] text-[#13322E] hover:bg-[#FAF7F0]'
             }`}
           >
-            💰 Finanzas & Comisiones
+            <><DollarSign className="inline h-4 w-4" /> Finanzas & Comisiones</>
           </button>
 
           <button

@@ -557,7 +557,7 @@ export default function PublishCamperPage() {
                   <div className="rounded-2xl border border-teal-200 bg-teal-50/50 p-4 sm:p-5 space-y-3">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-black uppercase tracking-wider text-[#0F766E]">
-                        💡 Desglose económico transparente
+                        Desglose económico transparente
                       </span>
                       <span className="text-[10px] bg-[#16B8AA] text-white font-bold px-2.5 py-0.5 rounded-full">
                         División automática en Stripe
@@ -603,7 +603,7 @@ export default function PublishCamperPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <h4 className="text-sm font-bold text-[#13322E] flex items-center gap-1.5">
-                        <span>📅 Tarifas Especiales según Fechas / Temporada</span>
+                        <span>Tarifas especiales según fechas y temporada</span>
                       </h4>
                       <p className="text-[11px] text-[#6B726E] mt-0.5">
                         Personaliza el precio por día para períodos de alta demanda (ej: Semana Santa, Verano, Fines de semana).

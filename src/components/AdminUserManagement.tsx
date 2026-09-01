@@ -385,7 +385,7 @@ export default function AdminUserManagement() {
                               : 'bg-sky-100 text-sky-900 border-sky-200'
                           }`}
                         >
-                          {isAdmin ? '👑 Administrador' : isOwner ? '🚐 Propietario' : '🎒 Viajero'}
+                          {isAdmin ? 'Administrador' : isOwner ? 'Propietario' : 'Viajero'}
                         </span>
 
                         <span
@@ -428,13 +428,13 @@ export default function AdminUserManagement() {
                       {u._count && (
                         <div className="flex items-center space-x-3 text-[11px] text-[#13322E] font-bold mt-1.5">
                           {u._count.vehicles > 0 && (
-                            <span className="text-[#16B8AA]">🚐 {u._count.vehicles} campers publicadas</span>
+                            <span className="text-[#16B8AA]">{u._count.vehicles} campers publicadas</span>
                           )}
                           {u._count.bookingsAsTraveler > 0 && (
-                            <span>🎒 {u._count.bookingsAsTraveler} reservas hechas</span>
+                            <span>{u._count.bookingsAsTraveler} reservas hechas</span>
                           )}
                           {u._count.bookingsAsOwner > 0 && (
-                            <span>🔑 {u._count.bookingsAsOwner} alquileres gestionados</span>
+                            <span>{u._count.bookingsAsOwner} alquileres gestionados</span>
                           )}
                         </div>
                       )}
@@ -631,9 +631,9 @@ export default function AdminUserManagement() {
                     onChange={(e) => setEditForm({ ...editForm, role: e.target.value as any })}
                     className="w-full px-3.5 py-2 rounded-xl border border-[#E9E1D2] text-xs font-bold text-[#13322E] focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
                   >
-                    <option value="TRAVELER">🎒 Viajero</option>
-                    <option value="OWNER">🚐 Propietario</option>
-                    <option value="ADMIN">👑 Administrador</option>
+                    <option value="TRAVELER">Viajero</option>
+                    <option value="OWNER">Propietario</option>
+                    <option value="ADMIN">Administrador</option>
                   </select>
                 </div>
                 <div>

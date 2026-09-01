@@ -483,7 +483,7 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
                     <h3 className="font-serif text-3xl font-bold text-[#13322E]">{vehicle.basePricePerDay} € <span className="text-xs text-[#6B726E] font-normal">/ día</span></h3>
                   </div>
                   <span className="rounded-full bg-amber-100 text-amber-900 px-3 py-1 text-[10px] font-black uppercase tracking-wider">
-                    🔥 Ocupación Completa
+                    Ocupación completa
                   </span>
                 </div>
 

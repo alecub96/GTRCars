@@ -507,7 +507,7 @@ export default function AdminConversationsAudit() {
             {/* PIE MODAL */}
             <div className="p-4 border-t border-[#E9E1D2] bg-[#FAF7F0] flex items-center justify-between">
               <span className="text-[11px] text-[#6B726E]">
-                🔒 Registro de auditoría conforme a Términos y Condiciones (Cláusula 9).
+                Registro de auditoría conforme a Términos y Condiciones (Cláusula 9).
               </span>
               <button
                 type="button"
