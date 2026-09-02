@@ -6,6 +6,7 @@ import Navbar from '@/components/Navbar';
 import { CANARY_ISLANDS } from '@/lib/pricing';
 import { BusFront, CarFront, Caravan, CheckCircle2, Mountain, Ship, Truck, Upload, AlertCircle, FileText, ShieldAlert } from 'lucide-react';
 import OwnerLocationMapPicker from '@/components/OwnerLocationMapPicker';
+import { analytics } from '@/lib/analytics';
 
 const EQUIPMENT = [
   'Aire acondicionado',
@@ -40,6 +41,7 @@ export default function PublishCamperPage() {
   const [photoFiles, setPhotoFiles] = useState<File[]>([]);
   const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
   const [coverPhotoIndex, setCoverPhotoIndex] = useState(0);
+  useEffect(() => { analytics.track('vehicle_creation_start'); }, []);
 
   useEffect(() => {
     fetch('/api/auth/me')
@@ -189,6 +191,7 @@ export default function PublishCamperPage() {
 
     setLoading(true);
     setError('');
+    analytics.formSubmit('owner_vehicle_publish');
 
     try {
       const res = await fetch('/api/vehicles/publish', {
@@ -220,6 +223,8 @@ export default function PublishCamperPage() {
         }
       }
 
+      analytics.track('vehicle_creation_success');
+      analytics.track('vehicle_publish_success');
       window.location.href = '/propietario?anuncio=creado';
     } catch (err: any) {
       setError(err.message || 'No se pudo enviar el anuncio a revisión.');

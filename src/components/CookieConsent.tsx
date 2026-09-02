@@ -16,6 +16,7 @@ export default function CookieConsent() {
       });
     }
   };
+  const updateClarityConsent = (granted: boolean) => { if (typeof window !== 'undefined' && (window as any).clarity) (window as any).clarity('consent', granted); };
 
   useEffect(() => {
     const consent = localStorage.getItem('vaneando-cookie-consent');
@@ -23,18 +24,23 @@ export default function CookieConsent() {
       setVisible(true);
     } else if (consent === 'all') {
       updateGoogleConsent(true);
+      updateClarityConsent(true);
     }
   }, []);
 
   const handleAcceptAll = () => {
     localStorage.setItem('vaneando-cookie-consent', 'all');
     updateGoogleConsent(true);
+    updateClarityConsent(true);
+    window.dispatchEvent(new Event('vaneando-consent-updated'));
     setVisible(false);
   };
 
   const handleAcceptNecessary = () => {
     localStorage.setItem('vaneando-cookie-consent', 'necessary');
     updateGoogleConsent(false);
+    updateClarityConsent(false);
+    window.dispatchEvent(new Event('vaneando-consent-updated'));
     setVisible(false);
   };
 

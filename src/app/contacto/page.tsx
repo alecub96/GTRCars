@@ -17,6 +17,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import Link from 'next/link';
+import { analytics } from '@/lib/analytics';
 
 export default function ContactoPage() {
   const router = useRouter();
@@ -37,6 +38,7 @@ export default function ContactoPage() {
     e.preventDefault();
     setError('');
     setLoading(true);
+    analytics.formSubmit('contact');
 
     try {
       const res = await fetch('/api/contact', {
@@ -53,6 +55,8 @@ export default function ContactoPage() {
       }
 
       setSuccess(true);
+      analytics.formSuccess('contact');
+      analytics.conversion('contact_success');
       setTimeout(() => {
         router.push('/gracias?origen=contacto');
       }, 1200);

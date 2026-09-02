@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { calculatePricing } from '@/lib/pricing';
 import DateRangeCalendar from '@/components/DateRangeCalendar';
+import { analytics } from '@/lib/analytics';
 
 interface BookingWidgetProps {
   vehicle: {
@@ -66,6 +67,8 @@ export default function BookingWidget({ vehicle }: BookingWidgetProps) {
     }
     setError('');
     setLoading(true);
+    analytics.track('booking_started', { vehicle_id: vehicle.id });
+    analytics.formStart('booking');
 
     try {
       const res = await fetch('/api/bookings', {
@@ -107,6 +110,8 @@ export default function BookingWidget({ vehicle }: BookingWidgetProps) {
         }
         throw new Error(data.error || 'Error al procesar reserva');
       }
+      analytics.track('booking_completed', { vehicle_id: vehicle.id });
+      analytics.conversion('conversion', { conversion_type: 'booking_request' });
 
       router.push(`/reserva/${data.booking.id}`);
     } catch (err: any) {

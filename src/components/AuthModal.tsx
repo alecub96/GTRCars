@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import { User, X, LogIn, UserPlus, LogOut, ShieldCheck, Truck, KeyRound, RefreshCw, Compass, Mail, UserCircle, CheckCircle2, Sparkles, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
+import { analytics } from '@/lib/analytics';
 
 export default function AuthModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -47,6 +48,7 @@ export default function AuthModal() {
       document.body.style.overflow = '';
     };
   }, [isOpen]);
+  useEffect(() => { if (isOpen && mode === 'register') analytics.track(role === 'OWNER' ? 'owner_registration_start' : 'registration_start'); }, [isOpen, mode, role]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,6 +78,8 @@ export default function AuthModal() {
       }
 
       setUser(data.user);
+      analytics.track(mode === 'register' && role === 'OWNER' ? 'owner_registration_success' : mode === 'register' ? 'registration_success' : 'login_success');
+      if (mode === 'register') analytics.conversion('conversion', { conversion_type: 'registration' });
       setIsOpen(false);
 
       // Comprobar si el usuario tenía una reserva en curso antes de identificarse
