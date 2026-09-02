@@ -1,3 +1,5 @@
+import { SEO_EXPANSION_ARTICLES } from './seo-expansion';
+
 export type BlogSection = { heading: string; paragraphs: string[]; bullets?: string[] };
 export type BlogFaq = { question: string; answer: string };
 export type BlogArticle = {
@@ -1166,7 +1168,7 @@ function expandArticle(article: BlogArticle): BlogArticle {
   return { ...article, sections: [...article.sections, ...(specificSections[article.slug] || []), ...profileSections, ...extraSections], faqs: [...(article.faqs || []), { question: '¿Qué incluye normalmente una reserva?', answer: 'Depende del anuncio: revisa precio, limpieza, extras, kilometraje, fianza, seguro y condiciones antes de confirmar.' }, { question: '¿Cómo contacto con Vaneando?', answer: 'Puedes utilizar la mensajería y los canales de contacto indicados en la plataforma para resolver dudas o incidencias.' }, { question: '¿Qué hago si las condiciones no están claras?', answer: 'Pregunta antes de pagar y solicita que cualquier acuerdo importante quede reflejado por escrito en la conversación.' }], readingTime: '25 min' };
 }
 
-export const BLOG_ARTICLES: BlogArticle[] = BASE_BLOG_ARTICLES.map(expandArticle);
+export const BLOG_ARTICLES: BlogArticle[] = [...BASE_BLOG_ARTICLES, ...SEO_EXPANSION_ARTICLES].map(expandArticle);
 
 export function getBlogArticle(slug: string) {
   return BLOG_ARTICLES.find((article) => article.slug === slug);

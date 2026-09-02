@@ -1,6 +1,6 @@
 const { BLOG_ARTICLES } = await import('../src/lib/blog.ts');
 const articles = BLOG_ARTICLES;
-if (articles.length !== 30) throw new Error(`El blog debe tener exactamente 30 artículos; actualmente tiene ${articles.length}`);
+if (articles.length !== 200) throw new Error(`El blog debe tener exactamente 200 artículos; actualmente tiene ${articles.length}`);
 
 const failures = [];
 const fingerprints = new Map();
@@ -28,4 +28,4 @@ if (failures.length) {
   console.error(JSON.stringify(failures, null, 2));
   throw new Error(`${failures.length} artículos aún no cumplen el estándar SEO mínimo`);
 }
-console.log('Blog quality audit passed: 30 artículos, todos con 3.000+ palabras y estructura SEO mínima.');
+console.log('Blog quality audit passed: 200 artículos, todos con 3.000+ palabras y estructura SEO mínima.');
