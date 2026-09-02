@@ -14,6 +14,12 @@ export default function OwnerIncomeCalculator() {
     return { bookedDays: Math.round(bookedDays * 10) / 10, gross, fee, net: Math.round((gross - fee) * 100) / 100 };
   }, [dailyRate, availableDays, occupancy]);
 
+  const comparison = [
+    { name: 'Vaneando', rate: 9.7, featured: true },
+    { name: 'Plataforma generalista', rate: 20, featured: false },
+    { name: 'Marketplace especializado', rate: 25, featured: false },
+  ];
+
   return (
     <section aria-labelledby="calculadora-ingresos" className="rounded-3xl bg-[#13322E] p-6 text-white shadow-xl sm:p-9">
       <div className="max-w-2xl">
@@ -31,6 +37,33 @@ export default function OwnerIncomeCalculator() {
         <div><span className="block text-xs text-white/65">Ingresos brutos</span><strong className="text-xl">{result.gross.toFixed(2)} €</strong></div>
         <div><span className="block text-xs text-white/65">Comisión Vaneando (9,7%)</span><strong className="text-xl">-{result.fee.toFixed(2)} €</strong></div>
         <div><span className="block text-xs text-[#F2CC8F]">Neto estimado</span><strong className="text-2xl text-[#F2CC8F]">{result.net.toFixed(2)} €</strong></div>
+      </div>
+      <div className="mt-8 rounded-2xl bg-white p-5 text-[#13322E] sm:p-6">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#16B8AA]">Compara tu neto</span>
+            <h3 className="mt-1 font-serif text-2xl font-bold">¿Qué recibirías con otras plataformas?</h3>
+          </div>
+          <span className="text-xs font-medium text-[#6B726E]">Sobre {result.gross.toFixed(2)} € brutos</span>
+        </div>
+        <div className="mt-5 grid gap-3 md:grid-cols-3">
+          {comparison.map((platform) => {
+            const fee = Math.round(result.gross * platform.rate) / 100;
+            const net = Math.round((result.gross - fee) * 100) / 100;
+            return (
+              <div key={platform.name} className={`rounded-xl border p-4 ${platform.featured ? 'border-[#16B8AA] bg-[#F0FDFA]' : 'border-[#E9E1D2] bg-[#FAF7F0]'}`}>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-sm font-black">{platform.name}</span>
+                  {platform.featured && <span className="rounded-full bg-[#16B8AA] px-2 py-1 text-[9px] font-black uppercase tracking-wider text-white">Tu opción</span>}
+                </div>
+                <p className="mt-3 text-xs text-[#6B726E]">Comisión orientativa: {platform.rate}%</p>
+                <strong className="mt-1 block text-xl">{net.toFixed(2)} € <span className="text-xs font-medium text-[#6B726E]">netos</span></strong>
+                {!platform.featured && <p className="mt-2 text-[11px] font-bold text-[#D97706]">-{(net - result.net).toFixed(2)} € frente a Vaneando</p>}
+              </div>
+            );
+          })}
+        </div>
+        <p className="mt-4 text-[11px] leading-5 text-[#6B726E]">Comparativa orientativa para ayudarte a visualizar el impacto de las comisiones. Las tarifas de cada plataforma pueden cambiar según el mercado, el tipo de anuncio y las condiciones de la reserva.</p>
       </div>
     </section>
   );

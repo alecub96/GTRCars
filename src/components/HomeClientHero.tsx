@@ -51,8 +51,8 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
       <Navbar />
 
       {/* 1. HERO CON CAMBIO DINÁMICO DE IMAGEN DE FONDO SEGÚN LA ISLA */}
-      <section className="relative z-20 min-h-[85vh] flex items-center justify-center overflow-hidden px-3 sm:px-4 py-10 transition-all duration-700 w-full max-w-full">
-        <div className="absolute inset-0 z-0">
+      <section className="relative z-20 min-h-[85vh] flex items-center justify-center overflow-visible px-3 sm:px-4 py-10 transition-all duration-700 w-full max-w-full">
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
           <img
             key={selectedIsland}
             src={currentHeroImage}
