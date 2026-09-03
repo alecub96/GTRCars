@@ -155,18 +155,6 @@ export default function AdminPage() {
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-8">
           <button
             type="button"
-            onClick={() => setActiveTab('analytics')}
-            className={`px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === 'analytics'
-                ? 'bg-[#13322E] text-white shadow-sm'
-                : 'bg-white border border-[#E9E1D2] text-[#13322E] hover:bg-[#FAF7F0]'
-            }`}
-          >
-            <><BarChart3 className="inline h-4 w-4" /> Analítica & Medición</>
-          </button>
-
-          <button
-            type="button"
             onClick={() => setActiveTab('vehicles')}
             className={`p-4 rounded-3xl border text-left transition-all cursor-pointer ${
               activeTab === 'vehicles'
@@ -373,6 +361,18 @@ export default function AdminPage() {
             }`}
           >
             <><DollarSign className="inline h-4 w-4" /> Finanzas & Comisiones</>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('analytics')}
+            className={`px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
+              activeTab === 'analytics'
+                ? 'bg-[#13322E] text-white shadow-sm'
+                : 'bg-white border border-[#E9E1D2] text-[#13322E] hover:bg-[#FAF7F0]'
+            }`}
+          >
+            <><BarChart3 className="inline h-4 w-4" /> Analítica & Medición</>
           </button>
 
           <button
