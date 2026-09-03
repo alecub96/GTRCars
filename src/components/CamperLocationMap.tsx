@@ -312,27 +312,12 @@ export default function CamperLocationMap({
             <span>${municipality} (${island})</span>
           </div>
           <div style="
-            position: absolute;
-            width: 54px;
-            height: 54px;
-            border-radius: 50%;
-            background-color: rgba(22, 184, 170, 0.35);
-            animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
-          "></div>
-          <div style="
             position: relative;
-            background-color: #13322E;
-            color: #ffffff;
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.35);
-            border: 3px solid #ffffff;
           ">
-            <img src="${vehicleIllustration}" alt="${vehicleTitle}" style="width: 46px; height: 46px; object-fit: contain;" />
+            <img src="${vehicleIllustration}" alt="${vehicleTitle}" style="width: 66px; height: 66px; object-fit: contain;" />
           </div>
         </div>
       `,
