@@ -90,7 +90,7 @@ export default function SecurityPage() {
         {/* AVISO IMPORTANTE DE INTERMEDIACIÓN TECNOLÓGICA */}
         <div className="bg-amber-50/80 border border-amber-200 p-6 rounded-3xl flex flex-col sm:flex-row items-start sm:items-center gap-4 text-amber-950">
           <div className="w-10 h-10 rounded-2xl bg-[#D97706] text-white flex items-center justify-center font-black shrink-0 text-base">
-            ⚖️
+            <ShieldCheck className="h-5 w-5" />
           </div>
           <div className="space-y-1 text-xs leading-relaxed">
             <strong className="block text-sm font-bold text-amber-950">

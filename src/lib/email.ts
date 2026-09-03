@@ -114,17 +114,17 @@ export async function sendWelcomeEmail(to: string, firstName: string) {
   const previewText = `Tu cuenta ha sido creada con éxito. Empieza a descubrir las Islas Canarias sobre ruedas.`;
 
   const contentHtml = `
-    <h2 style="font-family: Georgia, serif; color: #13322E; margin-top: 0;">¡Hola ${escapeHtml(firstName)}! 👋</h2>
+    <h2 style="font-family: Georgia, serif; color: #13322E; margin-top: 0;">¡Hola ${escapeHtml(firstName)}! </h2>
     <p>Te damos la bienvenida a <strong>vaneando.com</strong>, la comunidad de viajeros y propietarios locales de furgonetas camperizadas y autocaravanas de las Islas Canarias.</p>
     
     <div class="card">
-      <h3 style="margin-top: 0; color: #13322E; font-size: 16px;">🔐 Datos de tu Cuenta de Acceso</h3>
+      <h3 style="margin-top: 0; color: #13322E; font-size: 16px;"> Datos de tu Cuenta de Acceso</h3>
       <p style="margin: 6px 0;"><strong>Correo Electrónico:</strong> ${escapeHtml(to)}</p>
       <p style="margin: 6px 0;"><strong>Plataforma:</strong> <a href="${appUrl}" style="color:#16B8AA;font-weight:bold;">vaneando.com</a></p>
       <p style="margin: 6px 0; font-size: 13px; color: #6B726E;">Ya puedes iniciar sesión en cualquier momento con tu correo y contraseña elegida.</p>
     </div>
 
-    <h3 style="color: #13322E; font-size: 16px; margin-top: 24px;">🏝️ Lo que puedes hacer ahora:</h3>
+    <h3 style="color: #13322E; font-size: 16px; margin-top: 24px;">️ Lo que puedes hacer ahora:</h3>
     <ul style="padding-left: 20px; color: #4A5568;">
       <li><strong>Explorar el archipiélago:</strong> Encuentra campers en Gran Canaria, Tenerife, Lanzarote, Fuerteventura y más.</li>
       <li><strong>Alquilar a locales:</strong> Vehículos únicos, económicos y con recomendaciones secretas de pernocta.</li>
@@ -138,7 +138,7 @@ export async function sendWelcomeEmail(to: string, firstName: string) {
   await transporter.sendMail({
     from,
     to,
-    subject: `¡Bienvenido a vaneando.com, ${firstName}! 🚐✨`,
+    subject: `¡Bienvenido a vaneando.com, ${firstName}! `,
     text: `Hola ${firstName},\n\n¡Bienvenido a vaneando.com! Tu cuenta con el correo ${to} se ha creado correctamente.\n\nEntra ahora y descubre Canarias sobre ruedas: ${appUrl}\n\nContacto: hola@vaneando.com`,
     html: renderEmailLayout({
       title,
@@ -180,7 +180,7 @@ export async function sendPaymentInvoiceEmail(
   const previewText = `Hemos recibido tu pago de ${invoice.totalAmount.toFixed(2)}€ para la reserva ${invoice.bookingCode}.`;
 
   const contentHtml = `
-    <h2 style="font-family: Georgia, serif; color: #13322E; margin-top: 0;">¡Pago Confirmado y Factura Emitida! 🎉</h2>
+    <h2 style="font-family: Georgia, serif; color: #13322E; margin-top: 0;">¡Pago Confirmado y Factura Emitida! </h2>
     <p>Hola ${escapeHtml(firstName)}, gracias por tu pago. Tu reserva para disfrutar de <strong>${escapeHtml(invoice.vehicleTitle)}</strong> está 100% confirmada.</p>
     
     <div class="card">
@@ -196,7 +196,7 @@ export async function sendPaymentInvoiceEmail(
       </table>
     </div>
 
-    <h3 style="color: #13322E; font-size: 16px; margin-top: 24px;">📋 Detalle de la Reserva y Alquiler</h3>
+    <h3 style="color: #13322E; font-size: 16px; margin-top: 24px;"> Detalle de la Reserva y Alquiler</h3>
     <p style="margin: 4px 0; font-size: 14px;"><strong>Vehículo:</strong> ${escapeHtml(invoice.vehicleTitle)}</p>
     <p style="margin: 4px 0; font-size: 14px;"><strong>Fechas:</strong> Del ${escapeHtml(invoice.startDate)} al ${escapeHtml(invoice.endDate)} (${invoice.totalDays} ${invoice.totalDays === 1 ? 'día' : 'días'})</p>
 
@@ -235,7 +235,7 @@ export async function sendPaymentInvoiceEmail(
   await transporter.sendMail({
     from,
     to,
-    subject: `Factura ${invoice.invoiceNumber} · Pago Confirmado de tu Camper 🧾✨`,
+    subject: `Factura ${invoice.invoiceNumber} · Pago Confirmado de tu Camper `,
     text: `Hola ${firstName},\n\nPago confirmado para ${invoice.vehicleTitle}. Factura: ${invoice.invoiceNumber}. Total: ${invoice.totalAmount.toFixed(2)}€.\n\nVer reserva: ${appUrl}/reserva/${invoice.reservationId}`,
     html: renderEmailLayout({
       title,
@@ -259,7 +259,7 @@ export async function sendPasswordResetEmail(to: string, firstName: string, rese
   const previewText = 'Usa este enlace para restablecer la contraseña de tu cuenta. Caduca en una hora.';
 
   const contentHtml = `
-    <h2 style="font-family: Georgia, serif; color: #13322E; margin-top: 0;">Restablecer Contraseña 🔐</h2>
+    <h2 style="font-family: Georgia, serif; color: #13322E; margin-top: 0;">Restablecer Contraseña </h2>
     <p>Hola ${escapeHtml(firstName)}, hemos recibido una solicitud para cambiar la contraseña de tu cuenta en <strong>vaneando.com</strong>.</p>
     <p>Haz clic en el siguiente botón para crear una contraseña nueva. Por seguridad, este enlace caducará en 1 hora.</p>
     <p style="font-size: 13px; color: #6B726E; margin-top: 20px;">Si no solicitaste este cambio, puedes ignorar este correo de forma segura.</p>
@@ -268,7 +268,7 @@ export async function sendPasswordResetEmail(to: string, firstName: string, rese
   await transporter.sendMail({
     from,
     to,
-    subject: 'Restablece tu contraseña de vaneando.com 🔐',
+    subject: 'Restablece tu contraseña de vaneando.com ',
     text: `Hola ${firstName},\n\nUsa este enlace para crear una contraseña nueva. Caduca en una hora:\n${resetUrl}\n\nSi no solicitaste el cambio, ignora este correo.`,
     html: renderEmailLayout({
       title,
@@ -302,7 +302,7 @@ export async function sendBookingStatusEmail(
   const url = `${details.appUrl || process.env.NEXT_PUBLIC_APP_URL || 'https://vaneando.com'}/reserva/${details.reservationId}`;
 
   const contentHtml = `
-    <h2 style="font-family: Georgia, serif; color: #13322E; margin-top: 0;">Actualización de Reserva 🚐</h2>
+    <h2 style="font-family: Georgia, serif; color: #13322E; margin-top: 0;">Actualización de Reserva </h2>
     <p>Hola ${escapeHtml(firstName)},</p>
     <div class="card">
       <h3 style="margin-top:0; color:#13322E;">${escapeHtml(message)}</h3>
@@ -339,7 +339,7 @@ export async function sendBookingRequestEmail(
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://vaneando.com';
 
   const contentHtml = `
-    <h2 style="font-family: Georgia, serif; color: #13322E; margin-top: 0;">¡Tienes una nueva solicitud de alquiler! 📥</h2>
+    <h2 style="font-family: Georgia, serif; color: #13322E; margin-top: 0;">¡Tienes una nueva solicitud de alquiler! </h2>
     <p>Hola ${escapeHtml(ownerName)}, un viajero quiere alquilar tu camper.</p>
     <div class="card">
       <p style="margin: 4px 0;"><strong>Viajero:</strong> ${escapeHtml(details.traveler)}</p>
@@ -353,7 +353,7 @@ export async function sendBookingRequestEmail(
   await transporter.sendMail({
     from,
     to,
-    subject: `¡Nueva solicitud ${details.code} para ${details.vehicle}! 🚐`,
+    subject: `¡Nueva solicitud ${details.code} para ${details.vehicle}! `,
     text: `Hola ${ownerName},\n\n${details.traveler} quiere alquilar ${details.vehicle} del ${details.start.toLocaleDateString('es-ES')} al ${details.end.toLocaleDateString('es-ES')}.\n\nGestiona la solicitud: ${appUrl}/propietario`,
     html: renderEmailLayout({
       title: `Nueva solicitud para ${details.vehicle}`,
@@ -375,7 +375,7 @@ export async function sendBookingCreatedOwnerEmail(
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://vaneando.com';
   const title = details.instant ? '¡Reserva instantánea recibida!' : '¡Nueva solicitud de reserva!';
   const contentHtml = `
-    <h2 style="font-family: Georgia, serif; color: #13322E; margin-top: 0;">${title} 🚐</h2>
+    <h2 style="font-family: Georgia, serif; color: #13322E; margin-top: 0;">${title} </h2>
     <p>Hola ${escapeHtml(ownerName)}, ${details.instant ? 'un viajero ha reservado' : 'un viajero ha enviado una solicitud para'} tu camper.</p>
     <div class="card">
       <p style="margin: 4px 0;"><strong>Viajero:</strong> ${escapeHtml(details.traveler)}</p>
@@ -404,7 +404,7 @@ export async function sendChatSummaryEmail(
   const rows = messages.map((message) => `<p style="margin:6px 0;"><small style="color:#6B726E;">${escapeHtml(message.createdAt.toLocaleString('es-ES'))}</small><br><strong>${escapeHtml(message.author)}:</strong> ${escapeHtml(message.content)}</p>`).join('');
 
   const contentHtml = `
-    <h2 style="font-family: Georgia, serif; color: #13322E; margin-top: 0;">Resumen de Conversación 💬</h2>
+    <h2 style="font-family: Georgia, serif; color: #13322E; margin-top: 0;">Resumen de Conversación </h2>
     <p>Hola ${escapeHtml(participantName)}, aquí tienes la copia de tu chat en vaneando.com.</p>
     <div class="card">
       ${rows}
@@ -414,7 +414,7 @@ export async function sendChatSummaryEmail(
   await transporter.sendMail({
     from,
     to,
-    subject: 'Resumen de tu chat con vaneando.com 💬',
+    subject: 'Resumen de tu chat con vaneando.com ',
     text: `Hola ${participantName},\n\n${lines.join('\n')}`,
     html: renderEmailLayout({
       title: 'Resumen de tu chat',
@@ -460,7 +460,7 @@ export async function sendBookingCancelledByOwnerEmail(
   await transporter.sendMail({
     from,
     to,
-    subject: `Reserva cancelada: ${details.code} (${details.vehicle}) 🚐`,
+    subject: `Reserva cancelada: ${details.code} (${details.vehicle}) `,
     text: `Hola ${travelerName},\n\nEl propietario ha cancelado tu reserva ${details.code} para ${details.vehicle}.\n\nMotivo: ${reasonText}\n\nPuedes buscar otras opciones en: ${appUrl}/buscar`,
     html: renderEmailLayout({
       title: 'Reserva Cancelada por el Propietario',
@@ -505,7 +505,7 @@ export async function sendContractCancelledEmail(
   await transporter.sendMail({
     from,
     to,
-    subject: `Contrato cancelado / en revisión: Reserva ${details.code} 📄`,
+    subject: `Contrato cancelado / en revisión: Reserva ${details.code} `,
     text: `Hola ${travelerName},\n\nEl contrato de tu reserva ${details.code} ha sido cancelado para su actualización.\nMotivo: ${reasonText}\n\nRevisa el estado en: ${appUrl}/reserva/${details.bookingId}`,
     html: renderEmailLayout({
       title: 'Contrato Digital Cancelado / En Revisión',
@@ -535,7 +535,7 @@ export async function sendEmailTest(to: string) {
   await transporter.sendMail({
     from,
     to,
-    subject: 'Prueba de correo de vaneando.com ✉️',
+    subject: 'Prueba de correo de vaneando.com ️',
     text: 'La configuración de correo de vaneando.com funciona correctamente.',
     html: renderEmailLayout({
       title: 'Prueba de Correo',

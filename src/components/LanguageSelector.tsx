@@ -4,11 +4,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Globe, ChevronDown, Check } from 'lucide-react';
 
 const LANGUAGES = [
-  { code: 'es', label: 'Español', flag: '🇪🇸' },
-  { code: 'en', label: 'English', flag: '🇬🇧' },
-  { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
-  { code: 'fr', label: 'Français', flag: '🇫🇷' },
-  { code: 'it', label: 'Italiano', flag: '🇮🇹' },
+  { code: 'es', label: 'Español', flag: 'ES' },
+  { code: 'en', label: 'English', flag: 'EN' },
+  { code: 'de', label: 'Deutsch', flag: 'DE' },
+  { code: 'fr', label: 'Français', flag: 'FR' },
+  { code: 'it', label: 'Italiano', flag: 'IT' },
 ];
 
 export default function LanguageSelector() {

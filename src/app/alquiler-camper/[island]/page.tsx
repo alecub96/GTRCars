@@ -113,9 +113,9 @@ export default async function SeoIslandPage({ params }: SeoIslandPageProps) {
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4 text-xs font-bold">
-            <span className="bg-white/10 border border-white/20 px-4 py-2 rounded-full">✓ Condiciones visibles</span>
-            <span className="bg-white/10 border border-white/20 px-4 py-2 rounded-full">✓ Contacto directo</span>
-            <span className="bg-white/10 border border-white/20 px-4 py-2 rounded-full">✓ Disponibilidad por fechas</span>
+            <span className="bg-white/10 border border-white/20 px-4 py-2 rounded-full">Condiciones visibles</span>
+            <span className="bg-white/10 border border-white/20 px-4 py-2 rounded-full">Contacto directo</span>
+            <span className="bg-white/10 border border-white/20 px-4 py-2 rounded-full">Disponibilidad por fechas</span>
           </div>
         </div>
       </section>
@@ -169,7 +169,7 @@ export default async function SeoIslandPage({ params }: SeoIslandPageProps) {
                     </span>
                     {isFeatured && (
                       <span className="absolute top-4 right-4 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-[10px] font-black uppercase px-3 py-1 rounded-full shadow-md border border-amber-300/40 flex items-center gap-1">
-                        ⭐ Destacado
+                        Destacado
                       </span>
                     )}
                   </div>

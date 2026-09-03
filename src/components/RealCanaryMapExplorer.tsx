@@ -281,7 +281,7 @@ export default function RealCanaryMapExplorer({
             cursor: pointer;
             transform: translate(-50%, -50%);
           ">
-            ${poi.type === 'camping' ? '⛺' : '🏖️'}
+            ${poi.type === 'camping' ? 'Acampada' : 'Playa'}
           </div>
         `,
         iconSize: [28, 28],

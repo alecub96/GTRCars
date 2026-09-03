@@ -255,7 +255,7 @@ export default function SupportPage() {
                         {message.system
                           ? 'Asistente Vaneando'
                           : message.sender?.role === 'ADMIN'
-                          ? '⭐ Equipo Vaneando'
+                          ? 'Equipo Vaneando'
                           : `${message.sender?.firstName || ''} ${message.sender?.lastName || ''}`}
                       </strong>
                       <div className="whitespace-pre-wrap leading-relaxed">{message.content}</div>

@@ -84,7 +84,7 @@ export default async function ProfilePage() {
               <div key={`${review.createdAt ? new Date(review.createdAt).toISOString() : idx}-${idx}`} className="mt-4 border-t border-[#E9E1D2] pt-4">
                 <div className="flex items-center justify-between">
                   <strong>{review.author?.firstName || 'Usuario'}</strong>
-                  <span className="text-sm font-bold text-amber-600">★ {review.rating}/5</span>
+                  <span className="text-sm font-bold text-amber-600">{review.rating}/5</span>
                 </div>
                 <p className="mt-1 text-sm text-[#6B726E]">{review.comment}</p>
               </div>

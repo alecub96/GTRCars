@@ -220,7 +220,7 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
         <div className="bg-[#D97706] text-white text-xs font-bold py-2.5 px-4 text-center sticky top-0 z-50 shadow-md flex items-center justify-center space-x-2">
           <ShieldCheck className="w-4 h-4" />
           <span>
-            ⚠️ Modo Vista Previa ({vehicle.status === 'PENDING_REVIEW' ? 'Pendiente de moderación' : vehicle.status === 'DRAFT' ? 'Borrador' : 'Rechazado'}) — Solo visible para ti y la administración.
+            Modo Vista Previa ({vehicle.status === 'PENDING_REVIEW' ? 'Pendiente de moderación' : vehicle.status === 'DRAFT' ? 'Borrador' : 'Rechazado'}) — Solo visible para ti y la administración.
           </span>
         </div>
       )}
@@ -236,7 +236,7 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
               ? 'bg-red-50 text-red-800 border-red-200'
               : 'bg-amber-50 text-amber-800 border-amber-200'
           }`}>
-            <span>⚠️ Vista previa de anuncio ({vehicle.status === 'REJECTED' ? 'RECHAZADO' : vehicle.status === 'PENDING_REVIEW' ? 'PENDIENTE DE APROBACIÓN' : vehicle.status}). No visible en búsquedas públicas para clientes.</span>
+            <span>Vista previa de anuncio ({vehicle.status === 'REJECTED' ? 'RECHAZADO' : vehicle.status === 'PENDING_REVIEW' ? 'PENDIENTE DE APROBACIÓN' : vehicle.status}). No visible en búsquedas públicas para clientes.</span>
             {vehicle.rejectionReason && (
               <span className="font-normal text-red-700">Motivo: {vehicle.rejectionReason}</span>
             )}
@@ -356,7 +356,7 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
                     if (!featName) return null;
                     return (
                       <div key={feat?.id || featName || idx} className="flex items-center space-x-2 text-xs font-medium text-[#13322E] bg-white p-3 rounded-2xl border border-[#E9E1D2]">
-                        <span className="text-[#16B8AA]">✓</span>
+                        <span className="h-2 w-2 shrink-0 rounded-full bg-[#16B8AA]" aria-hidden="true" />
                         <span>{featName}</span>
                       </div>
                     );
@@ -503,7 +503,7 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
                     disabled
                     className="w-full py-3.5 rounded-full bg-slate-200 text-slate-500 font-bold text-xs uppercase tracking-wider cursor-not-allowed text-center"
                   >
-                    ⛔ Fechas no disponibles
+                    Fechas no disponibles
                   </button>
 
                   <Link

@@ -7,7 +7,7 @@ import Navbar from '@/components/Navbar';
 import MainSearchWidget from '@/components/MainSearchWidget';
 import VehicleTypeSlider from '@/components/VehicleTypeSlider';
 import { CANARY_ISLANDS } from '@/lib/pricing';
-import { Star, ChevronRight, MapPin, Map, Users, Compass, ShieldCheck, HeartHandshake, KeyRound } from 'lucide-react';
+import { Star, ChevronRight, MapPin, Map, Users, Compass, ShieldCheck, HeartHandshake, KeyRound, Waves, Mountain, Sun } from 'lucide-react';
 import VehicleViewTracker from '@/components/VehicleViewTracker';
 import VehicleCardPhotoSlider from '@/components/VehicleCardPhotoSlider';
 import FAQAccordion from '@/components/FAQAccordion';
@@ -443,6 +443,30 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
         </div>
       </section>
 
+      {/* IDENTIDAD CANARIA */}
+      <section className="border-t border-[#E9E1D2] bg-[#13322E] py-16 text-white">
+        <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[1.2fr_2fr] lg:items-center lg:px-8">
+          <div>
+            <span className="text-xs font-black uppercase tracking-[0.25em] text-[#F2CC8F]">Canarias sobre ruedas</span>
+            <h2 className="mt-3 font-serif text-3xl font-bold sm:text-4xl">Una forma local de descubrir las islas</h2>
+            <p className="mt-4 max-w-xl text-sm leading-6 text-white/70">Del basalto volcánico al Atlántico, cada ruta tiene un paisaje y un ritmo propio. Vaneando nace aquí para conectar viajeros con propietarios de las islas.</p>
+          </div>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            {[
+              { icon: Waves, title: 'Atlántico', text: 'Costas, calas y amaneceres frente al mar.' },
+              { icon: Mountain, title: 'Volcanes', text: 'Cumbres, barrancos y tierra de origen volcánico.' },
+              { icon: Sun, title: 'Vida local', text: 'Recomendaciones de quienes conocen cada isla.' },
+            ].map(({ icon: Icon, title, text }) => (
+              <div key={title} className="rounded-3xl border border-white/10 bg-white/5 p-5">
+                <Icon className="h-7 w-7 text-[#16B8AA]" strokeWidth={1.8} />
+                <h3 className="mt-5 font-serif text-xl font-bold">{title}</h3>
+                <p className="mt-2 text-xs leading-5 text-white/65">{text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* 7. OPINIONES DE LA COMUNIDAD (HISTORIAS SOBRE RUEDAS EN CANARIAS) */}
       <section className="py-20 bg-[#F7F6F2] border-t border-[#E9E1D2]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -465,7 +489,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
               <article key={review.name} className="bg-white p-8 rounded-3xl border border-[#E9E1D2] shadow-sm">
                 <div className="flex items-center justify-between gap-3 mb-4">
                   <div><h4 className="font-bold text-sm text-[#13322E]">{review.name}</h4><span className="text-[10px] text-[#6B726E]">{review.date}</span></div>
-                  <span className="inline-flex items-center gap-1 text-sm font-black text-[#D97706]" aria-label="Valoración 5 de 5">★★★★★ <span className="text-[#13322E]">5/5</span></span>
+                  <span className="inline-flex items-center gap-1 text-sm font-black text-[#D97706]" aria-label="Valoración 5 de 5"><span className="text-[#13322E]">5/5</span></span>
                 </div>
                 <p className="text-sm text-[#13322E] font-medium leading-relaxed italic">&ldquo;{review.text}&rdquo;</p>
                 <p className="mt-5 border-t border-[#E9E1D2] pt-4 text-[10px] font-bold uppercase tracking-wider text-[#6B726E]">Opinión real de viajero</p>
@@ -546,8 +570,8 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
             </p>
             <div className="flex flex-wrap items-center gap-2 text-xs text-white/80">
               <span className="bg-white/10 px-3 py-1 rounded-full border border-white/10">Pagos seguros SSL</span>
-              <span className="bg-white/10 px-3 py-1 rounded-full border border-white/10">⚖️ Contratos eIDAS</span>
-              <span className="bg-white/10 px-3 py-1 rounded-full border border-white/10">⚡ Respuesta &lt; 15 min</span>
+              <span className="bg-white/10 px-3 py-1 rounded-full border border-white/10">Contratos eIDAS</span>
+              <span className="bg-white/10 px-3 py-1 rounded-full border border-white/10">Respuesta &lt; 15 min</span>
             </div>
 
             <div className="pt-2">

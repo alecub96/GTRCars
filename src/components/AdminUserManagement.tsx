@@ -328,10 +328,10 @@ export default function AdminUserManagement() {
             className="px-3 py-2.5 rounded-2xl border border-[#E9E1D2] text-xs font-bold text-[#13322E] bg-white focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
           >
             <option value="ALL">Cualquier verificación</option>
-            <option value="VERIFIED">✅ Verificados</option>
+            <option value="VERIFIED">Verificados</option>
             <option value="PENDING">⏳ Pendientes DNI</option>
             <option value="UNVERIFIED">Sin verificar</option>
-            <option value="REJECTED">❌ Rechazados</option>
+            <option value="REJECTED">Rechazados</option>
           </select>
         </div>
       </div>
@@ -400,11 +400,11 @@ export default function AdminUserManagement() {
                           }`}
                         >
                           {u.verification === 'VERIFIED'
-                            ? '✅ DNI Verificado'
+                            ? 'DNI Verificado'
                             : u.verification === 'PENDING'
                             ? '⏳ DNI Pendiente'
                             : u.verification === 'REJECTED'
-                            ? '❌ Rechazado'
+                            ? 'Rechazado'
                             : 'Sin DNI'}
                         </span>
                       </div>
@@ -645,8 +645,8 @@ export default function AdminUserManagement() {
                   >
                     <option value="UNVERIFIED">Sin verificar</option>
                     <option value="PENDING">⏳ Pendiente de revisión</option>
-                    <option value="VERIFIED">✅ Verificado (Aprobado)</option>
-                    <option value="REJECTED">❌ Rechazado</option>
+                    <option value="VERIFIED">Verificado (Aprobado)</option>
+                    <option value="REJECTED">Rechazado</option>
                   </select>
                 </div>
               </div>

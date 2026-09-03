@@ -714,7 +714,7 @@ export default function PublishCamperPage() {
                                 className="text-red-500 hover:text-red-700 font-bold text-xs p-1"
                                 title="Eliminar tarifa"
                               >
-                                ✕
+                                <span className="sr-only">Eliminar tarifa</span>
                               </button>
                             </div>
                           </div>

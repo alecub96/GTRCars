@@ -205,8 +205,8 @@ export default function AdminVehicleQueue() {
                         {v.status === 'PENDING_REVIEW'
                           ? '⏳ Pendiente de revisión'
                           : v.status === 'ACTIVE'
-                          ? '✅ Aprobado y Activo'
-                          : '❌ Rechazado'}
+                          ? 'Aprobado y Activo'
+                          : 'Rechazado'}
                       </span>
                       <span className="text-[10px] font-bold text-[#6B726E] uppercase">
                         {v.island} • {v.municipality}

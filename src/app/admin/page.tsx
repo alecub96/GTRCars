@@ -384,7 +384,7 @@ export default function AdminPage() {
                 : 'bg-white border border-[#E9E1D2] text-[#13322E] hover:bg-[#FAF7F0]'
             }`}
           >
-            ⚙️ Diagnóstico & Correo
+            Diagnóstico & Correo
           </button>
         </div>
 

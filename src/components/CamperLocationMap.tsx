@@ -300,7 +300,7 @@ export default function CamperLocationMap({
             box-shadow: 0 6px 18px rgba(0,0,0,0.35);
             border: 3px solid #ffffff;
           ">
-            🚐
+            Camper
           </div>
         </div>
       `,
@@ -334,7 +334,7 @@ export default function CamperLocationMap({
             cursor: pointer;
             transform: translate(-50%, -50%);
           ">
-            ${poi.category === 'acampada' ? '⛺' : '🏖️'}
+            ${poi.category === 'acampada' ? 'Acampada' : 'Playa'}
           </div>
         `,
         iconSize: [30, 30],
@@ -463,14 +463,14 @@ export default function CamperLocationMap({
           <div className="absolute bottom-4 left-4 right-14 z-30 max-w-sm bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-[#16B8AA] shadow-2xl space-y-1.5 animate-in slide-in-from-bottom-2">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-black uppercase tracking-wider text-[#16B8AA]">
-                {selectedPoi.category === 'acampada' ? '⛺ Zona de Acampada' : '🏖️ Playa de Pernocta'}
+                {selectedPoi.category === 'acampada' ? 'Zona de Acampada' : 'Playa de Pernocta'}
               </span>
               <button
                 type="button"
                 onClick={() => setSelectedPoi(null)}
                 className="text-xs font-bold text-slate-400 hover:text-slate-700 cursor-pointer"
               >
-                ✕
+                Cerrar
               </button>
             </div>
             <h4 className="font-bold text-sm text-[#13322E]">{selectedPoi.name}</h4>
@@ -498,7 +498,7 @@ export default function CamperLocationMap({
                 className="p-3.5 bg-white rounded-2xl border border-[#E9E1D2] hover:border-[#16B8AA] transition-all cursor-pointer shadow-sm hover:shadow group"
               >
                 <div className="flex items-center space-x-1.5 text-[10px] font-black uppercase text-[#16B8AA] mb-1">
-                  <span>{poi.category === 'acampada' ? '⛺ Acampada' : '🏖️ Playa'}</span>
+                  <span>{poi.category === 'acampada' ? 'Acampada' : 'Playa'}</span>
                 </div>
                 <h5 className="font-bold text-sm text-[#13322E] group-hover:text-[#16B8AA] transition-colors line-clamp-1">
                   {poi.name}

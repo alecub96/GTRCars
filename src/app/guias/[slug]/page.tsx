@@ -173,7 +173,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
                       <ul className="grid sm:grid-cols-2 gap-3">
                         {section.bullets.map((item) => (
                           <li key={item} className="bg-white border border-[#E9E1D2] rounded-2xl px-4 py-3 text-xs sm:text-sm text-[#13322E] font-bold flex items-start gap-2 shadow-xs">
-                            <span className="text-[#16B8AA] font-bold text-base">✓</span>
+                            <span className="h-2 w-2 shrink-0 rounded-full bg-[#16B8AA]" aria-hidden="true" />
                             <span>{item}</span>
                           </li>
                         ))}

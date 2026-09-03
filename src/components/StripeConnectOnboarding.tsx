@@ -40,7 +40,7 @@ export default function StripeConnectOnboarding({ onClose }: { onClose: () => vo
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'No se pudieron guardar los datos bancarios');
 
-      setSuccessMsg('✅ ¡Excelente! Tu IBAN bancario ha sido guardado y verificado correctamente.');
+      setSuccessMsg('¡Excelente! Tu IBAN bancario ha sido guardado y verificado correctamente.');
       setIsConfigured(true);
       if (data.iban) setIban(data.iban);
     } catch (err: any) {

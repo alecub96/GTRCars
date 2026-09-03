@@ -98,7 +98,7 @@ export default function OwnerDashboardPage() {
       if (data.url) {
         window.open(data.url, '_self');
       } else {
-        setMsg('✨ ¡Listo! Tu suscripción de Usuario destacado está activa por 2,99€/mes.');
+        setMsg('¡Listo! Tu suscripción de Usuario destacado está activa por 2,99€/mes.');
         // Actualizar estado local
         setVehicles(vehicles.map(v => v.id === vehicleId ? { ...v, isFeatured: true } : v));
       }
@@ -247,7 +247,7 @@ export default function OwnerDashboardPage() {
                             : 'bg-emerald-100 text-emerald-900 border border-emerald-200'
                         }`}
                       >
-                        {v.status === 'PENDING_REVIEW' ? '⏳ Pendiente de revisión' : '✅ Activo'}
+                        {v.status === 'PENDING_REVIEW' ? 'Pendiente de revisión' : 'Activo'}
                       </span>
                     </div>
                     <h4 className="font-serif text-xl font-bold text-[#13322E] mb-2 line-clamp-1">{v.title}</h4>
