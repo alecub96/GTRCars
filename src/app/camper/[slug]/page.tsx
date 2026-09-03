@@ -397,6 +397,7 @@ export default async function CamperDetailPage({ params }: CamperDetailPageProps
               island={vehicle.island || 'Gran Canaria'}
               municipality={vehicle.municipality || 'Canarias'}
               vehicleTitle={vehicle.title || 'Camper'}
+              vehicleType={vehicle.vehicleType || ''}
               latitude={vehicle.latitude ? Number(vehicle.latitude) : null}
               longitude={vehicle.longitude ? Number(vehicle.longitude) : null}
               addressApprox={vehicle.addressApprox || null}

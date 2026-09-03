@@ -19,6 +19,7 @@ interface CamperLocationMapProps {
   island: string;
   municipality: string;
   vehicleTitle?: string;
+  vehicleType?: string;
   latitude?: number | null;
   longitude?: number | null;
   addressApprox?: string | null;
@@ -178,10 +179,22 @@ export default function CamperLocationMap({
   island,
   municipality,
   vehicleTitle = 'Camper',
+  vehicleType = '',
   latitude,
   longitude,
   addressApprox,
 }: CamperLocationMapProps) {
+  const vehicleIllustration = vehicleType.includes('BARCO')
+    ? '/illustrations/vehicle-types/nautica.png'
+    : vehicleType.includes('4X4')
+      ? '/illustrations/vehicle-types/4x4.png'
+      : vehicleType.includes('AUTOCARAVANA')
+        ? '/illustrations/vehicle-types/autocaravana.png'
+        : vehicleType.includes('CARAVANA')
+          ? '/illustrations/vehicle-types/caravan.png'
+          : vehicleType.includes('GRAN_VOLUMEN')
+            ? '/illustrations/vehicle-types/camper-gran-volumen.png'
+            : '/illustrations/vehicle-types/camper-pequena.png';
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
   const [activeCategory, setActiveCategory] = useState<string>('todos');
@@ -280,6 +293,26 @@ export default function CamperLocationMap({
         ">
           <div style="
             position: absolute;
+            left: 50%;
+            bottom: 72px;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            background: #ffffff;
+            color: #13322E;
+            padding: 8px 12px;
+            border: 1px solid #E9E1D2;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(19, 50, 46, 0.14);
+            font-family: inherit;
+            font-size: 13px;
+            line-height: 1.25;
+            text-align: center;
+          ">
+            <strong style="display: block; font-weight: 700;">Zona de entrega</strong>
+            <span>${municipality} (${island})</span>
+          </div>
+          <div style="
+            position: absolute;
             width: 54px;
             height: 54px;
             border-radius: 50%;
@@ -290,29 +323,24 @@ export default function CamperLocationMap({
             position: relative;
             background-color: #13322E;
             color: #ffffff;
-            width: 44px;
-            height: 44px;
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
             box-shadow: 0 6px 18px rgba(0,0,0,0.35);
             border: 3px solid #ffffff;
           ">
-            Camper
+            <img src="${vehicleIllustration}" alt="${vehicleTitle}" style="width: 46px; height: 46px; object-fit: contain;" />
           </div>
         </div>
       `,
-      iconSize: [54, 54],
-      iconAnchor: [27, 27],
+      iconSize: [66, 66],
+      iconAnchor: [33, 58],
     });
 
     const camperMarker = L.marker([vehicleCoords.lat, vehicleCoords.lng], { icon: camperPinIcon }).addTo(map);
-    camperMarker.bindTooltip(
-      `<b>Zona de entrega</b><br>${municipality} (${island})`,
-      { permanent: true, direction: 'top', offset: [0, -20] }
-    );
 
     // 3. POIS CERCANOS EN LA ISLA
     const islandPois = CANARY_POIS.filter((p) => p.island.toLowerCase() === island.toLowerCase());
