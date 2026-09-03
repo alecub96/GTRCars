@@ -261,7 +261,7 @@ export default function DateRangeCalendar({
           onClick={() => setOpen(false)}
         >
           <div
-            className="relative z-[1000000] w-[min(740px,calc(100vw-32px))] max-h-[90vh] overflow-y-auto rounded-[28px] border border-[#E9E1D2] bg-white p-5 sm:p-7 text-[#13322E] shadow-2xl animate-in zoom-in-95 duration-200"
+            className="relative z-[1000000] w-[min(740px,calc(100vw-32px))] max-h-[90vh] overflow-y-auto rounded-[32px] border border-[#E9E1D2] bg-white p-5 sm:p-7 text-[#13322E] shadow-2xl animate-soft-appear"
             onClick={(e) => e.stopPropagation()}
           >
             {calendarContent}

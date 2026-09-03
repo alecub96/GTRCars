@@ -58,7 +58,7 @@ export default function LanguageSelector() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-40 origin-top-right rounded-2xl bg-white p-1.5 shadow-xl border border-[#E9E1D2] z-50 animate-fade-in-up">
+        <div className="absolute right-0 mt-2 w-40 origin-top-right rounded-2xl bg-white p-1.5 shadow-xl border border-[#E9E1D2] z-50 animate-soft-appear">
           {LANGUAGES.map((lang) => {
             const isCurrent = lang.code === currentLang;
             return (

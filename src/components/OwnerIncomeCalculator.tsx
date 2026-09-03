@@ -58,7 +58,7 @@ export default function OwnerIncomeCalculator() {
                 </div>
                 <p className="mt-3 text-xs text-[#6B726E]">Comisión orientativa: {platform.rate}%</p>
                 <strong className="mt-1 block text-xl">{net.toFixed(2)} € <span className="text-xs font-medium text-[#6B726E]">netos</span></strong>
-                {!platform.featured && <p className="mt-2 text-[11px] font-bold text-[#D97706]">-{(net - result.net).toFixed(2)} € frente a Vaneando</p>}
+                {!platform.featured && <p className="mt-2 text-[11px] font-bold text-[#D97706]">-{(result.net - net).toFixed(2)} € frente a Vaneando</p>}
               </div>
             );
           })}

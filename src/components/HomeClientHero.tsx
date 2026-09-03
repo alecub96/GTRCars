@@ -264,6 +264,9 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-[#F7F6F2] p-8 rounded-3xl border border-[#E9E1D2] flex flex-col justify-between hover:shadow-lg transition-all">
               <div>
+                <div className="mb-6 flex h-24 w-32 items-center justify-center">
+                  <img src="/illustrations/vehicle-types/camper-pequena.png" alt="" className="h-20 w-24 scale-x-[-1] object-contain" />
+                </div>
                 <span className="text-xs font-black uppercase tracking-widest text-[#16B8AA]">Ágil & Discreta</span>
                 <h3 className="font-serif text-2xl font-bold text-[#13322E] mt-2 mb-3">Furgoneta Camper Pequeña</h3>
                 <p className="text-xs text-[#6B726E] font-medium leading-relaxed mb-6">
@@ -277,6 +280,9 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
 
             <div className="bg-[#F7F6F2] p-8 rounded-3xl border border-[#E9E1D2] flex flex-col justify-between hover:shadow-lg transition-all">
               <div>
+                <div className="mb-6 flex h-24 w-32 items-center justify-center">
+                  <img src="/illustrations/vehicle-types/camper-gran-volumen.png" alt="" className="h-20 w-24 scale-x-[-1] object-contain" />
+                </div>
                 <span className="text-xs font-black uppercase tracking-widest text-[#D97706]">Autónoma con Ducha</span>
                 <h3 className="font-serif text-2xl font-bold text-[#13322E] mt-2 mb-3">Camper Gran Volumen</h3>
                 <p className="text-xs text-[#6B726E] font-medium leading-relaxed mb-6">
@@ -290,6 +296,9 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
 
             <div className="bg-[#F7F6F2] p-8 rounded-3xl border border-[#E9E1D2] flex flex-col justify-between hover:shadow-lg transition-all">
               <div>
+                <div className="mb-6 flex h-24 w-32 items-center justify-center">
+                  <img src="/illustrations/vehicle-types/autocaravana.png" alt="" className="h-20 w-24 scale-x-[-1] object-contain" />
+                </div>
                 <span className="text-xs font-black uppercase tracking-widest text-[#13322E]">Confort Familiar</span>
                 <h3 className="font-serif text-2xl font-bold text-[#13322E] mt-2 mb-3">Autocaravana Familiar</h3>
                 <p className="text-xs text-[#6B726E] font-medium leading-relaxed mb-6">
@@ -303,6 +312,9 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
 
             <div className="bg-[#F7F6F2] p-8 rounded-3xl border border-[#E9E1D2] flex flex-col justify-between hover:shadow-lg transition-all">
               <div>
+                <div className="mb-6 flex h-24 w-32 items-center justify-center">
+                  <img src="/illustrations/vehicle-types/4x4.png" alt="" className="h-20 w-24 scale-x-[-1] object-contain" />
+                </div>
                 <span className="text-xs font-black uppercase tracking-widest text-[#16B8AA]">Aventura Total</span>
                 <h3 className="font-serif text-2xl font-bold text-[#13322E] mt-2 mb-3">4x4 con Tienda de Techo</h3>
                 <p className="text-xs text-[#6B726E] font-medium leading-relaxed mb-6">
@@ -316,6 +328,9 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
 
             <div className="bg-[#F7F6F2] p-8 rounded-3xl border border-[#E9E1D2] flex flex-col justify-between hover:shadow-lg transition-all">
               <div>
+                <div className="mb-6 flex h-24 w-32 items-center justify-center">
+                  <img src="/illustrations/vehicle-types/caravan.png" alt="" className="h-20 w-24 object-contain" />
+                </div>
                 <span className="text-xs font-black uppercase tracking-widest text-[#D97706]">Estancia Fija</span>
                 <h3 className="font-serif text-2xl font-bold text-[#13322E] mt-2 mb-3">Caravana Tradicional</h3>
                 <p className="text-xs text-[#6B726E] font-medium leading-relaxed mb-6">
@@ -329,6 +344,9 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
 
             <div className="bg-[#F7F6F2] p-8 rounded-3xl border border-[#E9E1D2] flex flex-col justify-between hover:shadow-lg transition-all">
               <div>
+                <div className="mb-6 flex h-24 w-32 items-center justify-center">
+                  <img src="/illustrations/vehicle-types/nautica.png" alt="" className="h-20 w-24 scale-x-[-1] object-contain" />
+                </div>
                 <span className="text-xs font-black uppercase tracking-widest text-[#13322E]">Experiencia Náutica</span>
                 <h3 className="font-serif text-2xl font-bold text-[#13322E] mt-2 mb-3">Velero o Barco Habitable</h3>
                 <p className="text-xs text-[#6B726E] font-medium leading-relaxed mb-6">

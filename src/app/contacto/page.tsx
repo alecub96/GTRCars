@@ -124,7 +124,7 @@ export default function ContactoPage() {
                   </div>
                   <div>
                     <strong className="block text-[#13322E]">Sede Principal</strong>
-                    <span className="text-[#6B726E]">Las Palmas de Gran Canaria / Santa Cruz de Tenerife</span>
+                    <span className="text-[#6B726E]">Las Palmas de Gran Canaria, Gran Canaria</span>
                   </div>
                 </div>
               </div>

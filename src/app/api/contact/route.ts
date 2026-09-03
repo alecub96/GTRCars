@@ -37,7 +37,14 @@ export async function POST(request: Request) {
       );
     }
 
-    if (transporter) {
+    if (!transporter) {
+      return NextResponse.json(
+        { error: 'El servicio de contacto no está configurado temporalmente. Escríbenos a contacto@vaneando.com.' },
+        { status: 503 }
+      );
+    }
+
+    try {
       await transporter.sendMail({
         from: `vaneando. <${smtpUser}>`,
         to: smtpUser,
@@ -58,7 +65,13 @@ export async function POST(request: Request) {
             </div>
           </div>
         `,
-      }).catch((err: any) => console.error('Error enviando email de contacto:', err));
+      });
+    } catch (error) {
+      console.error('Error enviando email de contacto:', error);
+      return NextResponse.json(
+        { error: 'No se pudo entregar el mensaje. Inténtalo de nuevo en unos minutos.' },
+        { status: 502 }
+      );
     }
 
     return NextResponse.json({

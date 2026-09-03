@@ -232,7 +232,7 @@ export default function Navbar() {
       {/* MENÚ MÓVIL ÚNICO Y COMPLETO (SLIDE-OVER DRAWER) */}
       {mobileOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm md:hidden animate-in fade-in duration-200">
-          <div className="fixed inset-y-0 right-0 w-full max-w-sm bg-white shadow-2xl flex flex-col z-50 animate-in slide-in-from-right duration-300">
+          <div className="fixed inset-y-0 right-0 w-full max-w-sm rounded-l-[32px] bg-white shadow-2xl flex flex-col z-50 animate-in slide-in-from-right duration-300">
             {/* CABECERA DEL MENÚ */}
             <div className="px-5 py-4 border-b border-[#E9E1D2] flex items-center justify-between bg-[#FAF7F0]">
               <div className="flex items-center space-x-2">
