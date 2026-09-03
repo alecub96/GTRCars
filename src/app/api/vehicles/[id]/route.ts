@@ -134,7 +134,7 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
       if (['DIESEL', 'GASOLINE', 'HYBRID', 'ELECTRIC'].includes(norm)) dataToUpdate.fuelType = norm;
     }
     if (typeof fuelConsumption === 'string') dataToUpdate.fuelConsumption = fuelConsumption.trim();
-    if (typeof bookingType === 'string' && ['INSTANT_BOOKING', 'REQUEST_REQUIRED'].includes(bookingType)) dataToUpdate.bookingType = bookingType;
+    if (typeof bookingType === 'string' && ['INSTANT_BOOKING', 'REQUEST_TO_BOOK'].includes(bookingType)) dataToUpdate.bookingType = bookingType;
     if (typeof cancellationPolicy === 'string' && ['FLEXIBLE', 'MODERATE', 'STRICT'].includes(cancellationPolicy)) dataToUpdate.cancellationPolicy = cancellationPolicy;
 
     if (latitude !== undefined) dataToUpdate.latitude = Number(latitude) || null;
