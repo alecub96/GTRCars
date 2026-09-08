@@ -4,11 +4,12 @@ import { BLOG_ARTICLES } from '@/lib/blog';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://vaneando.com';
+  const staticLastModified = new Date('2026-08-26T00:00:00.000Z');
 
   const islandUrls = CANARY_ISLANDS.map((isla) => ({
     url: `${baseUrl}/alquiler-camper/${isla.id}`,
-    lastModified: new Date(),
-    changeFrequency: 'daily' as const,
+    lastModified: staticLastModified,
+    changeFrequency: 'monthly' as const,
     priority: 0.8,
   }));
   const blogUrls = BLOG_ARTICLES.map((article) => ({ url: `${baseUrl}/guias/${article.slug}`, lastModified: new Date(article.publishedAt), changeFrequency: 'monthly' as const, priority: 0.7 }));
@@ -21,20 +22,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     {
       url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
+      lastModified: staticLastModified,
+      changeFrequency: 'monthly',
       priority: 1.0,
     },
     {
       url: `${baseUrl}/buscar`,
-      lastModified: new Date(),
-      changeFrequency: 'always',
+      lastModified: staticLastModified,
+      changeFrequency: 'weekly',
       priority: 0.9,
     },
     ...islandUrls,
-    { url: `${baseUrl}/alquilar-mi-camper`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
-    { url: `${baseUrl}/guias`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${baseUrl}/colaboradores`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${baseUrl}/alquilar-mi-camper`, lastModified: staticLastModified, changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${baseUrl}/guias`, lastModified: staticLastModified, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${baseUrl}/colaboradores`, lastModified: staticLastModified, changeFrequency: 'monthly', priority: 0.6 },
     ...blogUrls,
     ...camperUrls,
   ];

@@ -18,8 +18,6 @@ export default function robots(): MetadataRoute.Robots {
         '/verificacion/',
         '/checkin/',
         '/checkout/',
-        '/page/',
-        '/*/page/',
       ],
     },
     sitemap: 'https://vaneando.com/sitemap.xml',

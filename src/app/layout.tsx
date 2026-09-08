@@ -25,7 +25,6 @@ export const metadata: Metadata = {
   creator: 'vaneando.',
   publisher: 'vaneando.',
   keywords: [
-    // ESPAÑOL
     'alquiler camper Canarias',
     'alquiler camper Gran Canaria barato',
     'alquiler autocaravana Tenerife',
@@ -34,58 +33,11 @@ export const metadata: Metadata = {
     'alquiler camper particulares Canarias',
     'alquiler autocaravanas Fuerteventura',
     'alquiler camper Lanzarote',
-    // DEUTSCH (Alemania - Mercado #1 en pernocta y días de estancia)
-    'camper mieten Gran Canaria',
-    'wohnmobil mieten Teneriffa',
-    'campervan mieten Kanaren',
-    'wohnmobilvermietung Kanarische Inseln',
-    'kastenwagen mieten Fuerteventura',
-    'camper mieten Lanzarote privat',
-    // ENGLISH (Reino Unido / Irlanda - Mercado #1 en volumen)
-    'campervan hire Gran Canaria',
-    'motorhome rental Tenerife',
-    'campervan rental Canary Islands',
-    'rent a campervan Canary Islands',
-    'cheap campervan rental Tenerife',
-    'peer to peer campervan rental Canary Islands',
-    // FRANÇAIS (Francia / Bélgica / Suiza - Comunidad camper líder)
-    'location van Gran Canaria',
-    'location camping-car Tenerife',
-    'location campervan Canaries',
-    'location fourgon aménagé Fuerteventura',
-    'louer un van entre particuliers Canaries',
-    // ITALIANO (Italia - Alto crecimiento camper)
-    'noleggio camper Canarie',
-    'noleggio camper Gran Canaria',
-    'noleggio van Tenerife',
-    'noleggio camper tra privati Canarie',
-    'affitto camper Fuerteventura',
-    // NORSK (Noruega - Turismo nórdico invernal)
-    'bobil leie Kanariøyene',
-    'leie campervan Gran Canaria',
-    'bobilutleie Tenerife',
-    'leie bobil Fuerteventura privat',
-    // ROMÂNĂ (Rumanía)
-    'inchiriere autorulota Insulele Canare',
-    'inchiriere camper Gran Canaria',
-    'inchiriere autorulote Tenerife',
-    'autorulota de inchiriat Canare',
-    // NEDERLANDS (Países Bajos / Flandes - Gran cultura camper)
-    'camper huren Canarische Eilanden',
-    'camper huren Gran Canaria',
-    'campervan huren Tenerife',
-    'buscamper huren Fuerteventura',
-    // SVENSKA & POLSKI (Suecia y Polonia - Mercados clave en auge)
-    'hyra husbil Kanarieöarna',
-    'hyra campervan Gran Canaria',
-    'wynajem kampera Wyspy Kanaryjskie',
-    'wynajem kamperow Teneryfa',
   ],
   alternates: { canonical: 'https://vaneando.com' },
   openGraph: {
     type: 'website',
     locale: 'es_ES',
-    alternateLocale: ['en_GB', 'de_DE', 'fr_FR', 'it_IT', 'no_NO', 'ro_RO', 'nl_NL', 'sv_SE', 'pl_PL'],
     siteName: 'vaneando. — Canarias sobre ruedas',
     title: 'Vaneando | Alquiler de campers y autocaravanas en Canarias',
     description: 'Campers y autocaravanas disponibles en Canarias, con información clara del anuncio y contacto con propietarios.',
@@ -166,11 +118,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     '@type': 'WebSite',
     name: 'vaneando.',
     url: 'https://vaneando.com',
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: 'https://vaneando.com/buscar?island={search_term_string}',
-      'query-input': 'required name=search_term_string',
-    },
   };
 
   return (

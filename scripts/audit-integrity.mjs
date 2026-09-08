@@ -20,7 +20,8 @@ assert.equal(search.includes('REALISTIC_CANARIAN_CAMPERS'), false, 'demo invento
 assert.equal(sitemap.includes('REALISTIC_CANARIAN_CAMPERS'), false, 'demo inventory must not be in sitemap');
 assert.match(search, /status:\s*'ACTIVE'/, 'search must query active vehicles');
 assert.match(camper, /status:\s*'ACTIVE'/, 'vehicle detail must query active vehicles');
-assert.match(search, /canonical:\s*'https:\/\/vaneando\.com\/buscar'/, 'search canonical must be clean');
+assert.match(search, /canonical\s*=\s*isSimpleIslandSearch/, 'island searches must canonicalize to their dedicated landing');
+assert.match(search, /: 'https:\/\/vaneando\.com\/buscar'/, 'unfiltered search canonical must be clean');
 assert.match(search, /index:\s*false/, 'faceted search must be noindex');
 assert.equal(layout.includes('La plataforma #1'), false, 'unsupported leadership claim must not be in root metadata');
 assert.equal(home.includes('REALISTIC_CANARIAN_CAMPERS'), false, 'demo inventory must not be public home inventory');
