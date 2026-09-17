@@ -47,31 +47,31 @@ const items = [
   ],
   [
     '9. Legislación Aplicable y Contacto',
-    'Estas condiciones se rigen por la legislación española. Para cualquier asistencia o consulta, contacta con Concierge en vip@gtrcars.vip.',
+    'Estas condiciones se rigen por la legislación española. Para cualquier asistencia o consulta, contacta con Concierge en vip@gtrcars.es.',
   ],
 ];
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-[#070707] text-white selection:bg-[#D4AF37] selection:text-black">
+    <div className="min-h-screen bg-white text-black selection:bg-black selection:text-white">
       <Navbar />
       <main className="mx-auto max-w-4xl px-4 py-12 sm:py-16">
-        <article className="rounded-3xl border border-white/10 bg-[#0f0f12] p-8 shadow-2xl sm:p-12">
-          <div className="mb-8 border-b border-white/10 pb-7">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-[10px] font-mono tracking-widest uppercase mb-3">
+        <article className="rounded-3xl border border-gray-200 bg-gray-50 p-8 shadow-2xl sm:p-12">
+          <div className="mb-8 border-b border-gray-200 pb-7">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 border border-gray-200 text-black text-[10px] font-mono tracking-widest uppercase mb-3">
               <Shield className="w-3 h-3" />
               CONDICIONES DE CONTRATACIÓN
             </div>
-            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-white">Términos y Condiciones</h1>
-            <p className="mt-2 text-xs font-mono text-neutral-400">
+            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-black">Términos y Condiciones</h1>
+            <p className="mt-2 text-xs font-mono text-gray-500">
               GTR Cars // Canary Hypercar Vault — Reglas de servicio y alquiler de superdeportivos
             </p>
           </div>
 
-          <div className="space-y-8 text-xs sm:text-sm font-mono leading-relaxed text-neutral-300">
+          <div className="space-y-8 text-xs sm:text-sm font-mono leading-relaxed text-gray-600">
             {items.map(([title, text]) => (
               <section key={title} className="space-y-2">
-                <h2 className="font-serif text-lg font-bold text-white text-[#D4AF37]">{title}</h2>
+                <h2 className="font-serif text-lg font-bold text-black text-black">{title}</h2>
                 <p>{text}</p>
               </section>
             ))}

@@ -21,7 +21,9 @@ import {
   Eye,
   RotateCcw,
   Ban,
+  Download,
 } from 'lucide-react';
+import { generateContractPDF } from '@/lib/pdf-contract';
 
 interface ContractViewerProps {
   booking: any;
@@ -351,8 +353,66 @@ export default function DigitalContractViewer({
     }
   };
 
+  const handleDownloadPDF = () => {
+    try {
+      const pdf = generateContractPDF({
+        contractCode: booking.code || 'GTR-CONTRATO',
+        date: new Date().toLocaleDateString('es-ES'),
+        owner: {
+          fullName: `${booking.owner?.firstName || 'Propietario'} ${booking.owner?.lastName || ''}`.trim(),
+          dni: booking.owner?.dni || 'Verificado en GTR Cars',
+          email: booking.owner?.email || '',
+          phone: booking.owner?.phone || '',
+          address: booking.owner?.address || '',
+          signature: contract.ownerSignature || (ownerSigned ? contract.signedByOwner : null),
+          signedAt: contract.signedAtOwner ? new Date(contract.signedAtOwner).toLocaleString('es-ES') : null,
+        },
+        traveler: {
+          fullName: `${booking.traveler?.firstName || 'Arrendatario'} ${booking.traveler?.lastName || ''}`.trim(),
+          dni: booking.traveler?.dni || 'Verificado en GTR Cars',
+          email: booking.traveler?.email || '',
+          phone: booking.traveler?.phone || '',
+          address: booking.traveler?.address || '',
+          drivingLicense: 'Permiso B Verificado',
+          signature: contract.travelerSignature || (travelerSigned ? contract.signedByTraveler : null),
+          signedAt: contract.signedAtTraveler ? new Date(contract.signedAtTraveler).toLocaleString('es-ES') : null,
+        },
+        vehicle: {
+          brand: booking.vehicle?.brand || 'Supercar',
+          model: booking.vehicle?.model || booking.vehicle?.title || 'GT',
+          plate: booking.vehicle?.plate || 'GTR-VIP',
+          year: booking.vehicle?.year || 2024,
+          hp: booking.vehicle?.hp || '',
+          pickupLocation: `${booking.vehicle?.municipality || ''}, ${booking.vehicle?.island || ''}`.trim(),
+          returnLocation: `${booking.vehicle?.municipality || ''}, ${booking.vehicle?.island || ''}`.trim(),
+        },
+        rental: {
+          pickupDate: dateFormatted(booking.pickupDate),
+          pickupTime: booking.pickupTime || '10:00',
+          returnDate: dateFormatted(booking.returnDate),
+          returnTime: booking.returnTime || '20:00',
+          totalAmount: booking.totalAmount || 0,
+          depositAmount: booking.depositAmount || 0,
+          includedKmPerDay: booking.vehicle?.includedKmPerDay || 150,
+          extraKmPrice: booking.vehicle?.extraKmPrice || 3.50,
+        },
+        inspection: {
+          odometer,
+          fuelLevel: fuelLevel === 'FULL' ? '100% Lleno' : fuelLevel,
+          cleanliness: cleanliness === 'EXCELLENT' ? 'Excelente' : cleanliness,
+          notes,
+        },
+      });
+
+      pdf.save(`Contrato_GTR_Cars_${booking.code || 'reserva'}.pdf`);
+    } catch (e: any) {
+      console.error('Error generando PDF:', e);
+      alert('Error generando el archivo PDF: ' + (e?.message || 'Revisa los datos'));
+    }
+  };
+
   return (
-    <div className="bg-white rounded-3xl border border-[#E9E1D2] shadow-sm p-6 sm:p-8 space-y-6">
+    <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-6 sm:p-8 space-y-6">
       
       {/* CABECERA Y ACCIONES */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#E9E1D2]">
@@ -394,11 +454,20 @@ export default function DigitalContractViewer({
           )}
 
           <button
+            type="button"
+            onClick={handleDownloadPDF}
+            className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-full bg-black hover:bg-neutral-800 text-xs font-bold text-white transition-all shadow-sm cursor-pointer"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>Descargar Contrato PDF</span>
+          </button>
+
+          <button
             onClick={() => window.print()}
-            className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-full border border-[#E9E1D2] bg-[#FAF7F0] text-xs font-bold text-[#13322E] hover:bg-[#13322E] hover:text-white transition-all cursor-pointer"
+            className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-full border border-gray-300 bg-gray-50 text-xs font-bold text-black hover:bg-black hover:text-white transition-all cursor-pointer"
           >
             <Printer className="w-3.5 h-3.5" />
-            <span>Imprimir / PDF</span>
+            <span>Imprimir</span>
           </button>
         </div>
       </div>

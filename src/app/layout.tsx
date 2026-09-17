@@ -7,45 +7,50 @@ import { activeSocialLinks } from '@/lib/social-links';
 import AnalyticsProvider from '@/components/AnalyticsProvider';
 
 export const viewport: Viewport = {
-  themeColor: '#050505',
-  colorScheme: 'dark',
+  themeColor: '#FFFFFF',
+  colorScheme: 'light',
   width: 'device-width',
   initialScale: 1,
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://gtrcars.vip'),
+  metadataBase: new URL('https://gtrcars.es'),
   title: {
-    default: 'GTR Cars | Alquiler de Superdeportivos & Hypercars | Madrid, Barcelona, Canarias, Londres',
+    default: 'GTR Cars | Alquiler de Superdeportivos en Canarias, Madrid, Barcelona y Londres (GT Cars Premium)',
     template: '%s | GTR Cars',
   },
-  description: 'Club internacional de alquiler entre particulares y gestión de superdeportivos e hypercars. Servicio exclusivo en Gran Canaria, Tenerife, Madrid, Barcelona y Londres. Entrega VIP, fianza en custodia y verificación de pilotos.',
+  description: 'GTR Cars: Plataforma peer-to-peer de alquiler de superdeportivos, deportivos GT e hypercars. Alquila directamente a propietarios verificados en Gran Canaria, Tenerife, Madrid, Barcelona y Londres con depósito en custodia.',
   applicationName: 'GTR Cars',
-  authors: [{ name: 'GTR Cars // International Supercar Club', url: 'https://gtrcars.vip' }],
+  authors: [{ name: 'GTR Cars // International Supercar Club', url: 'https://gtrcars.es' }],
   creator: 'GTR Cars',
   publisher: 'GTR Cars',
   keywords: [
+    'gt cars',
+    'gt cars canarias',
+    'gt cars premium',
+    'gtr cars',
+    'gtr cars canarias',
+    'gt cars tenerife',
+    'gt cars gran canaria',
+    'alquiler superdeportivos canarias',
+    'alquiler deportivos gran canaria',
+    'alquiler superdeportivos tenerife',
+    'alquiler coches lujo canarias',
+    'alquiler porsche gran canaria',
+    'alquiler ferrari tenerife',
     'alquiler superdeportivos madrid',
     'supercar hire barcelona',
     'supercar rental london',
-    'alquiler deportivos gran canaria',
-    'alquiler superdeportivos tenerife',
-    'alquiler ferrari madrid',
-    'alquiler lamborghini barcelona',
-    'rent porsche london',
     'rentabilizar superdeportivo propietarios',
-    'monetize supercar owners uk spain',
-    'alquiler coches lujo gran canaria',
-    'gtr cars selection',
   ],
-  alternates: { canonical: 'https://gtrcars.vip' },
+  alternates: { canonical: 'https://gtrcars.es' },
   openGraph: {
     type: 'website',
     locale: 'es_ES',
     siteName: 'GTR Cars // International Supercar Network',
     title: 'GTR Cars | Alquiler de Superdeportivos en Madrid, Barcelona, Canarias y Londres',
     description: 'Accede a la colección más exclusiva de superdeportivos. Alquila Ferrari, Lamborghini, Porsche y McLaren directamente de propietarios verificados o rentabiliza tu vehículo.',
-    url: 'https://gtrcars.vip',
+    url: 'https://gtrcars.es',
     images: [
       {
         url: '/og-image.png',
@@ -75,14 +80,15 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon.png', sizes: 'any' },
-      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
-      { url: '/gtcars-logo.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico?v=2', sizes: 'any' },
+      { url: '/favicon.png?v=2', type: 'image/png' },
+      { url: '/icon-192.png?v=2', sizes: '192x192', type: 'image/png' },
+      { url: '/brand/app-icon.png?v=2', sizes: '512x512', type: 'image/png' },
     ],
     apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+      { url: '/apple-touch-icon.png?v=2', sizes: '180x180', type: 'image/png' },
     ],
-    shortcut: ['/favicon.png'],
+    shortcut: ['/favicon.ico?v=2'],
   },
   manifest: '/site.webmanifest',
 };
@@ -92,8 +98,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'GTR Cars',
-    url: 'https://gtrcars.vip',
-    logo: 'https://gtrcars.vip/favicon.png',
+    url: 'https://gtrcars.es',
+    logo: 'https://gtrcars.es/favicon.png',
     description: 'Plataforma internacional de alquiler entre particulares y gestión de superdeportivos e hypercars en Madrid, Barcelona, Gran Canaria, Tenerife y Londres.',
     knowsLanguage: ['es', 'en'],
     areaServed: [
@@ -112,7 +118,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'GTR Cars // International Supercar Club',
-    url: 'https://gtrcars.vip',
+    url: 'https://gtrcars.es',
   };
 
   return (

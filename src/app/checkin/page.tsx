@@ -18,16 +18,16 @@ function EvidenceFields() {
       ].map(([name, label]) => (
         <label
           key={name}
-          className="flex min-h-32 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-white/15 bg-neutral-900/60 p-3 text-center hover:border-[#D4AF37]/50 transition-colors"
+          className="flex min-h-32 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-white/15 bg-neutral-900/60 p-3 text-center hover:border-black/50 transition-colors"
         >
-          <Camera className="mb-2 h-6 w-6 text-[#D4AF37]" />
+          <Camera className="mb-2 h-6 w-6 text-black" />
           <span className="text-xs font-mono font-bold text-white">{label}</span>
           <input
             name={name}
             required
             type="file"
             accept="image/jpeg,image/png,image/webp"
-            className="mt-2 max-w-full text-[10px] text-neutral-400 font-mono"
+            className="mt-2 max-w-full text-[10px] text-gray-500 font-mono"
           />
         </label>
       ))}
@@ -73,18 +73,18 @@ function CheckInDigitalForm() {
   }
 
   return (
-    <div className="min-h-screen bg-[#070707] text-white selection:bg-[#D4AF37] selection:text-black flex flex-col">
+    <div className="min-h-screen bg-white text-black selection:bg-black selection:text-white flex flex-col">
       <Navbar />
       <main className="flex-1 mx-auto max-w-3xl px-4 py-12 w-full">
-        <section className="space-y-8 rounded-3xl border border-white/10 bg-[#0f0f12] p-6 shadow-2xl sm:p-8">
-          <header className="border-b border-white/10 pb-6 text-center">
-            <ClipboardCheck className="mx-auto mb-3 h-10 w-10 text-[#D4AF37]" />
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D4AF37]/10 text-[#D4AF37] text-[10px] font-mono tracking-widest uppercase mb-2 border border-[#D4AF37]/30">
+        <section className="space-y-8 rounded-3xl border border-gray-200 bg-gray-50 p-6 shadow-2xl sm:p-8">
+          <header className="border-b border-gray-200 pb-6 text-center">
+            <ClipboardCheck className="mx-auto mb-3 h-10 w-10 text-black" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 text-black text-[10px] font-mono tracking-widest uppercase mb-2 border border-gray-200">
               <Sparkles className="w-3 h-3" />
               ACTA DIGITAL DE ENTREGA VIP
             </div>
-            <h1 className="mt-1 font-serif text-3xl font-bold text-white">Check-in de Superdeportivo</h1>
-            <p className="mt-2 text-xs font-mono text-neutral-400">
+            <h1 className="mt-1 font-serif text-3xl font-bold text-black">Check-in de Superdeportivo</h1>
+            <p className="mt-2 text-xs font-mono text-gray-500">
               {booking ? `${booking.code} · ${booking.vehicle}` : 'Vinculado a una reserva de flota GTR Cars'}
             </p>
           </header>
@@ -98,8 +98,8 @@ function CheckInDigitalForm() {
           {existing ? (
             <div className="py-10 text-center font-mono space-y-3">
               <CheckCircle2 className="mx-auto h-16 w-16 text-emerald-400" />
-              <h2 className="font-serif text-2xl font-bold text-white">Acta VIP registrada correctamente</h2>
-              <p className="text-xs text-neutral-400">
+              <h2 className="font-serif text-2xl font-bold text-black">Acta VIP registrada correctamente</h2>
+              <p className="text-xs text-gray-500">
                 Las evidencias y telemetría inicial quedan custodiadas en el Vault.
               </p>
             </div>
@@ -110,15 +110,15 @@ function CheckInDigitalForm() {
           ) : (
             booking && (
               <form onSubmit={submit} className="space-y-6 font-mono">
-                <div className="rounded-2xl border border-[#D4AF37]/30 bg-[#D4AF37]/5 p-4 text-xs text-neutral-300 leading-relaxed flex items-center gap-2">
-                  <ShieldCheck className="h-5 w-5 text-[#D4AF37] shrink-0" />
+                <div className="rounded-2xl border border-gray-200 bg-[#D4AF37]/5 p-4 text-xs text-gray-600 leading-relaxed flex items-center gap-2">
+                  <ShieldCheck className="h-5 w-5 text-black shrink-0" />
                   <span>
                     Completa el acta en presencia de ambas partes. Se registra fecha, firma digital y telemetría de salida.
                   </span>
                 </div>
 
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <label className="text-xs font-mono uppercase tracking-wider text-neutral-400">
+                  <label className="text-xs font-mono uppercase tracking-wider text-gray-500">
                     Kilometraje de Salida
                     <input
                       name="odometer"
@@ -126,7 +126,7 @@ function CheckInDigitalForm() {
                       type="number"
                       min="0"
                       max="10000000"
-                      className="mt-1 w-full rounded-xl border border-white/15 bg-neutral-900 p-3 text-sm text-white focus:border-[#D4AF37] outline-none"
+                      className="mt-1 w-full rounded-xl border border-white/15 bg-neutral-900 p-3 text-sm text-white focus:border-black outline-none"
                     />
                   </label>
                   <LevelSelect name="fuelLevel" label="Combustible (98 Octanos)" />
@@ -135,14 +135,14 @@ function CheckInDigitalForm() {
 
                 <EvidenceFields />
 
-                <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400">
+                <label className="block text-xs font-mono uppercase tracking-wider text-gray-500">
                   Inspección Visual y Observaciones
                   <textarea
                     name="notes"
                     maxLength={3000}
                     rows={4}
                     placeholder="Estado de llantas, splitter frontal, nivel de aceite..."
-                    className="mt-1 w-full rounded-xl border border-white/15 bg-neutral-900 p-3 text-sm text-white focus:border-[#D4AF37] outline-none"
+                    className="mt-1 w-full rounded-xl border border-white/15 bg-neutral-900 p-3 text-sm text-white focus:border-black outline-none"
                   />
                 </label>
 
@@ -164,11 +164,11 @@ function CheckInDigitalForm() {
 
 function LevelSelect({ name, label }: { name: string; label: string }) {
   return (
-    <label className="text-xs font-mono uppercase tracking-wider text-neutral-400">
+    <label className="text-xs font-mono uppercase tracking-wider text-gray-500">
       {label}
       <select
         name={name}
-        className="mt-1 w-full rounded-xl border border-white/15 bg-neutral-900 p-3 text-sm text-white focus:border-[#D4AF37] outline-none cursor-pointer"
+        className="mt-1 w-full rounded-xl border border-white/15 bg-neutral-900 p-3 text-sm text-white focus:border-black outline-none cursor-pointer"
       >
         <option value="FULL">100% Lleno (98 Octanos)</option>
         <option value="3/4">3/4 Depósito</option>
@@ -182,11 +182,11 @@ function LevelSelect({ name, label }: { name: string; label: string }) {
 
 function CleanlinessSelect() {
   return (
-    <label className="text-xs font-mono uppercase tracking-wider text-neutral-400">
+    <label className="text-xs font-mono uppercase tracking-wider text-gray-500">
       Detailing / Limpieza
       <select
         name="cleanliness"
-        className="mt-1 w-full rounded-xl border border-white/15 bg-neutral-900 p-3 text-sm text-white focus:border-[#D4AF37] outline-none cursor-pointer"
+        className="mt-1 w-full rounded-xl border border-white/15 bg-neutral-900 p-3 text-sm text-white focus:border-black outline-none cursor-pointer"
       >
         <option value="EXCELLENT">Detailing Impecable (Cerámico)</option>
         <option value="GOOD">Limpieza Óptima</option>
@@ -200,7 +200,7 @@ export default function CheckInDigitalPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#070707]">
+        <div className="min-h-screen bg-white">
           <Navbar />
         </div>
       }

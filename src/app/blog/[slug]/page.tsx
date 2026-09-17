@@ -47,30 +47,30 @@ export default function BlogDetailPage() {
     '@type': 'BlogPosting',
     headline: content.title,
     description: content.metaDescription,
-    image: `https://gtrcars.vip${article.image}`,
+    image: `https://gtrcars.es${article.image}`,
     datePublished: article.publishedAt,
     author: {
       '@type': 'Organization',
       name: 'GTR Cars Editorial Team',
-      url: 'https://gtrcars.vip',
+      url: 'https://gtrcars.es',
     },
     publisher: {
       '@type': 'Organization',
       name: 'GTR Cars',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://gtrcars.vip/favicon.png',
+        url: 'https://gtrcars.es/favicon.png',
       },
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://gtrcars.vip/blog/${article.slug}`,
+      '@id': `https://gtrcars.es/blog/${article.slug}`,
     },
     keywords: article.keywords.join(', '),
   };
 
   return (
-    <div className="min-h-screen bg-[#070707] text-white selection:bg-[#D4AF37] selection:text-black">
+    <div className="min-h-screen bg-white text-black selection:bg-black selection:text-white">
       {/* Schema.org BlogPosting Injection */}
       <script
         type="application/ld+json"
@@ -84,21 +84,21 @@ export default function BlogDetailPage() {
         <div className="flex items-center justify-between gap-4 mb-8">
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 text-xs font-mono text-neutral-400 hover:text-[#D4AF37] transition-colors"
+            className="inline-flex items-center gap-2 text-xs font-mono text-gray-500 hover:text-black transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>{lang === 'es' ? 'Volver a todos los artículos' : 'Back to all articles'}</span>
           </Link>
 
           {/* SELECTOR DE IDIOMA */}
-          <div className="inline-flex items-center rounded-2xl bg-[#0f0f12] p-1 border border-white/10 shadow-lg">
+          <div className="inline-flex items-center rounded-2xl bg-gray-50 p-1 border border-gray-200 shadow-lg">
             <button
               type="button"
               onClick={() => setLang('es')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
                 lang === 'es'
-                  ? 'bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black shadow-md'
-                  : 'text-neutral-400 hover:text-white'
+                  ? 'bg-black text-white hover:bg-neutral-800 shadow-md'
+                  : 'text-gray-500 hover:text-white'
               }`}
             >
               <Globe className="w-3 h-3" />
@@ -109,8 +109,8 @@ export default function BlogDetailPage() {
               onClick={() => setLang('en')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
                 lang === 'en'
-                  ? 'bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black shadow-md'
-                  : 'text-neutral-400 hover:text-white'
+                  ? 'bg-black text-white hover:bg-neutral-800 shadow-md'
+                  : 'text-gray-500 hover:text-white'
               }`}
             >
               <Globe className="w-3 h-3" />
@@ -121,15 +121,15 @@ export default function BlogDetailPage() {
 
         {/* CABECERA DEL ARTÍCULO */}
         <header className="space-y-6 mb-10 text-center sm:text-left">
-          <div className="flex flex-wrap items-center gap-3 justify-center sm:justify-start text-xs font-mono text-neutral-400">
-            <span className="px-3 py-1 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] uppercase font-bold text-[10px] tracking-wider">
+          <div className="flex flex-wrap items-center gap-3 justify-center sm:justify-start text-xs font-mono text-gray-500">
+            <span className="px-3 py-1 rounded-full bg-gray-100 border border-gray-200 text-black uppercase font-bold text-[10px] tracking-wider">
               {article.category}
             </span>
             <span>•</span>
             <span>{article.publishedAt}</span>
             <span>•</span>
             <span className="flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5 text-[#D4AF37]" />
+              <Clock className="w-3.5 h-3.5 text-black" />
               {article.readingTime}
             </span>
           </div>
@@ -138,22 +138,22 @@ export default function BlogDetailPage() {
             {content.title}
           </h1>
 
-          <p className="text-sm sm:text-base text-neutral-300 font-mono leading-relaxed border-l-2 border-[#D4AF37] pl-4 italic">
+          <p className="text-sm sm:text-base text-gray-600 font-mono leading-relaxed border-l-2 border-black pl-4 italic">
             {content.excerpt}
           </p>
 
-          <div className="flex items-center justify-between pt-2 border-t border-white/10">
+          <div className="flex items-center justify-between pt-2 border-t border-gray-200">
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-emerald-400" />
-              <span className="text-[11px] font-mono text-neutral-400">GTR Cars Editorial Team // Canarias</span>
+              <span className="text-[11px] font-mono text-gray-500">GTR Cars Editorial Team // Canarias</span>
             </div>
 
             <button
               type="button"
               onClick={handleShare}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-mono text-neutral-300 transition-colors cursor-pointer border border-white/10"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-mono text-gray-600 transition-colors cursor-pointer border border-gray-200"
             >
-              <Share2 className="w-3.5 h-3.5 text-[#D4AF37]" />
+              <Share2 className="w-3.5 h-3.5 text-black" />
               <span>{copied ? (lang === 'es' ? '¡Enlace copiado!' : 'Link copied!') : (lang === 'es' ? 'Compartir' : 'Share')}</span>
             </button>
           </div>
@@ -168,25 +168,25 @@ export default function BlogDetailPage() {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
           <div className="absolute bottom-4 left-6 z-10 flex items-center gap-2">
-            <span className="text-xs font-mono text-white/70 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
+            <span className="text-xs font-mono text-gray-700 bg-gray-100 backdrop-blur-md px-3 py-1 rounded-full border border-gray-200">
               GTR Cars Vault Collection
             </span>
           </div>
         </div>
 
         {/* CONTENIDO PRINCIPAL */}
-        <article className="space-y-10 text-neutral-300 font-mono text-sm sm:text-base leading-relaxed">
-          <div className="p-6 rounded-3xl bg-[#0f0f12] border border-white/10 shadow-lg">
+        <article className="space-y-10 text-gray-600 font-mono text-sm sm:text-base leading-relaxed">
+          <div className="p-6 rounded-3xl bg-gray-50 border border-gray-200 shadow-lg">
             <p className="leading-relaxed text-white font-medium">{content.content}</p>
           </div>
 
           {content.sections.map((sec, idx) => (
             <section key={idx} className="space-y-4">
               <h2 className="font-serif text-2xl sm:text-3xl font-bold text-white flex items-center gap-3">
-                <span className="text-[#D4AF37] font-mono text-lg">{idx + 1}.</span>
+                <span className="text-black font-mono text-lg">{idx + 1}.</span>
                 {sec.heading}
               </h2>
-              <div className="p-6 rounded-2xl bg-neutral-900/40 border border-white/5 leading-relaxed text-neutral-300 space-y-3">
+              <div className="p-6 rounded-2xl bg-neutral-900/40 border border-gray-100 leading-relaxed text-gray-600 space-y-3">
                 <p>{sec.body}</p>
               </div>
             </section>
@@ -194,9 +194,9 @@ export default function BlogDetailPage() {
 
           {/* FAQS SECTION */}
           {content.faqs && content.faqs.length > 0 && (
-            <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-[#0f0f12] border border-[#D4AF37]/30 space-y-6 shadow-xl">
+            <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-gray-50 border border-gray-200 space-y-6 shadow-xl">
               <div className="flex items-center gap-2.5">
-                <HelpCircle className="w-6 h-6 text-[#D4AF37]" />
+                <HelpCircle className="w-6 h-6 text-black" />
                 <h3 className="font-serif text-xl sm:text-2xl font-bold text-white">
                   {lang === 'es' ? 'Preguntas Frecuentes' : 'Frequently Asked Questions'}
                 </h3>
@@ -204,9 +204,9 @@ export default function BlogDetailPage() {
 
               <div className="space-y-4">
                 {content.faqs.map((faq, idx) => (
-                  <div key={idx} className="p-4 rounded-2xl bg-black/60 border border-white/10 space-y-2">
+                  <div key={idx} className="p-4 rounded-2xl bg-gray-100 border border-gray-200 space-y-2">
                     <h4 className="font-bold text-white text-sm sm:text-base">{faq.question}</h4>
-                    <p className="text-xs sm:text-sm text-neutral-400">{faq.answer}</p>
+                    <p className="text-xs sm:text-sm text-gray-500">{faq.answer}</p>
                   </div>
                 ))}
               </div>
@@ -214,8 +214,8 @@ export default function BlogDetailPage() {
           )}
 
           {/* BANNER CTA: ALQUILAR SUPERDEPORTIVO */}
-          <div className="mt-14 p-8 rounded-3xl bg-gradient-to-br from-[#17171d] via-[#101014] to-black border border-[#D4AF37]/40 shadow-2xl text-center space-y-5">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D4AF37]/10 text-[#D4AF37] text-[10px] font-mono tracking-widest uppercase border border-[#D4AF37]/30">
+          <div className="mt-14 p-8 rounded-3xl bg-gradient-to-br from-[#17171d] via-[#101014] to-black border border-gray-200 shadow-2xl text-center space-y-5">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 text-black text-[10px] font-mono tracking-widest uppercase border border-gray-200">
               <Sparkles className="w-3 h-3" />
               {lang === 'es' ? 'EXPERIENCIA DE CONDUCCIÓN VIP' : 'VIP DRIVING EXPERIENCE'}
             </div>
@@ -226,7 +226,7 @@ export default function BlogDetailPage() {
                 : 'Ready to Command the Roads in the Canaries?'}
             </h3>
 
-            <p className="text-xs sm:text-sm text-neutral-400 max-w-xl mx-auto font-mono">
+            <p className="text-xs sm:text-sm text-gray-500 max-w-xl mx-auto font-mono">
               {lang === 'es'
                 ? 'Explora nuestra flota de Ferrari, Lamborghini, McLaren y Porsche GT3 RS con entrega VIP directa en aeropuerto o tu resort de lujo.'
                 : 'Discover our fleet of Ferrari, Lamborghini, McLaren, and Porsche GT3 RS with direct airport concierge and resort delivery.'}
@@ -235,13 +235,13 @@ export default function BlogDetailPage() {
             <div className="pt-2 flex flex-wrap justify-center gap-4">
               <Link
                 href="/#flota"
-                className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black font-mono font-bold text-xs uppercase tracking-wider hover:brightness-110 shadow-lg transition-all"
+                className="px-8 py-3.5 rounded-xl bg-black text-white hover:bg-neutral-800 font-mono font-bold text-xs uppercase tracking-wider hover:brightness-110 shadow-lg transition-all"
               >
                 {lang === 'es' ? 'Ver Flota Disponible' : 'Explore Available Fleet'}
               </Link>
               <Link
                 href="/publicar-camper"
-                className="px-8 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-mono font-bold text-xs uppercase tracking-wider transition-all border border-white/10"
+                className="px-8 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-mono font-bold text-xs uppercase tracking-wider transition-all border border-gray-200"
               >
                 {lang === 'es' ? 'Unirse al Vault Propietarios' : 'Join Owner Vault'}
               </Link>
@@ -251,8 +251,8 @@ export default function BlogDetailPage() {
 
         {/* ARTÍCULOS RELACIONADOS */}
         {otherArticles.length > 0 && (
-          <div className="mt-16 pt-12 border-t border-white/10 space-y-6">
-            <h3 className="font-serif text-2xl font-bold text-white">
+          <div className="mt-16 pt-12 border-t border-gray-200 space-y-6">
+            <h3 className="font-serif text-2xl font-bold text-black">
               {lang === 'es' ? 'Otros Artículos de Interés' : 'Related Articles'}
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -262,7 +262,7 @@ export default function BlogDetailPage() {
                   <Link
                     key={rel.slug}
                     href={`/blog/${rel.slug}`}
-                    className="group bg-[#0f0f12] rounded-2xl border border-white/10 p-4 hover:border-[#D4AF37]/40 transition-all flex flex-col justify-between space-y-3"
+                    className="group bg-gray-50 rounded-2xl border border-gray-200 p-4 hover:border-gray-200 transition-all flex flex-col justify-between space-y-3"
                   >
                     <div className="h-32 w-full rounded-xl overflow-hidden relative">
                       <img
@@ -272,10 +272,10 @@ export default function BlogDetailPage() {
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <span className="text-[9px] font-mono text-[#D4AF37] uppercase font-bold">
+                      <span className="text-[9px] font-mono text-black uppercase font-bold">
                         {rel.category}
                       </span>
-                      <h4 className="font-serif font-bold text-xs sm:text-sm text-white group-hover:text-[#D4AF37] transition-colors line-clamp-2">
+                      <h4 className="font-serif font-bold text-xs sm:text-sm text-white group-hover:text-black transition-colors line-clamp-2">
                         {relData.title}
                       </h4>
                     </div>

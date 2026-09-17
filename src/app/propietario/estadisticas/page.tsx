@@ -46,21 +46,21 @@ export default function OwnerStatsPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#070707] text-white selection:bg-[#D4AF37] selection:text-black flex flex-col">
+    <div className="min-h-screen bg-white text-black selection:bg-black selection:text-black flex flex-col">
       <Navbar />
 
       <main className="flex-1 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 w-full">
         {/* CABECERA PRINCIPAL */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D4AF37]/10 text-[#D4AF37] text-[10px] font-mono tracking-widest uppercase mb-2 border border-[#D4AF37]/30">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 text-black text-[10px] font-mono tracking-widest uppercase mb-2 border border-gray-200">
               <Sparkles className="w-3 h-3" />
               TELEMETRÍA &amp; RENDIMIENTO DEL VAULT
             </div>
-            <h1 className="font-serif text-3xl sm:text-5xl font-bold text-white mt-1">
+            <h1 className="font-serif text-3xl sm:text-5xl font-bold text-black mt-1">
               Estadísticas de tus Superdeportivos
             </h1>
-            <p className="mt-2 text-xs sm:text-sm text-neutral-400 font-mono">
+            <p className="mt-2 text-xs sm:text-sm text-gray-500 font-mono">
               Métricas de visualizaciones, solicitudes VIP y ratio de conversión en tiempo real.
             </p>
           </div>
@@ -68,14 +68,14 @@ export default function OwnerStatsPage() {
           <div className="flex items-center space-x-3">
             <Link
               href="/propietario/finanzas"
-              className="inline-flex items-center space-x-2 bg-[#0f0f12] border border-white/15 hover:border-[#D4AF37] px-5 py-2.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider text-white shadow-md transition-all"
+              className="inline-flex items-center space-x-2 bg-gray-50 border border-white/15 hover:border-[#D4AF37] px-5 py-2.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider text-black shadow-md transition-all"
             >
               <span>Ver Liquidaciones</span>
-              <ArrowRight className="w-4 h-4 text-[#D4AF37]" />
+              <ArrowRight className="w-4 h-4 text-black" />
             </Link>
             <Link
               href="/publicar-camper"
-              className="inline-flex items-center space-x-2 bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black px-5 py-2.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider shadow-lg hover:brightness-110 transition-all"
+              className="inline-flex items-center space-x-2 bg-black hover:bg-neutral-800 text-white px-5 py-2.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider shadow-lg hover:brightness-110 transition-all"
             >
               <Gauge className="w-4 h-4" />
               <span>Homologar Nuevo Vehículo</span>
@@ -90,7 +90,7 @@ export default function OwnerStatsPage() {
               <ShieldCheck className="w-5 h-5 text-amber-400 shrink-0" />
               <span>{errorMsg}</span>
             </div>
-            <Link href="/propietario" className="underline font-bold uppercase text-[10px] text-[#D4AF37]">
+            <Link href="/propietario" className="underline font-bold uppercase text-[10px] text-black">
               Ir al Vault Propietario
             </Link>
           </div>
@@ -98,68 +98,68 @@ export default function OwnerStatsPage() {
 
         {/* 1. TARJETAS KPI RESUMEN */}
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-10 font-mono">
-          <div className="bg-[#0f0f12] p-6 rounded-3xl border border-white/10 shadow-xl flex flex-col justify-between">
-            <div className="flex items-center justify-between text-neutral-400 mb-3">
+          <div className="bg-gray-50 p-6 rounded-3xl border border-gray-200 shadow-xl flex flex-col justify-between">
+            <div className="flex items-center justify-between text-gray-500 mb-3">
               <span className="text-[10px] uppercase tracking-wider">Apariciones</span>
-              <Eye className="w-4 h-4 text-[#D4AF37]" />
+              <Eye className="w-4 h-4 text-black" />
             </div>
             <div>
-              <strong className="font-serif text-3xl sm:text-4xl text-white">
+              <strong className="font-serif text-3xl sm:text-4xl text-black">
                 {loading ? '...' : stats.impressions}
               </strong>
-              <span className="block text-[11px] text-neutral-400 mt-1">Impresiones en el catálogo</span>
+              <span className="block text-[11px] text-gray-500 mt-1">Impresiones en el catálogo</span>
             </div>
           </div>
 
-          <div className="bg-[#0f0f12] p-6 rounded-3xl border border-white/10 shadow-xl flex flex-col justify-between">
-            <div className="flex items-center justify-between text-neutral-400 mb-3">
+          <div className="bg-gray-50 p-6 rounded-3xl border border-gray-200 shadow-xl flex flex-col justify-between">
+            <div className="flex items-center justify-between text-gray-500 mb-3">
               <span className="text-[10px] uppercase tracking-wider">Visitas Cockpit</span>
-              <MousePointerClick className="w-4 h-4 text-[#D4AF37]" />
+              <MousePointerClick className="w-4 h-4 text-black" />
             </div>
             <div>
-              <strong className="font-serif text-3xl sm:text-4xl text-white">
+              <strong className="font-serif text-3xl sm:text-4xl text-black">
                 {loading ? '...' : stats.views}
               </strong>
-              <span className="block text-[11px] text-neutral-400 mt-1">Clics en ficha técnica</span>
+              <span className="block text-[11px] text-gray-500 mt-1">Clics en ficha técnica</span>
             </div>
           </div>
 
-          <div className="bg-[#0f0f12] p-6 rounded-3xl border border-white/10 shadow-xl flex flex-col justify-between">
-            <div className="flex items-center justify-between text-neutral-400 mb-3">
+          <div className="bg-gray-50 p-6 rounded-3xl border border-gray-200 shadow-xl flex flex-col justify-between">
+            <div className="flex items-center justify-between text-gray-500 mb-3">
               <span className="text-[10px] uppercase tracking-wider">Solicitudes VIP</span>
-              <Inbox className="w-4 h-4 text-[#D4AF37]" />
+              <Inbox className="w-4 h-4 text-black" />
             </div>
             <div>
-              <strong className="font-serif text-3xl sm:text-4xl text-white">
+              <strong className="font-serif text-3xl sm:text-4xl text-black">
                 {loading ? '...' : stats.requests}
               </strong>
-              <span className="block text-[11px] text-neutral-400 mt-1">Peticiones de concierge</span>
+              <span className="block text-[11px] text-gray-500 mt-1">Peticiones de concierge</span>
             </div>
           </div>
 
-          <div className="bg-[#0f0f12] p-6 rounded-3xl border border-white/10 shadow-xl flex flex-col justify-between">
-            <div className="flex items-center justify-between text-neutral-400 mb-3">
+          <div className="bg-gray-50 p-6 rounded-3xl border border-gray-200 shadow-xl flex flex-col justify-between">
+            <div className="flex items-center justify-between text-gray-500 mb-3">
               <span className="text-[10px] uppercase tracking-wider">Confirmadas</span>
-              <CheckCircle2 className="w-4 h-4 text-[#D4AF37]" />
+              <CheckCircle2 className="w-4 h-4 text-black" />
             </div>
             <div>
-              <strong className="font-serif text-3xl sm:text-4xl text-white">
+              <strong className="font-serif text-3xl sm:text-4xl text-black">
                 {loading ? '...' : stats.confirmed}
               </strong>
-              <span className="block text-[11px] text-neutral-400 mt-1">Reservas formalizadas</span>
+              <span className="block text-[11px] text-gray-500 mt-1">Reservas formalizadas</span>
             </div>
           </div>
 
-          <div className="bg-[#0f0f12] p-6 rounded-3xl border border-[#D4AF37]/30 shadow-xl flex flex-col justify-between col-span-2 lg:col-span-1 bg-gradient-to-br from-neutral-900 to-black">
-            <div className="flex items-center justify-between text-[#D4AF37] mb-3">
+          <div className="bg-gray-50 p-6 rounded-3xl border border-gray-200 shadow-xl flex flex-col justify-between col-span-2 lg:col-span-1 bg-gradient-to-br from-neutral-900 to-black">
+            <div className="flex items-center justify-between text-black mb-3">
               <span className="text-[10px] uppercase tracking-wider font-bold">Conversión</span>
-              <TrendingUp className="w-4 h-4 text-[#D4AF37]" />
+              <TrendingUp className="w-4 h-4 text-black" />
             </div>
             <div>
-              <strong className="font-serif text-3xl sm:text-4xl text-[#D4AF37]">
+              <strong className="font-serif text-3xl sm:text-4xl text-black">
                 {loading ? '...' : `${stats.conversion}%`}
               </strong>
-              <span className="block text-[11px] text-neutral-400 mt-1">Efectividad de reserva</span>
+              <span className="block text-[11px] text-gray-500 mt-1">Efectividad de reserva</span>
             </div>
           </div>
         </div>
@@ -167,58 +167,58 @@ export default function OwnerStatsPage() {
         {/* 2. SECCIONES DETALLADAS POR VEHÍCULO Y PROCEDENCIA */}
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 font-mono">
           {/* DESGLOSE POR SUPERDEPORTIVO */}
-          <div className="bg-[#0f0f12] rounded-3xl border border-white/10 p-6 shadow-xl">
-            <div className="flex items-center justify-between pb-4 border-b border-white/10">
+          <div className="bg-gray-50 rounded-3xl border border-gray-200 p-6 shadow-xl">
+            <div className="flex items-center justify-between pb-4 border-b border-gray-200">
               <div className="flex items-center space-x-3">
-                <Gauge className="w-5 h-5 text-[#D4AF37]" />
-                <h2 className="font-serif text-2xl font-bold text-white">Rendimiento por Modelo</h2>
+                <Gauge className="w-5 h-5 text-black" />
+                <h2 className="font-serif text-2xl font-bold text-black">Rendimiento por Modelo</h2>
               </div>
-              <span className="text-xs text-neutral-400">
+              <span className="text-xs text-gray-500">
                 {stats.perVehicle?.length || 0} {stats.perVehicle?.length === 1 ? 'vehículo' : 'vehículos'}
               </span>
             </div>
 
             {loading ? (
-              <div className="py-12 text-center text-sm text-neutral-400">Cargando telemetría de flota...</div>
+              <div className="py-12 text-center text-sm text-gray-500">Cargando telemetría de flota...</div>
             ) : stats.perVehicle && stats.perVehicle.length > 0 ? (
               <div className="divide-y divide-white/5 mt-2">
                 {stats.perVehicle.map((vehicle: any) => (
                   <div key={vehicle.id} className="py-4 space-y-2">
                     <div className="flex items-center justify-between">
-                      <h3 className="font-bold text-base text-white">{vehicle.title}</h3>
-                      <span className="text-xs font-bold text-[#D4AF37] bg-[#D4AF37]/10 px-2.5 py-1 rounded-full border border-[#D4AF37]/30">
+                      <h3 className="font-bold text-base text-black">{vehicle.title}</h3>
+                      <span className="text-xs font-bold text-black bg-gray-100 px-2.5 py-1 rounded-full border border-gray-200">
                         {vehicle.conversion}% conv.
                       </span>
                     </div>
                     <div className="grid grid-cols-4 gap-2 text-center pt-1">
-                      <div className="bg-black/60 p-2 rounded-xl border border-white/10">
-                        <span className="block text-[9px] uppercase text-neutral-400">Apariciones</span>
-                        <strong className="text-sm text-white">{vehicle.impressions}</strong>
+                      <div className="bg-gray-100 p-2 rounded-xl border border-gray-200">
+                        <span className="block text-[9px] uppercase text-gray-500">Apariciones</span>
+                        <strong className="text-sm text-black">{vehicle.impressions}</strong>
                       </div>
-                      <div className="bg-black/60 p-2 rounded-xl border border-white/10">
-                        <span className="block text-[9px] uppercase text-neutral-400">Visitas</span>
-                        <strong className="text-sm text-white">{vehicle.views}</strong>
+                      <div className="bg-gray-100 p-2 rounded-xl border border-gray-200">
+                        <span className="block text-[9px] uppercase text-gray-500">Visitas</span>
+                        <strong className="text-sm text-black">{vehicle.views}</strong>
                       </div>
-                      <div className="bg-black/60 p-2 rounded-xl border border-white/10">
-                        <span className="block text-[9px] uppercase text-neutral-400">Solicitudes</span>
-                        <strong className="text-sm text-white">{vehicle.requests}</strong>
+                      <div className="bg-gray-100 p-2 rounded-xl border border-gray-200">
+                        <span className="block text-[9px] uppercase text-gray-500">Solicitudes</span>
+                        <strong className="text-sm text-black">{vehicle.requests}</strong>
                       </div>
-                      <div className="bg-black/60 p-2 rounded-xl border border-white/10">
-                        <span className="block text-[9px] uppercase text-neutral-400">Confirmadas</span>
-                        <strong className="text-sm text-white">{vehicle.confirmed}</strong>
+                      <div className="bg-gray-100 p-2 rounded-xl border border-gray-200">
+                        <span className="block text-[9px] uppercase text-gray-500">Confirmadas</span>
+                        <strong className="text-sm text-black">{vehicle.confirmed}</strong>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="py-12 text-center text-sm text-neutral-400 space-y-3">
-                <BarChart3 className="w-10 h-10 text-[#D4AF37] mx-auto mb-3 opacity-60" />
-                <p className="font-bold text-white">Todavía no tienes superdeportivos homologados en el Vault.</p>
-                <p className="text-xs text-neutral-400">Publica tu primer Ferrari, Porsche o Lamborghini para recibir solicitudes VIP.</p>
+              <div className="py-12 text-center text-sm text-gray-500 space-y-3">
+                <BarChart3 className="w-10 h-10 text-black mx-auto mb-3 opacity-60" />
+                <p className="font-bold text-black">Todavía no tienes superdeportivos homologados en el Vault.</p>
+                <p className="text-xs text-gray-500">Publica tu primer Ferrari, Porsche o Lamborghini para recibir solicitudes VIP.</p>
                 <Link
                   href="/publicar-camper"
-                  className="mt-4 inline-block bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider hover:brightness-110"
+                  className="mt-4 inline-block bg-black hover:bg-neutral-800 text-white px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider hover:brightness-110"
                 >
                   Homologar Superdeportivo
                 </Link>
@@ -227,39 +227,39 @@ export default function OwnerStatsPage() {
           </div>
 
           {/* PROCEDENCIA DE LOS VISITANTES */}
-          <div className="bg-[#0f0f12] rounded-3xl border border-white/10 p-6 shadow-xl flex flex-col justify-between">
+          <div className="bg-gray-50 rounded-3xl border border-gray-200 p-6 shadow-xl flex flex-col justify-between">
             <div>
-              <div className="flex items-center justify-between pb-4 border-b border-white/10">
+              <div className="flex items-center justify-between pb-4 border-b border-gray-200">
                 <div className="flex items-center space-x-3">
-                  <Globe2 className="w-5 h-5 text-[#D4AF37]" />
-                  <h2 className="font-serif text-2xl font-bold text-white">Procedencia de Clientes VIP</h2>
+                  <Globe2 className="w-5 h-5 text-black" />
+                  <h2 className="font-serif text-2xl font-bold text-black">Procedencia de Clientes VIP</h2>
                 </div>
               </div>
 
               {loading ? (
-                <div className="py-12 text-center text-sm text-neutral-400">Analizando procedencia...</div>
+                <div className="py-12 text-center text-sm text-gray-500">Analizando procedencia...</div>
               ) : stats.countries && stats.countries.length > 0 ? (
                 <div className="divide-y divide-white/5 mt-2">
                   {stats.countries.map(([country, total]: [string, number]) => (
                     <div key={country} className="py-3 flex items-center justify-between">
-                      <span className="text-sm font-bold text-white">{country}</span>
-                      <span className="text-xs font-bold text-[#D4AF37] bg-[#D4AF37]/10 px-3 py-1 rounded-full border border-[#D4AF37]/30">
+                      <span className="text-sm font-bold text-black">{country}</span>
+                      <span className="text-xs font-bold text-black bg-gray-100 px-3 py-1 rounded-full border border-gray-200">
                         {total} {total === 1 ? 'visita' : 'visitas'}
                       </span>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="py-12 text-center text-sm text-neutral-400 space-y-2">
-                  <Globe2 className="w-10 h-10 text-[#D4AF37] mx-auto mb-3 opacity-60" />
-                  <p className="font-bold text-white">Aún no hay visitas internacionales registradas.</p>
-                  <p className="text-xs text-neutral-400">Tus vehículos se promocionan activamente en los principales hubs turísticos de Reino Unido, Alemania y España.</p>
+                <div className="py-12 text-center text-sm text-gray-500 space-y-2">
+                  <Globe2 className="w-10 h-10 text-black mx-auto mb-3 opacity-60" />
+                  <p className="font-bold text-black">Aún no hay visitas internacionales registradas.</p>
+                  <p className="text-xs text-gray-500">Tus vehículos se promocionan activamente en los principales hubs turísticos de Reino Unido, Alemania y España.</p>
                 </div>
               )}
             </div>
 
-            <div className="mt-6 p-4 rounded-2xl bg-black/60 border border-white/10 text-xs text-neutral-400">
-              <strong className="text-[#D4AF37]">Optimización del Vault:</strong> Mantén actualizado el calendario y activa fotografías de alta resolución para maximizar tus reservas.
+            <div className="mt-6 p-4 rounded-2xl bg-gray-100 border border-gray-200 text-xs text-gray-500">
+              <strong className="text-black">Optimización del Vault:</strong> Mantén actualizado el calendario y activa fotografías de alta resolución para maximizar tus reservas.
             </div>
           </div>
         </section>

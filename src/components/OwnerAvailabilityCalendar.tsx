@@ -91,7 +91,7 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
       if (calData.exportUrl) {
         setExportUrl(calData.exportUrl);
       } else {
-        const origin = typeof window !== 'undefined' ? window.location.origin : 'https://gtrcars.vip';
+        const origin = typeof window !== 'undefined' ? window.location.origin : 'https://gtrcars.es';
         setExportUrl(`${origin}/api/calendar/export/${id}`);
       }
     } catch (err) {
@@ -319,31 +319,31 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
   }
 
   return (
-    <section className="mb-12 rounded-3xl border border-white/10 bg-[#0f0f12] p-6 sm:p-8 shadow-2xl backdrop-blur-xl">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6 mb-6">
+    <section className="mb-12 rounded-3xl border border-gray-200 bg-gray-50 p-6 sm:p-8 shadow-2xl backdrop-blur-xl">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-200 pb-6 mb-6">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-[10px] font-mono tracking-widest uppercase mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 border border-gray-200 text-black text-[10px] font-mono tracking-widest uppercase mb-2">
             <Sparkles className="w-3 h-3" />
             TELEMETRÍA &amp; DISPONIBILIDAD
           </div>
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-white flex items-center gap-2.5">
-            <Calendar className="h-7 w-7 text-[#D4AF37]" />
+          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-black flex items-center gap-2.5">
+            <Calendar className="h-7 w-7 text-black" />
             Disponibilidad y Sincronización Automática
           </h2>
-          <p className="mt-1 text-xs sm:text-sm text-neutral-400">
+          <p className="mt-1 text-xs sm:text-sm text-gray-500">
             Vincula tus calendarios externos o sincroniza iCal con plataformas privadas y concierge para evitar solapamientos de reservas.
           </p>
         </div>
 
         {vehicles.length > 0 && (
           <div className="w-full sm:w-auto min-w-[240px]">
-            <label className="block text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-1">
+            <label className="block text-[11px] font-mono uppercase tracking-wider text-gray-500 mb-1">
               Seleccionar Superdeportivo
             </label>
             <select
               value={selectedVehicleId}
               onChange={(e) => setVehicleId(e.target.value)}
-              className="w-full rounded-xl border border-white/15 bg-neutral-900 p-2.5 text-xs sm:text-sm font-mono text-white focus:border-[#D4AF37] focus:outline-none cursor-pointer"
+              className="w-full rounded-xl border border-gray-200 bg-neutral-900 p-2.5 text-xs sm:text-sm font-mono text-black focus:border-[#D4AF37] focus:outline-none cursor-pointer"
             >
               {vehicles.map((v) => (
                 <option key={v.id} value={v.id}>
@@ -356,7 +356,7 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
       </div>
 
       {!vehicles.length ? (
-        <p className="text-sm text-neutral-400">Publica tu primer superdeportivo para poder gestionar su calendario.</p>
+        <p className="text-sm text-gray-500">Publica tu primer superdeportivo para poder gestionar su calendario.</p>
       ) : (
         <div className="space-y-10">
           {/* MENSAJES DE ESTADO */}
@@ -374,7 +374,7 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
               <button
                 type="button"
                 onClick={() => setMessage(null)}
-                className="text-xs font-bold underline ml-3 cursor-pointer text-white/70 hover:text-white"
+                className="text-xs font-bold underline ml-3 cursor-pointer text-gray-700 hover:text-black"
               >
                 Cerrar
               </button>
@@ -382,34 +382,34 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
           )}
 
           {/* MÓDULO DESTACADO: SINCRONIZACIÓN AUTOMÁTICA ICAL */}
-          <div className="rounded-3xl border border-[#D4AF37]/30 bg-gradient-to-br from-[#17171d] via-[#101014] to-black p-5 sm:p-7 shadow-xl">
+          <div className="rounded-3xl border border-gray-200 bg-gradient-to-br from-[#17171d] via-[#101014] to-black p-5 sm:p-7 shadow-xl">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
               <div className="flex items-center space-x-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black shadow-lg">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-black text-white hover:bg-neutral-800 shadow-lg">
                   <CalendarSync className="h-6 w-6" />
                 </div>
                 <div>
-                  <h3 className="font-serif text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+                  <h3 className="font-serif text-lg sm:text-xl font-bold text-black flex items-center gap-2">
                     Sincronización con otras Plataformas
-                    <span className="rounded-full bg-[#D4AF37]/20 text-[#D4AF37] text-[10px] font-mono uppercase px-2.5 py-0.5 tracking-wider border border-[#D4AF37]/30">
+                    <span className="rounded-full bg-[#D4AF37]/20 text-black text-[10px] font-mono uppercase px-2.5 py-0.5 tracking-wider border border-gray-200">
                       iCal Automático
                     </span>
                   </h3>
-                  <p className="text-xs text-neutral-400">
+                  <p className="text-xs text-gray-500">
                     Conecta tus flujos de concierge, Airbnb Luxe, Booking.com y Google Calendar en ambos sentidos.
                   </p>
                 </div>
               </div>
 
               {/* SELECTOR DE PESTAÑAS */}
-              <div className="flex items-center rounded-2xl bg-neutral-900/80 p-1 border border-white/10 w-fit">
+              <div className="flex items-center rounded-2xl bg-neutral-900/80 p-1 border border-gray-200 w-fit">
                 <button
                   type="button"
                   onClick={() => setSyncTab('url')}
                   className={`flex items-center space-x-1.5 px-3 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
                     syncTab === 'url'
-                      ? 'bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black shadow-sm'
-                      : 'text-neutral-400 hover:text-white'
+                      ? 'bg-black text-white hover:bg-neutral-800 shadow-sm'
+                      : 'text-gray-500 hover:text-black'
                   }`}
                 >
                   <LinkIcon className="h-3.5 w-3.5" />
@@ -420,8 +420,8 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
                   onClick={() => setSyncTab('file')}
                   className={`flex items-center space-x-1.5 px-3 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
                     syncTab === 'file'
-                      ? 'bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black shadow-sm'
-                      : 'text-neutral-400 hover:text-white'
+                      ? 'bg-black text-white hover:bg-neutral-800 shadow-sm'
+                      : 'text-gray-500 hover:text-black'
                   }`}
                 >
                   <Upload className="h-3.5 w-3.5" />
@@ -432,8 +432,8 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
                   onClick={() => setSyncTab('export')}
                   className={`flex items-center space-x-1.5 px-3 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
                     syncTab === 'export'
-                      ? 'bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black shadow-sm'
-                      : 'text-neutral-400 hover:text-white'
+                      ? 'bg-black text-white hover:bg-neutral-800 shadow-sm'
+                      : 'text-gray-500 hover:text-black'
                   }`}
                 >
                   <Copy className="h-3.5 w-3.5" />
@@ -446,7 +446,7 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
             {syncTab === 'url' && (
               <div className="space-y-6">
                 <div>
-                  <label className="block text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-2">
+                  <label className="block text-[11px] font-mono uppercase tracking-wider text-gray-500 mb-2">
                     Plataforma a Vincular:
                   </label>
                   <div className="flex flex-wrap gap-2">
@@ -464,7 +464,7 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
                         className={`px-3.5 py-1.5 rounded-full text-xs font-mono font-bold transition-all border cursor-pointer ${
                           selectedPlatform === p.id
                             ? 'bg-[#D4AF37] text-black border-[#D4AF37] shadow-sm font-black'
-                            : 'bg-neutral-900 text-neutral-300 border-white/10 hover:border-[#D4AF37]/50'
+                            : 'bg-neutral-900 text-gray-600 border-gray-200 hover:border-black'
                         }`}
                       >
                         {p.name}
@@ -476,19 +476,19 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
                 {/* FORMULARIO DE IMPORTACIÓN POR ENLACE */}
                 <form onSubmit={handleAddFeed} className="grid grid-cols-1 md:grid-cols-12 gap-3">
                   <div className="md:col-span-4">
-                    <label className="block text-[11px] font-mono text-neutral-400 mb-1">Nombre del Calendario</label>
+                    <label className="block text-[11px] font-mono text-gray-500 mb-1">Nombre del Calendario</label>
                     <input
                       type="text"
                       required
                       value={feedNameInput}
                       onChange={(e) => setFeedNameInput(e.target.value)}
                       placeholder="Ej. Concierge Tenerife - GT3 RS"
-                      className="w-full rounded-xl border border-white/15 bg-neutral-900 p-3 text-xs sm:text-sm font-mono text-white focus:border-[#D4AF37] focus:outline-none"
+                      className="w-full rounded-xl border border-gray-200 bg-neutral-900 p-3 text-xs sm:text-sm font-mono text-black focus:border-[#D4AF37] focus:outline-none"
                     />
                   </div>
 
                   <div className="md:col-span-6">
-                    <label className="block text-[11px] font-mono text-neutral-400 mb-1">
+                    <label className="block text-[11px] font-mono text-gray-500 mb-1">
                       URL del feed iCal (.ics o webcal://)
                     </label>
                     <input
@@ -497,7 +497,7 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
                       value={feedUrlInput}
                       onChange={(e) => setFeedUrlInput(e.target.value)}
                       placeholder="https://calendar.google.com/calendar/ical/.../basic.ics"
-                      className="w-full rounded-xl border border-white/15 bg-neutral-900 p-3 text-xs sm:text-sm font-mono text-white focus:border-[#D4AF37] focus:outline-none"
+                      className="w-full rounded-xl border border-gray-200 bg-neutral-900 p-3 text-xs sm:text-sm font-mono text-black focus:border-[#D4AF37] focus:outline-none"
                     />
                   </div>
 
@@ -505,7 +505,7 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
                     <button
                       type="submit"
                       disabled={isSubmittingFeed || !feedUrlInput.trim()}
-                      className="w-full rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black py-3 px-4 text-xs font-mono font-bold uppercase tracking-wider transition-all disabled:opacity-50 flex items-center justify-center space-x-1.5 shadow-md cursor-pointer hover:brightness-110"
+                      className="w-full rounded-xl bg-black text-white hover:bg-neutral-800 py-3 px-4 text-xs font-mono font-bold uppercase tracking-wider transition-all disabled:opacity-50 flex items-center justify-center space-x-1.5 shadow-md cursor-pointer hover:brightness-110"
                     >
                       {isSubmittingFeed ? (
                         <>
@@ -524,25 +524,25 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
 
                 {/* LISTA DE FEEDS VINCULADOS */}
                 {feeds.length > 0 && (
-                  <div className="mt-4 border-t border-white/10 pt-4">
-                    <h4 className="text-xs font-mono uppercase tracking-wider text-[#D4AF37] mb-3 flex items-center gap-1.5">
+                  <div className="mt-4 border-t border-gray-200 pt-4">
+                    <h4 className="text-xs font-mono uppercase tracking-wider text-black mb-3 flex items-center gap-1.5">
                       <span>Calendarios conectados para este vehículo ({feeds.length})</span>
                     </h4>
                     <div className="grid gap-3 sm:grid-cols-2">
                       {feeds.map((feed) => (
                         <div
                           key={feed.id}
-                          className="flex items-center justify-between p-3.5 rounded-2xl bg-neutral-900 border border-white/10 shadow-md"
+                          className="flex items-center justify-between p-3.5 rounded-2xl bg-neutral-900 border border-gray-200 shadow-md"
                         >
                           <div className="min-w-0 pr-3">
                             <div className="flex items-center gap-2">
                               <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
-                              <strong className="text-xs sm:text-sm text-white truncate block font-mono">{feed.name}</strong>
-                              <span className="text-[9px] font-mono uppercase tracking-wider bg-white/10 text-neutral-300 px-2 py-0.5 rounded-md border border-white/10">
+                              <strong className="text-xs sm:text-sm text-black truncate block font-mono">{feed.name}</strong>
+                              <span className="text-[9px] font-mono uppercase tracking-wider bg-white/10 text-gray-600 px-2 py-0.5 rounded-md border border-gray-200">
                                 {feed.platform}
                               </span>
                             </div>
-                            <p className="text-[11px] text-neutral-400 mt-0.5 truncate font-mono">
+                            <p className="text-[11px] text-gray-500 mt-0.5 truncate font-mono">
                               {feed.lastSyncAt ? `Última sincronización: ${new Date(feed.lastSyncAt).toLocaleString('es-ES')}` : 'Activo'}
                             </p>
                           </div>
@@ -553,7 +553,7 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
                               onClick={() => handleSyncFeedAgain(feed)}
                               disabled={isSubmittingFeed}
                               title="Sincronizar ahora"
-                              className="p-2 rounded-xl text-[#D4AF37] hover:bg-white/10 transition-colors cursor-pointer"
+                              className="p-2 rounded-xl text-black hover:bg-white/10 transition-colors cursor-pointer"
                             >
                               <RefreshCw className={`h-4 w-4 ${isSubmittingFeed ? 'animate-spin' : ''}`} />
                             </button>
@@ -577,15 +577,15 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
             {/* PESTAÑA 2: SUBIR ARCHIVO .ICS */}
             {syncTab === 'file' && (
               <div className="space-y-4">
-                <div className="border-2 border-dashed border-white/15 hover:border-[#D4AF37] transition-colors rounded-2xl p-6 text-center bg-neutral-900/60">
-                  <Upload className="h-10 w-10 mx-auto text-[#D4AF37] mb-3" />
-                  <h4 className="font-bold text-sm text-white mb-1 font-mono">
+                <div className="border-2 border-dashed border-gray-200 hover:border-[#D4AF37] transition-colors rounded-2xl p-6 text-center bg-neutral-900/60">
+                  <Upload className="h-10 w-10 mx-auto text-black mb-3" />
+                  <h4 className="font-bold text-sm text-black mb-1 font-mono">
                     Arrastra o selecciona un archivo .ics / .ical
                   </h4>
-                  <p className="text-xs text-neutral-400 max-w-md mx-auto mb-4 font-mono">
+                  <p className="text-xs text-gray-500 max-w-md mx-auto mb-4 font-mono">
                     Exporta el archivo de calendario desde tu software de gestión o plataforma externa e impórtalo aquí directamente.
                   </p>
-                  <label className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black px-6 py-2.5 text-xs font-mono font-bold transition-all cursor-pointer shadow-lg hover:brightness-110">
+                  <label className="inline-flex items-center gap-2 rounded-full bg-black text-white hover:bg-neutral-800 px-6 py-2.5 text-xs font-mono font-bold transition-all cursor-pointer shadow-lg hover:brightness-110">
                     <Upload className="h-4 w-4" />
                     <span>{isSyncingFile ? 'Procesando archivo…' : 'Seleccionar archivo .ics'}</span>
                     <input
@@ -598,9 +598,9 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
                   </label>
                 </div>
 
-                <div className="bg-neutral-900/80 p-4 rounded-2xl border border-white/10 text-xs text-neutral-400 space-y-1 font-mono">
-                  <p className="font-bold text-white flex items-center gap-1.5">
-                    <Info className="h-4 w-4 text-[#D4AF37]" />
+                <div className="bg-neutral-900/80 p-4 rounded-2xl border border-gray-200 text-xs text-gray-500 space-y-1 font-mono">
+                  <p className="font-bold text-black flex items-center gap-1.5">
+                    <Info className="h-4 w-4 text-black" />
                     ¿Cómo exportar tu archivo .ics de otros calendarios?
                   </p>
                   <p>1. En <strong>Google Calendar</strong>: Ajustes &gt; Configuración de mis calendarios &gt; Exportar calendario.</p>
@@ -611,12 +611,12 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
 
             {/* PESTAÑA 3: EXPORTAR CALENDARIO DE GTR CARS */}
             {syncTab === 'export' && (
-              <div className="space-y-5 bg-neutral-900/60 p-5 rounded-2xl border border-white/10">
+              <div className="space-y-5 bg-neutral-900/60 p-5 rounded-2xl border border-gray-200">
                 <div>
-                  <h4 className="font-bold text-sm text-white mb-1 font-mono">
+                  <h4 className="font-bold text-sm text-black mb-1 font-mono">
                     Enlace oficial de exportación iCal de GTR Cars
                   </h4>
-                  <p className="text-xs text-neutral-400 font-mono">
+                  <p className="text-xs text-gray-500 font-mono">
                     Pega este enlace en tus otros calendarios para que bloqueen automáticamente las fechas cuando se confirme una reserva en GTR Cars.
                   </p>
                 </div>
@@ -626,12 +626,12 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
                     type="text"
                     readOnly
                     value={exportUrl}
-                    className="w-full rounded-xl border border-white/15 bg-black/80 p-3 text-xs font-mono text-[#D4AF37] select-all"
+                    className="w-full rounded-xl border border-gray-200 bg-black/80 p-3 text-xs font-mono text-black select-all"
                   />
                   <button
                     type="button"
                     onClick={handleCopyExportUrl}
-                    className="shrink-0 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black px-4 py-3 text-xs font-mono font-bold flex items-center space-x-1.5 transition-all shadow-md cursor-pointer hover:brightness-110"
+                    className="shrink-0 rounded-xl bg-black text-white hover:bg-neutral-800 px-4 py-3 text-xs font-mono font-bold flex items-center space-x-1.5 transition-all shadow-md cursor-pointer hover:brightness-110"
                   >
                     {copiedExport ? (
                       <>
@@ -652,10 +652,10 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
 
           {/* MÓDULO MANUAL: BLOQUEO DE FECHAS MANUAL */}
           <div className="grid gap-8 lg:grid-cols-2">
-            <div className="rounded-3xl border border-white/10 p-6 bg-neutral-900/50 space-y-4">
+            <div className="rounded-3xl border border-gray-200 p-6 bg-neutral-900/50 space-y-4">
               <div>
-                <h3 className="font-serif text-lg font-bold text-white">Marcar fechas no disponibles manualmente</h3>
-                <p className="text-xs text-neutral-400 font-mono">Selecciona los días que quieras reservar para uso personal, rodajes o mantenimiento técnico.</p>
+                <h3 className="font-serif text-lg font-bold text-black">Marcar fechas no disponibles manualmente</h3>
+                <p className="text-xs text-gray-500 font-mono">Selecciona los días que quieras reservar para uso personal, rodajes o mantenimiento técnico.</p>
               </div>
 
               <form onSubmit={addBlock} className="space-y-4">
@@ -671,7 +671,7 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
                 <button
                   type="submit"
                   disabled={!startDate || !endDate}
-                  className="w-full rounded-xl bg-white/10 hover:bg-[#D4AF37] hover:text-black py-3 text-xs font-mono font-bold text-white transition-all disabled:opacity-40 cursor-pointer border border-white/10"
+                  className="w-full rounded-xl bg-white/10 hover:bg-[#D4AF37] hover:text-black py-3 text-xs font-mono font-bold text-black transition-all disabled:opacity-40 cursor-pointer border border-gray-200"
                 >
                   Bloquear este periodo
                 </button>
@@ -679,29 +679,29 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
             </div>
 
             {/* MÓDULO: TARIFAS POR TEMPORADA */}
-            <form onSubmit={addRule} className="rounded-3xl border border-white/10 bg-neutral-900/50 p-6 space-y-4 shadow-xl">
+            <form onSubmit={addRule} className="rounded-3xl border border-gray-200 bg-neutral-900/50 p-6 space-y-4 shadow-xl">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <DollarSign className="h-5 w-5 text-[#D4AF37]" />
-                  <h3 className="font-serif text-lg font-bold text-white">Tarifas por fechas especiales</h3>
+                  <DollarSign className="h-5 w-5 text-black" />
+                  <h3 className="font-serif text-lg font-bold text-black">Tarifas por fechas especiales</h3>
                 </div>
-                <span className="text-xs font-mono font-bold text-neutral-400">({rules.length}/5)</span>
+                <span className="text-xs font-mono font-bold text-gray-500">({rules.length}/5)</span>
               </div>
 
               <div className="grid gap-3 sm:grid-cols-2">
                 <div className="sm:col-span-2">
-                  <label className="block text-[11px] font-mono text-neutral-400 mb-1">Nombre de la Temporada</label>
+                  <label className="block text-[11px] font-mono text-gray-500 mb-1">Nombre de la Temporada</label>
                   <input
                     required
                     value={ruleName}
                     onChange={(e) => setRuleName(e.target.value)}
                     placeholder="Ej. Rally Islas Canarias / Temporada Alta"
-                    className="w-full rounded-xl border border-white/15 bg-black/80 p-2.5 text-xs sm:text-sm font-mono text-white focus:border-[#D4AF37] focus:outline-none"
+                    className="w-full rounded-xl border border-gray-200 bg-black/80 p-2.5 text-xs sm:text-sm font-mono text-black focus:border-[#D4AF37] focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-mono text-neutral-400 mb-1">Precio Diario (€/día)</label>
+                  <label className="block text-[11px] font-mono text-gray-500 mb-1">Precio Diario (€/día)</label>
                   <input
                     required
                     type="number"
@@ -710,29 +710,29 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
                     value={rulePrice}
                     onChange={(e) => setRulePrice(e.target.value)}
                     placeholder="Ej. 1200 €"
-                    className="w-full rounded-xl border border-white/15 bg-black/80 p-2.5 text-xs sm:text-sm font-mono text-[#D4AF37] font-bold focus:border-[#D4AF37] focus:outline-none"
+                    className="w-full rounded-xl border border-gray-200 bg-black/80 p-2.5 text-xs sm:text-sm font-mono text-black font-bold focus:border-[#D4AF37] focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-mono text-neutral-400 mb-1">Fecha Inicio</label>
+                  <label className="block text-[11px] font-mono text-gray-500 mb-1">Fecha Inicio</label>
                   <input
                     required
                     type="date"
                     value={ruleStart}
                     onChange={(e) => setRuleStart(e.target.value)}
-                    className="w-full rounded-xl border border-white/15 bg-black/80 p-2.5 text-xs sm:text-sm font-mono text-white focus:border-[#D4AF37] focus:outline-none"
+                    className="w-full rounded-xl border border-gray-200 bg-black/80 p-2.5 text-xs sm:text-sm font-mono text-black focus:border-[#D4AF37] focus:outline-none"
                   />
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="block text-[11px] font-mono text-neutral-400 mb-1">Fecha Fin</label>
+                  <label className="block text-[11px] font-mono text-gray-500 mb-1">Fecha Fin</label>
                   <input
                     required
                     type="date"
                     value={ruleEnd}
                     onChange={(e) => setRuleEnd(e.target.value)}
-                    className="w-full rounded-xl border border-white/15 bg-black/80 p-2.5 text-xs sm:text-sm font-mono text-white focus:border-[#D4AF37] focus:outline-none"
+                    className="w-full rounded-xl border border-gray-200 bg-black/80 p-2.5 text-xs sm:text-sm font-mono text-black focus:border-[#D4AF37] focus:outline-none"
                   />
                 </div>
               </div>
@@ -748,16 +748,16 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
           </div>
 
           {/* LISTADOS: PERIODOS BLOQUEADOS & TARIFAS ACTIVAS */}
-          <div className="grid gap-8 md:grid-cols-2 pt-6 border-t border-white/10">
+          <div className="grid gap-8 md:grid-cols-2 pt-6 border-t border-gray-200">
             {/* LISTA DE PERIODOS NO DISPONIBLES */}
             <div>
-              <h3 className="mb-3 text-sm font-mono uppercase tracking-wider text-white flex items-center justify-between">
+              <h3 className="mb-3 text-sm font-mono uppercase tracking-wider text-black flex items-center justify-between">
                 <span>Periodos no disponibles ({blocks.length})</span>
               </h3>
 
               <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
                 {blocks.length === 0 ? (
-                  <p className="text-xs font-mono text-neutral-400 bg-neutral-900/60 p-4 rounded-2xl border border-white/10">
+                  <p className="text-xs font-mono text-gray-500 bg-neutral-900/60 p-4 rounded-2xl border border-gray-200">
                     Tu superdeportivo está 100% disponible. Puedes bloquear fechas manualmente o vincular tu calendario externo.
                   </p>
                 ) : (
@@ -765,11 +765,11 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
                     const isBooking = block.reason?.startsWith('BOOKING_');
                     const isSync = block.reason?.startsWith('SYNC_');
                     let tag = 'Bloqueo Manual';
-                    let badgeColor = 'bg-amber-500/20 text-amber-300 border-amber-500/30';
+                    let badgeColor = 'bg-amber-500/20 text-amber-800 border-amber-500/30';
 
                     if (isBooking) {
                       tag = 'Reserva GTR Cars';
-                      badgeColor = 'bg-[#D4AF37]/20 text-[#D4AF37] border-[#D4AF37]/30';
+                      badgeColor = 'bg-[#D4AF37]/20 text-black border-gray-200';
                     } else if (isSync) {
                       if (block.reason?.includes('AIRBNB')) tag = 'Sincronizado Airbnb Luxe';
                       else if (block.reason?.includes('BOOKING')) tag = 'Sincronizado Booking';
@@ -781,10 +781,10 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
                     return (
                       <div
                         key={block.id}
-                        className="flex items-center justify-between rounded-2xl border border-white/10 bg-neutral-900 p-3.5 shadow-sm"
+                        className="flex items-center justify-between rounded-2xl border border-gray-200 bg-neutral-900 p-3.5 shadow-sm"
                       >
                         <div>
-                          <span className="text-xs font-mono font-bold text-white block">
+                          <span className="text-xs font-mono font-bold text-black block">
                             {new Date(block.startDate).toLocaleDateString('es-ES')} – {new Date(block.endDate).toLocaleDateString('es-ES')}
                           </span>
                           <span className={`inline-block mt-1 text-[10px] font-mono uppercase px-2 py-0.5 rounded-md border ${badgeColor}`}>
@@ -818,25 +818,25 @@ export default function OwnerAvailabilityCalendar({ vehicles }: { vehicles: Vehi
 
             {/* LISTA DE TARIFAS ACTIVAS */}
             <div>
-              <h3 className="mb-3 text-sm font-mono uppercase tracking-wider text-white">
+              <h3 className="mb-3 text-sm font-mono uppercase tracking-wider text-black">
                 Tarifas por temporada ({rules.length})
               </h3>
 
               <div className="space-y-2">
                 {rules.length === 0 ? (
-                  <p className="text-xs font-mono text-neutral-400 bg-neutral-900/60 p-4 rounded-2xl border border-white/10">
+                  <p className="text-xs font-mono text-gray-500 bg-neutral-900/60 p-4 rounded-2xl border border-gray-200">
                     Se aplicará la tarifa base configurada en el anuncio para todos los días del año.
                   </p>
                 ) : (
                   rules.map((rule) => (
                     <div
                       key={rule.id}
-                      className="flex items-center justify-between rounded-2xl border border-[#D4AF37]/30 bg-[#D4AF37]/5 p-3.5 shadow-sm text-white"
+                      className="flex items-center justify-between rounded-2xl border border-gray-200 bg-[#D4AF37]/5 p-3.5 shadow-sm text-black"
                     >
                       <div>
                         <strong className="text-xs sm:text-sm block font-mono">{rule.name}</strong>
-                        <span className="text-xs font-mono font-bold text-[#D4AF37]">{rule.pricePerDay} €/día</span>
-                        <span className="text-[11px] font-mono text-neutral-400 ml-2">
+                        <span className="text-xs font-mono font-bold text-black">{rule.pricePerDay} €/día</span>
+                        <span className="text-[11px] font-mono text-gray-500 ml-2">
                           ({new Date(rule.startDate).toLocaleDateString('es-ES')} – {new Date(rule.endDate).toLocaleDateString('es-ES')})
                         </span>
                       </div>

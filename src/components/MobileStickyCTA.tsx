@@ -38,7 +38,7 @@ export default function MobileStickyCTA() {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-30 sm:hidden bg-[#070707]/95 backdrop-blur-xl border-t border-white/10 p-3 shadow-2xl animate-fade-in-up font-mono">
+    <div className="fixed bottom-0 left-0 right-0 z-30 sm:hidden bg-white/95 backdrop-blur-xl border-t border-gray-200 p-3 shadow-2xl animate-fade-in-up font-mono">
       <div className="flex items-center justify-between gap-2.5 max-w-md mx-auto">
         <Link
           href="/buscar"
@@ -50,7 +50,7 @@ export default function MobileStickyCTA() {
 
         <Link
           href="/publicar-camper"
-          className="inline-flex items-center justify-center space-x-1 rounded-xl border border-white/15 bg-white/[0.04] hover:bg-white/[0.08] text-white py-3 px-3.5 text-xs font-bold uppercase tracking-wider transition-all active:scale-95 shadow-xs whitespace-nowrap"
+          className="inline-flex items-center justify-center space-x-1 rounded-xl border border-white/15 bg-white/[0.04] hover:bg-white/[0.08] text-black py-3 px-3.5 text-xs font-bold uppercase tracking-wider transition-all active:scale-95 shadow-xs whitespace-nowrap"
         >
           <PlusCircle className="w-3.5 h-3.5 text-[#D4AF37]" />
           <span>Publicar</span>

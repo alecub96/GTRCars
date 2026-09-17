@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { BLOG_ARTICLES } from '@/lib/blog-data';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://gtrcars.vip';
+  const baseUrl = 'https://gtrcars.es';
   const now = new Date();
 
   // Artículos editoriales del Blog SEO (Madrid, Barcelona, Gran Canaria, Tenerife, Londres)

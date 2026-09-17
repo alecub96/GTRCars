@@ -34,10 +34,10 @@ export default function ErrorPage({ error, reset }: { error: Error & { digest?: 
 
   if (isRecovering) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#070707] px-4 text-white">
+      <main className="flex min-h-screen items-center justify-center bg-white px-4 text-white">
         <div className="text-center space-y-4">
-          <RefreshCw className="w-8 h-8 text-[#D4AF37] animate-spin mx-auto" />
-          <p className="text-xs font-mono font-bold uppercase tracking-widest text-[#D4AF37]">
+          <RefreshCw className="w-8 h-8 text-black animate-spin mx-auto" />
+          <p className="text-xs font-mono font-bold uppercase tracking-widest text-black">
             Sincronizando telemetría con GTR Cars...
           </p>
         </div>
@@ -46,18 +46,18 @@ export default function ErrorPage({ error, reset }: { error: Error & { digest?: 
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#070707] px-4 text-white">
-      <section className="w-full max-w-lg rounded-3xl border border-white/10 bg-[#0f0f12] p-8 text-center shadow-2xl sm:p-12">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/30">
+    <main className="flex min-h-screen items-center justify-center bg-white px-4 text-white">
+      <section className="w-full max-w-lg rounded-3xl border border-gray-200 bg-gray-50 p-8 text-center shadow-2xl sm:p-12">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-100 text-black border border-gray-200">
           <AlertTriangle className="w-6 h-6" />
         </div>
-        <p className="mt-6 text-[10px] font-mono font-bold uppercase tracking-[.25em] text-[#D4AF37]">
+        <p className="mt-6 text-[10px] font-mono font-bold uppercase tracking-[.25em] text-black">
           Incidencia Temporal
         </p>
-        <h1 className="mt-2 font-serif text-3xl sm:text-4xl font-bold text-white">
+        <h1 className="mt-2 font-serif text-3xl sm:text-4xl font-bold text-black">
           No hemos podido cargar esta sección
         </h1>
-        <p className="mt-4 text-xs font-mono leading-relaxed text-neutral-400">
+        <p className="mt-4 text-xs font-mono leading-relaxed text-gray-500">
           Tus datos y reservas no se han perdido. Reintenta la conexión o vuelve al Vault principal.
         </p>
         <div className="mt-7 flex flex-wrap justify-center gap-3">

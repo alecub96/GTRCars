@@ -100,9 +100,15 @@ export default function SupercarGrid() {
         {/* SECTION HEADER */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-6 border-b border-gray-200">
           <div>
+            <span className="text-[10px] font-mono font-bold uppercase tracking-[0.25em] text-gray-500 block mb-1">
+              SELECCIÓN GT CARS & GTR CARS PREMIUM
+            </span>
             <h2 className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-black font-sans">
-              COLECCIÓN DE VEHÍCULOS
+              COLECCIÓN DE SUPERDEPORTIVOS
             </h2>
+            <p className="text-xs font-mono text-gray-600 mt-1 max-w-lg font-medium">
+              Flota exclusiva de propietarios particulares: desde GT Cars de circuito hasta Hypercars V12 en Gran Canaria, Tenerife y principales hubs europeos.
+            </p>
           </div>
 
           <div className="mt-4 md:mt-0">

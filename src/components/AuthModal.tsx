@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { User, X, LogIn, UserPlus, LogOut, ShieldCheck, Truck, KeyRound, RefreshCw, Compass, Mail, UserCircle, CheckCircle2, Sparkles, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 import { analytics } from '@/lib/analytics';
@@ -192,19 +193,19 @@ export default function AuthModal() {
     <>
       {roleNotice && (
         <div className="fixed top-4 inset-x-3 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 sm:w-full sm:max-w-md z-[999999] pointer-events-auto animate-in fade-in slide-in-from-top-4 duration-300 font-sans">
-          <div className="rounded-2xl sm:rounded-3xl bg-[#0f0f12]/95 backdrop-blur-xl text-white p-4 sm:p-5 shadow-[0_20px_50px_rgba(0,0,0,0.8)] border border-[#D4AF37]/40 flex items-center justify-between gap-3">
+          <div className="rounded-2xl sm:rounded-3xl bg-white text-black border-gray-200 p-4 sm:p-5 shadow-[0_20px_50px_rgba(0,0,0,0.8)] border border-gray-200 flex items-center justify-between gap-3">
             <div className="flex items-center space-x-3 min-w-0">
-              <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-xl sm:rounded-2xl bg-[#D4AF37]/20 text-[#D4AF37] border border-[#D4AF37]/30">
+              <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-xl sm:rounded-2xl bg-gray-100 text-black border border-gray-200">
                 <CheckCircle2 className="h-6 w-6 sm:h-7 sm:w-7" />
               </div>
               <div className="flex-1 min-w-0 font-mono">
-                <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#D4AF37] block">
+                <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-black block">
                   Protocolo Actualizado
                 </span>
-                <h3 className="text-sm sm:text-base font-bold text-white tracking-tight truncate font-sans">
+                <h3 className="text-sm sm:text-base font-bold text-black tracking-tight truncate font-sans">
                   Ahora en modo {roleNotice === 'OWNER' ? 'propietario' : 'conductor VIP'}
                 </h3>
-                <p className="text-[11px] sm:text-xs text-white/50 truncate mt-0.5">
+                <p className="text-[11px] sm:text-xs text-gray-500 truncate mt-0.5">
                   {roleNotice === 'OWNER'
                     ? 'Gestiona tus superdeportivos, disponibilidad y finanzas.'
                     : 'Explora el Vault de superdeportivos y gestiona tus reservas.'}
@@ -214,7 +215,7 @@ export default function AuthModal() {
             <button
               type="button"
               onClick={() => setRoleNotice(null)}
-              className="p-1.5 rounded-full text-white/40 hover:text-white shrink-0 cursor-pointer"
+              className="p-1.5 rounded-full text-gray-400 hover:text-black shrink-0 cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -228,7 +229,7 @@ export default function AuthModal() {
             onClick={() => setIsOpen(!isOpen)}
             className="inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-wider px-3.5 py-2 rounded-full bg-white text-black border border-gray-200 hover:border-black hover:bg-gray-50 transition-all shadow-xs shrink-0 cursor-pointer"
           >
-            <div className="w-6 h-6 rounded-full bg-black text-white flex items-center justify-center text-[10px] font-black uppercase shrink-0">
+            <div className="w-6 h-6 rounded-full bg-black text-black flex items-center justify-center text-[10px] font-black uppercase shrink-0">
               {user.firstName ? user.firstName[0] : 'U'}
             </div>
             <span className="hidden sm:inline font-sans text-xs font-bold text-black">{user.firstName}</span>
@@ -328,7 +329,7 @@ export default function AuthModal() {
         <>
           <button
             onClick={() => { setMode('login'); setIsOpen(true); }}
-            className="hidden md:inline-flex items-center space-x-2 text-xs font-mono font-bold uppercase tracking-wider px-5 py-2.5 rounded-full bg-black text-white hover:bg-gray-800 transition-all shadow-md cursor-pointer"
+            className="hidden md:inline-flex items-center space-x-2 text-xs font-mono font-bold uppercase tracking-wider px-5 py-2.5 rounded-full bg-black text-black hover:bg-gray-800 transition-all shadow-md cursor-pointer"
           >
             <User className="w-4 h-4" />
             <span>ACCESO // GARAJE</span>
@@ -350,6 +351,25 @@ export default function AuthModal() {
                 >
                   <X className="w-5 h-5" />
                 </button>
+
+                {/* LOGO DE MARCA */}
+                <div className="flex items-center space-x-3 mb-6">
+                  <Image
+                    src="/brand/isotype-transparent.png"
+                    alt="GTR Cars"
+                    width={38}
+                    height={23}
+                    className="h-6 w-auto object-contain"
+                  />
+                  <div>
+                    <span className="text-sm font-black tracking-widest uppercase font-sans text-black block leading-none">
+                      GTR CARS
+                    </span>
+                    <span className="text-[8px] font-mono tracking-widest text-gray-400 uppercase">
+                      PEER-TO-PEER SPORTS CAR RENTAL
+                    </span>
+                  </div>
+                </div>
 
                 {/* ACCESO DEMO DIRECTO 1-CLICK */}
                 <div className="mb-6 rounded-2xl border border-gray-200 bg-gray-50 p-4">
@@ -448,7 +468,7 @@ export default function AuthModal() {
                           onClick={() => setRole('TRAVELER')}
                           className={`py-2.5 rounded-full text-xs font-bold uppercase tracking-widest border transition-all cursor-pointer ${
                             role === 'TRAVELER'
-                              ? 'bg-black text-white border-black font-black'
+                              ? 'bg-black text-black border-black font-black'
                               : 'bg-white text-gray-600 border-gray-200 hover:border-black'
                           }`}
                         >
@@ -459,7 +479,7 @@ export default function AuthModal() {
                           onClick={() => setRole('OWNER')}
                           className={`py-2.5 rounded-full text-xs font-bold uppercase tracking-widest border transition-all cursor-pointer ${
                             role === 'OWNER'
-                              ? 'bg-black text-white border-black font-black'
+                              ? 'bg-black text-black border-black font-black'
                               : 'bg-white text-gray-600 border-gray-200 hover:border-black'
                           }`}
                         >
@@ -520,7 +540,7 @@ export default function AuthModal() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-4 rounded-full bg-black text-white font-mono font-black text-xs uppercase tracking-widest hover:bg-gray-800 transition-all shadow-md mt-3 flex items-center justify-center space-x-2 cursor-pointer disabled:opacity-50"
+                    className="w-full py-4 rounded-full bg-black text-black font-mono font-black text-xs uppercase tracking-widest hover:bg-gray-800 transition-all shadow-md mt-3 flex items-center justify-center space-x-2 cursor-pointer disabled:opacity-50"
                   >
                     {mode === 'login' ? <LogIn className="w-4 h-4" /> : <UserPlus className="w-4 h-4" />}
                     <span>{loading ? 'AUTENTICANDO...' : mode === 'login' ? 'INICIAR SESIÓN' : mode === 'register' ? 'REGISTRARME EN GARAJE' : 'ENVIAR ENLACE'}</span>

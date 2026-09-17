@@ -21,7 +21,7 @@ export default function robots(): MetadataRoute.Robots {
         '/checkout/',
       ],
     },
-    sitemap: 'https://gtrcars.vip/sitemap.xml',
-    host: 'https://gtrcars.vip',
+    sitemap: 'https://gtrcars.es/sitemap.xml',
+    host: 'https://gtrcars.es',
   };
 }

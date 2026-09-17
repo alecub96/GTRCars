@@ -7,6 +7,7 @@ import {
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
+import { playPaddleShiftSound, playSoftTickSound } from '@/lib/sound';
 
 interface Supercar {
   id: string;
@@ -452,8 +453,14 @@ export default function SupercarConfiguratorHero() {
   const total = FEATURED_FLEET.length;
   const currentCar = FEATURED_FLEET[selectedIndex];
 
-  const prevCar = () => setSelectedIndex((prev) => (prev === 0 ? total - 1 : prev - 1));
-  const nextCar = () => setSelectedIndex((prev) => (prev === total - 1 ? 0 : prev + 1));
+  const prevCar = () => {
+    playPaddleShiftSound('prev');
+    setSelectedIndex((prev) => (prev === 0 ? total - 1 : prev - 1));
+  };
+  const nextCar = () => {
+    playPaddleShiftSound('next');
+    setSelectedIndex((prev) => (prev === total - 1 ? 0 : prev + 1));
+  };
 
   // Soporte para gestos táctiles (Swipe en móvil)
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
@@ -493,7 +500,12 @@ export default function SupercarConfiguratorHero() {
         </span>
       </div>
 
-      {/* 2. ESPACIADOR SUPERIOR */}
+      {/* H1 para SEO accesible sin invadir el diseño limpio */}
+      <h1 className="sr-only">
+        GT Cars Premium & GTR Cars — Alquiler de Superdeportivos en Canarias, Madrid, Barcelona y Londres
+      </h1>
+
+      {/* 2. ESPACIADOR SUPERIOR LIMPIO */}
       <div className="pt-2 sm:pt-4" />
 
       {/* 3. CENTRO: CARRUSEL TIPO RUEDA DE APPLE / LIBRO 3D CON SOPORTE SWIPE */}
@@ -586,7 +598,10 @@ export default function SupercarConfiguratorHero() {
               return (
                 <button
                   key={fCar.id}
-                  onClick={() => setSelectedIndex(idx)}
+                  onClick={() => {
+                    playSoftTickSound();
+                    setSelectedIndex(idx);
+                  }}
                   className={`px-3 sm:px-5 py-1.5 sm:py-2 text-[10px] sm:text-xs font-mono uppercase tracking-wider transition-all rounded-full cursor-pointer whitespace-nowrap shrink-0 ${
                     isSelected
                       ? 'bg-black text-white font-bold shadow-md scale-105'

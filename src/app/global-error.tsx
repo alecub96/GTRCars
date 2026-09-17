@@ -33,20 +33,20 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
 
   return (
     <html lang="es">
-      <body className="flex min-h-screen items-center justify-center bg-[#070707] px-4 text-white font-mono selection:bg-[#D4AF37] selection:text-black">
-        <main className="max-w-lg rounded-3xl bg-[#0f0f12] p-10 text-center shadow-2xl border border-white/10">
+      <body className="flex min-h-screen items-center justify-center bg-white px-4 text-white font-mono selection:bg-[#D4AF37] selection:text-black">
+        <main className="max-w-lg rounded-3xl bg-gray-50 p-10 text-center shadow-2xl border border-gray-200">
           {isRecovering ? (
             <div className="space-y-4">
-              <RefreshCw className="w-8 h-8 text-[#D4AF37] animate-spin mx-auto" />
-              <p className="text-xs font-mono font-bold uppercase tracking-widest text-[#D4AF37]">
+              <RefreshCw className="w-8 h-8 text-black animate-spin mx-auto" />
+              <p className="text-xs font-mono font-bold uppercase tracking-widest text-black">
                 Sincronizando con GTR Cars...
               </p>
             </div>
           ) : (
             <>
-              <p className="text-[10px] font-mono font-bold uppercase tracking-[.25em] text-[#D4AF37]">GTR CARS // VAULT</p>
-              <h1 className="mt-3 font-serif text-3xl font-bold text-white">Incidencia temporal de conexión</h1>
-              <p className="mt-4 text-xs font-mono text-neutral-400">Reintenta la carga para sincronizar la telemetría.</p>
+              <p className="text-[10px] font-mono font-bold uppercase tracking-[.25em] text-black">GTR CARS // VAULT</p>
+              <h1 className="mt-3 font-serif text-3xl font-bold text-black">Incidencia temporal de conexión</h1>
+              <p className="mt-4 text-xs font-mono text-gray-500">Reintenta la carga para sincronizar la telemetría.</p>
               <button
                 type="button"
                 onClick={() => {

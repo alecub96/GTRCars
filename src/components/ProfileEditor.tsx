@@ -28,9 +28,9 @@ export default function ProfileEditor({ user }: { user: any }) {
   }
 
   return (
-    <form onSubmit={submit} className="rounded-3xl border border-white/10 bg-[#0f0f12] p-6 sm:p-8 shadow-xl">
+    <form onSubmit={submit} className="rounded-3xl border border-gray-200 bg-gray-50 p-6 sm:p-8 shadow-sm">
       <div className="flex flex-col gap-6 sm:flex-row items-center sm:items-start">
-        <label className="group relative mx-auto h-32 w-32 shrink-0 cursor-pointer overflow-hidden rounded-2xl bg-black text-white border border-white/10 hover:border-[#D4AF37] transition-all shadow-lg sm:mx-0">
+        <label className="group relative mx-auto h-32 w-32 shrink-0 cursor-pointer overflow-hidden rounded-2xl bg-white text-black border border-gray-300 hover:border-black transition-all shadow-sm sm:mx-0">
           <img
             src={preview || '/default-avatar.svg'}
             alt="Foto de perfil"
@@ -39,8 +39,8 @@ export default function ProfileEditor({ user }: { user: any }) {
               (e.target as HTMLImageElement).src = '/default-avatar.svg';
             }}
           />
-          <span className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 transition group-hover:opacity-100">
-            <Camera className="h-6 w-6 text-[#D4AF37]" />
+          <span className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition group-hover:opacity-100">
+            <Camera className="h-6 w-6 text-white" />
           </span>
           <input
             type="file"
@@ -57,46 +57,46 @@ export default function ProfileEditor({ user }: { user: any }) {
         </label>
 
         <div className="grid flex-1 gap-4 sm:grid-cols-2 w-full font-mono">
-          <label className="text-[10px] font-bold uppercase tracking-widest text-white/50">
+          <label className="text-[10px] font-bold uppercase tracking-widest text-gray-600">
             Nombre
             <input
               required
               value={current.firstName}
               onChange={(event) => setCurrent({ ...current, firstName: event.target.value })}
-              className="mt-1.5 w-full rounded-xl border border-white/10 bg-white/[0.03] p-3 text-sm font-sans text-white focus:border-[#D4AF37] focus:outline-none"
+              className="mt-1.5 w-full rounded-xl border border-gray-200 bg-white p-3 text-sm font-sans text-black focus:border-black focus:outline-none"
             />
           </label>
-          <label className="text-[10px] font-bold uppercase tracking-widest text-white/50">
+          <label className="text-[10px] font-bold uppercase tracking-widest text-gray-600">
             Apellidos
             <input
               required
               value={current.lastName}
               onChange={(event) => setCurrent({ ...current, lastName: event.target.value })}
-              className="mt-1.5 w-full rounded-xl border border-white/10 bg-white/[0.03] p-3 text-sm font-sans text-white focus:border-[#D4AF37] focus:outline-none"
+              className="mt-1.5 w-full rounded-xl border border-gray-200 bg-white p-3 text-sm font-sans text-black focus:border-black focus:outline-none"
             />
           </label>
-          <label className="text-[10px] font-bold uppercase tracking-widest text-white/50">
+          <label className="text-[10px] font-bold uppercase tracking-widest text-gray-600">
             Teléfono de Contacto VIP
             <input
               value={current.phone || ''}
               onChange={(event) => setCurrent({ ...current, phone: event.target.value })}
               placeholder="+34 600 000 000"
-              className="mt-1.5 w-full rounded-xl border border-white/10 bg-white/[0.03] p-3 text-sm font-sans text-white placeholder:text-white/20 focus:border-[#D4AF37] focus:outline-none"
+              className="mt-1.5 w-full rounded-xl border border-gray-200 bg-white p-3 text-sm font-sans text-black placeholder:text-gray-400 focus:border-black focus:outline-none"
             />
           </label>
-          <label className="text-[10px] font-bold uppercase tracking-widest text-white/50">
+          <label className="text-[10px] font-bold uppercase tracking-widest text-gray-600">
             Correo Electrónico (No Modificable)
             <input
               disabled
               value={current.email}
-              className="mt-1.5 w-full rounded-xl border border-white/5 bg-black/50 p-3 text-sm font-sans text-white/40 cursor-not-allowed"
+              className="mt-1.5 w-full rounded-xl border border-gray-200 bg-gray-100 p-3 text-sm font-sans text-gray-500 cursor-not-allowed"
             />
           </label>
         </div>
       </div>
 
       {message && (
-        <p className="mt-5 flex items-center gap-2 text-xs font-mono font-bold text-emerald-400">
+        <p className="mt-5 flex items-center gap-2 text-xs font-mono font-bold text-emerald-600">
           <CheckCircle2 className="h-4 w-4" />
           {message}
         </p>
@@ -104,7 +104,7 @@ export default function ProfileEditor({ user }: { user: any }) {
 
       <button
         disabled={loading}
-        className="mt-6 flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B38B21] px-6 py-3 text-xs font-mono font-black uppercase tracking-wider text-black hover:brightness-110 transition-all shadow-[0_0_15px_rgba(212,175,55,0.2)] cursor-pointer disabled:opacity-50"
+        className="mt-6 flex items-center gap-2 rounded-full bg-black px-7 py-3.5 text-xs font-mono font-black uppercase tracking-wider text-white hover:bg-neutral-800 transition-all shadow-md cursor-pointer disabled:opacity-50"
       >
         <Save className="h-4 w-4" />
         {loading ? 'Guardando...' : 'Guardar Cambios de Perfil'}

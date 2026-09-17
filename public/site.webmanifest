@@ -1,5 +1,5 @@
 {
-  "name": "GTR Cars — Alquiler de Deportivos en Gran Canaria y Tenerife",
+  "name": "GTR Cars — Peer-to-Peer Sports Car Rental",
   "short_name": "GTR Cars",
   "icons": [
     {
@@ -13,13 +13,13 @@
       "type": "image/png"
     },
     {
-      "src": "/gtcars-logo.svg",
+      "src": "/brand/isotype.png",
       "sizes": "any",
-      "type": "image/svg+xml"
+      "type": "image/png"
     }
   ],
-  "theme_color": "#070707",
-  "background_color": "#070707",
+  "theme_color": "#000000",
+  "background_color": "#FFFFFF",
   "display": "standalone",
   "start_url": "/",
   "orientation": "portrait"

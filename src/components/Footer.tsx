@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Shield, Sparkles, MapPin, Mail, PhoneCall } from 'lucide-react';
 import {
   HypercarSilhouette,
@@ -53,26 +54,31 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* COLUMNA 1: BRAND */}
           <div className="lg:col-span-2 space-y-4">
-            <Link href="/" className="inline-flex items-center space-x-2">
-              <span className="font-sans text-xl font-black tracking-wider text-black">
-                GTR <span className="text-gray-500">CARS</span>
-              </span>
-              <span className="px-2 py-0.5 rounded-full bg-gray-200 text-black text-[9px] uppercase tracking-widest font-bold border border-gray-300">
-                SELECTION
-              </span>
+            <Link href="/" className="inline-block">
+              <Image
+                src="/brand/logo-primary.png"
+                alt="GTR Cars - Peer-to-Peer Sports Car Rental"
+                width={200}
+                height={50}
+                className="h-11 w-auto object-contain"
+                unoptimized
+              />
             </Link>
+            <p className="text-[11px] font-sans font-semibold tracking-wider text-black uppercase">
+              Drive a higher standard — Exceptional cars. Extraordinary people.
+            </p>
             <p className="text-gray-600 text-xs leading-relaxed max-w-sm font-medium">
-              Plataforma internacional de intermediación y alquiler de superdeportivos, hypercars y vehículos de altas prestaciones. Entrega VIP en Madrid, Barcelona, Gran Canaria, Tenerife y Londres.
+              Plataforma internacional peer-to-peer de alquiler de superdeportivos, hypercars y vehículos de altas prestaciones. Entrega VIP personalizada en Madrid, Barcelona, Gran Canaria, Tenerife y Londres.
             </p>
             <div className="pt-2 flex flex-wrap items-center gap-2 text-gray-600 font-bold">
               <span className="flex items-center gap-1">
-                <MapPin className="w-3.5 h-3.5 text-black" />
-                Madrid · Barcelona · Canarias · Londres
+                <MapPin className="w-3.5 h-3.5 text-[#E10600]" />
+                Madrid · Barcelona · Canarias · London
               </span>
               <span>•</span>
               <span className="flex items-center gap-1">
                 <Mail className="w-3.5 h-3.5 text-black" />
-                vip@gtrcars.es
+                concierge@gtrcars.es
               </span>
             </div>
           </div>
@@ -174,6 +180,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/contrato" className="hover:text-black transition-colors font-bold text-black">
+                  Generador de Contrato Digital
+                </Link>
+              </li>
+              <li>
                 <Link href="/terminos" className="hover:text-black transition-colors">
                   Términos y Condiciones
                 </Link>
@@ -193,13 +204,17 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 pt-8 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-gray-500 font-medium text-[11px]">
-          <p>© 2026 GTRCars.es // Canary Hypercar Vault. Todos los derechos reservados.</p>
-          <div className="flex items-center space-x-4">
+          <p>© 2026 GTR Cars // International Supercar Club. Todos los derechos reservados.</p>
+          <div className="flex flex-wrap items-center gap-3">
             <span>Gran Canaria (LPA)</span>
             <span>•</span>
-            <span>Tenerife Sur (TFS)</span>
+            <span>Tenerife (TFS/TFN)</span>
             <span>•</span>
-            <span>Costa Adeje</span>
+            <span>Madrid (MAD)</span>
+            <span>•</span>
+            <span>Barcelona (BCN)</span>
+            <span>•</span>
+            <span>London (LHR)</span>
           </div>
         </div>
       </div>

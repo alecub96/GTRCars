@@ -254,24 +254,24 @@ export default function PublishSupercarPage() {
     }
   };
 
-  if (authorized !== true) return <div className="min-h-screen bg-[#070707]" />;
+  if (authorized !== true) return <div className="min-h-screen bg-white" />;
 
   return (
-    <div className="min-h-screen bg-[#070707] text-white selection:bg-[#D4AF37] selection:text-black">
+    <div className="min-h-screen bg-white text-black selection:bg-black selection:text-black">
       <Navbar />
 
       <main className="max-w-4xl mx-auto px-4 py-8 sm:py-12">
-        <div className="bg-[#0f0f12] rounded-3xl p-6 sm:p-10 border border-white/10 shadow-2xl backdrop-blur-2xl space-y-8">
+        <div className="bg-gray-50 rounded-3xl p-6 sm:p-10 border border-gray-200 shadow-2xl backdrop-blur-2xl space-y-8">
           {/* CABECERA PASOS */}
-          <div className="border-b border-white/10 pb-6 text-center">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-[10px] font-mono tracking-widest uppercase mb-3">
+          <div className="border-b border-gray-200 pb-6 text-center">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-gray-100 border border-gray-200 text-black text-[10px] font-mono tracking-widest uppercase mb-3">
               <Sparkles className="w-3.5 h-3.5" />
               GTR CARS // PARTNERS VAULT
             </div>
-            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-white tracking-tight">
+            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-black tracking-tight">
               Publica tu Superdeportivo en Canarias
             </h1>
-            <p className="text-xs text-neutral-400 font-mono mt-2">
+            <p className="text-xs text-gray-500 font-mono mt-2">
               Paso {step} de 3 — Protocolo de homologación e inspección técnica para propietarios
             </p>
           </div>
@@ -289,17 +289,17 @@ export default function PublishSupercarPage() {
             {step === 1 && (
               <div className="space-y-6">
                 <div>
-                  <h3 className="font-serif text-xl font-bold text-white flex items-center gap-2">
-                    <Gauge className="w-5 h-5 text-[#D4AF37]" />
+                  <h3 className="font-serif text-xl font-bold text-black flex items-center gap-2">
+                    <Gauge className="w-5 h-5 text-black" />
                     1. Categoría y Telemetría del Vehículo
                   </h3>
-                  <p className="text-xs text-neutral-400 font-mono mt-1">
+                  <p className="text-xs text-gray-500 font-mono mt-1">
                     Selecciona el segmento de ingeniería y datos de rendimiento para el configurador.
                   </p>
                 </div>
 
                 <fieldset>
-                  <legend className="mb-3 text-xs font-mono uppercase tracking-wider text-neutral-400">
+                  <legend className="mb-3 text-xs font-mono uppercase tracking-wider text-gray-500">
                     Segmento Superdeportivo
                   </legend>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -313,20 +313,20 @@ export default function PublishSupercarPage() {
                           onClick={() => setFormData({ ...formData, vehicleType: value })}
                           className={`group flex flex-col items-start p-4 rounded-2xl border text-left transition-all cursor-pointer ${
                             selected
-                              ? 'border-[#D4AF37] bg-[#D4AF37]/10 text-white ring-1 ring-[#D4AF37] shadow-[0_0_20px_rgba(212,175,55,0.15)]'
-                              : 'border-white/10 bg-neutral-900/80 text-neutral-400 hover:border-white/30 hover:bg-neutral-900 hover:text-white'
+                              ? 'border-[#D4AF37] bg-gray-100 text-black ring-1 ring-[#D4AF37] shadow-[0_0_20px_rgba(212,175,55,0.15)]'
+                              : 'border-gray-200 bg-neutral-900/80 text-gray-500 hover:border-white/30 hover:bg-neutral-900 hover:text-black'
                           }`}
                         >
                           <div className="flex items-center justify-between w-full mb-3">
-                            <Icon className={`w-16 h-8 transition-all ${selected ? 'text-[#D4AF37] scale-105' : 'text-neutral-300 group-hover:text-white'}`} />
+                            <Icon className={`w-16 h-8 transition-all ${selected ? 'text-black scale-105' : 'text-gray-600 group-hover:text-black'}`} />
                             {selected ? (
                               <span className="h-2 w-2 rounded-full bg-[#D4AF37] shadow-[0_0_8px_#D4AF37]" />
                             ) : (
                               <span className="h-2 w-2 rounded-full bg-white/10 group-hover:bg-white/30" />
                             )}
                           </div>
-                          <span className="text-xs font-mono font-bold text-white block leading-tight">{label}</span>
-                          <span className="text-[10px] font-mono text-neutral-400 mt-1 block leading-tight">{desc}</span>
+                          <span className="text-xs font-mono font-bold text-black block leading-tight">{label}</span>
+                          <span className="text-[10px] font-mono text-gray-500 mt-1 block leading-tight">{desc}</span>
                         </button>
                       );
                     })}
@@ -335,7 +335,7 @@ export default function PublishSupercarPage() {
 
                 <div>
                   <div className="flex justify-between items-center mb-1">
-                    <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400">
+                    <label className="block text-xs font-mono uppercase tracking-wider text-gray-500">
                       Título del Anuncio (Ej: Ferrari 296 GTB V6 Hybrid Assetto Fiorano)
                     </label>
                     <span className={`text-[10px] font-mono ${formData.title.length >= 5 ? 'text-emerald-400' : 'text-amber-400'}`}>
@@ -348,17 +348,17 @@ export default function PublishSupercarPage() {
                     placeholder="Ej. Porsche 911 GT3 RS Weissach Package (Gran Canaria)"
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:outline-none focus:border-[#D4AF37]"
+                    className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-black focus:outline-none focus:border-[#D4AF37]"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1">Isla</label>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-gray-500 mb-1">Isla</label>
                     <select
                       value={formData.island}
                       onChange={(e) => setFormData({ ...formData, island: e.target.value })}
-                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:outline-none focus:border-[#D4AF37] cursor-pointer"
+                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-black focus:outline-none focus:border-[#D4AF37] cursor-pointer"
                     >
                       {CANARY_ISLANDS.map((is) => (
                         <option key={is.id} value={is.name}>
@@ -368,14 +368,14 @@ export default function PublishSupercarPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1">Municipio / Zona</label>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-gray-500 mb-1">Municipio / Zona</label>
                     <input
                       type="text"
                       required
                       placeholder="Ej. Las Palmas / Meloneras / Costa Adeje"
                       value={formData.municipality}
                       onChange={(e) => setFormData({ ...formData, municipality: e.target.value })}
-                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:outline-none focus:border-[#D4AF37]"
+                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-black focus:outline-none focus:border-[#D4AF37]"
                     />
                   </div>
                 </div>
@@ -398,35 +398,35 @@ export default function PublishSupercarPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1">Marca</label>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-gray-500 mb-1">Marca</label>
                     <input
                       type="text"
                       required
                       placeholder="Ej. Porsche"
                       value={formData.brand}
                       onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
-                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:outline-none focus:border-[#D4AF37]"
+                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-black focus:outline-none focus:border-[#D4AF37]"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1">Modelo</label>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-gray-500 mb-1">Modelo</label>
                     <input
                       type="text"
                       required
                       placeholder="Ej. 911 GT3 RS"
                       value={formData.model}
                       onChange={(e) => setFormData({ ...formData, model: e.target.value })}
-                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:outline-none focus:border-[#D4AF37]"
+                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-black focus:outline-none focus:border-[#D4AF37]"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1">Año</label>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-gray-500 mb-1">Año</label>
                     <input
                       type="number"
                       required
                       value={formData.year || ''}
                       onChange={(e) => handleNumberInput('year', e.target.value)}
-                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:outline-none focus:border-[#D4AF37]"
+                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-black focus:outline-none focus:border-[#D4AF37]"
                     />
                   </div>
                 </div>
@@ -436,7 +436,7 @@ export default function PublishSupercarPage() {
                   onClick={() => {
                     if (validateStep1()) setStep(2);
                   }}
-                  className="w-full py-4 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black font-mono font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all cursor-pointer shadow-lg"
+                  className="w-full py-4 rounded-xl bg-black hover:bg-neutral-800 text-white font-mono font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all cursor-pointer shadow-lg"
                 >
                   Continuar a Prestaciones y Equipamiento →
                 </button>
@@ -447,68 +447,68 @@ export default function PublishSupercarPage() {
             {step === 2 && (
               <div className="space-y-6">
                 <div>
-                  <h3 className="font-serif text-xl font-bold text-white flex items-center gap-2">
-                    <Zap className="w-5 h-5 text-[#D4AF37]" />
+                  <h3 className="font-serif text-xl font-bold text-black flex items-center gap-2">
+                    <Zap className="w-5 h-5 text-black" />
                     2. Prestaciones de Conducción y Equipamiento
                   </h3>
-                  <p className="text-xs text-neutral-400 font-mono mt-1">
+                  <p className="text-xs text-gray-500 font-mono mt-1">
                     Detalla la potencia y paquete aerodinámico del superdeportivo.
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1">Potencia (CV)</label>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-gray-500 mb-1">Potencia (CV)</label>
                     <input
                       type="number"
                       placeholder="Ej. 525"
                       value={formData.powerCv || ''}
                       onChange={(e) => handleNumberInput('powerCv', e.target.value)}
-                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-[#D4AF37] font-bold focus:border-[#D4AF37] outline-none"
+                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-black font-bold focus:border-[#D4AF37] outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1">0-100 km/h (s)</label>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-gray-500 mb-1">0-100 km/h (s)</label>
                     <input
                       type="number"
                       step="0.1"
                       placeholder="Ej. 3.2"
                       value={formData.acceleration0100 || ''}
                       onChange={(e) => handleNumberInput('acceleration0100', e.target.value)}
-                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:border-[#D4AF37] outline-none"
+                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-black focus:border-[#D4AF37] outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1">Plazas</label>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-gray-500 mb-1">Plazas</label>
                     <input
                       type="number"
                       min="1"
                       max="5"
                       value={formData.passengers || ''}
                       onChange={(e) => handleNumberInput('passengers', e.target.value)}
-                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:border-[#D4AF37] outline-none"
+                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-black focus:border-[#D4AF37] outline-none"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <label className="text-xs font-mono uppercase tracking-wider text-neutral-400">
+                  <label className="text-xs font-mono uppercase tracking-wider text-gray-500">
                     Caja de Cambios
                     <select
                       value={formData.transmission}
                       onChange={(e) => setFormData({ ...formData, transmission: e.target.value })}
-                      className="mt-1 w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:border-[#D4AF37] outline-none cursor-pointer"
+                      className="mt-1 w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-black focus:border-[#D4AF37] outline-none cursor-pointer"
                     >
                       <option value="AUTOMATIC">Automático / Doble Embrague (PDK/DCT)</option>
                       <option value="MANUAL">Manual Deportivo con Rev-Match</option>
                     </select>
                   </label>
-                  <label className="text-xs font-mono uppercase tracking-wider text-neutral-400">
+                  <label className="text-xs font-mono uppercase tracking-wider text-gray-500">
                     Motorización
                     <select
                       value={formData.fuelType}
                       onChange={(e) => setFormData({ ...formData, fuelType: e.target.value })}
-                      className="mt-1 w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:border-[#D4AF37] outline-none cursor-pointer"
+                      className="mt-1 w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-black focus:border-[#D4AF37] outline-none cursor-pointer"
                     >
                       <option value="GASOLINE">Gasolina Atmosférico / Turbo (98 Octanos)</option>
                       <option value="HYBRID">Híbrido Enchufable de Altas Prestaciones (PHEV)</option>
@@ -518,7 +518,7 @@ export default function PublishSupercarPage() {
                 </div>
 
                 <fieldset>
-                  <legend className="mb-2 text-xs font-mono uppercase tracking-wider text-neutral-400">
+                  <legend className="mb-2 text-xs font-mono uppercase tracking-wider text-gray-500">
                     Equipamiento y Opcionales de Circuito
                   </legend>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -527,8 +527,8 @@ export default function PublishSupercarPage() {
                         key={item}
                         className={`rounded-xl border p-3 text-xs font-mono cursor-pointer transition-all flex items-center ${
                           formData.features.includes(item)
-                            ? 'border-[#D4AF37] bg-[#D4AF37]/10 text-white font-bold'
-                            : 'border-white/10 bg-neutral-900/60 text-neutral-400 hover:border-white/20'
+                            ? 'border-[#D4AF37] bg-gray-100 text-black font-bold'
+                            : 'border-gray-200 bg-neutral-900/60 text-gray-500 hover:border-white/20'
                         }`}
                       >
                         <input
@@ -554,14 +554,14 @@ export default function PublishSupercarPage() {
                   <button
                     type="button"
                     onClick={() => setStep(1)}
-                    className="w-1/3 py-4 rounded-xl border border-white/15 font-mono font-bold text-xs uppercase tracking-wider text-neutral-300 hover:bg-white/5 cursor-pointer"
+                    className="w-1/3 py-4 rounded-xl border border-white/15 font-mono font-bold text-xs uppercase tracking-wider text-gray-600 hover:bg-white/5 cursor-pointer"
                   >
                     Atrás
                   </button>
                   <button
                     type="button"
                     onClick={() => setStep(3)}
-                    className="w-2/3 py-4 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black font-mono font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all cursor-pointer shadow-lg"
+                    className="w-2/3 py-4 rounded-xl bg-black hover:bg-neutral-800 text-white font-mono font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all cursor-pointer shadow-lg"
                   >
                     Continuar a Tarifas y Condiciones →
                   </button>
@@ -573,18 +573,18 @@ export default function PublishSupercarPage() {
             {step === 3 && (
               <div className="space-y-6">
                 <div>
-                  <h3 className="font-serif text-xl font-bold text-white flex items-center gap-2">
-                    <Shield className="w-5 h-5 text-[#D4AF37]" />
+                  <h3 className="font-serif text-xl font-bold text-black flex items-center gap-2">
+                    <Shield className="w-5 h-5 text-black" />
                     3. Tarifas, Fianza y Galería de Fotos
                   </h3>
-                  <p className="text-xs text-neutral-400 font-mono mt-1">
+                  <p className="text-xs text-gray-500 font-mono mt-1">
                     Establece el precio por jornada y el depósito de garantía.
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1">
+                    <label className="block text-xs font-mono uppercase tracking-wider text-gray-500 mb-1">
                       Precio Diario (€ / jornada)
                     </label>
                     <input
@@ -594,11 +594,11 @@ export default function PublishSupercarPage() {
                       value={formData.basePricePerDay || ''}
                       onChange={(e) => handleNumberInput('basePricePerDay', e.target.value)}
                       placeholder="950"
-                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-lg font-mono font-extrabold text-[#D4AF37] focus:outline-none focus:border-[#D4AF37]"
+                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-lg font-mono font-extrabold text-black focus:outline-none focus:border-[#D4AF37]"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1">
+                    <label className="block text-xs font-mono uppercase tracking-wider text-gray-500 mb-1">
                       Fianza / Depósito de Seguridad (€)
                     </label>
                     <input
@@ -608,48 +608,48 @@ export default function PublishSupercarPage() {
                       value={formData.securityDeposit || ''}
                       onChange={(e) => handleNumberInput('securityDeposit', e.target.value)}
                       placeholder="3000"
-                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-lg font-mono font-bold text-white focus:outline-none focus:border-[#D4AF37]"
+                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-lg font-mono font-bold text-black focus:outline-none focus:border-[#D4AF37]"
                     />
                   </div>
                 </div>
 
                 {/* DESGLOSE ECONÓMICO EN TIEMPO REAL */}
                 {formData.basePricePerDay > 0 && (
-                  <div className="rounded-2xl border border-[#D4AF37]/30 bg-neutral-900/80 p-5 space-y-3">
+                  <div className="rounded-2xl border border-gray-200 bg-neutral-900/80 p-5 space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-mono uppercase tracking-wider text-[#D4AF37]">
+                      <span className="text-[11px] font-mono uppercase tracking-wider text-black">
                         Liquidación de Ingresos GTR Cars
                       </span>
-                      <span className="text-[10px] font-mono bg-[#D4AF37]/20 text-[#D4AF37] font-bold px-2.5 py-0.5 rounded-full border border-[#D4AF37]/30">
+                      <span className="text-[10px] font-mono bg-[#D4AF37]/20 text-black font-bold px-2.5 py-0.5 rounded-full border border-gray-200">
                         Transferencia Bancaria Directa
                       </span>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                      <div className="bg-black/60 p-4 rounded-xl border border-white/10">
-                        <span className="block text-[11px] text-neutral-400 font-mono">
+                      <div className="bg-gray-100 p-4 rounded-xl border border-gray-200">
+                        <span className="block text-[11px] text-gray-500 font-mono">
                           El cliente abonará:
                         </span>
                         <div className="flex items-baseline space-x-1.5 mt-0.5">
-                          <strong className="text-xl font-bold font-mono text-white">
+                          <strong className="text-xl font-bold font-mono text-black">
                             {(Math.round(formData.basePricePerDay * 1.045 * 100) / 100).toFixed(2)} €
                           </strong>
-                          <span className="text-xs text-neutral-400 font-mono">/ jornada</span>
+                          <span className="text-xs text-gray-500 font-mono">/ jornada</span>
                         </div>
                         <p className="text-[10px] text-neutral-500 font-mono mt-1">
                           (Tu tarifa + tarifa de concierge y seguro de cobertura total)
                         </p>
                       </div>
 
-                      <div className="bg-black/60 p-4 rounded-xl border border-white/10">
-                        <span className="block text-[11px] text-neutral-400 font-mono">
+                      <div className="bg-gray-100 p-4 rounded-xl border border-gray-200">
+                        <span className="block text-[11px] text-gray-500 font-mono">
                           Ingreso neto para el propietario:
                         </span>
                         <div className="flex items-baseline space-x-1.5 mt-0.5">
-                          <strong className="text-xl font-bold font-mono text-[#D4AF37]">
+                          <strong className="text-xl font-bold font-mono text-black">
                             {(Math.round(formData.basePricePerDay * 0.90 * 100) / 100).toFixed(2)} €
                           </strong>
-                          <span className="text-xs text-neutral-400 font-mono">netos / jornada</span>
+                          <span className="text-xs text-gray-500 font-mono">netos / jornada</span>
                         </div>
                         <p className="text-[10px] text-neutral-500 font-mono mt-1">
                           (Tras el 10% de gestión y custodia de plataforma)
@@ -660,23 +660,23 @@ export default function PublishSupercarPage() {
                 )}
 
                 {/* MODULO INTERACTIVO DE TARIFAS POR EVENTOS */}
-                <div className="p-5 rounded-2xl bg-neutral-900/60 border border-white/10 space-y-4">
+                <div className="p-5 rounded-2xl bg-neutral-900/60 border border-gray-200 space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h4 className="text-sm font-mono font-bold text-white flex items-center gap-1.5">
+                      <h4 className="text-sm font-mono font-bold text-black flex items-center gap-1.5">
                         <span>Tarifas especiales para eventos / temporada alta</span>
                       </h4>
-                      <p className="text-[11px] text-neutral-400 font-mono mt-0.5">
+                      <p className="text-[11px] text-gray-500 font-mono mt-0.5">
                         Personaliza el precio para semanas de Rallyes, concentraciones de superdeportivos o festivos.
                       </p>
                     </div>
                   </div>
 
                   {/* FORMULARIO PARA AÑADIR NUEVA TARIFA */}
-                  <div className="bg-black/60 p-4 rounded-xl border border-white/10 space-y-3">
+                  <div className="bg-gray-100 p-4 rounded-xl border border-gray-200 space-y-3">
                     <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
                       <div className="sm:col-span-2">
-                        <label className="block text-[10px] font-mono uppercase tracking-wider text-neutral-400 mb-1">
+                        <label className="block text-[10px] font-mono uppercase tracking-wider text-gray-500 mb-1">
                           Motivo / Evento
                         </label>
                         <input
@@ -684,36 +684,36 @@ export default function PublishSupercarPage() {
                           placeholder="Ej. Rally Islas Canarias / Fin de Año"
                           value={ruleName}
                           onChange={(e) => setRuleName(e.target.value)}
-                          className="w-full p-2.5 rounded-lg border border-white/15 bg-neutral-900 text-xs font-mono text-white focus:border-[#D4AF37] outline-none"
+                          className="w-full p-2.5 rounded-lg border border-white/15 bg-neutral-900 text-xs font-mono text-black focus:border-[#D4AF37] outline-none"
                         />
                       </div>
                       <div>
-                        <label className="block text-[10px] font-mono uppercase tracking-wider text-neutral-400 mb-1">
+                        <label className="block text-[10px] font-mono uppercase tracking-wider text-gray-500 mb-1">
                           Desde
                         </label>
                         <input
                           type="date"
                           value={ruleStart}
                           onChange={(e) => setRuleStart(e.target.value)}
-                          className="w-full p-2.5 rounded-lg border border-white/15 bg-neutral-900 text-xs font-mono text-white focus:border-[#D4AF37] outline-none"
+                          className="w-full p-2.5 rounded-lg border border-white/15 bg-neutral-900 text-xs font-mono text-black focus:border-[#D4AF37] outline-none"
                         />
                       </div>
                       <div>
-                        <label className="block text-[10px] font-mono uppercase tracking-wider text-neutral-400 mb-1">
+                        <label className="block text-[10px] font-mono uppercase tracking-wider text-gray-500 mb-1">
                           Hasta
                         </label>
                         <input
                           type="date"
                           value={ruleEnd}
                           onChange={(e) => setRuleEnd(e.target.value)}
-                          className="w-full p-2.5 rounded-lg border border-white/15 bg-neutral-900 text-xs font-mono text-white focus:border-[#D4AF37] outline-none"
+                          className="w-full p-2.5 rounded-lg border border-white/15 bg-neutral-900 text-xs font-mono text-black focus:border-[#D4AF37] outline-none"
                         />
                       </div>
                     </div>
 
                     <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
                       <div className="flex items-center gap-2">
-                        <label className="text-xs font-mono uppercase tracking-wider text-neutral-300">
+                        <label className="text-xs font-mono uppercase tracking-wider text-gray-600">
                           Tarifa en estas fechas:
                         </label>
                         <div className="flex items-center gap-1">
@@ -722,9 +722,9 @@ export default function PublishSupercarPage() {
                             min="50"
                             value={rulePrice || ''}
                             onChange={(e) => setRulePrice(Number(e.target.value))}
-                            className="w-24 p-2 rounded-lg border border-white/15 bg-neutral-900 text-xs font-mono font-bold text-[#D4AF37] text-center"
+                            className="w-24 p-2 rounded-lg border border-white/15 bg-neutral-900 text-xs font-mono font-bold text-black text-center"
                           />
-                          <span className="text-xs font-mono text-neutral-400">€/día</span>
+                          <span className="text-xs font-mono text-gray-500">€/día</span>
                         </div>
                       </div>
 
@@ -741,23 +741,23 @@ export default function PublishSupercarPage() {
                   {/* LISTA DE TARIFAS CONFIGURADAS */}
                   {pricingRules.length > 0 && (
                     <div className="space-y-2 pt-1">
-                      <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 block">
+                      <span className="text-[10px] font-mono uppercase tracking-wider text-gray-500 block">
                         Tarifas especiales activas ({pricingRules.length}):
                       </span>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         {pricingRules.map((r) => (
                           <div
                             key={r.id}
-                            className="p-3 bg-neutral-900 rounded-xl border border-white/10 flex items-center justify-between text-xs shadow-sm font-mono"
+                            className="p-3 bg-neutral-900 rounded-xl border border-gray-200 flex items-center justify-between text-xs shadow-sm font-mono"
                           >
                             <div>
-                              <span className="font-bold text-white block">{r.name}</span>
-                              <span className="text-[10px] text-neutral-400">
+                              <span className="font-bold text-black block">{r.name}</span>
+                              <span className="text-[10px] text-gray-500">
                                 {new Date(r.startDate).toLocaleDateString()} al {new Date(r.endDate).toLocaleDateString()}
                               </span>
                             </div>
                             <div className="flex items-center gap-3">
-                              <span className="font-extrabold text-[#D4AF37] text-sm">{r.pricePerDay} €/día</span>
+                              <span className="font-extrabold text-black text-sm">{r.pricePerDay} €/día</span>
                               <button
                                 type="button"
                                 onClick={() => handleRemovePricingRule(r.id)}
@@ -775,17 +775,17 @@ export default function PublishSupercarPage() {
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                  <label className="text-xs font-mono uppercase tracking-wider text-neutral-400">
+                  <label className="text-xs font-mono uppercase tracking-wider text-gray-500">
                     Km diarios inc.
                     <input
                       type="number"
                       min="0"
                       value={formData.includedKmPerDay || ''}
                       onChange={(e) => handleNumberInput('includedKmPerDay', e.target.value)}
-                      className="mt-1 w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:border-[#D4AF37] outline-none"
+                      className="mt-1 w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-black focus:border-[#D4AF37] outline-none"
                     />
                   </label>
-                  <label className="text-xs font-mono uppercase tracking-wider text-neutral-400">
+                  <label className="text-xs font-mono uppercase tracking-wider text-gray-500">
                     Km extra (€)
                     <input
                       type="number"
@@ -793,49 +793,49 @@ export default function PublishSupercarPage() {
                       step="0.1"
                       value={formData.extraKmPrice || ''}
                       onChange={(e) => handleNumberInput('extraKmPrice', e.target.value)}
-                      className="mt-1 w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:border-[#D4AF37] outline-none"
+                      className="mt-1 w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-black focus:border-[#D4AF37] outline-none"
                     />
                   </label>
-                  <label className="text-xs font-mono uppercase tracking-wider text-neutral-400">
+                  <label className="text-xs font-mono uppercase tracking-wider text-gray-500">
                     Mínimo días
                     <input
                       type="number"
                       min="1"
                       value={formData.minDays || ''}
                       onChange={(e) => handleNumberInput('minDays', e.target.value)}
-                      className="mt-1 w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:border-[#D4AF37] outline-none"
+                      className="mt-1 w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-black focus:border-[#D4AF37] outline-none"
                     />
                   </label>
-                  <label className="text-xs font-mono uppercase tracking-wider text-neutral-400">
+                  <label className="text-xs font-mono uppercase tracking-wider text-gray-500">
                     Máximo días
                     <input
                       type="number"
                       min={formData.minDays}
                       value={formData.maxDays || ''}
                       onChange={(e) => handleNumberInput('maxDays', e.target.value)}
-                      className="mt-1 w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:border-[#D4AF37] outline-none"
+                      className="mt-1 w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-black focus:border-[#D4AF37] outline-none"
                     />
                   </label>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <label className="text-xs font-mono uppercase tracking-wider text-neutral-400">
+                  <label className="text-xs font-mono uppercase tracking-wider text-gray-500">
                     Modalidad de Reserva
                     <select
                       value={formData.bookingType}
                       onChange={(e) => setFormData({ ...formData, bookingType: e.target.value })}
-                      className="mt-1 w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:border-[#D4AF37] outline-none cursor-pointer"
+                      className="mt-1 w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-black focus:border-[#D4AF37] outline-none cursor-pointer"
                     >
                       <option value="REQUEST_TO_BOOK">Solicitud Concierge con Validación</option>
                       <option value="INSTANT_BOOKING">Reserva Inmediata con Fianza</option>
                     </select>
                   </label>
-                  <label className="text-xs font-mono uppercase tracking-wider text-neutral-400">
+                  <label className="text-xs font-mono uppercase tracking-wider text-gray-500">
                     Política de Cancelación
                     <select
                       value={formData.cancellationPolicy}
                       onChange={(e) => setFormData({ ...formData, cancellationPolicy: e.target.value })}
-                      className="mt-1 w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:border-[#D4AF37] outline-none cursor-pointer"
+                      className="mt-1 w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-black focus:border-[#D4AF37] outline-none cursor-pointer"
                     >
                       <option value="STRICT">Estricta (Recomendada para Superdeportivos)</option>
                       <option value="MODERATE">Moderada (7 días de antelación)</option>
@@ -846,7 +846,7 @@ export default function PublishSupercarPage() {
 
                 <div>
                   <div className="flex justify-between items-center mb-1">
-                    <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400">
+                    <label className="block text-xs font-mono uppercase tracking-wider text-gray-500">
                       Descripción del Superdeportivo
                     </label>
                     <span className={`text-[10px] font-mono ${formData.description.trim().length >= 20 ? 'text-emerald-400' : 'text-amber-400'}`}>
@@ -859,13 +859,13 @@ export default function PublishSupercarPage() {
                     placeholder="Describe el estado de conservación, configuración de fábrica, sonido del escape, mantenimiento en servicio oficial, etc."
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:outline-none focus:border-[#D4AF37]"
+                    className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-black focus:outline-none focus:border-[#D4AF37]"
                   />
                 </div>
 
                 <div>
                   <div className="flex justify-between items-center mb-1">
-                    <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400">
+                    <label className="block text-xs font-mono uppercase tracking-wider text-gray-500">
                       Requisitos de Conducción y Normas
                     </label>
                     <span className={`text-[10px] font-mono ${formData.rules.trim().length >= 10 ? 'text-emerald-400' : 'text-amber-400'}`}>
@@ -878,16 +878,16 @@ export default function PublishSupercarPage() {
                     placeholder="Edad mínima (ej: +25 años, 3 años de carnet), prohibición de circuito cerrado sin autorización, combustible 98 octanos obligatorio..."
                     value={formData.rules}
                     onChange={(e) => setFormData({ ...formData, rules: e.target.value })}
-                    className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:outline-none focus:border-[#D4AF37]"
+                    className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-black focus:outline-none focus:border-[#D4AF37]"
                   />
                 </div>
 
                 {/* GALERÍA OBLIGATORIA */}
                 <div>
-                  <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1">
+                  <label className="block text-xs font-mono uppercase tracking-wider text-gray-500 mb-1">
                     Fotografías del Vehículo (Mínimo 5, Máximo 10)
                   </label>
-                  <label className="flex min-h-44 cursor-pointer items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-[#D4AF37]/40 bg-black/60 text-center hover:bg-black/90 transition-colors">
+                  <label className="flex min-h-44 cursor-pointer items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-[#D4AF37]/40 bg-gray-100 text-center hover:bg-black/90 transition-colors">
                     {photoPreviews.length ? (
                       <div className="grid w-full grid-cols-2 gap-2 p-3 sm:grid-cols-5">
                         {photoPreviews.map((preview, index) => (
@@ -901,11 +901,11 @@ export default function PublishSupercarPage() {
                       </div>
                     ) : (
                       <div className="p-6 text-center space-y-2">
-                        <Upload className="w-8 h-8 text-[#D4AF37] mx-auto" />
-                        <span className="block text-sm font-mono font-bold text-white">
+                        <Upload className="w-8 h-8 text-black mx-auto" />
+                        <span className="block text-sm font-mono font-bold text-black">
                           Pulsa para subir fotografías de alta calidad (JPG, PNG o WEBP)
                         </span>
-                        <span className="block text-[11px] font-mono text-neutral-400">Máximo 10 MB por imagen</span>
+                        <span className="block text-[11px] font-mono text-gray-500">Máximo 10 MB por imagen</span>
                       </div>
                     )}
                     <input
@@ -928,14 +928,14 @@ export default function PublishSupercarPage() {
                     />
                   </label>
                   {photoPreviews.length > 0 && (
-                    <div className="mt-3 flex items-center justify-between text-xs font-mono text-neutral-400">
+                    <div className="mt-3 flex items-center justify-between text-xs font-mono text-gray-500">
                       <span>{photoPreviews.length} fotos seleccionadas</span>
                       <label>
                         Portada:{' '}
                         <select
                           value={coverPhotoIndex}
                           onChange={(e) => setCoverPhotoIndex(Number(e.target.value))}
-                          className="ml-2 rounded-lg border border-white/15 bg-neutral-900 p-1.5 text-white"
+                          className="ml-2 rounded-lg border border-white/15 bg-neutral-900 p-1.5 text-black"
                         >
                           {photoPreviews.map((_, index) => (
                             <option key={index} value={index}>
@@ -948,8 +948,8 @@ export default function PublishSupercarPage() {
                   )}
                 </div>
 
-                <div className="rounded-2xl border border-[#D4AF37]/30 bg-[#D4AF37]/5 p-4 text-xs font-mono text-neutral-300 flex items-center space-x-2.5">
-                  <CheckCircle2 className="h-5 w-5 text-[#D4AF37] shrink-0" />
+                <div className="rounded-2xl border border-gray-200 bg-[#D4AF37]/5 p-4 text-xs font-mono text-gray-600 flex items-center space-x-2.5">
+                  <CheckCircle2 className="h-5 w-5 text-black shrink-0" />
                   <span>
                     El superdeportivo entrará en fase de verificación y auditoría por el equipo de GTR Cars antes de su activación pública en el Vault.
                   </span>
@@ -959,14 +959,14 @@ export default function PublishSupercarPage() {
                   <button
                     type="button"
                     onClick={() => setStep(2)}
-                    className="w-1/3 py-4 rounded-xl border border-white/15 font-mono font-bold text-xs uppercase tracking-wider text-neutral-300 hover:bg-white/5 cursor-pointer"
+                    className="w-1/3 py-4 rounded-xl border border-white/15 font-mono font-bold text-xs uppercase tracking-wider text-gray-600 hover:bg-white/5 cursor-pointer"
                   >
                     Atrás
                   </button>
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-2/3 py-4 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black font-mono font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all cursor-pointer shadow-lg flex items-center justify-center space-x-2"
+                    className="w-2/3 py-4 rounded-xl bg-black hover:bg-neutral-800 text-white font-mono font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all cursor-pointer shadow-lg flex items-center justify-center space-x-2"
                   >
                     <span>{loading ? 'PUBLICANDO SUPERDEPORTIVO...' : 'HOMOLOGAR Y REGISTRAR EN EL VAULT'}</span>
                   </button>

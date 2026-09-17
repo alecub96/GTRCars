@@ -21,6 +21,7 @@ import {
   LogOut,
   User,
   HeartHandshake,
+  FileText,
 } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -90,19 +91,17 @@ export default function Navbar() {
     <header className="w-full relative z-40 bg-white border-b border-gray-100">
       {/* NAVEGACIÓN PRINCIPAL LIMPIA ESTILO PORSCHE (FONDO BLANCO) */}
       <nav className="bg-white px-6 sm:px-10 py-4 flex items-center justify-between">
-        {/* LOGO MINIMALISTA PORSCHE STYLE */}
-        <Link href="/" className="group flex items-center space-x-3">
-          <div className="w-8 h-8 rounded-full border border-black bg-black flex items-center justify-center font-black text-xs text-white">
-            GT
-          </div>
-          <div>
-            <span className="font-black text-xl tracking-[0.2em] text-black uppercase block leading-none font-sans">
-              GTR CARS
-            </span>
-            <span className="text-[8px] font-mono tracking-[0.3em] uppercase text-gray-400 block mt-0.5">
-              SELECTION
-            </span>
-          </div>
+        {/* LOGO OFICIAL GTR CARS */}
+        <Link href="/" className="group flex items-center py-1">
+          <Image
+            src="/brand/logo-primary.png"
+            alt="GTR Cars"
+            width={240}
+            height={60}
+            className="h-10 sm:h-12 w-auto object-contain transition-transform group-hover:scale-[1.02]"
+            priority
+            unoptimized
+          />
         </Link>
 
         {/* ENLACES CENTRALES ESTILO PORSCHE (NEGRO/GRIS) */}
@@ -146,6 +145,10 @@ export default function Navbar() {
 
           <Link href="/blog" className="hover:text-black transition-colors">
             EXPERIENCIAS
+          </Link>
+          <Link href="/contrato" className="hover:text-black transition-colors flex items-center gap-1">
+            <FileText className="w-3.5 h-3.5 text-black" />
+            <span>CONTRATO DIGITAL</span>
           </Link>
           <Link href="/seguridad" className="hover:text-black transition-colors">
             GARANTÍAS
@@ -209,7 +212,15 @@ export default function Navbar() {
           <div className="fixed inset-y-0 right-0 w-full max-w-sm rounded-l-3xl bg-white border-l border-gray-200 shadow-2xl flex flex-col z-50 animate-in slide-in-from-right duration-300 text-black">
             {/* CABECERA DEL MENÚ */}
             <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50 font-mono">
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2.5">
+                <Image
+                  src="/brand/isotype.png"
+                  alt="GTR Cars"
+                  width={30}
+                  height={18}
+                  className="h-5 w-auto object-contain"
+                  unoptimized
+                />
                 <span className="text-xs font-black uppercase tracking-widest text-black">
                   GTR CARS // GARAJE
                 </span>
@@ -348,6 +359,15 @@ export default function Navbar() {
                   >
                     <Search className="w-4 h-4 text-black" />
                     <span>Explorar Garaje</span>
+                  </Link>
+
+                  <Link
+                    onClick={() => setMobileOpen(false)}
+                    href="/contrato"
+                    className="flex items-center space-x-3 rounded-xl p-3 hover:bg-gray-100 transition-colors hover:text-black"
+                  >
+                    <FileText className="w-4 h-4 text-black" />
+                    <span>Generador de Contrato Digital</span>
                   </Link>
 
                   <Link

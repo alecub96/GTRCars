@@ -51,18 +51,18 @@ export default async function ProfilePage() {
   const rating = reviews.length ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length : 5.0;
 
   return (
-    <div className="min-h-screen bg-[#070707] text-white selection:bg-[#D4AF37] selection:text-black font-sans">
+    <div className="min-h-screen bg-white text-black selection:bg-black selection:text-white font-sans">
       <Navbar />
 
       <main className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10">
-        <div className="mb-8 border-b border-white/10 pb-6 font-mono">
-          <span className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#D4AF37]">
-            IDENTIDAD VAULT // GT CARS
+        <div className="mb-8 border-b border-gray-200 pb-6 font-mono">
+          <span className="text-[11px] font-bold uppercase tracking-[0.3em] text-gray-500">
+            IDENTIDAD VAULT // GT CARS PREMIUM
           </span>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-white mt-1 font-sans">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-black mt-1 font-sans">
             Mi Perfil VIP
           </h1>
-          <p className="mt-2 text-sm text-white/60 font-sans">
+          <p className="mt-2 text-sm text-gray-600 font-sans font-medium">
             {isAdmin
               ? 'Perfil de supervisión y gestión global de la plataforma.'
               : `Cuenta exclusiva en modo ${user.role === 'OWNER' ? 'Propietario de Superdeportivos' : 'Piloto VIP'}.`}
@@ -71,37 +71,37 @@ export default async function ProfilePage() {
 
         <div className="mb-8 grid gap-4 sm:grid-cols-3 font-mono">
           {!isAdmin && (
-            <div className="rounded-2xl border border-white/10 bg-[#0f0f12] p-5 shadow-xl">
-              <Star className="mb-2 h-6 w-6 text-[#D4AF37] fill-[#D4AF37]" />
-              <strong className="text-3xl font-black text-[#D4AF37] block">
+            <div className="rounded-2xl border border-gray-200 bg-gray-50 p-5 shadow-sm">
+              <Star className="mb-2 h-6 w-6 text-black fill-black" />
+              <strong className="text-3xl font-black text-black block">
                 {rating ? rating.toFixed(1) : '5.0'} / 5.0
               </strong>
-              <p className="text-xs text-white/50 mt-1">
+              <p className="text-xs text-gray-500 mt-1 font-medium">
                 Reputación de {user.role === 'OWNER' ? 'propietario' : 'piloto'}
               </p>
             </div>
           )}
 
           {!isAdmin && (
-            <div className="rounded-2xl border border-white/10 bg-[#0f0f12] p-5 shadow-xl">
-              <CalendarDays className="mb-2 h-6 w-6 text-[#D4AF37]" />
-              <strong className="text-3xl font-black text-white block">
+            <div className="rounded-2xl border border-gray-200 bg-gray-50 p-5 shadow-sm">
+              <CalendarDays className="mb-2 h-6 w-6 text-black" />
+              <strong className="text-3xl font-black text-black block">
                 {bookingsCount || (user.role === 'OWNER' ? 2 : 2)}
               </strong>
-              <p className="text-xs text-white/50 mt-1">Jornadas gestionadas</p>
+              <p className="text-xs text-gray-500 mt-1 font-medium">Jornadas gestionadas</p>
             </div>
           )}
 
-          <div className="rounded-2xl border border-white/10 bg-[#0f0f12] p-5 shadow-xl">
+          <div className="rounded-2xl border border-gray-200 bg-gray-50 p-5 shadow-sm">
             {user.role === 'OWNER' ? (
-              <Gauge className="mb-2 h-6 w-6 text-[#D4AF37]" />
+              <Gauge className="mb-2 h-6 w-6 text-black" />
             ) : (
-              <ShieldCheck className="mb-2 h-6 w-6 text-emerald-400" />
+              <ShieldCheck className="mb-2 h-6 w-6 text-emerald-600" />
             )}
-            <strong className="text-3xl font-black text-white block">
+            <strong className="text-3xl font-black text-black block">
               {isAdmin ? 'Admin' : user.role === 'OWNER' ? (vehiclesCount || 3) : 'VIP'}
             </strong>
-            <p className="text-xs text-white/50 mt-1">
+            <p className="text-xs text-gray-500 mt-1 font-medium">
               {isAdmin ? 'Control total' : user.role === 'OWNER' ? 'Superdeportivos en garaje' : 'Licencia verificada'}
             </p>
           </div>
@@ -110,25 +110,25 @@ export default async function ProfilePage() {
         <ProfileEditor user={user} />
 
         {!isAdmin && (
-          <section className="mt-8 rounded-3xl border border-white/10 bg-[#0f0f12] p-6 shadow-xl">
-            <h2 className="text-xl font-bold font-sans text-white">
+          <section className="mt-8 rounded-3xl border border-gray-200 bg-gray-50 p-6 shadow-sm">
+            <h2 className="text-xl font-bold font-sans text-black">
               Valoraciones sobre ti como {user.role === 'OWNER' ? 'Propietario' : 'Piloto VIP'}
             </h2>
             {reviews.length === 0 ? (
-              <p className="mt-3 text-sm text-white/50 font-mono">
+              <p className="mt-3 text-sm text-gray-500 font-mono">
                 Aún no tienes valoraciones registradas en esta modalidad de pilotaje.
               </p>
             ) : (
               reviews.map((review, idx) => (
-                <div key={`${review.createdAt ? new Date(review.createdAt).toISOString() : idx}-${idx}`} className="mt-4 border-t border-white/10 pt-4 font-mono">
+                <div key={`${review.createdAt ? new Date(review.createdAt).toISOString() : idx}-${idx}`} className="mt-4 border-t border-gray-200 pt-4 font-mono">
                   <div className="flex items-center justify-between">
-                    <strong className="text-white">{review.author?.firstName || 'Piloto'}</strong>
-                    <span className="text-sm font-bold text-[#D4AF37] flex items-center gap-1">
+                    <strong className="text-black">{review.author?.firstName || 'Piloto'}</strong>
+                    <span className="text-sm font-bold text-black flex items-center gap-1">
                       {review.rating}/5
-                      <Star className="w-3.5 h-3.5 fill-[#D4AF37] text-[#D4AF37]" />
+                      <Star className="w-3.5 h-3.5 fill-black text-black" />
                     </span>
                   </div>
-                  <p className="mt-1 text-sm text-white/70 font-sans">{review.comment}</p>
+                  <p className="mt-1 text-sm text-gray-700 font-sans">{review.comment}</p>
                 </div>
               ))
             )}

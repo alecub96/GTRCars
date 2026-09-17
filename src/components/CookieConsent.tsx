@@ -50,15 +50,15 @@ export default function CookieConsent() {
     <aside
       role="dialog"
       aria-label="Preferencias de privacidad y telemetría"
-      className="fixed inset-x-4 bottom-4 z-[10000] mx-auto max-w-3xl rounded-3xl border border-white/15 bg-[#0f0f12]/95 backdrop-blur-xl p-5 text-white shadow-2xl animate-fade-in-up font-sans"
+      className="fixed inset-x-4 bottom-4 z-[10000] mx-auto max-w-3xl rounded-3xl border border-white/15 bg-gray-50/95 backdrop-blur-xl p-5 text-black shadow-2xl animate-fade-in-up font-sans"
     >
       <div className="flex items-center space-x-2 font-mono text-[10px] text-[#D4AF37] uppercase tracking-widest mb-1">
         <span>// PRIVACIDAD & PROTOCOLO TELEMETRÍA</span>
       </div>
-      <h2 className="text-lg font-bold text-white tracking-tight">Privacidad y Telemetría en GT Cars</h2>
-      <p className="mt-2 text-xs sm:text-sm text-white/60 leading-relaxed font-light">
+      <h2 className="text-lg font-bold text-black tracking-tight">Privacidad y Telemetría en GT Cars</h2>
+      <p className="mt-2 text-xs sm:text-sm text-black/60 leading-relaxed font-light">
         Utilizamos cookies técnicas necesarias para la navegación, autenticación en el Vault y gestión de reservas, así como analítica agregada para optimizar la experiencia de conducción. Consulta nuestra{' '}
-        <Link href="/cookies" className="font-bold text-[#D4AF37] underline hover:text-white transition-colors">
+        <Link href="/cookies" className="font-bold text-[#D4AF37] underline hover:text-black transition-colors">
           política de cookies
         </Link>.
       </p>
@@ -66,7 +66,7 @@ export default function CookieConsent() {
         <button
           type="button"
           onClick={handleAcceptNecessary}
-          className="rounded-xl border border-white/15 bg-white/[0.04] px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-white/70 hover:text-white hover:bg-white/[0.08] transition-all cursor-pointer"
+          className="rounded-xl border border-white/15 bg-white/[0.04] px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-black/70 hover:text-black hover:bg-white/[0.08] transition-all cursor-pointer"
         >
           Solo Técnicas
         </button>

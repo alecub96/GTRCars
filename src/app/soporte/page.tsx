@@ -102,16 +102,16 @@ export default function SupportPage() {
   const isAdmin = currentUser?.role === 'ADMIN';
 
   return (
-    <div className="min-h-screen bg-[#070707] text-white selection:bg-[#D4AF37] selection:text-black flex flex-col">
+    <div className="min-h-screen bg-white text-black selection:bg-black selection:text-white flex flex-col">
       <Navbar />
       <main className="flex-1 mx-auto max-w-6xl px-4 py-8 sm:py-12 w-full">
         <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-[10px] font-mono tracking-widest uppercase mb-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 border border-gray-200 text-black text-[10px] font-mono tracking-widest uppercase mb-2">
               <Headphones className="w-3.5 h-3.5" />
               CONSERJERÍA VIP GTR CARS
             </div>
-            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-white mt-1">
+            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-black mt-1">
               {isAdmin ? 'Panel de Soporte con Usuarios' : 'Canal Privado con Conserjería VIP'}
             </h1>
           </div>
@@ -124,15 +124,15 @@ export default function SupportPage() {
         {/* SI EL USUARIO NO ESTÁ AUTENTICADO */}
         {!isAuthLoading && !currentUser && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div className="md:col-span-2 rounded-3xl border border-white/10 bg-[#0f0f12] p-8 sm:p-10 shadow-2xl flex flex-col justify-between space-y-6">
+            <div className="md:col-span-2 rounded-3xl border border-gray-200 bg-gray-50 p-8 sm:p-10 shadow-2xl flex flex-col justify-between space-y-6">
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/30 flex items-center justify-center mb-4">
+                <div className="w-12 h-12 rounded-2xl bg-gray-100 text-black border border-gray-200 flex items-center justify-center mb-4">
                   <MessageSquare className="w-6 h-6" />
                 </div>
-                <h2 className="font-serif text-2xl font-bold text-white mb-2">
+                <h2 className="font-serif text-2xl font-bold text-black mb-2">
                   Inicia sesión para abrir un canal con Conserjería
                 </h2>
-                <p className="text-xs sm:text-sm text-neutral-400 font-mono leading-relaxed">
+                <p className="text-xs sm:text-sm text-gray-500 font-mono leading-relaxed">
                   Para poder asociar tu consulta a tu reserva de superdeportivo, fianza o custodia en el Vault, identifícate en la plataforma.
                 </p>
               </div>
@@ -157,20 +157,20 @@ export default function SupportPage() {
             </div>
 
             <div className="space-y-4">
-              <div className="rounded-3xl border border-white/10 bg-[#0f0f12] p-6 shadow-xl space-y-1">
-                <Mail className="w-5 h-5 text-[#D4AF37] mb-2" />
+              <div className="rounded-3xl border border-gray-200 bg-gray-50 p-6 shadow-xl space-y-1">
+                <Mail className="w-5 h-5 text-black mb-2" />
                 <h3 className="text-sm font-mono font-bold text-white">Correo VIP</h3>
-                <p className="text-xs font-mono text-neutral-400">vip@gtrcars.vip</p>
+                <p className="text-xs font-mono text-gray-500">vip@gtrcars.es</p>
               </div>
-              <div className="rounded-3xl border border-white/10 bg-[#0f0f12] p-6 shadow-xl space-y-1">
-                <Clock className="w-5 h-5 text-[#D4AF37] mb-2" />
+              <div className="rounded-3xl border border-gray-200 bg-gray-50 p-6 shadow-xl space-y-1">
+                <Clock className="w-5 h-5 text-black mb-2" />
                 <h3 className="text-sm font-mono font-bold text-white">Tiempo de respuesta</h3>
-                <p className="text-xs font-mono text-neutral-400">Menos de 15 minutos (24/7)</p>
+                <p className="text-xs font-mono text-gray-500">Menos de 15 minutos (24/7)</p>
               </div>
-              <div className="rounded-3xl border border-white/10 bg-[#0f0f12] p-6 shadow-xl space-y-1">
-                <ShieldCheck className="w-5 h-5 text-[#D4AF37] mb-2" />
+              <div className="rounded-3xl border border-gray-200 bg-gray-50 p-6 shadow-xl space-y-1">
+                <ShieldCheck className="w-5 h-5 text-black mb-2" />
                 <h3 className="text-sm font-mono font-bold text-white">Emergencias en ruta</h3>
-                <p className="text-xs font-mono text-neutral-400">Asistencia de plataforma baja 24/7</p>
+                <p className="text-xs font-mono text-gray-500">Asistencia de plataforma baja 24/7</p>
               </div>
             </div>
           </div>
@@ -178,9 +178,9 @@ export default function SupportPage() {
 
         {/* CHAT DE SOPORTE PARA USUARIOS AUTENTICADOS */}
         {currentUser && (
-          <div className="grid h-[620px] grid-cols-1 overflow-hidden rounded-3xl border border-white/10 bg-[#0f0f12] shadow-2xl md:grid-cols-3">
+          <div className="grid h-[620px] grid-cols-1 overflow-hidden rounded-3xl border border-gray-200 bg-gray-50 shadow-2xl md:grid-cols-3">
             {isAdmin && (
-              <aside className="overflow-y-auto border-r border-white/10 bg-black/60 p-4">
+              <aside className="overflow-y-auto border-r border-gray-200 bg-gray-100 p-4">
                 <h2 className="mb-3 font-mono font-bold text-sm text-white flex items-center justify-between">
                   <span>Conversaciones activas</span>
                   <span className="text-xs bg-[#D4AF37] text-black px-2 py-0.5 rounded-full font-bold">
@@ -188,7 +188,7 @@ export default function SupportPage() {
                   </span>
                 </h2>
                 {conversations.length === 0 ? (
-                  <p className="text-xs font-mono text-neutral-400 p-3 text-center">No hay tickets abiertos.</p>
+                  <p className="text-xs font-mono text-gray-500 p-3 text-center">No hay tickets abiertos.</p>
                 ) : (
                   conversations.map((conversation) => (
                     <button
@@ -196,14 +196,14 @@ export default function SupportPage() {
                       onClick={() => setActiveId(conversation.id)}
                       className={`mb-2 w-full rounded-2xl border p-3 text-left transition-all cursor-pointer font-mono ${
                         activeId === conversation.id
-                          ? 'border-[#D4AF37] bg-neutral-900 shadow-md ring-1 ring-[#D4AF37]'
-                          : 'border-white/5 hover:bg-neutral-900/60 text-neutral-400'
+                          ? 'border-black bg-neutral-900 shadow-md ring-1 ring-[#D4AF37]'
+                          : 'border-gray-100 hover:bg-neutral-900/60 text-gray-500'
                       }`}
                     >
                       <strong className="block text-sm text-white">
                         {conversation.user.firstName} {conversation.user.lastName}
                       </strong>
-                      <span className="block truncate text-xs text-neutral-400">
+                      <span className="block truncate text-xs text-gray-500">
                         {conversation.user.email}
                       </span>
                       {conversation._count?.messages > 0 && (
@@ -218,16 +218,16 @@ export default function SupportPage() {
             )}
 
             <section className={`flex flex-col ${isAdmin ? 'md:col-span-2' : 'md:col-span-3'}`}>
-              <div className="flex-1 space-y-3 overflow-y-auto p-4 sm:p-6 custom-scrollbar bg-black/40">
+              <div className="flex-1 space-y-3 overflow-y-auto p-4 sm:p-6 custom-scrollbar bg-gray-100">
                 {messages.length === 0 && (
                   <div className="text-center py-16 px-4">
-                    <MessageSquare className="w-10 h-10 text-[#D4AF37] mx-auto mb-3 opacity-60" />
+                    <MessageSquare className="w-10 h-10 text-black mx-auto mb-3 opacity-60" />
                     <p className="text-sm font-mono font-bold text-white">
                       {isAdmin && !activeId
                         ? 'Selecciona una conversación de la lista.'
                         : '¡Hola! Escribe tu consulta al equipo de Conserjería VIP.'}
                     </p>
-                    <p className="text-xs font-mono text-neutral-400 mt-1 max-w-sm mx-auto">
+                    <p className="text-xs font-mono text-gray-500 mt-1 max-w-sm mx-auto">
                       Un agente de GTR Cars te responderá de inmediato.
                     </p>
                   </div>
@@ -247,10 +247,10 @@ export default function SupportPage() {
                     <div
                       className={`max-w-[85%] sm:max-w-[75%] rounded-2xl p-3.5 text-xs sm:text-sm shadow-md font-mono ${
                         message.system
-                          ? 'border border-[#D4AF37]/30 bg-neutral-900 text-center text-white'
+                          ? 'border border-gray-200 bg-neutral-900 text-center text-white'
                           : message.sender?.id === currentUser?.id
-                          ? 'bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black font-semibold rounded-br-none'
-                          : 'bg-neutral-900 border border-white/10 text-white rounded-bl-none'
+                          ? 'bg-black text-white hover:bg-neutral-800 font-semibold rounded-br-none'
+                          : 'bg-neutral-900 border border-gray-200 text-white rounded-bl-none'
                       }`}
                     >
                       <strong className="mb-1 block text-[10px] uppercase tracking-wider opacity-70">
@@ -281,14 +281,14 @@ export default function SupportPage() {
               )}
 
               {(!isAdmin || activeId) && (
-                <form onSubmit={send} className="flex gap-2 border-t border-white/10 p-3 sm:p-4 bg-[#0f0f12]">
+                <form onSubmit={send} className="flex gap-2 border-t border-gray-200 p-3 sm:p-4 bg-gray-50">
                   <input
                     value={content}
                     onChange={(event) => setContent(event.target.value)}
                     required
                     disabled={sending}
                     placeholder="Escribe tu mensaje a Conserjería VIP..."
-                    className="flex-1 rounded-xl border border-white/15 bg-neutral-900 px-4 py-3 text-xs sm:text-sm font-mono text-white focus:outline-none focus:border-[#D4AF37] disabled:bg-neutral-800"
+                    className="flex-1 rounded-xl border border-white/15 bg-neutral-900 px-4 py-3 text-xs sm:text-sm font-mono text-white focus:outline-none focus:border-black disabled:bg-neutral-800"
                   />
                   <button
                     type="submit"
