@@ -1,12 +1,12 @@
 // Web Audio API micro-sounds para interacciones sutiles superdeportivos
-let audioCtx = null;
+let audioCtx: AudioContext | null = null;
 
-function getAudioContext() {
+function getAudioContext(): AudioContext | null {
   if (typeof window === 'undefined') return null;
   if (!audioCtx) {
-    const CKey = window.AudioContext || window.webkitAudioContext;
-    if (CKey) {
-      audioCtx = new CKey();
+    const AudioCtxClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    if (AudioCtxClass) {
+      audioCtx = new AudioCtxClass();
     }
   }
   if (audioCtx && audioCtx.state === 'suspended') {
