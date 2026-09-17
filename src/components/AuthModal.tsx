@@ -118,42 +118,32 @@ export default function AuthModal() {
     }
   };
 
-  const handleSwitchRole = async () => {
-    if (switching) return;
-    const targetRole = user.role === 'OWNER' ? 'TRAVELER' : 'OWNER';
-    setSwitching(true);
-    setSwitchError('');
+  const handleDemoLogin = async (type: 'owner' | 'client') => {
+    setError('');
+    setSuccessMessage('');
+    setLoading(true);
 
     try {
-      const res = await fetch('/api/auth/switch-role', {
+      const res = await fetch('/api/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ targetRole }),
+        body: JSON.stringify({ action: type === 'owner' ? 'demo-owner' : 'demo-client' }),
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Error al cambiar de modo');
+      if (!res.ok) throw new Error(data.error || 'Error al acceder en modo demo');
 
       setUser(data.user);
       setIsOpen(false);
-      setRoleNotice(targetRole);
-
-      window.dispatchEvent(
-        new CustomEvent('role-switched', { detail: { targetRole: data.user.role } })
-      );
-
-      const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
-      if (currentPath === '/cuenta' || currentPath === '/propietario') {
-        setTimeout(() => {
-          window.location.href = targetRole === 'TRAVELER' ? '/cuenta' : '/propietario';
-        }, 500);
+      if (type === 'owner') {
+        window.location.href = '/propietario';
       } else {
-        router.refresh();
+        window.location.href = '/cuenta';
       }
     } catch (err: any) {
-      setSwitchError(err.message || 'No se pudo cambiar de modo');
+      setError(err.message || 'Error en acceso demo');
     } finally {
-      setSwitching(false);
+      setLoading(false);
     }
   };
 
@@ -201,30 +191,30 @@ export default function AuthModal() {
   return (
     <>
       {roleNotice && (
-        <div className="fixed top-4 inset-x-3 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 sm:w-full sm:max-w-md z-[999999] pointer-events-auto animate-in fade-in slide-in-from-top-4 duration-300">
-          <div className="rounded-2xl sm:rounded-3xl bg-[#13322E] text-white p-4 sm:p-5 shadow-[0_20px_50px_rgba(0,0,0,0.4)] border border-[#16B8AA]/40 flex items-center justify-between gap-3">
+        <div className="fixed top-4 inset-x-3 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 sm:w-full sm:max-w-md z-[999999] pointer-events-auto animate-in fade-in slide-in-from-top-4 duration-300 font-sans">
+          <div className="rounded-2xl sm:rounded-3xl bg-[#0f0f12]/95 backdrop-blur-xl text-white p-4 sm:p-5 shadow-[0_20px_50px_rgba(0,0,0,0.8)] border border-[#D4AF37]/40 flex items-center justify-between gap-3">
             <div className="flex items-center space-x-3 min-w-0">
-              <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-xl sm:rounded-2xl bg-[#16B8AA]/20 text-[#16B8AA]">
+              <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-xl sm:rounded-2xl bg-[#D4AF37]/20 text-[#D4AF37] border border-[#D4AF37]/30">
                 <CheckCircle2 className="h-6 w-6 sm:h-7 sm:w-7" />
               </div>
-              <div className="flex-1 min-w-0">
-                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#16B8AA] block">
-                  Modo actualizado
+              <div className="flex-1 min-w-0 font-mono">
+                <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#D4AF37] block">
+                  Protocolo Actualizado
                 </span>
-                <h3 className="text-sm sm:text-base font-bold text-white tracking-tight truncate">
-                  Ahora estás en modo {roleNotice === 'OWNER' ? 'propietario' : 'viajero'}
+                <h3 className="text-sm sm:text-base font-bold text-white tracking-tight truncate font-sans">
+                  Ahora en modo {roleNotice === 'OWNER' ? 'propietario' : 'conductor VIP'}
                 </h3>
-                <p className="text-[11px] sm:text-xs text-[#A0AEC0] font-medium truncate mt-0.5">
+                <p className="text-[11px] sm:text-xs text-white/50 truncate mt-0.5">
                   {roleNotice === 'OWNER'
-                    ? 'Gestiona tus campers, calendario y finanzas.'
-                    : 'Explora campers y gestiona tus viajes.'}
+                    ? 'Gestiona tus superdeportivos, disponibilidad y finanzas.'
+                    : 'Explora el Vault de superdeportivos y gestiona tus reservas.'}
                 </p>
               </div>
             </div>
             <button
               type="button"
               onClick={() => setRoleNotice(null)}
-              className="p-1.5 rounded-full text-slate-400 hover:text-white shrink-0 cursor-pointer"
+              className="p-1.5 rounded-full text-white/40 hover:text-white shrink-0 cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -232,101 +222,99 @@ export default function AuthModal() {
         </div>
       )}
       {user ? (
-        /* MENÚ DESPLEGABLE DE PERFIL PARA ESCRITORIO (EN MÓVIL SE USA EL MENÚ UNIFICADO) */
-        <div className="relative hidden md:inline-block">
+        /* MENÚ DESPLEGABLE DE PERFIL PARA ESCRITORIO (DARK LUXURY) */
+        <div className="relative hidden md:inline-block font-mono">
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="inline-flex items-center space-x-1.5 sm:space-x-2 text-xs font-bold uppercase tracking-wider px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full bg-[#F4F9F8] text-[#13322E] border border-[#E9E1D2] hover:bg-[#E9E1D2] transition-all shadow-sm shrink-0 cursor-pointer"
+            className="inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-wider px-3.5 py-2 rounded-full bg-white/[0.04] text-white border border-white/10 hover:border-[#D4AF37]/50 hover:bg-white/[0.08] transition-all shadow-sm shrink-0 cursor-pointer"
           >
-            <div className="w-6 h-6 rounded-full bg-[#16B8AA] text-white flex items-center justify-center text-[10px] font-black uppercase shrink-0">
+            <div className="w-6 h-6 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black flex items-center justify-center text-[10px] font-black uppercase shrink-0">
               {user.firstName ? user.firstName[0] : 'U'}
             </div>
-            <span className="hidden sm:inline">{user.firstName}</span>
-            <span className="hidden sm:inline-block text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-[#16B8AA]/10 text-[#16B8AA]">
-              {user.role === 'ADMIN' ? 'Administrador' : user.role === 'OWNER' ? 'Modo Propietario' : 'Modo Viajero'}
+            <span className="hidden sm:inline font-sans text-xs font-bold">{user.firstName}</span>
+            <span className="hidden sm:inline-block text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-[#D4AF37]/15 text-[#D4AF37] border border-[#D4AF37]/30">
+              {user.role === 'ADMIN' ? 'Admin' : user.role === 'OWNER' ? 'Propietario' : 'Piloto VIP'}
             </span>
           </button>
 
           {isOpen && (
-            <div className="absolute right-0 mt-2 w-72 bg-white border border-slate-200 rounded-3xl shadow-2xl p-5 z-[9999] text-[#13322E] animate-fade-in">
-              <div className="border-b border-slate-100 pb-3 mb-3 px-1">
-                <span className="text-[10px] font-black uppercase tracking-wider text-[#16B8AA]">
-                  {user.role === 'ADMIN' ? 'Administrador' : user.role === 'OWNER' ? 'Modo Propietario Activo' : 'Modo Viajero Activo'}
+            <div className="absolute right-0 mt-2 w-72 bg-[#0f0f12]/95 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-2xl p-5 z-[9999] text-white animate-fade-in font-sans">
+              <div className="border-b border-white/10 pb-3 mb-3 px-1 font-mono">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-[#D4AF37]">
+                  {user.role === 'ADMIN' ? 'Administrador' : user.role === 'OWNER' ? 'Cuenta Propietario' : 'Cuenta Piloto VIP'}
                 </span>
-                <p className="font-bold text-sm text-[#13322E] truncate">{user.firstName} {user.lastName}</p>
-                <p className="text-xs text-slate-400 truncate">{user.email}</p>
+                <p className="font-bold text-sm text-white truncate font-sans">{user.firstName} {user.lastName}</p>
+                <p className="text-xs text-white/40 truncate">{user.email}</p>
               </div>
 
-              {/* BOTÓN PROMINENTE DE CAMBIO DE MODO */}
-              {user.role !== 'ADMIN' && (
-                <button
-                  onClick={handleSwitchRole}
-                  disabled={switching}
-                  className="w-full mb-3 p-3 rounded-2xl bg-gradient-to-r from-[#13322E] to-[#254842] text-white font-black text-xs uppercase tracking-wider flex items-center justify-between shadow-md hover:opacity-95 transition-opacity"
-                >
-                  <div className="flex items-center space-x-2">
-                    <RefreshCw className={`w-4 h-4 text-[#16B8AA] ${switching ? 'animate-spin' : ''}`} />
-                    <span>{user.role === 'OWNER' ? 'Pasar a Modo Viajero' : 'Pasar a Modo Propietario'}</span>
-                  </div>
-                </button>
-              )}
-              {switchError && <p role="alert" className="mb-3 rounded-xl border border-red-200 bg-red-50 p-3 text-xs font-bold text-red-700">{switchError}</p>}
-
-              <div className="space-y-1 text-xs font-bold text-slate-700">
+              <div className="space-y-1 text-xs font-mono text-white/80">
                 {user.role !== 'ADMIN' && (
                   <Link
                     href="/mensajes"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center space-x-2.5 p-2.5 rounded-2xl hover:bg-slate-50 transition-colors"
+                    className="flex items-center space-x-2.5 p-2.5 rounded-xl hover:bg-white/[0.06] transition-colors hover:text-white"
                   >
-                    <MessageSquare className="w-4 h-4 text-[#16B8AA]" />
-                    <span>Mensajes & Chats</span>
+                    <MessageSquare className="w-4 h-4 text-[#D4AF37]" />
+                    <span>Mensajería & Vault</span>
                   </Link>
                 )}
 
                 <Link
                   href="/perfil"
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center space-x-2.5 p-2.5 rounded-2xl hover:bg-slate-50 transition-colors"
+                  className="flex items-center space-x-2.5 p-2.5 rounded-xl hover:bg-white/[0.06] transition-colors hover:text-white"
                 >
-                  <UserCircle className="w-4 h-4 text-[#16B8AA]" />
-                  <span>Mi perfil</span>
+                  <UserCircle className="w-4 h-4 text-[#D4AF37]" />
+                  <span>Mi Perfil</span>
                 </Link>
 
-                {user.role === 'TRAVELER' && <Link href="/cuenta" onClick={() => setIsOpen(false)} className="flex items-center space-x-2.5 p-2.5 rounded-2xl hover:bg-slate-50 transition-colors"><Compass className="w-4 h-4 text-[#16B8AA]" /><span>Mis reservas y viajes</span></Link>}
+                {user.role === 'TRAVELER' && (
+                  <Link
+                    href="/cuenta"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center space-x-2.5 p-2.5 rounded-xl hover:bg-white/[0.06] transition-colors hover:text-white"
+                  >
+                    <Compass className="w-4 h-4 text-[#D4AF37]" />
+                    <span>Mis Reservas Supercars</span>
+                  </Link>
+                )}
 
-                {user.role === 'OWNER' && <Link
-                  href="/propietario"
-                  onClick={() => setIsOpen(false)}
-                  className="flex items-center space-x-2.5 p-2.5 rounded-2xl hover:bg-slate-50 transition-colors"
-                >
-                  <Truck className="w-4 h-4 text-[#16B8AA]" />
-                  <span>Panel de propietario</span>
-                </Link>}
+                {user.role === 'OWNER' && (
+                  <Link
+                    href="/propietario"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center space-x-2.5 p-2.5 rounded-xl hover:bg-white/[0.06] transition-colors hover:text-white"
+                  >
+                    <Truck className="w-4 h-4 text-[#D4AF37]" />
+                    <span>Panel de Propietario</span>
+                  </Link>
+                )}
 
                 {user.role === 'ADMIN' && (
                   <Link
                     href="/admin"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center space-x-2.5 p-2.5 rounded-2xl hover:bg-slate-50 transition-colors"
+                    className="flex items-center space-x-2.5 p-2.5 rounded-xl hover:bg-white/[0.06] transition-colors hover:text-white"
                   >
-                    <KeyRound className="w-4 h-4 text-[#D97706]" />
+                    <KeyRound className="w-4 h-4 text-[#D4AF37]" />
                     <span>Panel de Administración</span>
                   </Link>
                 )}
 
-                {user.role !== 'OWNER' && user.role !== 'ADMIN' && <Link
-                  href="/verificacion"
-                  onClick={() => setIsOpen(false)}
-                  className="flex items-center space-x-2.5 p-2.5 rounded-2xl hover:bg-slate-50 transition-colors"
-                >
-                  <ShieldCheck className="w-4 h-4 text-[#16B8AA]" />
-                  <span>Verificación de Licencia</span>
-                </Link>}
+                {user.role !== 'OWNER' && user.role !== 'ADMIN' && (
+                  <Link
+                    href="/verificacion"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center space-x-2.5 p-2.5 rounded-xl hover:bg-white/[0.06] transition-colors hover:text-white"
+                  >
+                    <ShieldCheck className="w-4 h-4 text-[#D4AF37]" />
+                    <span>Verificación de Licencia VIP</span>
+                  </Link>
+                )}
 
                 <button
                   onClick={handleLogout}
-                  className="w-full flex items-center space-x-2.5 p-2.5 rounded-2xl hover:bg-red-50 text-red-600 transition-colors text-left font-bold border-t border-slate-100 mt-2 pt-3"
+                  className="w-full flex items-center space-x-2.5 p-2.5 rounded-xl hover:bg-red-950/40 text-red-400 hover:text-red-300 transition-colors text-left font-mono font-bold border-t border-white/10 mt-2 pt-3 cursor-pointer"
                 >
                   <LogOut className="w-4 h-4" />
                   <span>Cerrar Sesión</span>
@@ -336,100 +324,143 @@ export default function AuthModal() {
           )}
         </div>
       ) : (
-        /* BOTÓN Y MODAL DE INICIO DE SESIÓN / REGISTRO */
+        /* BOTÓN Y MODAL DE INICIO DE SESIÓN / REGISTRO (DARK LUXURY) */
         <>
           <button
-            onClick={() => { setMode('register'); setIsOpen(true); }}
-            className="hidden md:inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full bg-[#16B8AA] text-white hover:bg-[#0F766E] transition-all shadow-sm cursor-pointer"
+            onClick={() => { setMode('login'); setIsOpen(true); }}
+            className="hidden md:inline-flex items-center space-x-2 text-xs font-mono font-bold uppercase tracking-wider px-5 py-2.5 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black hover:brightness-110 transition-all shadow-[0_0_15px_rgba(212,175,55,0.2)] cursor-pointer"
           >
             <User className="w-4 h-4" />
-            <span>Acceder / Registrarse</span>
+            <span>ACCESO // VAULT</span>
           </button>
 
           {isOpen && mounted && createPortal(
             <div
               onClick={() => setIsOpen(false)}
-              className="fixed inset-0 z-[999999] overflow-y-auto bg-black/65 backdrop-blur-sm p-4 sm:p-6 flex min-h-full items-center justify-center cursor-pointer"
+              className="fixed inset-0 z-[999999] overflow-y-auto bg-black/85 backdrop-blur-md p-4 sm:p-6 flex min-h-full items-center justify-center cursor-pointer font-sans"
             >
               <div
                 onClick={(e) => e.stopPropagation()}
-                className="relative w-full max-w-md bg-white border border-[#E9E1D2] rounded-3xl p-6 sm:p-8 shadow-2xl animate-fade-in my-auto text-left cursor-default"
+                className="relative w-full max-w-lg bg-[#0f0f12] border border-[#D4AF37]/30 rounded-3xl p-6 sm:p-8 shadow-[0_0_50px_rgba(0,0,0,0.9)] animate-fade-in my-auto text-left cursor-default text-white"
               >
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="absolute top-5 right-5 p-2 rounded-full hover:bg-slate-100 transition-colors text-slate-500 cursor-pointer"
+                  className="absolute top-5 right-5 p-2 rounded-full hover:bg-white/10 transition-colors text-white/50 hover:text-white cursor-pointer"
                 >
                   <X className="w-5 h-5" />
                 </button>
 
+                {/* ACCESO DEMO DIRECTO 1-CLICK */}
+                <div className="mb-6 rounded-2xl border border-[#D4AF37]/30 bg-gradient-to-b from-[#1a1813] to-[#0d0d10] p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#D4AF37] flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
+                      Accesos Rápidos Demo
+                    </span>
+                    <span className="text-[9px] font-mono text-white/40 uppercase">Sin contraseña</span>
+                  </div>
+                  <p className="text-xs text-white/70 mb-3">
+                    Prueba la experiencia completa con cuentas preconfiguradas de rol único:
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <button
+                      type="button"
+                      onClick={() => handleDemoLogin('owner')}
+                      disabled={loading}
+                      className="group p-3 rounded-xl bg-black/60 hover:bg-[#D4AF37]/15 border border-white/10 hover:border-[#D4AF37] text-left transition-all cursor-pointer"
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-[10px] font-mono font-bold uppercase text-[#D4AF37]">Propietario Demo</span>
+                        <Truck className="w-3.5 h-3.5 text-[#D4AF37]" />
+                      </div>
+                      <p className="text-xs font-bold text-white group-hover:text-[#D4AF37] transition-colors">Carlos M.</p>
+                      <p className="text-[10px] text-white/50 truncate">Flota Revuelto, SF90 & GT3 RS</p>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleDemoLogin('client')}
+                      disabled={loading}
+                      className="group p-3 rounded-xl bg-black/60 hover:bg-[#D4AF37]/15 border border-white/10 hover:border-[#D4AF37] text-left transition-all cursor-pointer"
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-[10px] font-mono font-bold uppercase text-[#D4AF37]">Piloto VIP Demo</span>
+                        <Compass className="w-3.5 h-3.5 text-[#D4AF37]" />
+                      </div>
+                      <p className="text-xs font-bold text-white group-hover:text-[#D4AF37] transition-colors">Alejandro B.</p>
+                      <p className="text-[10px] text-white/50 truncate">Reservas activas & Favoritos</p>
+                    </button>
+                  </div>
+                </div>
+
                 {/* PESTAÑAS DE REGISTRO E INICIO DE SESIÓN */}
-                <div className="flex border-b border-[#E9E1D2] mb-6">
-                  <button
-                    type="button"
-                    onClick={() => { setMode('register'); setError(''); setSuccessMessage(''); }}
-                    className={`flex-1 py-3 text-xs font-black uppercase tracking-wider transition-all border-b-2 cursor-pointer ${
-                      mode === 'register'
-                        ? 'border-[#16B8AA] text-[#16B8AA]'
-                        : 'border-transparent text-[#6B726E] hover:text-[#13322E]'
-                    }`}
-                  >
-                    Crear Cuenta
-                  </button>
+                <div className="flex border-b border-white/10 mb-6 font-mono">
                   <button
                     type="button"
                     onClick={() => { setMode('login'); setError(''); setSuccessMessage(''); }}
-                    className={`flex-1 py-3 text-xs font-black uppercase tracking-wider transition-all border-b-2 cursor-pointer ${
+                    className={`flex-1 py-3 text-xs font-bold uppercase tracking-widest transition-all border-b-2 cursor-pointer ${
                       mode === 'login'
-                        ? 'border-[#16B8AA] text-[#16B8AA]'
-                        : 'border-transparent text-[#6B726E] hover:text-[#13322E]'
+                        ? 'border-[#D4AF37] text-[#D4AF37]'
+                        : 'border-transparent text-white/40 hover:text-white'
                     }`}
                   >
                     Iniciar Sesión
                   </button>
+                  <button
+                    type="button"
+                    onClick={() => { setMode('register'); setError(''); setSuccessMessage(''); }}
+                    className={`flex-1 py-3 text-xs font-bold uppercase tracking-widest transition-all border-b-2 cursor-pointer ${
+                      mode === 'register'
+                        ? 'border-[#D4AF37] text-[#D4AF37]'
+                        : 'border-transparent text-white/40 hover:text-white'
+                    }`}
+                  >
+                    Registrar Cuenta
+                  </button>
                 </div>
 
                 {customSubtitle && (
-                  <div className="mb-5 p-3.5 rounded-2xl bg-teal-50 border border-teal-200 text-[#0F766E] text-xs font-semibold flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-[#16B8AA] shrink-0" />
+                  <div className="mb-5 p-3.5 rounded-2xl bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-xs font-mono flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-[#D4AF37] shrink-0" />
                     <span>{customSubtitle}</span>
                   </div>
                 )}
 
                 {error && (
-                  <div className="mb-4 p-3 rounded-2xl bg-red-50 border border-red-200 text-red-700 text-xs font-bold text-center">
+                  <div className="mb-4 p-3 rounded-xl bg-red-950/50 border border-red-500/30 text-red-300 text-xs font-mono text-center">
                     {error}
                   </div>
                 )}
 
                 {successMessage && (
-                  <div className="mb-4 p-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold text-center">
+                  <div className="mb-4 p-3 rounded-xl bg-emerald-950/50 border border-emerald-500/30 text-emerald-300 text-xs font-mono text-center">
                     {successMessage}
                   </div>
                 )}
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4 font-mono">
                   {mode === 'register' && (
                     <>
                       <div className="grid grid-cols-2 gap-2 mb-2">
                         <button
                           type="button"
                           onClick={() => setRole('TRAVELER')}
-                          className={`py-2 rounded-xl text-xs font-black uppercase tracking-wider border transition-all cursor-pointer ${
+                          className={`py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest border transition-all cursor-pointer ${
                             role === 'TRAVELER'
-                              ? 'bg-[#16B8AA] text-white border-[#16B8AA]'
-                              : 'bg-slate-50 text-slate-600 border-slate-200'
+                              ? 'bg-[#D4AF37] text-black border-[#D4AF37] font-black'
+                              : 'bg-white/[0.03] text-white/60 border-white/10 hover:border-white/20'
                           }`}
                         >
-                          Viajero
+                          Piloto VIP
                         </button>
                         <button
                           type="button"
                           onClick={() => setRole('OWNER')}
-                          className={`py-2 rounded-xl text-xs font-black uppercase tracking-wider border transition-all cursor-pointer ${
+                          className={`py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest border transition-all cursor-pointer ${
                             role === 'OWNER'
-                              ? 'bg-[#16B8AA] text-white border-[#16B8AA]'
-                              : 'bg-slate-50 text-slate-600 border-slate-200'
+                              ? 'bg-[#D4AF37] text-black border-[#D4AF37] font-black'
+                              : 'bg-white/[0.03] text-white/60 border-white/10 hover:border-white/20'
                           }`}
                         >
                           Propietario
@@ -438,23 +469,23 @@ export default function AuthModal() {
 
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1">Nombre</label>
+                          <label className="block text-[10px] font-bold uppercase tracking-widest text-white/50 mb-1">Nombre</label>
                           <input
                             type="text"
                             required
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
-                            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+                            className="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.03] text-white text-sm font-sans focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]"
                           />
                         </div>
                         <div>
-                          <label className="block text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1">Apellidos</label>
+                          <label className="block text-[10px] font-bold uppercase tracking-widest text-white/50 mb-1">Apellidos</label>
                           <input
                             type="text"
                             required
                             value={lastName}
                             onChange={(e) => setLastName(e.target.value)}
-                            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+                            className="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.03] text-white text-sm font-sans focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]"
                           />
                         </div>
                       </div>
@@ -462,26 +493,26 @@ export default function AuthModal() {
                   )}
 
                   <div>
-                    <label className="block text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1">Correo Electrónico</label>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-white/50 mb-1">Correo Electrónico</label>
                     <input
                       type="email"
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="ejemplo@canariascampers.es"
-                      className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+                      placeholder="piloto@gtcars.vip"
+                      className="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.03] text-white text-sm font-sans placeholder:text-white/20 focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]"
                     />
                   </div>
 
                   {mode !== 'forgot' && (
                     <div>
-                      <label className="block text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1">Contraseña</label>
+                      <label className="block text-[10px] font-bold uppercase tracking-widest text-white/50 mb-1">Contraseña</label>
                       <input
                         type="password"
                         required
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+                        className="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.03] text-white text-sm font-sans focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]"
                       />
                     </div>
                   )}
@@ -489,21 +520,21 @@ export default function AuthModal() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-3.5 rounded-full bg-[#13322E] text-white font-black text-xs uppercase tracking-widest hover:bg-[#254842] transition-colors shadow-md mt-2 flex items-center justify-center space-x-2 cursor-pointer disabled:opacity-50"
+                    className="w-full py-4 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black font-mono font-black text-xs uppercase tracking-widest hover:brightness-110 transition-all shadow-[0_0_20px_rgba(212,175,55,0.25)] mt-3 flex items-center justify-center space-x-2 cursor-pointer disabled:opacity-50"
                   >
                     {mode === 'login' ? <LogIn className="w-4 h-4" /> : <UserPlus className="w-4 h-4" />}
-                    <span>{loading ? 'Procesando...' : mode === 'login' ? 'INICIAR SESIÓN' : mode === 'register' ? 'CREAR CUENTA' : 'ENVIAR ENLACE'}</span>
+                    <span>{loading ? 'AUTENTICANDO...' : mode === 'login' ? 'INICIAR SESIÓN' : mode === 'register' ? 'REGISTRARME EN VAULT' : 'ENVIAR ENLACE'}</span>
                   </button>
                 </form>
 
-                <div className="mt-6 text-center text-xs text-slate-500 font-medium">
+                <div className="mt-6 text-center text-xs text-white/40 font-mono">
                   {mode === 'login' && (
-                    <button onClick={() => { setMode('forgot'); setError(''); setSuccessMessage(''); }} className="font-bold text-[#16B8AA] hover:underline cursor-pointer">
+                    <button onClick={() => { setMode('forgot'); setError(''); setSuccessMessage(''); }} className="font-bold text-[#D4AF37] hover:underline cursor-pointer">
                       ¿Has olvidado tu contraseña?
                     </button>
                   )}
                   {mode === 'forgot' && (
-                    <button onClick={() => { setMode('login'); setError(''); setSuccessMessage(''); }} className="font-bold text-[#16B8AA] hover:underline cursor-pointer">
+                    <button onClick={() => { setMode('login'); setError(''); setSuccessMessage(''); }} className="font-bold text-[#D4AF37] hover:underline cursor-pointer">
                       Volver a iniciar sesión
                     </button>
                   )}

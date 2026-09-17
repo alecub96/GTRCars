@@ -7,7 +7,7 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
   const [isRecovering, setIsRecovering] = useState(false);
 
   useEffect(() => {
-    console.error('Vaneando global error:', error);
+    console.error('GTR Cars global error:', error);
     const errorStr = (error?.message || error?.name || '').toLowerCase();
     const isChunkError =
       error?.name === 'ChunkLoadError' ||
@@ -18,7 +18,7 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
 
     if (isChunkError && typeof window !== 'undefined') {
       setIsRecovering(true);
-      const storageKey = 'vaneando_chunk_reload';
+      const storageKey = 'gtrcars_chunk_reload';
       const lastReload = sessionStorage.getItem(storageKey);
       const now = Date.now();
       if (!lastReload || now - parseInt(lastReload, 10) > 4000) {
@@ -33,20 +33,20 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
 
   return (
     <html lang="es">
-      <body className="flex min-h-screen items-center justify-center bg-[#F7F6F2] px-4 text-[#13322E]">
-        <main className="max-w-lg rounded-[36px] bg-white p-10 text-center shadow-xl border border-[#E9E1D2]">
+      <body className="flex min-h-screen items-center justify-center bg-[#070707] px-4 text-white font-mono selection:bg-[#D4AF37] selection:text-black">
+        <main className="max-w-lg rounded-3xl bg-[#0f0f12] p-10 text-center shadow-2xl border border-white/10">
           {isRecovering ? (
             <div className="space-y-4">
-              <RefreshCw className="w-8 h-8 text-[#16B8AA] animate-spin mx-auto" />
-              <p className="text-xs font-black uppercase tracking-widest text-[#16B8AA]">
-                Sincronizando con la última versión de Vaneando...
+              <RefreshCw className="w-8 h-8 text-[#D4AF37] animate-spin mx-auto" />
+              <p className="text-xs font-mono font-bold uppercase tracking-widest text-[#D4AF37]">
+                Sincronizando con GTR Cars...
               </p>
             </div>
           ) : (
             <>
-              <p className="text-[10px] font-black uppercase tracking-[.25em] text-[#16B8AA]">vaneando.</p>
-              <h1 className="mt-3 font-serif text-3xl font-bold">Ha ocurrido una incidencia temporal.</h1>
-              <p className="mt-4 text-sm text-[#6B726E]">Reintenta la carga para sincronizar la última versión limpia.</p>
+              <p className="text-[10px] font-mono font-bold uppercase tracking-[.25em] text-[#D4AF37]">GTR CARS // VAULT</p>
+              <h1 className="mt-3 font-serif text-3xl font-bold text-white">Incidencia temporal de conexión</h1>
+              <p className="mt-4 text-xs font-mono text-neutral-400">Reintenta la carga para sincronizar la telemetría.</p>
               <button
                 type="button"
                 onClick={() => {
@@ -57,7 +57,7 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
                     window.location.replace(`${window.location.pathname}${search}${sep}_r=${now}`);
                   }
                 }}
-                className="mt-7 rounded-full bg-[#16B8AA] px-6 py-3 text-xs font-bold text-white cursor-pointer"
+                className="mt-7 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B38B21] px-6 py-3 text-xs font-mono font-bold text-black uppercase tracking-wider hover:brightness-110 transition-all cursor-pointer shadow-lg"
               >
                 Reintentar
               </button>

@@ -2,7 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
-import { ShieldCheck, UserCheck, FileText, CheckCircle2, AlertCircle, Upload, Lock } from 'lucide-react';
+import Footer from '@/components/Footer';
+import { ShieldCheck, UserCheck, CheckCircle2, AlertCircle, Upload, Lock, Sparkles } from 'lucide-react';
 
 export default function IdentityVerificationPage() {
   const [documentType, setDocumentType] = useState('DNI_NIE');
@@ -17,15 +18,18 @@ export default function IdentityVerificationPage() {
   const [verificationStatus, setVerificationStatus] = useState<string>('UNVERIFIED');
 
   useEffect(() => {
-    fetch('/api/verification').then((response) => response.json()).then((data) => {
-      if (data.verification) setVerificationStatus(data.verification);
-    }).catch(() => {});
+    fetch('/api/verification')
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.verification) setVerificationStatus(data.verification);
+      })
+      .catch(() => {});
   }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!fileFront || !fileBack || !fileLicense) {
-      setError('Por favor adjunta las 3 fotos requeridas (Anverso DNI, Reverso DNI y Foto Carné de Conducir)');
+      setError('Por favor adjunta los 3 archivos requeridos (Anverso DNI/Pasaporte, Reverso y Permiso de Conducir)');
       return;
     }
     setLoading(true);
@@ -53,57 +57,57 @@ export default function IdentityVerificationPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]">
+    <div className="min-h-screen bg-[#070707] text-white selection:bg-[#D4AF37] selection:text-black flex flex-col">
       <Navbar />
 
-      <main className="max-w-3xl mx-auto px-4 py-12">
-        <div className="bg-white rounded-3xl p-8 border border-[#E9E1D2] shadow-xl space-y-8">
-          <div className="text-center border-b border-[#E9E1D2] pb-6">
-            <div className="w-12 h-12 rounded-full bg-[#16B8AA]/10 text-[#16B8AA] flex items-center justify-center mx-auto mb-3">
+      <main className="flex-1 max-w-3xl mx-auto px-4 py-12 w-full">
+        <div className="bg-[#0f0f12] rounded-3xl p-8 sm:p-10 border border-white/10 shadow-2xl space-y-8">
+          <div className="text-center border-b border-white/10 pb-6">
+            <div className="w-12 h-12 rounded-2xl bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/30 flex items-center justify-center mx-auto mb-3">
               <UserCheck className="w-6 h-6" />
             </div>
-            <span className="text-[11px] font-black uppercase tracking-[0.25em] text-[#D97706]">
-              Verificación Obligatoria de Identidad y Conductor
-            </span>
-            <h1 className="font-serif text-3xl font-bold text-[#13322E] mt-1">
-              Verifica tu Identidad y Permiso de Conducir
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D4AF37]/10 text-[#D4AF37] text-[10px] font-mono tracking-widest uppercase mb-2 border border-[#D4AF37]/30">
+              <Sparkles className="w-3 h-3" />
+              PROTOCOLO DE HOMOLOGACIÓN CONDUCTOR VIP
+            </div>
+            <h1 className="font-serif text-3xl font-bold text-white mt-1">
+              Verificación de Identidad y Carné de Conducir
             </h1>
-            <p className="text-xs text-[#6B726E] font-medium mt-2">
-              Verificamos que el carné de conducir coincide con la identidad y se encuentra vigente.
+            <p className="text-xs text-neutral-400 font-mono mt-2">
+              Validamos la vigencia del permiso de conducción para el seguro de flota de superdeportivos.
             </p>
           </div>
 
           {verificationStatus === 'VERIFIED' ? (
-            <div className="text-center py-8 space-y-4">
-              <CheckCircle2 className="w-16 h-16 text-emerald-600 mx-auto" />
-              <h3 className="font-serif text-2xl font-bold">Identidad y Permiso Verificados</h3>
-              <p className="text-xs text-[#6B726E]">Tu documentación y carné de conducir fueron revisados y aprobados por la administración.</p>
+            <div className="text-center py-8 space-y-4 font-mono">
+              <CheckCircle2 className="w-16 h-16 text-emerald-400 mx-auto" />
+              <h3 className="font-serif text-2xl font-bold text-white">Identidad y Permiso Homologados</h3>
+              <p className="text-xs text-neutral-400">Tu documentación fue revisada y autorizada por la dirección de GTR Cars.</p>
             </div>
           ) : verificationStatus === 'PENDING' || submitted ? (
-            <div className="text-center py-8 space-y-4">
-              <CheckCircle2 className="w-16 h-16 text-[#16B8AA] mx-auto" />
-              <h3 className="font-serif text-2xl font-bold">Documentación enviada correctamente</h3>
-              <p className="text-xs text-[#6B726E] max-w-md mx-auto">Tus 3 archivos (DNI/NIE y Carné de Conducir) están guardados de forma cifrada. La administración comprobará la coincidencia y vigencia.</p>
+            <div className="text-center py-8 space-y-4 font-mono">
+              <CheckCircle2 className="w-16 h-16 text-[#D4AF37] mx-auto" />
+              <h3 className="font-serif text-2xl font-bold text-white">Documentación enviada a revisión</h3>
+              <p className="text-xs text-neutral-400 max-w-md mx-auto">Tus archivos están custodiados con cifrado AES-256. El equipo de Concierge validará la documentación en menos de 15 minutos.</p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              
-              <div className="p-4 bg-[#F4F9F8] rounded-2xl border border-[#E9E1D2] text-xs text-[#13322E] flex items-start space-x-3">
-                <Lock className="w-5 h-5 text-[#16B8AA] shrink-0 mt-0.5" />
-                <p className="leading-relaxed font-medium">
-                  Tus documentos son encriptados y almacenados en servidores seguros. Nunca serán visibles públicamente para otros usuarios.
+            <form onSubmit={handleSubmit} className="space-y-6 font-mono">
+              <div className="p-4 bg-neutral-900 rounded-2xl border border-white/10 text-xs text-neutral-300 flex items-start space-x-3">
+                <Lock className="w-5 h-5 text-[#D4AF37] shrink-0 mt-0.5" />
+                <p className="leading-relaxed">
+                  Tus documentos son encriptados y almacenados bajo estrictos acuerdos de no divulgación. Nunca son compartidos públicamente.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-2">
-                    Tipo de Documento de Identidad
+                  <label className="block text-xs uppercase tracking-wider text-neutral-400 mb-2">
+                    Tipo de Documento
                   </label>
                   <select
                     value={documentType}
                     onChange={(e) => setDocumentType(e.target.value)}
-                    className="w-full p-3 rounded-xl border border-[#E9E1D2] text-sm font-bold bg-[#F8FAFC]"
+                    className="w-full p-3 rounded-xl border border-white/15 text-sm font-bold bg-neutral-900 text-white focus:border-[#D4AF37] outline-none cursor-pointer"
                   >
                     <option value="DNI_NIE">DNI / NIE (España)</option>
                     <option value="PASSPORT">Pasaporte Internacional</option>
@@ -112,8 +116,8 @@ export default function IdentityVerificationPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-2">
-                    Número de Documento (DNI/NIE/Pasaporte)
+                  <label className="block text-xs uppercase tracking-wider text-neutral-400 mb-2">
+                    Número de Documento
                   </label>
                   <input
                     type="text"
@@ -121,13 +125,13 @@ export default function IdentityVerificationPage() {
                     placeholder="Ej. 12345678Z"
                     value={documentNumber}
                     onChange={(e) => setDocumentNumber(e.target.value)}
-                    className="w-full p-3 rounded-xl border border-[#E9E1D2] text-sm focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+                    className="w-full p-3 rounded-xl border border-white/15 bg-neutral-900 text-white text-sm focus:border-[#D4AF37] outline-none"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">
+                <label className="block text-xs uppercase tracking-wider text-neutral-400 mb-1">
                   Fecha Expiración Permiso de Conducir
                 </label>
                 <input
@@ -135,18 +139,17 @@ export default function IdentityVerificationPage() {
                   required
                   value={licenseExpDate}
                   onChange={(e) => setLicenseExpDate(e.target.value)}
-                  className="w-full p-3 rounded-xl border border-[#E9E1D2] text-sm"
+                  className="w-full p-3 rounded-xl border border-white/15 bg-neutral-900 text-white text-sm focus:border-[#D4AF37] outline-none"
                 />
               </div>
 
               <div className="space-y-3">
-                <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E]">
-                  Adjuntar Fotos de Documentos (JPG, PNG o PDF)
+                <label className="block text-xs uppercase tracking-wider text-neutral-400">
+                  Fotografías de Documentos (JPG, PNG o PDF)
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  
                   {/* ANVERSO DNI */}
-                  <label className={`relative p-5 rounded-2xl border-2 border-dashed cursor-pointer transition-all text-center flex flex-col items-center justify-center ${fileFront ? 'border-[#16B8AA] bg-[#F0FDFA]' : 'border-[#CBD5E1] bg-[#F8FAFC] hover:bg-[#F1F5F9]'}`}>
+                  <label className={`relative p-5 rounded-2xl border-2 border-dashed cursor-pointer transition-all text-center flex flex-col items-center justify-center ${fileFront ? 'border-[#D4AF37] bg-[#D4AF37]/10' : 'border-white/15 bg-neutral-900/60 hover:border-white/30'}`}>
                     <input
                       type="file"
                       accept="image/jpeg,image/png,application/pdf"
@@ -155,21 +158,21 @@ export default function IdentityVerificationPage() {
                     />
                     {fileFront ? (
                       <>
-                        <CheckCircle2 className="w-7 h-7 text-[#16B8AA] mb-1.5" />
-                        <span className="text-xs font-bold text-[#13322E] truncate max-w-[150px]">{fileFront.name}</span>
-                        <span className="text-[10px] text-[#6B726E] mt-0.5">{(fileFront.size / 1024 / 1024).toFixed(2)} MB</span>
+                        <CheckCircle2 className="w-7 h-7 text-[#D4AF37] mb-1.5" />
+                        <span className="text-xs font-bold text-white truncate max-w-[150px]">{fileFront.name}</span>
+                        <span className="text-[10px] text-neutral-400 mt-0.5">{(fileFront.size / 1024 / 1024).toFixed(2)} MB</span>
                       </>
                     ) : (
                       <>
-                        <Upload className="w-7 h-7 text-[#16B8AA] mb-1.5" />
-                        <span className="block text-xs font-bold text-[#13322E]">Anverso DNI/NIE</span>
-                        <span className="block text-[10px] text-[#6B726E] mt-0.5">Foto Anverso</span>
+                        <Upload className="w-7 h-7 text-[#D4AF37] mb-1.5" />
+                        <span className="block text-xs font-bold text-white">Anverso DNI / Pasaporte</span>
+                        <span className="block text-[10px] text-neutral-400 mt-0.5">Foto Anverso</span>
                       </>
                     )}
                   </label>
 
                   {/* REVERSO DNI */}
-                  <label className={`relative p-5 rounded-2xl border-2 border-dashed cursor-pointer transition-all text-center flex flex-col items-center justify-center ${fileBack ? 'border-[#16B8AA] bg-[#F0FDFA]' : 'border-[#CBD5E1] bg-[#F8FAFC] hover:bg-[#F1F5F9]'}`}>
+                  <label className={`relative p-5 rounded-2xl border-2 border-dashed cursor-pointer transition-all text-center flex flex-col items-center justify-center ${fileBack ? 'border-[#D4AF37] bg-[#D4AF37]/10' : 'border-white/15 bg-neutral-900/60 hover:border-white/30'}`}>
                     <input
                       type="file"
                       accept="image/jpeg,image/png,application/pdf"
@@ -178,21 +181,21 @@ export default function IdentityVerificationPage() {
                     />
                     {fileBack ? (
                       <>
-                        <CheckCircle2 className="w-7 h-7 text-[#16B8AA] mb-1.5" />
-                        <span className="text-xs font-bold text-[#13322E] truncate max-w-[150px]">{fileBack.name}</span>
-                        <span className="text-[10px] text-[#6B726E] mt-0.5">{(fileBack.size / 1024 / 1024).toFixed(2)} MB</span>
+                        <CheckCircle2 className="w-7 h-7 text-[#D4AF37] mb-1.5" />
+                        <span className="text-xs font-bold text-white truncate max-w-[150px]">{fileBack.name}</span>
+                        <span className="text-[10px] text-neutral-400 mt-0.5">{(fileBack.size / 1024 / 1024).toFixed(2)} MB</span>
                       </>
                     ) : (
                       <>
-                        <Upload className="w-7 h-7 text-[#16B8AA] mb-1.5" />
-                        <span className="block text-xs font-bold text-[#13322E]">Reverso DNI/NIE</span>
-                        <span className="block text-[10px] text-[#6B726E] mt-0.5">Foto Reverso</span>
+                        <Upload className="w-7 h-7 text-[#D4AF37] mb-1.5" />
+                        <span className="block text-xs font-bold text-white">Reverso Documento</span>
+                        <span className="block text-[10px] text-neutral-400 mt-0.5">Foto Reverso</span>
                       </>
                     )}
                   </label>
 
                   {/* CARNÉ DE CONDUCIR */}
-                  <label className={`relative p-5 rounded-2xl border-2 border-dashed cursor-pointer transition-all text-center flex flex-col items-center justify-center ${fileLicense ? 'border-[#16B8AA] bg-[#F0FDFA]' : 'border-[#CBD5E1] bg-[#F8FAFC] hover:bg-[#F1F5F9]'}`}>
+                  <label className={`relative p-5 rounded-2xl border-2 border-dashed cursor-pointer transition-all text-center flex flex-col items-center justify-center ${fileLicense ? 'border-[#D4AF37] bg-[#D4AF37]/10' : 'border-white/15 bg-neutral-900/60 hover:border-white/30'}`}>
                     <input
                       type="file"
                       accept="image/jpeg,image/png,application/pdf"
@@ -201,39 +204,40 @@ export default function IdentityVerificationPage() {
                     />
                     {fileLicense ? (
                       <>
-                        <CheckCircle2 className="w-7 h-7 text-[#16B8AA] mb-1.5" />
-                        <span className="text-xs font-bold text-[#13322E] truncate max-w-[150px]">{fileLicense.name}</span>
-                        <span className="text-[10px] text-[#6B726E] mt-0.5">{(fileLicense.size / 1024 / 1024).toFixed(2)} MB</span>
+                        <CheckCircle2 className="w-7 h-7 text-[#D4AF37] mb-1.5" />
+                        <span className="text-xs font-bold text-white truncate max-w-[150px]">{fileLicense.name}</span>
+                        <span className="text-[10px] text-neutral-400 mt-0.5">{(fileLicense.size / 1024 / 1024).toFixed(2)} MB</span>
                       </>
                     ) : (
                       <>
-                        <Upload className="w-7 h-7 text-[#16B8AA] mb-1.5" />
-                        <span className="block text-xs font-bold text-[#13322E]">Carné de Conducir</span>
-                        <span className="block text-[10px] text-[#6B726E] mt-0.5">Foto Permiso</span>
+                        <Upload className="w-7 h-7 text-[#D4AF37] mb-1.5" />
+                        <span className="block text-xs font-bold text-white">Permiso de Conducir</span>
+                        <span className="block text-[10px] text-neutral-400 mt-0.5">Foto Permiso</span>
                       </>
                     )}
                   </label>
-
                 </div>
               </div>
 
               {error && (
-                <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-xs font-bold text-red-700">
-                  {error}
+                <div className="p-3 rounded-xl bg-red-950/40 border border-red-500/30 text-xs font-bold text-red-400 flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  <span>{error}</span>
                 </div>
               )}
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 rounded-full bg-[#16B8AA] text-white font-black text-xs uppercase tracking-widest hover:bg-[#0F766E] transition-all shadow-md disabled:bg-slate-300"
+                className="w-full py-4 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all shadow-lg disabled:opacity-40 cursor-pointer"
               >
-                {loading ? 'ENVIANDO DOCUMENTOS...' : 'ENVIAR DOCUMENTOS A VERIFICACIÓN'}
+                {loading ? 'ENVIANDO A VALIDACIÓN...' : 'HOMOLOGAR DOCUMENTACIÓN EN EL VAULT'}
               </button>
             </form>
           )}
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

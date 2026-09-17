@@ -1,6 +1,6 @@
 {
-  "name": "vaneando. — Canarias sobre ruedas",
-  "short_name": "vaneando",
+  "name": "GTR Cars — Alquiler de Deportivos en Gran Canaria y Tenerife",
+  "short_name": "GTR Cars",
   "icons": [
     {
       "src": "/icon-192.png",
@@ -13,13 +13,13 @@
       "type": "image/png"
     },
     {
-      "src": "/vaneando-icon.svg",
+      "src": "/gtcars-logo.svg",
       "sizes": "any",
       "type": "image/svg+xml"
     }
   ],
-  "theme_color": "#13322E",
-  "background_color": "#F7F6F2",
+  "theme_color": "#070707",
+  "background_color": "#070707",
   "display": "standalone",
   "start_url": "/",
   "orientation": "portrait"

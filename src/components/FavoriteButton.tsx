@@ -13,5 +13,15 @@ export default function FavoriteButton({ vehicleId }: { vehicleId: string }) {
     if (response.ok) setSaved(!saved);
     setBusy(false);
   }
-  return <button type="button" onClick={toggle} disabled={busy} aria-label={saved ? 'Quitar de favoritos' : 'Añadir a favoritos'} className="w-11 h-11 rounded-full bg-white/90 backdrop-blur flex items-center justify-center shadow-sm hover:scale-105 transition-transform"><Heart className={`w-5 h-5 ${saved ? 'fill-[#b88a55] text-[#b88a55]' : 'text-[#13322E]'}`} /></button>;
+  return (
+    <button
+      type="button"
+      onClick={toggle}
+      disabled={busy}
+      aria-label={saved ? 'Quitar de favoritos' : 'Añadir a favoritos'}
+      className="w-10 h-10 rounded-xl bg-white/[0.05] backdrop-blur-md border border-white/10 flex items-center justify-center shadow-sm hover:scale-105 hover:border-[#D4AF37]/50 transition-all cursor-pointer"
+    >
+      <Heart className={`w-4 h-4 ${saved ? 'fill-[#D4AF37] text-[#D4AF37]' : 'text-white/70 hover:text-white'}`} />
+    </button>
+  );
 }

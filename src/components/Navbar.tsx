@@ -67,42 +67,6 @@ export default function Navbar() {
     };
   }, [mobileOpen]);
 
-  const handleMobileSwitchRole = async () => {
-    if (!user || switching) return;
-    const targetRole = user.role === 'OWNER' ? 'TRAVELER' : 'OWNER';
-    setSwitching(true);
-
-    try {
-      const res = await fetch('/api/auth/switch-role', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ targetRole }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Error al cambiar de modo');
-
-      setUser(data.user);
-      setRole(data.user.role);
-      setMobileOpen(false);
-
-      window.dispatchEvent(
-        new CustomEvent('role-switched', { detail: { targetRole: data.user.role } })
-      );
-
-      const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
-      if (currentPath === '/cuenta' || currentPath === '/propietario') {
-        window.location.href = targetRole === 'TRAVELER' ? '/cuenta' : '/propietario';
-      } else {
-        router.refresh();
-      }
-    } catch (err: any) {
-      console.error('Error switching role:', err);
-    } finally {
-      setSwitching(false);
-    }
-  };
-
   const handleLogout = async () => {
     await fetch('/api/auth', {
       method: 'POST',
@@ -125,64 +89,82 @@ export default function Navbar() {
 
   return (
     <header className="w-full relative z-40">
-      {/* BARRA SUPERIOR BANNER */}
-      <div className="bg-[#13322E] text-[#f4efe7] text-[10px] sm:text-[11px] font-semibold tracking-wider py-2 px-3 sm:px-4 text-center leading-tight">
-        Dejemos de usar apps de empresas externas, apoyemos el comercio local. Una app de Canarias para Canarias.
+      {/* BARRA SUPERIOR BANNER CON ACCESO DIRECTO DEMO */}
+      <div className="bg-[#050505] text-[#D4AF37] text-[10px] font-mono tracking-[0.15em] uppercase py-2 px-3 sm:px-4 flex items-center justify-between border-b border-white/5">
+        <span className="hidden sm:inline">GTR CARS // ALQUILER DE SUPERDEPORTIVOS E HYPERCARS EN GRAN CANARIA Y TENERIFE</span>
+        <span className="sm:hidden">GTR CARS // HYPERCAR P2P</span>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => openAuth('login')}
+            className="text-[9px] font-bold uppercase text-[#D4AF37] hover:underline flex items-center gap-1.5 cursor-pointer"
+          >
+            <KeyRound className="w-3 h-3 text-[#D4AF37]" />
+            Acceso Demo
+          </button>
+        </div>
       </div>
 
       {/* NAVEGACIÓN PRINCIPAL */}
-      <nav className="bg-white/95 backdrop-blur-md border-b border-[#E9E1D2] px-3 sm:px-8 py-3 sm:py-4 flex items-center justify-between shadow-sm">
-        {/* LOGO */}
-        <Link href="/" className="group shrink-0">
-          <Image
-            src="/vaneando-lockup.svg"
-            width={240}
-            height={60}
-            priority
-            alt="vaneando — Canarias sobre ruedas"
-            className="h-8 sm:h-11 w-auto transition-transform group-hover:scale-[1.02]"
-          />
+      <nav className="bg-[#090909]/95 backdrop-blur-md border-b border-white/10 px-4 sm:px-8 py-3.5 sm:py-4 flex items-center justify-between shadow-2xl">
+        {/* LOGO OFICIAL GTR CARS */}
+        <Link href="/" className="group flex items-center space-x-3">
+          <div className="relative w-9 h-9 rounded-xl overflow-hidden border border-[#D4AF37]/50 shadow-[0_0_20px_rgba(212,175,55,0.35)] group-hover:scale-105 transition-transform bg-black">
+            <img
+              src="/favicon.png"
+              alt="GTR Cars Emblem"
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div>
+            <span className="font-black text-xl tracking-[0.15em] text-white uppercase block leading-none font-sans">
+              GTR CARS<span className="text-[#D4AF37]">.</span>
+            </span>
+            <span className="text-[8px] font-mono tracking-[0.3em] uppercase text-[#D4AF37]/80 block mt-0.5">
+              CANARY HYPERCAR VAULT
+            </span>
+          </div>
         </Link>
 
         {/* ENLACES CENTRALES (DESKTOP) */}
-        <div className="hidden md:flex items-center space-x-8 text-xs font-black uppercase tracking-wider text-[#13322E]">
+        <div className="hidden md:flex items-center space-x-7 text-xs font-mono font-bold uppercase tracking-wider text-white/80">
           {(role === 'TRAVELER' || role === 'ANONYMOUS') && (
-            <Link href="/buscar" className="hover:text-[#16B8AA] transition-colors">
-              Campers
+            <Link href="/buscar" className="hover:text-[#D4AF37] transition-colors">
+              SUPERDEPORTIVOS
+            </Link>
+          )}
+          {role === 'TRAVELER' && (
+            <Link href="/cuenta" className="hover:text-[#D4AF37] transition-colors">
+              MIS RESERVAS
             </Link>
           )}
           {(role === 'TRAVELER' || role === 'ANONYMOUS') && (
-            <Link href="/alquilar-mi-camper" className="rounded-full bg-[#16B8AA] px-4 py-2 text-white hover:bg-[#0F766E] transition-colors">
-              Alquila tu camper
+            <Link href="/publicar-camper" className="rounded-sm bg-[#D4AF37] px-4 py-2 text-black font-black hover:bg-[#F5C542] transition-colors shadow-[0_0_15px_rgba(212,175,55,0.25)]">
+              PUBLICAR MI COCHE
             </Link>
           )}
-          {role !== 'ADMIN' && (
-            <Link href="/guias" className="hover:text-[#16B8AA] transition-colors">
-              Blog & Guías
-            </Link>
-          )}
+          <Link href="/blog" className="hover:text-[#D4AF37] transition-colors">
+            BLOG & RUTAS
+          </Link>
+          <Link href="/seguridad" className="hover:text-[#D4AF37] transition-colors">
+            GARANTÍAS & SEGUROS
+          </Link>
           {role === 'OWNER' && (
-            <Link href="/propietario" className="hover:text-[#16B8AA] transition-colors">
-              Panel de propietario
-            </Link>
+            <>
+              <Link href="/propietario" className="text-[#D4AF37] hover:brightness-110 transition-colors">
+                PANEL PROPIETARIO
+              </Link>
+              <Link href="/publicar-camper" className="rounded-sm bg-[#D4AF37] px-4 py-2 text-black font-black hover:bg-[#F5C542] transition-colors shadow-[0_0_15px_rgba(212,175,55,0.25)]">
+                + AÑADIR SUPERCAR
+              </Link>
+            </>
           )}
           {role === 'ADMIN' && (
-            <Link href="/admin" className="hover:text-[#16B8AA] transition-colors">
-              Administración
+            <Link href="/admin" className="hover:text-[#D4AF37] transition-colors">
+              ADMINISTRACIÓN
             </Link>
           )}
-          {role !== 'ADMIN' && (
-            <Link href="/historias" className="hover:text-[#16B8AA] transition-colors">
-              Historias
-            </Link>
-          )}
-          {role !== 'ADMIN' && (
-            <Link href="/contacto" className="hover:text-[#16B8AA] transition-colors">
-              Contacto
-            </Link>
-          )}
-          <Link href="/colaboradores" className="hover:text-[#16B8AA] transition-colors">
-            Colaboradores
+          <Link href="/contacto" className="hover:text-[#D4AF37] transition-colors">
+            CONSERJERÍA 24/7
           </Link>
         </div>
 
@@ -194,10 +176,10 @@ export default function Navbar() {
               href="/soporte"
               aria-label="Contactar con soporte"
               title="Contactar con soporte"
-              className="flex items-center gap-1.5 rounded-full border border-[#E9E1D2] bg-white px-3 py-2 text-xs font-bold text-[#13322E] hover:border-[#16B8AA]"
+              className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-2 text-xs font-mono font-bold text-white hover:border-[#D4AF37]/50 hover:bg-white/[0.08] transition-all"
             >
-              <LifeBuoy className="h-4 w-4 text-[#16B8AA]" />
-              <span>Soporte</span>
+              <LifeBuoy className="h-4 w-4 text-[#D4AF37]" />
+              <span>Soporte VIP</span>
             </Link>
           )}
           <AuthModal />
@@ -208,42 +190,42 @@ export default function Navbar() {
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Menú principal"
-            className="flex items-center space-x-2 rounded-full border border-[#E9E1D2] bg-[#FAF7F0] px-3.5 py-1.5 text-xs font-bold text-[#13322E] hover:bg-[#E9E1D2] transition-all shadow-sm cursor-pointer"
+            className="flex items-center space-x-2 rounded-full border border-white/15 bg-white/[0.04] px-3.5 py-1.5 text-xs font-mono font-bold text-white hover:bg-white/[0.08] transition-all shadow-sm cursor-pointer"
           >
             {user ? (
               <>
-                <div className="w-6 h-6 rounded-full bg-[#16B8AA] text-white flex items-center justify-center text-[10px] font-black uppercase">
+                <div className="w-6 h-6 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black flex items-center justify-center text-[10px] font-black uppercase">
                   {user.firstName ? user.firstName[0] : 'U'}
                 </div>
-                <span className="font-extrabold max-w-[80px] truncate">{user.firstName}</span>
-                <Menu className="w-4 h-4 text-[#13322E]" />
+                <span className="font-sans font-bold max-w-[80px] truncate">{user.firstName}</span>
+                <Menu className="w-4 h-4 text-white/70" />
               </>
             ) : (
               <>
-                <User className="w-4 h-4 text-[#16B8AA]" />
-                <span className="uppercase text-[11px] tracking-wider font-extrabold">Menú</span>
-                <Menu className="w-4 h-4 text-[#13322E]" />
+                <User className="w-4 h-4 text-[#D4AF37]" />
+                <span className="uppercase text-[11px] tracking-wider font-mono font-bold">Menú</span>
+                <Menu className="w-4 h-4 text-white/70" />
               </>
             )}
           </button>
         </div>
       </nav>
 
-      {/* MENÚ MÓVIL ÚNICO Y COMPLETO (SLIDE-OVER DRAWER) */}
+      {/* MENÚ MÓVIL ÚNICO Y COMPLETO (SLIDE-OVER DRAWER DARK LUXURY) */}
       {mobileOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm md:hidden animate-in fade-in duration-200">
-          <div className="fixed inset-y-0 right-0 w-full max-w-sm rounded-l-[32px] bg-white shadow-2xl flex flex-col z-50 animate-in slide-in-from-right duration-300">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md md:hidden animate-in fade-in duration-200 font-sans">
+          <div className="fixed inset-y-0 right-0 w-full max-w-sm rounded-l-3xl bg-[#070707] border-l border-white/10 shadow-2xl flex flex-col z-50 animate-in slide-in-from-right duration-300 text-white">
             {/* CABECERA DEL MENÚ */}
-            <div className="px-5 py-4 border-b border-[#E9E1D2] flex items-center justify-between bg-[#FAF7F0]">
+            <div className="px-5 py-4 border-b border-white/10 flex items-center justify-between bg-[#0f0f12] font-mono">
               <div className="flex items-center space-x-2">
-                <span className="text-xs font-black uppercase tracking-widest text-[#13322E]">
-                  Menú Vaneando
+                <span className="text-xs font-black uppercase tracking-widest text-[#D4AF37]">
+                  GT CARS // VAULT
                 </span>
               </div>
               <button
                 onClick={() => setMobileOpen(false)}
                 aria-label="Cerrar menú"
-                className="p-2 rounded-full text-slate-500 hover:text-[#13322E] hover:bg-slate-200/60 transition-colors"
+                className="p-2 rounded-full text-white/40 hover:text-white hover:bg-white/10 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -253,86 +235,74 @@ export default function Navbar() {
             <div className="flex-1 overflow-y-auto p-5 space-y-6">
               {/* TARJETA DE USUARIO Y CAMBIO DE MODO (SI ESTÁ LOGUEADO) */}
               {user ? (
-                <div className="rounded-3xl border border-[#E9E1D2] bg-[#FAF7F0] p-4 shadow-sm space-y-3">
+                <div className="rounded-2xl border border-white/10 bg-[#0f0f12] p-4 shadow-xl space-y-3 font-mono">
                   <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-full bg-[#16B8AA] text-white flex items-center justify-center text-sm font-black uppercase shadow-sm shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black flex items-center justify-center text-sm font-black uppercase shadow-sm shrink-0">
                       {user.firstName ? user.firstName[0] : 'U'}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <span className="text-[9px] font-black uppercase tracking-wider text-[#16B8AA] block">
-                        {user.role === 'ADMIN' ? 'Administrador' : user.role === 'OWNER' ? 'Modo Propietario Activo' : 'Modo Viajero Activo'}
+                      <span className="text-[9px] font-bold uppercase tracking-wider text-[#D4AF37] block">
+                        {user.role === 'ADMIN' ? 'Administrador' : user.role === 'OWNER' ? 'Cuenta Propietario' : 'Cuenta Piloto VIP'}
                       </span>
-                      <h4 className="font-bold text-sm text-[#13322E] truncate">
+                      <h4 className="font-bold text-sm text-white truncate font-sans">
                         {user.firstName} {user.lastName}
                       </h4>
-                      <p className="text-[11px] text-[#6B726E] truncate">{user.email}</p>
+                      <p className="text-[11px] text-white/40 truncate">{user.email}</p>
                     </div>
                   </div>
-
-                  {/* BOTÓN PRINCIPAL DE CAMBIO DE MODO EN MÓVIL */}
-                  {user.role !== 'ADMIN' && (
-                    <button
-                      onClick={handleMobileSwitchRole}
-                      disabled={switching}
-                      className="w-full py-2.5 px-3.5 rounded-2xl bg-[#13322E] text-white font-black text-xs uppercase tracking-wider flex items-center justify-between shadow-md hover:bg-[#0F766E] transition-all cursor-pointer disabled:opacity-50"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <RefreshCw className={`w-3.5 h-3.5 text-[#16B8AA] ${switching ? 'animate-spin' : ''}`} />
-                        <span>{user.role === 'OWNER' ? 'Pasar a Modo Viajero' : 'Pasar a Modo Propietario'}</span>
-                      </div>
-                      <span className="text-[10px] text-[#16B8AA] font-extrabold">CAMBIAR</span>
-                    </button>
-                  )}
                 </div>
               ) : (
                 /* ACCESO PARA USUARIOS NO LOGUEADOS */
-                <div className="rounded-3xl border border-[#E9E1D2] bg-[#FAF7F0] p-5 text-center shadow-sm space-y-3">
-                  <p className="text-xs text-[#6B726E] font-medium">
-                    Accede a tu cuenta o regístrate para gestionar tus viajes y campers.
+                <div className="rounded-2xl border border-[#D4AF37]/30 bg-[#0f0f12] p-5 shadow-xl space-y-3 font-mono">
+                  <span className="text-[10px] font-bold uppercase text-[#D4AF37] tracking-wider block">
+                    Acceso Vault & Demostración
+                  </span>
+                  <p className="text-xs text-white/60 font-normal">
+                    Accede a tu cuenta o prueba los paneles con un solo clic:
                   </p>
                   <button
                     onClick={() => openAuth('login')}
-                    className="w-full py-3 rounded-full bg-[#16B8AA] text-white font-black text-xs uppercase tracking-widest hover:bg-[#0F766E] transition-all shadow-md cursor-pointer"
+                    className="w-full py-3 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black font-black text-xs uppercase tracking-widest hover:brightness-110 transition-all shadow-[0_0_15px_rgba(212,175,55,0.2)] cursor-pointer"
                   >
-                    Iniciar Sesión / Registrarse
+                    ACCEDER // IDENTIFICARME
                   </button>
                 </div>
               )}
 
               {/* SECCIÓN MI CUENTA (SI ESTÁ LOGUEADO) */}
               {user && (
-                <div className="space-y-2">
-                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#6B726E] px-2 block">
+                <div className="space-y-2 font-mono">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#D4AF37] px-2 block">
                     Gestión Personal
                   </span>
-                  <div className="grid gap-1 text-xs font-bold text-[#13322E]">
+                  <div className="grid gap-1 text-xs font-bold text-white/80">
                     {user.role !== 'ADMIN' && (
                       <Link
                         onClick={() => setMobileOpen(false)}
                         href="/mensajes"
-                        className="flex items-center space-x-3 rounded-2xl p-3 hover:bg-[#FAF7F0] transition-colors"
+                        className="flex items-center space-x-3 rounded-xl p-3 hover:bg-white/[0.05] transition-colors hover:text-white"
                       >
-                        <MessageSquare className="w-4 h-4 text-[#16B8AA]" />
-                        <span>Mensajes & Chats</span>
+                        <MessageSquare className="w-4 h-4 text-[#D4AF37]" />
+                        <span>Mensajería & Vault</span>
                       </Link>
                     )}
 
                     <Link
                       onClick={() => setMobileOpen(false)}
                       href="/perfil"
-                      className="flex items-center space-x-3 rounded-2xl p-3 hover:bg-[#FAF7F0] transition-colors"
+                      className="flex items-center space-x-3 rounded-xl p-3 hover:bg-white/[0.05] transition-colors hover:text-white"
                     >
-                      <UserCircle className="w-4 h-4 text-[#16B8AA]" />
-                      <span>Mi perfil</span>
+                      <UserCircle className="w-4 h-4 text-[#D4AF37]" />
+                      <span>Mi Perfil</span>
                     </Link>
 
                     {user.role === 'OWNER' && (
                       <Link
                         onClick={() => setMobileOpen(false)}
                         href="/propietario"
-                        className="flex items-center space-x-3 rounded-2xl p-3 bg-teal-50/60 text-[#0F766E] border border-teal-100 transition-colors"
+                        className="flex items-center space-x-3 rounded-xl p-3 bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/20 transition-colors"
                       >
-                        <Truck className="w-4 h-4 text-[#16B8AA]" />
+                        <Truck className="w-4 h-4 text-[#D4AF37]" />
                         <span>Panel de Propietario</span>
                       </Link>
                     )}
@@ -341,10 +311,10 @@ export default function Navbar() {
                       <Link
                         onClick={() => setMobileOpen(false)}
                         href="/cuenta"
-                        className="flex items-center space-x-3 rounded-2xl p-3 bg-teal-50/60 text-[#0F766E] border border-teal-100 transition-colors"
+                        className="flex items-center space-x-3 rounded-xl p-3 bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/20 transition-colors"
                       >
-                        <Compass className="w-4 h-4 text-[#16B8AA]" />
-                        <span>Mis reservas y viajes</span>
+                        <Compass className="w-4 h-4 text-[#D4AF37]" />
+                        <span>Mis Reservas Supercars</span>
                       </Link>
                     )}
 
@@ -352,9 +322,9 @@ export default function Navbar() {
                       <Link
                         onClick={() => setMobileOpen(false)}
                         href="/admin"
-                        className="flex items-center space-x-3 rounded-2xl p-3 bg-amber-50 text-amber-900 border border-amber-200 transition-colors"
+                        className="flex items-center space-x-3 rounded-xl p-3 bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/20 transition-colors"
                       >
-                        <KeyRound className="w-4 h-4 text-[#D97706]" />
+                        <KeyRound className="w-4 h-4 text-[#D4AF37]" />
                         <span>Panel de Administración</span>
                       </Link>
                     )}
@@ -363,10 +333,10 @@ export default function Navbar() {
                       <Link
                         onClick={() => setMobileOpen(false)}
                         href="/verificacion"
-                        className="flex items-center space-x-3 rounded-2xl p-3 hover:bg-[#FAF7F0] transition-colors"
+                        className="flex items-center space-x-3 rounded-xl p-3 hover:bg-white/[0.05] transition-colors hover:text-white"
                       >
-                        <ShieldCheck className="w-4 h-4 text-[#16B8AA]" />
-                        <span>Verificación de Licencia</span>
+                        <ShieldCheck className="w-4 h-4 text-[#D4AF37]" />
+                        <span>Verificación de Licencia VIP</span>
                       </Link>
                     )}
                   </div>
@@ -374,72 +344,45 @@ export default function Navbar() {
               )}
 
               {/* SECCIÓN NAVEGACIÓN GENERAL */}
-              <div className="space-y-2">
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#6B726E] px-2 block">
-                  Explorar Vaneando
+              <div className="space-y-2 font-mono">
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#D4AF37] px-2 block">
+                  Explorar Plataforma
                 </span>
-                <div className="grid gap-1 text-xs font-extrabold text-[#13322E]">
+                <div className="grid gap-1 text-xs font-bold text-white/80">
                   <Link
                     onClick={() => setMobileOpen(false)}
                     href="/buscar"
-                    className="flex items-center space-x-3 rounded-2xl p-3 hover:bg-[#FAF7F0] transition-colors"
+                    className="flex items-center space-x-3 rounded-xl p-3 hover:bg-white/[0.05] transition-colors hover:text-white"
                   >
-                    <Search className="w-4 h-4 text-[#16B8AA]" />
-                    <span>Explorar Campers</span>
-                  </Link>
-
-                  <Link
-                    onClick={() => setMobileOpen(false)}
-                    href="/guias"
-                    className="flex items-center space-x-3 rounded-2xl p-3 hover:bg-[#FAF7F0] transition-colors"
-                  >
-                    <BookOpen className="w-4 h-4 text-[#16B8AA]" />
-                    <span>Blog & Guías de Canarias</span>
+                    <Search className="w-4 h-4 text-[#D4AF37]" />
+                    <span>Explorar Vault</span>
                   </Link>
 
                   <Link
                     onClick={() => setMobileOpen(false)}
                     href="/seguridad"
-                    className="flex items-center space-x-3 rounded-2xl p-3 hover:bg-[#FAF7F0] transition-colors"
+                    className="flex items-center space-x-3 rounded-xl p-3 hover:bg-white/[0.05] transition-colors hover:text-white"
                   >
-                    <ShieldCheck className="w-4 h-4 text-[#16B8AA]" />
-                    <span>Seguros y Garantía</span>
-                  </Link>
-
-                  <Link
-                    onClick={() => setMobileOpen(false)}
-                    href="/historias"
-                    className="flex items-center space-x-3 rounded-2xl p-3 hover:bg-[#FAF7F0] transition-colors"
-                  >
-                    <Compass className="w-4 h-4 text-[#16B8AA]" />
-                    <span>Historias de Éxito</span>
+                    <ShieldCheck className="w-4 h-4 text-[#D4AF37]" />
+                    <span>Protocolo de Garantía & Escrow</span>
                   </Link>
 
                   <Link
                     onClick={() => setMobileOpen(false)}
                     href="/sobre-nosotros"
-                    className="flex items-center space-x-3 rounded-2xl p-3 hover:bg-[#FAF7F0] transition-colors"
+                    className="flex items-center space-x-3 rounded-xl p-3 hover:bg-white/[0.05] transition-colors hover:text-white"
                   >
-                    <User className="w-4 h-4 text-[#16B8AA]" />
-                    <span>Sobre Nosotros</span>
-                  </Link>
-
-                  <Link
-                    onClick={() => setMobileOpen(false)}
-                    href="/colaboradores"
-                    className="flex items-center space-x-3 rounded-2xl p-3 hover:bg-[#FAF7F0] transition-colors"
-                  >
-                    <HeartHandshake className="w-4 h-4 text-[#16B8AA]" />
-                    <span>Colaboradores locales</span>
+                    <User className="w-4 h-4 text-[#D4AF37]" />
+                    <span>Sobre GT Cars</span>
                   </Link>
 
                   <Link
                     onClick={() => setMobileOpen(false)}
                     href="/contacto"
-                    className="flex items-center space-x-3 rounded-2xl p-3 hover:bg-[#FAF7F0] transition-colors"
+                    className="flex items-center space-x-3 rounded-xl p-3 hover:bg-white/[0.05] transition-colors hover:text-white"
                   >
-                    <Mail className="w-4 h-4 text-[#16B8AA]" />
-                    <span>Contacto y Ayuda</span>
+                    <Mail className="w-4 h-4 text-[#D4AF37]" />
+                    <span>VIP Concierge 24/7</span>
                   </Link>
                 </div>
               </div>
@@ -447,10 +390,10 @@ export default function Navbar() {
 
             {/* PIE DEL MENÚ: CERRAR SESIÓN */}
             {user && (
-              <div className="p-4 border-t border-[#E9E1D2] bg-white">
+              <div className="p-4 border-t border-white/10 bg-[#0f0f12]">
                 <button
                   onClick={handleLogout}
-                  className="w-full flex items-center justify-center space-x-2 p-3 rounded-2xl bg-red-50 text-red-600 hover:bg-red-100 transition-colors font-bold text-xs cursor-pointer"
+                  className="w-full flex items-center justify-center space-x-2 p-3 rounded-xl bg-red-950/40 text-red-400 hover:bg-red-950/70 transition-colors font-mono font-bold text-xs cursor-pointer"
                 >
                   <LogOut className="w-4 h-4" />
                   <span>Cerrar Sesión</span>

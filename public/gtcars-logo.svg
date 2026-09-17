@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" fill="none">
+  <defs>
+    <linearGradient id="gtGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF2B2"/>
+      <stop offset="25%" stop-color="#D4AF37"/>
+      <stop offset="60%" stop-color="#AA7C11"/>
+      <stop offset="100%" stop-color="#E5C158"/>
+    </linearGradient>
+    <linearGradient id="gtDarkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1A1A1F"/>
+      <stop offset="100%" stop-color="#08080A"/>
+    </linearGradient>
+  </defs>
+
+  <!-- SHIELD EMBLEM -->
+  <g transform="translate(10, 8)">
+    <!-- Outer Shield Frame -->
+    <polygon points="42,0 84,24 84,62 42,86 0,62 0,24" fill="url(#gtDarkGrad)" stroke="url(#gtGoldGrad)" stroke-width="3" />
+    <!-- Inner Gold Ridge -->
+    <polygon points="42,8 74,27 74,56 42,75 10,56 10,27" fill="none" stroke="url(#gtGoldGrad)" stroke-width="1.5" opacity="0.6" />
+    <!-- GT Monogram inside Shield -->
+    <path d="M22,34 L40,34 L40,41 L29,41 L29,51 L39,51 L39,45 L34,45 L34,40 L44,40 L44,56 L22,56 Z" fill="url(#gtGoldGrad)" />
+    <path d="M46,34 L68,34 L68,40 L59,40 L59,56 L53,56 L53,40 L46,40 Z" fill="url(#gtGoldGrad)" />
+  </g>
+
+  <!-- BRAND TYPOGRAPHY -->
+  <text x="110" y="52" font-family="system-ui, -apple-system, sans-serif" font-size="34" font-weight="900" letter-spacing="4" fill="url(#gtGoldGrad)">
+    GT CARS<tspan fill="#FFFFFF">.</tspan>
+  </text>
+  
+  <!-- Subtitle Tagline -->
+  <text x="112" y="74" font-family="monospace" font-size="10" font-weight="700" letter-spacing="4.5" fill="#A0A0A5">
+    P2P HYPERCAR VAULT
+  </text>
+</svg>

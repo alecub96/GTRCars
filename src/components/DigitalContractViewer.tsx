@@ -804,7 +804,7 @@ export default function DigitalContractViewer({
                 El presente contrato se celebra de forma directa y exclusiva entre las partes particulares abajo firmantes.
               </p>
               <div className="p-3 bg-amber-50/80 border border-amber-200/80 rounded-xl text-[10px] text-amber-900 font-medium text-center">
-                ️ <strong>Aviso legal:</strong> Vaneando actúa únicamente como intermediario tecnológico para facilitar la puesta en contacto y la firma digital. Vaneando no es propietario del vehículo, no es parte del contrato de alquiler ni asume responsabilidades derivadas del uso, seguro o fianza acordada entre los particulares.
+                <strong>Aviso legal:</strong> GTR Cars actúa únicamente como intermediario tecnológico para facilitar la puesta en contacto y la firma digital. GTR Cars no es propietario del vehículo, no es parte del contrato de alquiler ni asume responsabilidades derivadas del uso, seguro o fianza acordada entre las partes.
               </div>
             </div>
 

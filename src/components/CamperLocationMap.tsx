@@ -406,16 +406,16 @@ export default function CamperLocationMap({
   const islandPois = CANARY_POIS.filter((p) => p.island.toLowerCase() === island.toLowerCase());
 
   return (
-    <div className="space-y-4 pt-6 border-t border-[#E9E1D2]">
-      {/* CABECERA CON UBICACIÓN CLARA */}
+    <div className="space-y-4 pt-6 border-t border-white/10 font-mono">
+      {/* CABECERA CON UBICACIÓN */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h3 className="font-serif text-2xl font-bold text-[#13322E] flex items-center space-x-2">
-            <MapPin className="w-6 h-6 text-[#16B8AA]" />
-            <span>Zona de recogida y pernocta</span>
+          <h3 className="text-xl font-bold uppercase tracking-wider text-white flex items-center space-x-2">
+            <span className="text-[#D4AF37]">05 //</span>
+            <span>Área de Entrega & Rutas ({island})</span>
           </h3>
-          <p className="text-xs text-[#6B726E] font-medium mt-0.5">
-            Ubicación aproximada en <strong>{municipality} ({island})</strong> por motivos de privacidad.
+          <p className="text-xs text-white/50 mt-1 font-sans">
+            Ubicación aproximada en <strong>{municipality} ({island})</strong> por protocolo de privacidad y custodia.
           </p>
         </div>
 
@@ -424,79 +424,79 @@ export default function CamperLocationMap({
           <button
             type="button"
             onClick={recenterMap}
-            className="px-3 py-1.5 rounded-xl bg-white border border-[#E9E1D2] text-xs font-bold text-[#13322E] shadow-sm hover:bg-[#FAF7F0] flex items-center gap-1.5 cursor-pointer"
+            className="px-3.5 py-2 rounded-xl bg-white/[0.04] border border-white/10 text-xs font-bold uppercase tracking-wider text-white hover:bg-white/[0.08] hover:border-[#D4AF37]/50 flex items-center gap-1.5 cursor-pointer transition-all"
           >
-            <Navigation className="w-3.5 h-3.5 text-[#16B8AA]" />
-            <span>Centrar en la camper</span>
+            <Navigation className="w-3.5 h-3.5 text-[#D4AF37]" />
+            <span>Centrar Vehículo</span>
           </button>
 
           <button
             type="button"
             onClick={() => setMapType(mapType === 'streets' ? 'satellite' : 'streets')}
-            className="p-1.5 rounded-xl bg-white border border-[#E9E1D2] text-[#13322E] shadow-sm hover:bg-[#FAF7F0] cursor-pointer"
-            title="Cambiar a Satélite / Calles"
+            className="p-2 rounded-xl bg-white/[0.04] border border-white/10 text-white hover:bg-white/[0.08] hover:border-[#D4AF37]/50 cursor-pointer transition-all"
+            title="Cambiar Satélite / Calles"
           >
-            <Layers className="w-4 h-4 text-[#16B8AA]" />
+            <Layers className="w-4 h-4 text-[#D4AF37]" />
           </button>
         </div>
       </div>
 
-      {/* AVISO DE PRIVACIDAD Y ENTREGA LIMPIO */}
-      <div className="p-3.5 bg-[#FAF7F0] rounded-2xl border border-[#E9E1D2] flex items-start space-x-3 text-xs text-[#13322E]">
-        <Info className="w-4 h-4 text-[#16B8AA] shrink-0 mt-0.5" />
+      {/* AVISO DE PROTOCOLO DE ENTREGA */}
+      <div className="p-4 bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/10 flex items-start space-x-3 text-xs text-white/70 font-sans">
+        <Info className="w-4 h-4 text-[#D4AF37] shrink-0 mt-0.5" />
         <p className="leading-relaxed">
-          <strong>Punto de encuentro:</strong> Se recoge habitualmente en <strong>{municipality}</strong> ({addressApprox || 'zona centro o aeropuerto previa coordinación'}). La dirección exacta o entrega directa en el aeropuerto se facilita al confirmar la reserva con el propietario.
+          <strong className="text-white font-mono uppercase tracking-wider">Protocolo VIP de Entrega:</strong> El vehículo se entrega habitualmente en <strong>{municipality}</strong> ({addressApprox || 'Terminal Ejecutiva / Aeropuerto previa coordinación'}). La geolocalización exacta y telemetría en vivo se activan al confirmar la reserva.
         </p>
       </div>
 
-      {/* MAPA INTERACTIVO REAL */}
-      <div className="relative rounded-3xl overflow-hidden border border-[#E9E1D2] bg-[#E5E3DF] h-[400px] shadow-md">
+      {/* MAPA INTERACTIVO */}
+      <div className="relative rounded-3xl overflow-hidden border border-white/10 bg-[#121216] h-[400px] shadow-2xl">
         <div ref={mapContainerRef} className="absolute inset-0 w-full h-full z-0" />
 
         {/* CONTROLES DE ZOOM */}
-        <div className="absolute right-4 bottom-4 z-20 flex flex-col gap-1.5">
+        <div className="absolute right-4 bottom-4 z-20 flex flex-col gap-1.5 font-mono">
           <button
             type="button"
             onClick={() => handleZoom(1)}
-            className="w-9 h-9 rounded-xl bg-white/95 backdrop-blur-md border border-[#E9E1D2] text-[#13322E] shadow-lg flex items-center justify-center hover:bg-white cursor-pointer"
+            className="w-9 h-9 rounded-xl bg-[#0f0f12]/90 backdrop-blur-md border border-white/15 text-white shadow-lg flex items-center justify-center hover:bg-white/20 cursor-pointer transition-all"
           >
             <ZoomIn className="w-4 h-4" />
           </button>
           <button
             type="button"
             onClick={() => handleZoom(-1)}
-            className="w-9 h-9 rounded-xl bg-white/95 backdrop-blur-md border border-[#E9E1D2] text-[#13322E] shadow-lg flex items-center justify-center hover:bg-white cursor-pointer"
+            className="w-9 h-9 rounded-xl bg-[#0f0f12]/90 backdrop-blur-md border border-white/15 text-white shadow-lg flex items-center justify-center hover:bg-white/20 cursor-pointer transition-all"
           >
             <ZoomOut className="w-4 h-4" />
           </button>
         </div>
 
-        {/* TARJETA INFORMATIVA DE POI SELECCIONADO EN EL MAPA */}
+        {/* TARJETA INFORMATIVA */}
         {selectedPoi && (
-          <div className="absolute bottom-4 left-4 right-14 z-30 max-w-sm bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-[#16B8AA] shadow-2xl space-y-1.5 animate-in slide-in-from-bottom-2">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-black uppercase tracking-wider text-[#16B8AA]">
-                {selectedPoi.category === 'acampada' ? 'Zona de Acampada' : 'Playa de Pernocta'}
+          <div className="absolute bottom-4 left-4 right-14 z-30 max-w-sm bg-[#0f0f12]/95 backdrop-blur-xl p-4 rounded-2xl border border-[#D4AF37]/50 shadow-2xl space-y-1.5 animate-in slide-in-from-bottom-2 text-white font-sans">
+            <div className="flex items-center justify-between font-mono">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-[#D4AF37]">
+                Punto de Interés & Ruta
               </span>
               <button
                 type="button"
                 onClick={() => setSelectedPoi(null)}
-                className="text-xs font-bold text-slate-400 hover:text-slate-700 cursor-pointer"
+                className="text-xs font-bold text-white/40 hover:text-white cursor-pointer"
               >
                 Cerrar
               </button>
             </div>
-            <h4 className="font-bold text-sm text-[#13322E]">{selectedPoi.name}</h4>
-            <p className="text-xs text-[#6B726E] leading-relaxed">{selectedPoi.description}</p>
+            <h4 className="font-bold text-sm text-white">{selectedPoi.name}</h4>
+            <p className="text-xs text-white/60 leading-relaxed font-light">{selectedPoi.description}</p>
           </div>
         )}
       </div>
 
-      {/* LUGARES DE INTERÉS CAMPER RECOMENDADOS */}
+      {/* RUTAS Y SPOTS RECOMENDADOS */}
       {islandPois.length > 0 && (
-        <div className="space-y-3 pt-2">
-          <h4 className="text-xs font-black uppercase tracking-wider text-[#6B726E]">
-            Lugares de interés camper cercanos en {island}
+        <div className="space-y-3 pt-2 font-mono">
+          <h4 className="text-xs font-bold uppercase tracking-widest text-white/50">
+            Rutas panorámicas y tramos recomendados en {island}
           </h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {islandPois.map((poi) => (
@@ -508,15 +508,15 @@ export default function CamperLocationMap({
                     mapInstanceRef.current.flyTo([poi.lat, poi.lng], 13, { duration: 0.8 });
                   }
                 }}
-                className="p-3.5 bg-white rounded-2xl border border-[#E9E1D2] hover:border-[#16B8AA] transition-all cursor-pointer shadow-sm hover:shadow group"
+                className="p-4 bg-white/[0.02] rounded-2xl border border-white/10 hover:border-[#D4AF37]/50 hover:bg-white/[0.05] transition-all cursor-pointer shadow-sm group"
               >
-                <div className="flex items-center space-x-1.5 text-[10px] font-black uppercase text-[#16B8AA] mb-1">
-                  <span>{poi.category === 'acampada' ? 'Acampada' : 'Playa'}</span>
+                <div className="flex items-center space-x-1.5 text-[10px] font-bold uppercase tracking-widest text-[#D4AF37] mb-1">
+                  <span>Ruta Recomendada</span>
                 </div>
-                <h5 className="font-bold text-sm text-[#13322E] group-hover:text-[#16B8AA] transition-colors line-clamp-1">
+                <h5 className="font-bold text-sm text-white group-hover:text-[#D4AF37] transition-colors line-clamp-1 font-sans">
                   {poi.name}
                 </h5>
-                <p className="text-xs text-[#6B726E] line-clamp-2 mt-0.5 leading-relaxed">
+                <p className="text-xs text-white/50 line-clamp-2 mt-1 leading-relaxed font-sans font-light">
                   {poi.description}
                 </p>
               </div>

@@ -65,18 +65,18 @@ export default function ContactOwnerButton({
 
   if (variant === 'card') {
     return (
-      <div className="w-full">
+      <div className="w-full font-mono">
         <button
           type="button"
           onClick={handleClick}
           disabled={loading}
-          className={`w-full py-3 px-4 rounded-2xl border border-[#16B8AA]/40 bg-[#F4F9F8] hover:bg-[#16B8AA] hover:text-white text-[#13322E] font-bold text-xs flex items-center justify-center space-x-2 transition-all shadow-xs group cursor-pointer ${className}`}
+          className={`w-full py-3.5 px-4 rounded-xl border border-white/10 bg-white/[0.04] hover:bg-[#D4AF37]/20 hover:border-[#D4AF37]/50 text-white font-bold text-xs flex items-center justify-center space-x-2 transition-all shadow-xs group cursor-pointer ${className}`}
         >
-          <MessageSquare className="w-4 h-4 text-[#16B8AA] group-hover:text-white transition-colors" />
-          <span>Contactar a {ownerName}</span>
+          <MessageSquare className="w-4 h-4 text-[#D4AF37] transition-colors" />
+          <span className="uppercase tracking-wider">Contactar a {ownerName}</span>
         </button>
         {notice && (
-          <p className="mt-2 text-[11px] font-semibold text-amber-800 bg-amber-50 p-2 rounded-xl border border-amber-200 text-center animate-fade-in">
+          <p className="mt-2 text-[11px] font-semibold text-amber-300 bg-amber-950/40 p-2 rounded-xl border border-amber-500/30 text-center animate-fade-in">
             {notice}
           </p>
         )}
@@ -86,18 +86,18 @@ export default function ContactOwnerButton({
 
   if (variant === 'outline') {
     return (
-      <div>
+      <div className="font-mono">
         <button
           type="button"
           onClick={handleClick}
           disabled={loading}
-          className={`inline-flex items-center space-x-2 py-2 px-3.5 rounded-full border border-[#16B8AA] bg-white text-[#16B8AA] hover:bg-[#16B8AA] hover:text-white font-bold text-xs transition-all shadow-xs cursor-pointer ${className}`}
+          className={`inline-flex items-center space-x-2 py-2.5 px-4 rounded-xl border border-white/15 bg-white/[0.03] text-white/80 hover:text-white hover:border-[#D4AF37] hover:bg-[#D4AF37]/10 font-bold text-xs uppercase tracking-wider transition-all shadow-xs cursor-pointer ${className}`}
         >
-          <MessageSquare className="w-3.5 h-3.5" />
-          <span>Preguntar al propietario</span>
+          <MessageSquare className="w-3.5 h-3.5 text-[#D4AF37]" />
+          <span>Consultar al Propietario</span>
         </button>
         {notice && (
-          <p className="mt-2 text-[11px] font-semibold text-amber-800 bg-amber-50 p-2 rounded-xl border border-amber-200 text-center">
+          <p className="mt-2 text-[11px] font-semibold text-amber-300 bg-amber-950/40 p-2 rounded-xl border border-amber-500/30 text-center">
             {notice}
           </p>
         )}
@@ -106,18 +106,18 @@ export default function ContactOwnerButton({
   }
 
   return (
-    <div>
+    <div className="font-mono">
       <button
         type="button"
         onClick={handleClick}
         disabled={loading}
-        className={`w-full py-3.5 px-4 rounded-full bg-[#13322E] hover:bg-[#16B8AA] text-white font-black text-xs uppercase tracking-wider flex items-center justify-center space-x-2 transition-all shadow-md active:scale-98 cursor-pointer ${className}`}
+        className={`inline-flex items-center space-x-2 py-3 px-5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black font-bold text-xs uppercase tracking-wider hover:brightness-110 transition-all shadow-md active:scale-95 cursor-pointer ${className}`}
       >
-        <MessageSquare className="w-4 h-4 text-[#16B8AA] group-hover:text-white" />
-        <span>Enviar mensaje a {ownerName}</span>
+        <MessageSquare className="w-4 h-4" />
+        <span>Enviar Mensaje</span>
       </button>
       {notice && (
-        <p className="mt-2 text-[11px] font-semibold text-amber-800 bg-amber-50 p-2 rounded-xl border border-amber-200 text-center">
+        <p className="mt-2 text-[11px] font-semibold text-amber-300 bg-amber-950/40 p-2 rounded-xl border border-amber-500/30 text-center">
           {notice}
         </p>
       )}

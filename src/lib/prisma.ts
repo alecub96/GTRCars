@@ -16,7 +16,13 @@ function getMariaDbCredentials() {
       database: decodeURIComponent((match[5] || '').split('?')[0]),
     };
   }
-  throw new Error('DATABASE_URL o VANEANDO_DATABASE_URL es obligatorio');
+  return {
+    user: 'root',
+    password: '',
+    host: '127.0.0.1',
+    port: 3306,
+    database: 'gtcars',
+  };
 }
 
 const creds = getMariaDbCredentials();

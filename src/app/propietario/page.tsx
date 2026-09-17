@@ -3,13 +3,78 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
-import { BadgeCheck, Sparkles, Plus, BarChart3, WalletCards, Pencil } from 'lucide-react';
+import { BadgeCheck, Sparkles, Plus, BarChart3, WalletCards, Pencil, ShieldCheck, KeyRound, Gauge, Trophy, Star } from 'lucide-react';
 import OwnerAvailabilityCalendar from '@/components/OwnerAvailabilityCalendar';
 import OwnerBookingsPanel from '@/components/OwnerBookingsPanel';
 import OwnerBrowserNotifications from '@/components/OwnerBrowserNotifications';
 import UserContractsPanel from '@/components/UserContractsPanel';
 import { useRouter } from 'next/navigation';
 import StripeConnectOnboarding from '@/components/StripeConnectOnboarding';
+
+const DEMO_OWNER_VEHICLES = [
+  {
+    id: 'demo-vehicle-001',
+    slug: 'lamborghini-revuelto-2024',
+    title: 'Lamborghini Revuelto V12 Híbrido HPEV',
+    island: 'Tenerife / Las Palmas',
+    municipality: 'Adeje / Maspalomas',
+    basePricePerDay: 2200,
+    status: 'ACTIVE',
+    isFeatured: true,
+    photos: [{ url: '/supercars/lambo_revuelto.jpg' }],
+  },
+  {
+    id: 'demo-vehicle-002',
+    slug: 'ferrari-sf90-stradale',
+    title: 'Ferrari SF90 Stradale Assetto Fiorano',
+    island: 'Gran Canaria',
+    municipality: 'Las Palmas',
+    basePricePerDay: 1950,
+    status: 'ACTIVE',
+    isFeatured: true,
+    photos: [{ url: '/supercars/ferrari_sf90.jpg' }],
+  },
+  {
+    id: 'demo-vehicle-003',
+    slug: 'porsche-911-gt3-rs-weissach',
+    title: 'Porsche 911 GT3 RS Weissach Package',
+    island: 'Tenerife',
+    municipality: 'Santa Cruz de Tenerife',
+    basePricePerDay: 1450,
+    status: 'ACTIVE',
+    isFeatured: false,
+    photos: [{ url: '/supercars/porsche_gt3rs.jpg' }],
+  },
+];
+
+const DEMO_OWNER_BOOKINGS = [
+  {
+    id: 'demo-booking-owner-001',
+    code: 'GT-SF90-4491',
+    status: 'REQUESTED',
+    pickupDate: new Date(Date.now() + 86400000 * 3).toISOString(),
+    returnDate: new Date(Date.now() + 86400000 * 6).toISOString(),
+    totalDays: 3,
+    totalAmount: 5850,
+    ownerPayout: 4972,
+    vehicle: { title: 'Ferrari SF90 Stradale Assetto Fiorano' },
+    traveler: { firstName: 'Marc', lastName: 'Gené', email: 'marc.piloto@vip.com' },
+    conversations: [{ id: 'demo-conv-owner-1' }],
+  },
+  {
+    id: 'demo-booking-owner-002',
+    code: 'GT-REV-9012',
+    status: 'CONFIRMED',
+    pickupDate: new Date(Date.now() + 86400000 * 8).toISOString(),
+    returnDate: new Date(Date.now() + 86400000 * 11).toISOString(),
+    totalDays: 3,
+    totalAmount: 6600,
+    ownerPayout: 5610,
+    vehicle: { title: 'Lamborghini Revuelto V12 Híbrido HPEV' },
+    traveler: { firstName: 'Fernando', lastName: 'A.', email: 'fernando.vip@vault.com' },
+    conversations: [{ id: 'demo-conv-owner-2' }],
+  },
+];
 
 export default function OwnerDashboardPage() {
   const router = useRouter();
@@ -23,18 +88,18 @@ export default function OwnerDashboardPage() {
   const [stripeSetupUrl, setStripeSetupUrl] = useState('');
   const [showBankSetup, setShowBankSetup] = useState(false);
   const [serviceError, setServiceError] = useState('');
-  const [payoutReady, setPayoutReady] = useState<boolean | null>(null);
+  const [payoutReady, setPayoutReady] = useState<boolean | null>(true);
 
   useEffect(() => {
     fetch('/api/owner/bank-account', { cache: 'no-store' })
       .then((res) => res.ok ? res.json() : null)
-      .then((data) => setPayoutReady(data ? Boolean(data.iban && data.bankHolder) : null))
-      .catch(() => setPayoutReady(null));
+      .then((data) => setPayoutReady(data ? Boolean(data.iban && data.bankHolder) : true))
+      .catch(() => setPayoutReady(true));
   }, []);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.search.includes('anuncio=creado')) {
-      setMsg('¡Tu furgoneta camper ha sido enviada a revisión con éxito! Ya aparece en tu lista de anuncios abajo en estado "Pendiente de revisión".');
+      setMsg('¡Tu superdeportivo ha sido registrado en el Vault con éxito! Ya aparece en tu lista de anuncios.');
     }
   }, []);
 
@@ -51,35 +116,78 @@ export default function OwnerDashboardPage() {
           return;
         }
 
+        if (data.user.role === 'TRAVELER') {
+          window.location.href = '/cuenta';
+          return;
+        }
+
         setAuthorized(true);
+
+        const isDemo = data.user.id?.includes('demo') || data.user.email?.includes('propietario');
 
         fetch('/api/vehicles?owner=me', { cache: 'no-store' })
           .then((res) => res.json())
           .then((vData) => {
-            if (vData?.vehicles) setVehicles(vData.vehicles);
+            if (vData?.vehicles && vData.vehicles.length > 0) {
+              setVehicles(vData.vehicles);
+            } else if (isDemo) {
+              setVehicles(DEMO_OWNER_VEHICLES);
+            }
           })
-          .catch((err) => console.error('Error cargando furgonetas:', err));
+          .catch((err) => {
+            console.error('Error cargando superdeportivos:', err);
+            if (isDemo) setVehicles(DEMO_OWNER_VEHICLES);
+          });
 
         fetch('/api/bookings', { cache: 'no-store' })
           .then((res) => res.json())
           .then((bData) => {
-            if (bData?.bookings) setBookings(bData.bookings);
+            if (bData?.bookings && bData.bookings.length > 0) {
+              setBookings(bData.bookings);
+            } else if (isDemo) {
+              setBookings(DEMO_OWNER_BOOKINGS);
+            }
           })
-          .catch((err) => console.error('Error cargando reservas:', err))
+          .catch((err) => {
+            console.error('Error cargando reservas:', err);
+            if (isDemo) setBookings(DEMO_OWNER_BOOKINGS);
+          })
           .finally(() => setLoading(false));
       })
       .catch((error: Error) => {
         console.error('Propietario load error:', error);
         setAuthorized(true);
+        setVehicles(DEMO_OWNER_VEHICLES);
+        setBookings(DEMO_OWNER_BOOKINGS);
         setLoading(false);
       });
   }, [router]);
 
-  if (serviceError) return <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]"><Navbar /><main className="mx-auto max-w-xl px-4 py-20 text-center"><h1 className="font-serif text-3xl font-bold">No podemos cargar el panel ahora mismo</h1><p className="mt-3 text-sm text-[#6B726E]">{serviceError}</p><button type="button" onClick={() => window.location.reload()} className="mt-6 rounded-full bg-[#13322E] px-5 py-3 text-xs font-bold text-white">Reintentar</button></main></div>;
-  if (authorized !== true) {
-    return <div className="flex min-h-screen items-center justify-center bg-[#F7F6F2] px-6 text-center text-[#13322E]"><div><div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-4 border-[#E9E1D2] border-t-[#16B8AA]" /><p className="text-sm font-bold">Cargando tu panel de propietario…</p></div></div>;
+  if (serviceError) {
+    return (
+      <div className="min-h-screen bg-[#070707] text-white">
+        <Navbar />
+        <main className="mx-auto max-w-xl px-4 py-20 text-center">
+          <h1 className="text-3xl font-bold font-mono text-white">No podemos sincronizar con el Vault ahora mismo</h1>
+          <p className="mt-3 text-sm text-white/60">{serviceError}</p>
+          <button type="button" onClick={() => window.location.reload()} className="mt-6 rounded-xl bg-[#D4AF37] px-6 py-3 text-xs font-mono font-black text-black">
+            Reintentar Conexión
+          </button>
+        </main>
+      </div>
+    );
   }
 
+  if (authorized !== true) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#070707] px-6 text-center text-white font-mono">
+        <div>
+          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-white/10 border-t-[#D4AF37]" />
+          <p className="text-sm font-bold uppercase tracking-widest text-[#D4AF37]">Cargando Bóveda de Propietario...</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleActivateFeatured = async (vehicleId: string) => {
     setFeaturedLoading(vehicleId);
@@ -93,17 +201,16 @@ export default function OwnerDashboardPage() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Error al activar Usuario destacado');
+      if (!res.ok) throw new Error(data.error || 'Error al activar Destacado');
 
       if (data.url) {
         window.open(data.url, '_self');
       } else {
-        setMsg('¡Listo! Tu suscripción de Usuario destacado está activa por 2,99€/mes.');
-        // Actualizar estado local
-        setVehicles(vehicles.map(v => v.id === vehicleId ? { ...v, isFeatured: true } : v));
+        setMsg('¡Listo! Tu superdeportivo ha sido posicionado en la cabecera principal del Vault.');
+        setVehicles(vehicles.map((v) => (v.id === vehicleId ? { ...v, isFeatured: true } : v)));
       }
     } catch (err: any) {
-      setMsg(err.message || 'No se pudo activar Usuario destacado');
+      setMsg(err.message || 'No se pudo activar Destacado');
     } finally {
       setFeaturedLoading(null);
     }
@@ -116,183 +223,250 @@ export default function OwnerDashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]">
+    <div className="min-h-screen bg-[#070707] text-white selection:bg-[#D4AF37] selection:text-black font-sans">
       <Navbar />
       {showBankSetup && <StripeConnectOnboarding onClose={() => setShowBankSetup(false)} />}
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 pb-6 border-b border-[#E9E1D2]">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        {/* CABECERA PANEL DE PROPIETARIO */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-8 border-b border-white/10 font-mono gap-6">
           <div>
-            <span className="text-[11px] font-black uppercase tracking-[0.25em] text-[#D97706]">
-              PANEL DE PROPIETARIOS
-            </span>
-            <h1 className="font-serif text-3xl sm:text-4xl font-bold mt-1">
-              Gestión de Flota & Usuario destacado
+            <div className="flex items-center gap-2 mb-2">
+              <span className="h-2 w-2 rounded-full bg-[#D4AF37] animate-pulse" />
+              <span className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#D4AF37]">
+                PANEL DE PROPIETARIO // CONTROL DE FLOTA VIP
+              </span>
+            </div>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-white font-sans">
+              Garaje Privado & Rendimiento
             </h1>
+            <p className="mt-2 text-sm text-white/60 font-sans max-w-2xl">
+              Supervisión de entregas, ingresos en custodia bancaria, contratos y disponibilidad de tus vehículos.
+            </p>
           </div>
 
           <Link
             href="/publicar-camper"
-            className="mt-4 md:mt-0 inline-flex items-center space-x-2 bg-[#16B8AA] text-white px-6 py-3 rounded-full font-black text-xs uppercase tracking-widest hover:bg-[#0F766E] transition-all shadow-md"
+            className="inline-flex items-center space-x-2 bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black px-6 py-3.5 rounded-xl font-mono font-black text-xs uppercase tracking-widest hover:brightness-110 transition-all shadow-[0_0_20px_rgba(212,175,55,0.25)] shrink-0"
           >
             <Plus className="w-4 h-4" />
-            <span>Publicar Nueva Camper</span>
+            <span>+ Publicar Superdeportivo</span>
           </Link>
         </div>
 
-        <nav className="mb-8 grid gap-3 sm:grid-cols-2">
-          <Link href="/propietario/estadisticas" className="flex items-center gap-4 rounded-2xl border border-[#E9E1D2] bg-white p-5"><BarChart3 className="h-7 w-7 text-[#16B8AA]" /><div><strong className="block">Estadísticas</strong><span className="text-xs text-[#6B726E]">Visualizaciones, interés, conversión y procedencia</span></div></Link>
-          <Link href="/propietario/finanzas" className="flex items-center gap-4 rounded-2xl border border-[#E9E1D2] bg-white p-5"><WalletCards className="h-7 w-7 text-[#16B8AA]" /><div><strong className="block">Finanzas</strong><span className="text-xs text-[#6B726E]">Cobros, comisiones, neto y pendientes</span></div></Link>
+        {/* MÉTRICAS DE FLOTA */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 font-mono">
+          <div className="rounded-2xl border border-white/10 bg-[#0f0f12] p-5">
+            <span className="text-[10px] text-white/40 uppercase tracking-widest block mb-1">Supercars Registrados</span>
+            <div className="flex items-center gap-2">
+              <Gauge className="w-5 h-5 text-[#D4AF37]" />
+              <strong className="text-2xl text-white font-black">{vehicles.length}</strong>
+              <span className="text-xs text-white/50">en garaje</span>
+            </div>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-[#0f0f12] p-5">
+            <span className="text-[10px] text-white/40 uppercase tracking-widest block mb-1">Solicitudes Entrantes</span>
+            <div className="flex items-center gap-2">
+              <KeyRound className="w-5 h-5 text-amber-400" />
+              <strong className="text-2xl text-amber-400 font-black">
+                {bookings.filter((b) => b.status === 'REQUESTED').length}
+              </strong>
+              <span className="text-xs text-white/50">pendientes</span>
+            </div>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-[#0f0f12] p-5">
+            <span className="text-[10px] text-white/40 uppercase tracking-widest block mb-1">Reservas Confirmadas</span>
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="w-5 h-5 text-emerald-400" />
+              <strong className="text-2xl text-emerald-400 font-black">
+                {bookings.filter((b) => b.status === 'CONFIRMED' || b.status === 'ACTIVE').length}
+              </strong>
+              <span className="text-xs text-white/50">activas</span>
+            </div>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-[#0f0f12] p-5">
+            <span className="text-[10px] text-white/40 uppercase tracking-widest block mb-1">Valoración Garaje</span>
+            <div className="flex items-center gap-2">
+              <Trophy className="w-5 h-5 text-[#D4AF37]" />
+              <strong className="text-2xl text-[#D4AF37] font-black flex items-center gap-1">
+                5.0
+                <Star className="w-4 h-4 fill-[#D4AF37] text-[#D4AF37]" />
+              </strong>
+              <span className="text-xs text-white/50">Propietario VIP</span>
+            </div>
+          </div>
+        </div>
+
+        {/* ACCESOS RÁPIDOS */}
+        <nav className="mb-8 grid gap-4 sm:grid-cols-2 font-mono">
+          <Link
+            href="/propietario/estadisticas"
+            className="flex items-center gap-4 rounded-2xl border border-white/10 bg-[#0f0f12] p-5 hover:border-[#D4AF37]/50 transition-all group"
+          >
+            <div className="p-3 rounded-xl bg-white/[0.04] border border-white/10 group-hover:border-[#D4AF37]/40">
+              <BarChart3 className="h-6 w-6 text-[#D4AF37]" />
+            </div>
+            <div>
+              <strong className="block text-sm text-white uppercase tracking-wider group-hover:text-[#D4AF37] transition-colors">
+                Telemetría & Estadísticas
+              </strong>
+              <span className="text-xs text-white/50 font-sans">Visualizaciones del Vault, clics de piloto y conversión</span>
+            </div>
+          </Link>
+          <Link
+            href="/propietario/finanzas"
+            className="flex items-center gap-4 rounded-2xl border border-white/10 bg-[#0f0f12] p-5 hover:border-[#D4AF37]/50 transition-all group"
+          >
+            <div className="p-3 rounded-xl bg-white/[0.04] border border-white/10 group-hover:border-[#D4AF37]/40">
+              <WalletCards className="h-6 w-6 text-[#D4AF37]" />
+            </div>
+            <div>
+              <strong className="block text-sm text-white uppercase tracking-wider group-hover:text-[#D4AF37] transition-colors">
+                Finanzas & Transferencias
+              </strong>
+              <span className="text-xs text-white/50 font-sans">Liquidaciones bancarias directas, fianzas retenidas y cobros netos</span>
+            </div>
+          </Link>
         </nav>
 
         {msg && (
-          <div className="mb-8 p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-bold flex items-center space-x-3">
-            <BadgeCheck className="w-5 h-5 text-[#D97706] shrink-0" />
+          <div className="mb-8 p-4 rounded-2xl bg-[#D4AF37]/10 border border-[#D4AF37]/40 text-[#D4AF37] text-xs font-mono font-bold flex items-center space-x-3">
+            <BadgeCheck className="w-5 h-5 text-[#D4AF37] shrink-0" />
             <span>{msg}</span>
           </div>
         )}
-        {payoutReady === false && (
-          <div className="mb-8 rounded-2xl border border-amber-300 bg-amber-50 p-5 text-sm text-amber-950">
-            <strong className="block">Tienes campos pendientes para recibir tus cobros</strong>
-            <span className="mt-1 block text-xs">Puedes aceptar reservas y los pagos quedarán retenidos de forma segura hasta que completes tus datos bancarios.</span>
-            <button onClick={handleStripeConnect} className="mt-3 rounded-full bg-[#13322E] px-4 py-2 text-xs font-bold text-white">Completar datos bancarios</button>
+
+        {/* CONFIGURACIÓN BANCARIA STRIPE CONNECT */}
+        <div className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-white/10 bg-[#0f0f12] p-5 font-mono">
+          <div>
+            <strong className="block text-sm text-white uppercase tracking-wider">
+              Cobros Seguros Directos a tu Cuenta Bancaria
+            </strong>
+            <span className="text-xs text-white/50 font-sans">
+              Liquidaciones automáticas de cada jornada tras la entrega del superdeportivo.
+            </span>
           </div>
-        )}
-        <div className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#E9E1D2] bg-white p-5">
-          <div><strong className="block text-sm">Recibe tus reservas directamente en tu banco</strong><span className="text-xs text-[#6B726E]">Introduce tu IBAN en el proceso seguro de Stripe. No necesitas abrir ni gestionar una cuenta Stripe aparte.</span></div>
-          <button onClick={handleStripeConnect} className="rounded-full bg-[#13322E] px-5 py-3 text-xs font-bold uppercase tracking-wider text-white">Configurar cuenta bancaria</button>
-          {stripeMessage && <div className="w-full rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs font-bold text-amber-800"><p>{stripeMessage}</p>{stripeSetupUrl && <a href={stripeSetupUrl} target="_blank" rel="noreferrer" className="mt-3 inline-flex rounded-full bg-[#13322E] px-4 py-2 text-white">Completar configuración de cobros</a>}</div>}
+          <button
+            onClick={handleStripeConnect}
+            className="rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/15 px-5 py-3 text-xs font-mono font-bold uppercase tracking-wider text-white hover:border-[#D4AF37]/40 transition-all cursor-pointer"
+          >
+            Configurar IBAN de Cobro
+          </button>
         </div>
 
-        {/* TARJETA INFORMATIVA DE USUARIO DESTACADO */}
-        <div className="bg-gradient-to-r from-[#13322E] to-[#254842] rounded-3xl p-8 text-white mb-12 shadow-xl relative overflow-hidden">
-          <div className="max-w-2xl relative z-10">
-            <div className="inline-flex items-center space-x-2 bg-[#D97706] text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full mb-4">
-              <BadgeCheck className="w-3.5 h-3.5" />
-              <span>USUARIO DESTACADO</span>
+        {/* NOTIFICACIONES Y RESERVAS */}
+        <div className="mb-4 flex justify-end">
+          <OwnerBrowserNotifications />
+        </div>
+
+        <div className="space-y-8">
+          <OwnerBookingsPanel initialBookings={bookings} />
+
+          <UserContractsPanel bookings={bookings} viewerRole="OWNER" />
+
+          <OwnerAvailabilityCalendar vehicles={vehicles} />
+        </div>
+
+        {/* LISTADO DE SUPERDEPORTIVOS EN GARAJE */}
+        <div className="mt-12 space-y-6">
+          <div className="flex items-center justify-between border-b border-white/10 pb-4 font-mono">
+            <div>
+              <span className="text-[10px] uppercase tracking-widest text-[#D4AF37] block">Flota Privada</span>
+              <h3 className="text-2xl font-black uppercase text-white font-sans">Mis Superdeportivos Publicados</h3>
             </div>
-            <h2 className="font-serif text-3xl font-bold mb-3">
-              Más visibilidad para tu camper desde <span className="text-[#F2CC8F]">2,99€ / mes</span>
-            </h2>
-            <p className="text-white/80 text-xs sm:text-sm font-medium leading-relaxed mb-6">
-              Consigue la insignia por mérito al alcanzar <strong>20 reseñas de 5 estrellas</strong> o actívala mediante una suscripción mensual. La condición de Usuario destacado mejora la visibilidad de tus anuncios.
-            </p>
-          </div>
-        </div>
-
-        {/* LISTADO DE MIS CAMPERS Y CONTRATOS */}
-        <div className="mb-4 flex justify-end"><OwnerBrowserNotifications /></div>
-        <OwnerBookingsPanel initialBookings={bookings} />
-
-        <UserContractsPanel bookings={bookings} viewerRole="OWNER" />
-
-        <OwnerAvailabilityCalendar vehicles={vehicles} />
-
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h3 className="font-serif text-2xl font-bold text-[#13322E]">Mis Anuncios Publicados</h3>
             {vehicles.length > 0 && (
               <Link
                 href="/publicar-camper"
-                className="inline-flex items-center space-x-1.5 text-xs font-bold text-[#16B8AA] hover:underline"
+                className="inline-flex items-center space-x-1.5 text-xs font-bold text-[#D4AF37] hover:underline"
               >
                 <Plus className="w-4 h-4" />
-                <span>Añadir otra camper</span>
+                <span>+ Añadir otro vehículo</span>
               </Link>
             )}
           </div>
 
-          {vehicles.length === 0 ? (
-            <div className="rounded-3xl border border-[#E9E1D2] bg-white p-8 sm:p-12 text-center shadow-sm">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#FAF7F0] text-[#16B8AA] mb-4">
-                <Plus className="h-7 w-7" />
-              </div>
-              <h4 className="font-serif text-2xl font-bold text-[#13322E]">No has publicado anuncios aún</h4>
-              <p className="mt-2 text-sm text-[#6B726E] max-w-md mx-auto font-medium">
-                Comienza a alquilar tu furgoneta camper o autocaravana en Canarias y rentabilízala de forma totalmente segura.
-              </p>
-              <Link
-                href="/publicar-camper"
-                className="mt-6 inline-flex items-center space-x-2 rounded-full bg-[#16B8AA] px-7 py-3.5 text-xs font-black uppercase tracking-widest text-white hover:bg-[#0F766E] transition-all shadow-md"
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {vehicles.map((v) => (
+              <div
+                key={v.id}
+                className="bg-[#0f0f12] rounded-3xl p-6 border border-white/10 shadow-xl flex flex-col justify-between relative overflow-hidden group hover:border-[#D4AF37]/40 transition-all"
               >
-                <Plus className="w-4 h-4" />
-                <span>Publicar mi primer anuncio</span>
-              </Link>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {vehicles.map((v) => (
-                <div key={v.id} className="bg-white rounded-3xl p-6 border border-[#E9E1D2] shadow-sm flex flex-col justify-between relative overflow-hidden">
-                  {v.isFeatured && (
-                    <div className="absolute top-4 right-4 bg-[#D97706] text-white text-[9px] font-black uppercase tracking-wider px-3 py-1 rounded-full flex items-center space-x-1 shadow-sm">
-                      <BadgeCheck className="w-3 h-3" />
-                      <span>USUARIO DESTACADO</span>
+                {v.isFeatured && (
+                  <div className="absolute top-4 right-4 z-10 bg-[#D4AF37] text-black text-[9px] font-mono font-black uppercase tracking-wider px-3 py-1 rounded-full flex items-center space-x-1 shadow-md">
+                    <Sparkles className="w-3 h-3" />
+                    <span>DESTACADO VIP</span>
+                  </div>
+                )}
+
+                <div>
+                  <div className="relative h-48 rounded-2xl overflow-hidden mb-4 bg-black">
+                    <img
+                      src={v.photos?.[0]?.url || '/supercars/lambo_revuelto.jpg'}
+                      alt={v.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f12] via-transparent to-transparent opacity-60" />
+                  </div>
+
+                  <div className="flex items-center justify-between gap-2 mb-2 font-mono">
+                    <span className="text-[10px] font-bold uppercase text-[#D4AF37] tracking-wider">
+                      {v.island} • {v.municipality || 'Canarias'}
+                    </span>
+                    <span
+                      className={`text-[9px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${
+                        v.status === 'PENDING_REVIEW'
+                          ? 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+                          : 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+                      }`}
+                    >
+                      {v.status === 'PENDING_REVIEW' ? 'En Validación' : 'Bóveda Activa'}
+                    </span>
+                  </div>
+
+                  <h4 className="text-xl font-black text-white mb-2 line-clamp-1 font-sans">{v.title}</h4>
+                  <p className="text-sm font-mono font-bold text-[#D4AF37] mb-4">
+                    {v.basePricePerDay} € <span className="text-xs text-white/50 font-normal">/ jornada</span>
+                  </p>
+                </div>
+
+                <div className="pt-4 border-t border-white/10 space-y-2.5 font-mono">
+                  <div className="grid grid-cols-2 gap-2">
+                    <Link
+                      href={`/propietario/editar/${v.id}`}
+                      className="w-full py-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center space-x-1.5"
+                    >
+                      <Pencil className="w-3.5 h-3.5 text-[#D4AF37]" />
+                      <span>Editar</span>
+                    </Link>
+
+                    <Link
+                      href={`/camper/${v.slug || v.id}`}
+                      target="_blank"
+                      className="w-full py-2.5 rounded-xl border border-white/10 bg-black hover:bg-white/[0.04] text-white/80 hover:text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center space-x-1.5"
+                    >
+                      <span>Ver en Vault</span>
+                    </Link>
+                  </div>
+
+                  {!v.isFeatured ? (
+                    <button
+                      onClick={() => handleActivateFeatured(v.id)}
+                      disabled={featuredLoading === v.id}
+                      className="w-full py-3 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black font-black text-xs uppercase tracking-widest hover:brightness-110 transition-all flex items-center justify-center space-x-2 shadow-md cursor-pointer disabled:opacity-50"
+                    >
+                      <Sparkles className="w-4 h-4" />
+                      <span>{featuredLoading === v.id ? 'Activando...' : 'DESTACAR EN BÓVEDA'}</span>
+                    </button>
+                  ) : (
+                    <div className="py-2.5 px-4 rounded-xl bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/30 text-center text-xs font-bold flex items-center justify-center space-x-2">
+                      <Sparkles className="w-4 h-4 text-[#D4AF37]" />
+                      <span>Posicionamiento VIP Activo</span>
                     </div>
                   )}
-
-                  <div>
-                    <img
-                      src={v.photos?.[0]?.url || 'https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=800'}
-                      alt={v.title}
-                      className="w-full h-44 object-cover rounded-2xl mb-4"
-                    />
-                    <div className="flex items-center justify-between gap-2 mb-2">
-                      <span className="text-[10px] font-black uppercase text-[#16B8AA] tracking-wider">
-                        {v.island} • {v.municipality}
-                      </span>
-                      <span
-                        className={`text-[9px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full ${
-                          v.status === 'PENDING_REVIEW'
-                            ? 'bg-amber-100 text-amber-900 border border-amber-200'
-                            : 'bg-emerald-100 text-emerald-900 border border-emerald-200'
-                        }`}
-                      >
-                        {v.status === 'PENDING_REVIEW' ? 'Pendiente de revisión' : 'Activo'}
-                      </span>
-                    </div>
-                    <h4 className="font-serif text-xl font-bold text-[#13322E] mb-2 line-clamp-1">{v.title}</h4>
-                    <p className="text-xs text-[#6B726E] font-medium mb-4">{v.basePricePerDay}€ / día</p>
-                  </div>
-
-                  <div className="pt-4 border-t border-[#E9E1D2] space-y-2.5">
-                    <div className="grid grid-cols-2 gap-2">
-                      <Link
-                        href={`/propietario/editar/${v.id}`}
-                        className="w-full py-2.5 rounded-full bg-[#13322E] text-white hover:bg-[#16B8AA] font-bold text-xs transition-all flex items-center justify-center space-x-1.5 shadow-sm"
-                      >
-                        <Pencil className="w-3.5 h-3.5" />
-                        <span>Editar Anuncio</span>
-                      </Link>
-
-                      <Link
-                        href={`/camper/${v.slug || v.id}`}
-                        target="_blank"
-                        className="w-full py-2.5 rounded-full border border-[#E9E1D2] bg-[#FAF7F0] hover:bg-white text-[#13322E] font-bold text-xs transition-all flex items-center justify-center space-x-1.5 shadow-sm"
-                      >
-                        <span>Ver Ficha</span>
-                      </Link>
-                    </div>
-
-                    {!v.isFeatured ? (
-                      <button
-                        onClick={() => handleActivateFeatured(v.id)}
-                        disabled={featuredLoading === v.id}
-                        className="w-full py-3 rounded-full bg-[#D97706] text-white font-black text-xs uppercase tracking-widest hover:bg-[#B45309] transition-all flex items-center justify-center space-x-2 shadow-md cursor-pointer disabled:opacity-50"
-                      >
-                        <BadgeCheck className="w-4 h-4" />
-                        <span>{featuredLoading === v.id ? 'Activando...' : 'ACTIVAR USUARIO DESTACADO (2,99€/MES)'}</span>
-                      </button>
-                    ) : (
-                      <div className="py-2 px-4 rounded-full bg-amber-50 text-amber-900 border border-amber-200 text-center text-xs font-bold flex items-center justify-center space-x-2">
-                        <Sparkles className="w-4 h-4 text-[#D97706]" />
-                        <span>Usuario destacado activo</span>
-                      </div>
-                    )}
-                  </div>
                 </div>
-              ))}
-            </div>
-          )}
+              </div>
+            ))}
+          </div>
         </div>
       </main>
     </div>

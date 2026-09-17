@@ -18,13 +18,13 @@ function Month({ month, startDate, endDate, blocked, onSelect }: { month: Date; 
   const unavailable = (value: string) => blocked.some((range) => value >= range.startDate.slice(0, 10) && value < range.endDate.slice(0, 10));
   
   return (
-    <div className="min-w-0 flex-1">
-      <h4 className="mb-4 text-center font-serif text-lg font-bold capitalize">
+    <div className="min-w-0 flex-1 font-mono">
+      <h4 className="mb-4 text-center font-bold text-sm text-white capitalize tracking-wider">
         {month.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}
       </h4>
       <div className="grid grid-cols-7 gap-1">
         {WEEK.map((day) => (
-          <span key={day} className="pb-2 text-center text-[10px] font-black text-[#94A3B8]">
+          <span key={day} className="pb-2 text-center text-[10px] font-bold text-white/30">
             {day}
           </span>
         ))}
@@ -45,18 +45,18 @@ function Month({ month, startDate, endDate, blocked, onSelect }: { month: Date; 
                 e.stopPropagation();
                 onSelect(value);
               }}
-              className={`relative aspect-square rounded-full text-xs font-bold transition-all ${
+              className={`relative aspect-square rounded-xl text-xs font-bold transition-all ${
                 selected
-                  ? 'z-10 bg-[#16B8AA] text-white shadow-md ring-4 ring-[#16B8AA]/25 scale-105 font-black'
+                  ? 'z-10 bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black shadow-[0_0_15px_rgba(212,175,55,0.4)] scale-105 font-black'
                   : inRange
-                  ? 'bg-[#16B8AA]/25 text-[#13322E] font-extrabold border border-[#16B8AA]/40 rounded-full'
+                  ? 'bg-[#D4AF37]/20 text-white font-bold border border-[#D4AF37]/40 rounded-xl'
                   : isBlocked
-                  ? 'cursor-not-allowed bg-amber-100 text-amber-800 line-through'
+                  ? 'cursor-not-allowed bg-red-950/30 text-red-500/50 line-through'
                   : disabled
-                  ? 'cursor-not-allowed opacity-30 line-through'
-                  : 'text-[#13322E] hover:bg-[#16B8AA] hover:text-white cursor-pointer'
+                  ? 'cursor-not-allowed text-white/20 line-through'
+                  : 'text-white/80 hover:bg-white/10 hover:text-white cursor-pointer'
               }`}
-              title={isBlocked ? 'No disponible' : undefined}
+              title={isBlocked ? 'Fecha reservada' : undefined}
             >
               {day}
             </button>
@@ -118,11 +118,11 @@ export default function DateRangeCalendar({
 
   // Contenido puro del calendario
   const calendarContent = (
-    <div className="w-full text-[#13322E]">
-      <div className="mb-5 flex items-center justify-between border-b border-[#E9E1D2] pb-4">
+    <div className="w-full text-white font-mono">
+      <div className="mb-5 flex items-center justify-between border-b border-white/10 pb-4">
         <div>
-          <span className="text-[10px] font-black uppercase tracking-[.18em] text-[#16B8AA]">Selecciona Fechas</span>
-          <p className="text-xs text-[#6B726E] font-medium">Elige días de entrega y devolución de tu camper</p>
+          <span className="text-[10px] font-bold uppercase tracking-[.18em] text-[#D4AF37]">Selección de Fechas</span>
+          <p className="text-xs text-white/50 font-normal">Días de entrega y devolución en el Vault</p>
         </div>
         <div className="flex items-center gap-2">
           <button
@@ -132,7 +132,7 @@ export default function DateRangeCalendar({
               e.stopPropagation();
               setMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1));
             }}
-            className="rounded-full border border-[#E9E1D2] p-2 hover:bg-[#F7F6F2] transition-colors cursor-pointer"
+            className="rounded-xl border border-white/10 p-2 hover:bg-white/10 text-white/70 hover:text-white transition-colors cursor-pointer"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
@@ -143,7 +143,7 @@ export default function DateRangeCalendar({
               e.stopPropagation();
               setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1));
             }}
-            className="rounded-full border border-[#E9E1D2] p-2 hover:bg-[#F7F6F2] transition-colors cursor-pointer"
+            className="rounded-xl border border-white/10 p-2 hover:bg-white/10 text-white/70 hover:text-white transition-colors cursor-pointer"
           >
             <ChevronRight className="h-4 w-4" />
           </button>
@@ -155,7 +155,7 @@ export default function DateRangeCalendar({
                 e.stopPropagation();
                 setOpen(false);
               }}
-              className="ml-1 rounded-full p-2 hover:bg-[#F7F6F2] text-[#6B726E] hover:text-[#13322E] transition-colors cursor-pointer"
+              className="ml-1 rounded-xl p-2 hover:bg-white/10 text-white/40 hover:text-white transition-colors cursor-pointer"
             >
               <X className="h-5 w-5" />
             </button>
@@ -170,20 +170,20 @@ export default function DateRangeCalendar({
         </div>
       </div>
 
-      <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl bg-[#F7F6F2] p-4 border border-[#E9E1D2]">
-        <div className="flex items-center gap-4 text-xs font-medium">
+      <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl bg-white/[0.02] p-4 border border-white/10">
+        <div className="flex items-center gap-4 text-xs font-mono">
           <div>
-            <small className="block text-[#6B726E] font-bold text-[10px] uppercase tracking-wider">Entrega</small>
-            <strong className="text-sm font-serif text-[#13322E]">{pretty(startDate)}</strong>
+            <small className="block text-white/40 font-bold text-[10px] uppercase tracking-wider">Entrega</small>
+            <strong className="text-sm font-bold text-white">{pretty(startDate)}</strong>
           </div>
-          <span className="text-[#16B8AA] font-bold">→</span>
+          <span className="text-[#D4AF37] font-bold">→</span>
           <div>
-            <small className="block text-[#6B726E] font-bold text-[10px] uppercase tracking-wider">Devolución</small>
-            <strong className="text-sm font-serif text-[#13322E]">{pretty(endDate)}</strong>
+            <small className="block text-white/40 font-bold text-[10px] uppercase tracking-wider">Devolución</small>
+            <strong className="text-sm font-bold text-white">{pretty(endDate)}</strong>
           </div>
           {calculatedNights > 0 && (
-            <span className="bg-[#16B8AA]/10 text-[#16B8AA] border border-[#16B8AA]/30 px-3 py-1 rounded-full font-black text-xs">
-              {calculatedNights} {calculatedNights === 1 ? 'noche' : 'noches'}
+            <span className="bg-[#D4AF37]/15 text-[#D4AF37] border border-[#D4AF37]/30 px-3 py-1 rounded-full font-bold text-xs">
+              {calculatedNights} {calculatedNights === 1 ? 'día de conducción' : 'días de conducción'}
             </span>
           )}
         </div>
@@ -195,9 +195,9 @@ export default function DateRangeCalendar({
                 e.stopPropagation();
                 onChange('', '');
               }}
-              className="text-xs font-bold text-[#6B726E] hover:text-[#13322E] hover:underline cursor-pointer"
+              className="text-xs font-bold text-white/50 hover:text-white hover:underline cursor-pointer"
             >
-              Borrar fechas
+              Limpiar
             </button>
           )}
           {variant === 'popover' && (
@@ -207,9 +207,9 @@ export default function DateRangeCalendar({
                 e.stopPropagation();
                 setOpen(false);
               }}
-              className="bg-[#16B8AA] hover:bg-[#0F766E] text-white px-6 py-2.5 rounded-full font-black text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all cursor-pointer"
+              className="bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow-md hover:brightness-110 transition-all cursor-pointer"
             >
-              Aplicar Fechas
+              Confirmar Fechas
             </button>
           )}
         </div>
@@ -217,37 +217,37 @@ export default function DateRangeCalendar({
     </div>
   );
 
-  // Variante inline: se dibuja dentro del contenedor donde se coloque (por ejemplo panel de propietario)
+  // Variante inline
   if (variant === 'inline') {
     return (
-      <div className="w-full rounded-2xl border border-[#E9E1D2] bg-white p-5 shadow-sm">
+      <div className="w-full rounded-2xl border border-white/10 bg-[#0f0f12] p-5 shadow-2xl">
         {calendarContent}
       </div>
     );
   }
 
-  // Variante popover: botón disparador y modal mediante Portal
+  // Variante popover
   return (
-    <div className="relative w-full">
+    <div className="relative w-full font-mono">
       <button
         type="button"
         onClick={(e) => {
           e.stopPropagation();
           setOpen(true);
         }}
-        className="flex w-full items-center space-x-3 text-left cursor-pointer p-3.5 rounded-2xl bg-[#FAF7F0] border border-[#E9E1D2] hover:border-[#16B8AA] hover:bg-white transition-all shadow-sm group"
+        className="flex w-full items-center space-x-3 text-left cursor-pointer p-3.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-[#D4AF37]/50 hover:bg-white/[0.06] transition-all shadow-sm group"
       >
-        <CalendarDays className="h-5 w-5 shrink-0 text-[#16B8AA] group-hover:scale-110 transition-transform" />
+        <CalendarDays className="h-5 w-5 shrink-0 text-[#D4AF37] group-hover:scale-110 transition-transform" />
         <div className="grid flex-1 grid-cols-2 gap-2 min-w-0">
           <div className="truncate">
-            <small className="block text-[9px] font-black uppercase tracking-wider text-[#6B726E]">Entrega</small>
-            <strong className="text-xs sm:text-sm font-extrabold text-[#13322E] truncate block">
+            <small className="block text-[9px] font-bold uppercase tracking-wider text-white/40">Entrega</small>
+            <strong className="text-xs sm:text-sm font-bold text-white truncate block">
               {pretty(startDate)}
             </strong>
           </div>
           <div className="truncate">
-            <small className="block text-[9px] font-black uppercase tracking-wider text-[#6B726E]">Devolución</small>
-            <strong className="text-xs sm:text-sm font-extrabold text-[#13322E] truncate block">
+            <small className="block text-[9px] font-bold uppercase tracking-wider text-white/40">Devolución</small>
+            <strong className="text-xs sm:text-sm font-bold text-white truncate block">
               {pretty(endDate)}
             </strong>
           </div>
@@ -257,11 +257,11 @@ export default function DateRangeCalendar({
       {open && mounted && createPortal(
         <div
           tabIndex={-1}
-          className="fixed inset-0 z-[999999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
+          className="fixed inset-0 z-[999999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
           onClick={() => setOpen(false)}
         >
           <div
-            className="relative z-[1000000] w-[min(740px,calc(100vw-32px))] max-h-[90vh] overflow-y-auto rounded-[32px] border border-[#E9E1D2] bg-white p-5 sm:p-7 text-[#13322E] shadow-2xl animate-soft-appear"
+            className="relative z-[1000000] w-[min(740px,calc(100vw-32px))] max-h-[90vh] overflow-y-auto rounded-3xl border border-white/15 bg-[#0f0f12] p-5 sm:p-7 text-white shadow-2xl animate-soft-appear"
             onClick={(e) => e.stopPropagation()}
           >
             {calendarContent}

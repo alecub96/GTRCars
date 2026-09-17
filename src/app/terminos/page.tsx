@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import { Shield, Sparkles } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Términos y Condiciones de Uso | vaneando.',
-  description: 'Condiciones de uso de Vaneando y del servicio de alquiler de furgonetas camperizadas en las Islas Canarias.',
+  title: 'Términos y Condiciones de Uso | GTR Cars',
+  description: 'Condiciones de uso y contratación de la plataforma GTR Cars para el alquiler de superdeportivos en las Islas Canarias.',
   robots: {
     index: false,
     follow: true,
@@ -11,20 +13,72 @@ export const metadata: Metadata = {
 };
 
 const items = [
-  ['1. Qué es Vaneando (Intermediario Tecnológico)', 'Vaneando es única y exclusivamente una plataforma tecnológica e intermediaria que facilita el contacto y la comunicación entre viajeros y propietarios particulares de vehículos camperizados en Canarias. Vaneando no es propietario de los vehículos, no presta servicios de transporte ni de alquiler, ni es parte en ningún caso de los contratos de alquiler celebrados directa y exclusivamente entre los particulares.'],
-  ['2. Registro y cuentas', 'Debes facilitar información veraz, mantener tus credenciales seguras y utilizar una cuenta por persona. El acceso puede suspenderse si detectamos fraude, suplantación, documentación irregular o incumplimientos de estas condiciones.'],
-  ['3. Anuncios y disponibilidad', 'El propietario responde de la exactitud del anuncio, fotografías, equipamiento, precio, calendario, documentación y seguro del vehículo. Vaneando puede revisar, ocultar o retirar anuncios que no cumplan los requisitos de la plataforma.'],
-  ['4. Solicitudes y reservas', 'Una solicitud no es una reserva confirmada hasta que el propietario la acepta y se cumplen las condiciones mostradas en el proceso. Las fechas, importes, fianza, extras y políticas de cancelación quedan recogidos en el resumen y contrato de cada reserva.'],
-  ['5. Pagos y liquidaciones', 'Los pagos se procesan mediante proveedores autorizados. Vaneando puede aplicar comisiones de servicio comunicadas antes de confirmar. El dinero de cada reserva se transfiere al propietario en un plazo de 7 días hábiles después de que finalice el periodo de alquiler, sujeto a la verificación de su cuenta bancaria (IBAN) y a las reglas antifraude o de reembolso aplicables.'],
-  ['6. Contrato, entrega y devolución', 'Las partes deben revisar y firmar el contrato, documentar el estado del vehículo en la entrega y devolución y comunicar sin demora accidentes, averías o daños. La firma electrónica registra la versión aceptada, fecha, identidad autenticada y consentimientos.'],
-  ['7. Seguro, fianza y daños', 'El propietario debe mantener el seguro obligatorio y las coberturas adecuadas. La fianza responde de los conceptos descritos en el anuncio o contrato. Cualquier cargo debe estar justificado con evidencias, comunicaciones y, cuando corresponda, facturas o presupuestos.'],
-  ['8. Cancelaciones y reembolsos', 'Se aplicará la política elegida para el anuncio y mostrada antes del pago, sin perjuicio de los derechos que reconozca la normativa. Los reembolsos se tramitan por el mismo medio de pago cuando sea posible y pueden tardar según la entidad financiera.'],
-  ['9. Mensajería, recogida y auditoría de conversaciones', 'Las conversaciones pre-reserva, mensajes del alquiler y solicitudes de soporte se recogen, almacenan y procesan en los sistemas de Vaneando. Esta recogida es obligatoria para garantizar la seguridad de los usuarios, prevenir fraudes, evitar acuerdos o pagos externos fuera de la cobertura de la plataforma y mediar en incidencias o disputas sobre el vehículo. Al utilizar el chat de Vaneando, el usuario acepta expresamente que estas comunicaciones sean registradas y puedan ser auditadas por el equipo de administración bajo estrictos controles de confidencialidad y anonimización de datos identificativos conforme al RGPD.'],
-  ['10. Conductas prohibidas', 'No se permite utilizar la plataforma para actividades ilícitas, publicar información falsa, discriminar, eludir comisiones, contactar fuera para evitar controles, manipular valoraciones o acceder a cuentas ajenas.'],
-  ['11. Limitación de responsabilidad', 'Vaneando aplica medidas razonables de seguridad y verificación, pero no garantiza la disponibilidad permanente ni responde de hechos imputables a usuarios, terceros, entidades financieras, carreteras, clima o fuerza mayor. Esta cláusula no limita derechos legalmente irrenunciables.'],
-  ['12. Ley aplicable y contacto', 'Estas condiciones se interpretan conforme a la legislación española. Para consultas o reclamaciones puedes escribir a contacto@vaneando.com. La versión vigente se publica siempre en esta página. Última actualización: 11 de agosto de 2026.'],
+  [
+    '1. Qué es GTR Cars // Canary Hypercar Vault',
+    'GTR Cars es una plataforma tecnológica y club privado de intermediación especializada en la reserva, custodia y alquiler de superdeportivos, hypercars y vehículos de altas prestaciones en las Islas Canarias (Gran Canaria, Tenerife y resto del archipiélago). Facilita el encuentro seguro entre clientes verificados y propietarios o gestores de flota.',
+  ],
+  [
+    '2. Requisitos de Conducción y Registro',
+    'Para reservar y conducir vehículos de nuestra flota, el conductor debe tener al menos 25 años de edad (o 23 según el segmento), carnet de conducir en vigor con al menos 2 años de antigüedad y aportar documentación de identidad veraz. La cuenta es personal e intransferible.',
+  ],
+  [
+    '3. Homologación de Vehículos en el Vault',
+    'Todos los superdeportivos listados en GTR Cars deben superar una inspección técnica rigurosa: estado de neumáticos, frenos carbocerámicos o de disco, mantenimiento en servicio oficial y seguro de cobertura total para flotas de altas prestaciones.',
+  ],
+  [
+    '4. Reservas y Servicio Concierge',
+    'Las solicitudes son validadas por nuestro equipo Concierge. Una reserva queda formalizada tras la verificación de documentación y el pago del depósito de fianza a través de pasarelas de pago seguras cifradas con Stripe.',
+  ],
+  [
+    '5. Fianzas y Depósitos de Seguridad',
+    'La fianza de garantía se pre-autoriza en tarjeta de crédito y responde de franquicias de seguro, combustible 98 octanos no repuesto o excesos de kilometraje contratados. Se libera automáticamente tras la inspección de devolución.',
+  ],
+  [
+    '6. Inspección Digital, Telemetría y Entrega',
+    'En el momento de la entrega (aeropuertos o villas privadas), se realiza un acta digital fotográfica de estado y lectura de kilometraje. El vehículo debe conducirse conforme a la normativa de tráfico y no está autorizada su utilización en tandas libres de circuito cerrado salvo evento corporativo expresamente concertado.',
+  ],
+  [
+    '7. Cancelaciones y Políticas Flexibles',
+    'Cada superdeportivo cuenta con su política de cancelación visible antes del pago (Estricta, Moderada o Flexible). Los reembolsos se liquidan por el mismo medio de pago utilizado.',
+  ],
+  [
+    '8. Confidencialidad y Protección de Datos',
+    'GTR Cars garantiza la máxima discreción y confidencialidad respecto a la identidad de sus clientes VIP y propietarios del Vault, cumpliendo estrictamente con el RGPD.',
+  ],
+  [
+    '9. Legislación Aplicable y Contacto',
+    'Estas condiciones se rigen por la legislación española. Para cualquier asistencia o consulta, contacta con Concierge en vip@gtrcars.vip.',
+  ],
 ];
 
 export default function TermsPage() {
-  return <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]"><Navbar /><main className="mx-auto max-w-4xl px-4 py-12"><article className="rounded-3xl border border-[#E9E1D2] bg-white p-8 shadow-sm sm:p-12"><div className="mb-8 border-b border-[#E9E1D2] pb-7"><span className="text-[11px] font-black uppercase tracking-[.25em] text-[#16B8AA]">Reglas claras para viajar</span><h1 className="mt-2 font-serif text-4xl font-bold">Términos y condiciones</h1><p className="mt-3 text-sm leading-relaxed text-[#6B726E]">Condiciones de uso de Vaneando y del servicio de alquiler. Léelas antes de publicar, solicitar o confirmar una reserva.</p></div><div className="space-y-7 text-sm leading-7 text-[#52605B]">{items.map(([title, text]) => <section key={title}><h2 className="mb-2 font-serif text-xl font-bold text-[#13322E]">{title}</h2><p>{text}</p></section>)}</div></article></main></div>;
+  return (
+    <div className="min-h-screen bg-[#070707] text-white selection:bg-[#D4AF37] selection:text-black">
+      <Navbar />
+      <main className="mx-auto max-w-4xl px-4 py-12 sm:py-16">
+        <article className="rounded-3xl border border-white/10 bg-[#0f0f12] p-8 shadow-2xl sm:p-12">
+          <div className="mb-8 border-b border-white/10 pb-7">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-[10px] font-mono tracking-widest uppercase mb-3">
+              <Shield className="w-3 h-3" />
+              CONDICIONES DE CONTRATACIÓN
+            </div>
+            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-white">Términos y Condiciones</h1>
+            <p className="mt-2 text-xs font-mono text-neutral-400">
+              GTR Cars // Canary Hypercar Vault — Reglas de servicio y alquiler de superdeportivos
+            </p>
+          </div>
+
+          <div className="space-y-8 text-xs sm:text-sm font-mono leading-relaxed text-neutral-300">
+            {items.map(([title, text]) => (
+              <section key={title} className="space-y-2">
+                <h2 className="font-serif text-lg font-bold text-white text-[#D4AF37]">{title}</h2>
+                <p>{text}</p>
+              </section>
+            ))}
+          </div>
+        </article>
+      </main>
+      <Footer />
+    </div>
+  );
 }

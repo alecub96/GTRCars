@@ -147,38 +147,42 @@ export default function OwnerBookingsPanel({ initialBookings }: { initialBooking
   }
 
   return (
-    <section className="mb-12 space-y-4">
-      <div>
-        <h2 className="font-serif text-3xl font-bold">Gestión de Reservas</h2>
-        <p className="text-sm text-[#6B726E]">
-          Supervisa solicitudes, reservas automáticas confirmadas y gestiona cancelaciones directamente.
+    <section className="mb-12 space-y-4 font-sans">
+      <div className="font-mono">
+        <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white font-sans">
+          Gestión de Reservas & Telemetría
+        </h2>
+        <p className="text-sm text-white/50 font-sans mt-1">
+          Supervisa solicitudes entrantes, aprueba jornadas de pilotaje y gestiona contratos digitales.
         </p>
       </div>
 
-      <div className="flex gap-2 overflow-x-auto rounded-2xl border border-[#E9E1D2] bg-white p-2">
+      <div className="flex gap-2 overflow-x-auto rounded-2xl border border-white/10 bg-[#0f0f12] p-2 font-mono">
         {tabs.map(([key, label]) => (
           <button
             type="button"
             key={key}
             onClick={() => setTab(key)}
-            className={`whitespace-nowrap rounded-xl px-4 py-2.5 text-xs font-bold transition-all cursor-pointer ${
-              tab === key ? 'bg-[#13322E] text-white shadow' : 'text-[#6B726E] hover:text-[#13322E]'
+            className={`whitespace-nowrap rounded-xl px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+              tab === key
+                ? 'bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black font-black shadow-[0_0_15px_rgba(212,175,55,0.25)]'
+                : 'text-white/60 hover:text-white hover:bg-white/[0.04]'
             }`}
           >
             {label}
-            <span className="ml-2 opacity-60">
+            <span className="ml-2 px-1.5 py-0.5 rounded text-[10px] bg-black/40">
               {bookings.filter((booking) => groups[key].some((status) => status === booking.status)).length}
             </span>
           </button>
         ))}
       </div>
 
-      {error && <p className="rounded-2xl bg-red-50 border border-red-200 p-4 text-xs font-bold text-red-700">{error}</p>}
-      {successMsg && <p className="rounded-2xl bg-emerald-50 border border-emerald-200 p-4 text-xs font-bold text-emerald-800">{successMsg}</p>}
+      {error && <p className="rounded-xl bg-red-950/50 border border-red-500/30 p-4 text-xs font-mono font-bold text-red-300">{error}</p>}
+      {successMsg && <p className="rounded-xl bg-emerald-950/50 border border-emerald-500/30 p-4 text-xs font-mono font-bold text-emerald-300">{successMsg}</p>}
 
       {visible.length === 0 ? (
-        <div className="rounded-3xl border border-dashed border-[#E9E1D2] bg-white p-8 text-center text-sm text-[#6B726E]">
-          No hay reservas en esta sección.
+        <div className="rounded-3xl border border-dashed border-white/15 bg-[#0f0f12] p-8 text-center text-sm font-mono text-white/40">
+          No hay reservas registradas en esta sección.
         </div>
       ) : (
         <div className="grid gap-4">
@@ -191,79 +195,115 @@ export default function OwnerBookingsPanel({ initialBookings }: { initialBooking
             const canOwnerCancel = !['CANCELLED', 'OWNER_REJECTED', 'COMPLETED', 'REFUNDED'].includes(booking.status);
 
             return (
-              <article key={booking.id} className="rounded-3xl border border-[#E9E1D2] bg-white p-5 shadow-sm">
+              <article key={booking.id} className="rounded-3xl border border-white/10 bg-[#0f0f12] p-6 shadow-xl">
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[10px] font-black uppercase tracking-wider text-[#16B8AA] font-mono">{booking.code}</span>
-                      <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full ${
-                        booking.status === 'CONFIRMED' ? 'bg-emerald-100 text-emerald-800' :
-                        booking.status === 'CANCELLED' ? 'bg-red-100 text-red-800' :
-                        booking.status === 'REQUESTED' ? 'bg-amber-100 text-amber-900' : 'bg-slate-100 text-slate-800'
+                    <div className="flex items-center gap-2 mb-1.5 font-mono">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#D4AF37]">
+                        {booking.code}
+                      </span>
+                      <span className={`text-[9px] font-bold uppercase px-2.5 py-0.5 rounded-full border ${
+                        booking.status === 'CONFIRMED' ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' :
+                        booking.status === 'CANCELLED' ? 'bg-red-500/15 text-red-300 border-red-500/30' :
+                        booking.status === 'REQUESTED' ? 'bg-amber-500/15 text-amber-300 border-amber-500/30' : 'bg-white/10 text-white/70 border-white/15'
                       }`}>
-                        {booking.status}
+                        {booking.status === 'REQUESTED' ? 'Solicitud Recibida' : booking.status === 'CONFIRMED' ? 'Confirmada' : booking.status}
                       </span>
                     </div>
-                    <h3 className="font-serif text-xl font-bold">{booking.vehicle.title}</h3>
-                    <p className="mt-1 flex items-center gap-1 text-xs text-[#6B726E]">
-                      <UserRound className="h-3.5 w-3.5" />
-                      {booking.traveler.firstName} {booking.traveler.lastName}
+                    <h3 className="text-xl sm:text-2xl font-black text-white">{booking.vehicle.title}</h3>
+                    <p className="mt-1 flex items-center gap-1.5 text-xs text-white/50 font-mono">
+                      <UserRound className="h-3.5 w-3.5 text-[#D4AF37]" />
+                      Piloto: <span className="text-white">{booking.traveler.firstName} {booking.traveler.lastName}</span>
                     </p>
                   </div>
-                  <strong className="font-serif text-2xl">
-                    {booking.ownerPayout.toFixed(2)} €
-                    <small className="block text-right font-sans text-[10px] font-normal text-[#6B726E]">netos estimados</small>
-                  </strong>
+                  <div className="text-right font-mono">
+                    <strong className="text-2xl sm:text-3xl font-black text-[#D4AF37]">
+                      {booking.ownerPayout ? booking.ownerPayout.toFixed(2) : (booking.totalAmount * 0.85).toFixed(2)} €
+                    </strong>
+                    <small className="block text-[10px] uppercase text-white/40">Liquidación estimada</small>
+                  </div>
                 </div>
 
-                <div className="my-4 grid gap-3 rounded-2xl bg-[#F7F6F2] p-4 sm:grid-cols-3">
-                  <span className="text-xs">
-                    <CalendarDays className="mb-1 h-4 w-4 text-[#16B8AA]" />
-                    <small className="block text-[#6B726E]">Periodo</small>
-                    <strong>{new Date(booking.pickupDate).toLocaleDateString('es-ES')} → {new Date(booking.returnDate).toLocaleDateString('es-ES')}</strong>
-                  </span>
-                  <span className="text-xs">
-                    <Clock3 className="mb-1 h-4 w-4 text-[#16B8AA]" />
-                    <small className="block text-[#6B726E]">Duración</small>
-                    <strong>{booking.totalDays} días</strong>
-                  </span>
-                  <span className="text-xs">
-                    <WalletCards className="mb-1 h-4 w-4 text-[#16B8AA]" />
-                    <small className="block text-[#6B726E]">Total abonado</small>
-                    <strong>{booking.totalAmount.toFixed(2)} €</strong>
-                  </span>
+                <div className="my-5 grid gap-3 rounded-2xl border border-white/10 bg-black/40 p-4 sm:grid-cols-3 font-mono text-xs">
+                  <div>
+                    <div className="flex items-center gap-1.5 text-white/40 mb-1">
+                      <CalendarDays className="h-3.5 w-3.5 text-[#D4AF37]" />
+                      <span className="uppercase text-[10px]">Periodo de Conducción</span>
+                    </div>
+                    <strong className="text-white text-xs sm:text-sm">
+                      {new Date(booking.pickupDate).toLocaleDateString('es-ES')} → {new Date(booking.returnDate).toLocaleDateString('es-ES')}
+                    </strong>
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5 text-white/40 mb-1">
+                      <Clock3 className="h-3.5 w-3.5 text-[#D4AF37]" />
+                      <span className="uppercase text-[10px]">Duración</span>
+                    </div>
+                    <strong className="text-white text-xs sm:text-sm">{booking.totalDays || 3} jornadas</strong>
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5 text-white/40 mb-1">
+                      <WalletCards className="h-3.5 w-3.5 text-[#D4AF37]" />
+                      <span className="uppercase text-[10px]">Total en Custodia</span>
+                    </div>
+                    <strong className="text-[#D4AF37] text-xs sm:text-sm font-black">{booking.totalAmount.toFixed(2)} €</strong>
+                  </div>
                 </div>
 
-                <div className="flex flex-wrap gap-2 pt-2 border-t border-[#E9E1D2]">
-                  <Link href={conversationHref} className="flex items-center gap-1.5 rounded-full border border-[#E9E1D2] px-4 py-2 text-xs font-bold hover:bg-[#FAF7F0] transition-colors">
-                    <MessageCircle className="h-4 w-4" /> Hablar con el viajero
+                <div className="flex flex-wrap gap-2.5 pt-3 border-t border-white/10 font-mono">
+                  <Link
+                    href={conversationHref}
+                    className="flex items-center gap-1.5 rounded-xl border border-white/15 bg-white/[0.04] px-4 py-2 text-xs font-bold text-white hover:border-[#D4AF37]/50 hover:bg-white/[0.08] transition-colors"
+                  >
+                    <MessageCircle className="h-4 w-4 text-[#D4AF37]" /> Chat con Piloto
                   </Link>
                   {canOpenReservation && (
-                    <Link href={`/reserva/${booking.id}`} className="flex items-center gap-1.5 rounded-full border border-[#E9E1D2] px-4 py-2 text-xs font-bold hover:bg-[#FAF7F0] transition-colors">
-                      <FileSignature className="h-4 w-4" /> Contrato y reserva
+                    <Link
+                      href={`/reserva/${booking.id}`}
+                      className="flex items-center gap-1.5 rounded-xl border border-white/15 bg-white/[0.04] px-4 py-2 text-xs font-bold text-white hover:border-[#D4AF37]/50 hover:bg-white/[0.08] transition-colors"
+                    >
+                      <FileSignature className="h-4 w-4 text-[#D4AF37]" /> Contrato & Telemetría
                     </Link>
                   )}
                   {['CONFIRMED', 'CHECKIN_PENDING'].includes(booking.status) && (
-                    <Link href={`/checkin?bookingId=${booking.id}`} className="flex items-center gap-1.5 rounded-full bg-[#13322E] px-4 py-2 text-xs font-bold text-white shadow-xs">
-                      <ClipboardCheck className="h-4 w-4" /> Registrar entrega
+                    <Link
+                      href={`/checkin?bookingId=${booking.id}`}
+                      className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B38B21] px-4 py-2 text-xs font-black uppercase tracking-wider text-black shadow-md hover:brightness-110 transition-all"
+                    >
+                      <ClipboardCheck className="h-4 w-4" /> Acta de Entrega Digital
                     </Link>
                   )}
                   {['ACTIVE', 'CHECKOUT_PENDING'].includes(booking.status) && (
-                    <Link href={`/checkout?bookingId=${booking.id}`} className="flex items-center gap-1.5 rounded-full bg-[#13322E] px-4 py-2 text-xs font-bold text-white shadow-xs">
-                      <ClipboardCheck className="h-4 w-4" /> Registrar devolución
+                    <Link
+                      href={`/checkout?bookingId=${booking.id}`}
+                      className="flex items-center gap-1.5 rounded-xl bg-[#D4AF37] px-4 py-2 text-xs font-black uppercase tracking-wider text-black shadow-md hover:brightness-110 transition-all"
+                    >
+                      <ClipboardCheck className="h-4 w-4" /> Registrar Devolución
                     </Link>
                   )}
                   {booking.status === 'COMPLETED' && (
-                    <button type="button" onClick={() => setReviewing(booking)} className="flex items-center gap-1.5 rounded-full border border-[#E9E1D2] px-4 py-2 text-xs font-bold cursor-pointer">
-                      <Star className="h-4 w-4" /> Valorar viajero
+                    <button
+                      type="button"
+                      onClick={() => setReviewing(booking)}
+                      className="flex items-center gap-1.5 rounded-xl border border-[#D4AF37]/30 bg-[#D4AF37]/10 px-4 py-2 text-xs font-bold text-[#D4AF37] hover:bg-[#D4AF37]/20 transition-all cursor-pointer"
+                    >
+                      <Star className="h-4 w-4" /> Valorar Piloto
                     </button>
                   )}
                   {booking.status === 'REQUESTED' && (
                     <>
-                      <button type="button" onClick={() => setDecision({ id: booking.id, action: 'accept' })} className="flex items-center gap-1.5 rounded-full bg-[#16B8AA] px-4 py-2 text-xs font-bold text-white cursor-pointer shadow-xs">
-                        <Check className="h-4 w-4" /> Aceptar fechas
+                      <button
+                        type="button"
+                        onClick={() => setDecision({ id: booking.id, action: 'accept' })}
+                        className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B38B21] px-5 py-2 text-xs font-black uppercase tracking-wider text-black hover:brightness-110 transition-all cursor-pointer shadow-md"
+                      >
+                        <Check className="h-4 w-4" /> Aprobar Conducción
                       </button>
-                      <button type="button" onClick={() => setDecision({ id: booking.id, action: 'reject' })} className="flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold text-red-600 border border-red-200 hover:bg-red-50 cursor-pointer">
+                      <button
+                        type="button"
+                        onClick={() => setDecision({ id: booking.id, action: 'reject' })}
+                        className="flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-bold text-red-400 border border-red-500/30 hover:bg-red-950/30 transition-all cursor-pointer"
+                      >
                         <X className="h-4 w-4" /> Rechazar
                       </button>
                     </>
@@ -277,7 +317,7 @@ export default function OwnerBookingsPanel({ initialBookings }: { initialBooking
                         setCancellingBooking(booking);
                         setCancelReason('');
                       }}
-                      className="ml-auto flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold text-red-700 bg-red-50 border border-red-200 hover:bg-red-100 transition-all cursor-pointer"
+                      className="ml-auto flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-bold text-red-400 border border-red-500/30 hover:bg-red-950/30 transition-all cursor-pointer"
                     >
                       <Ban className="h-3.5 w-3.5" />
                       <span>Cancelar Reserva</span>
@@ -292,48 +332,48 @@ export default function OwnerBookingsPanel({ initialBookings }: { initialBooking
 
       {/* MODAL DE CANCELACIÓN DE RESERVA CON MOTIVO */}
       {cancellingBooking && (
-        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-[#13322E]/60 p-4 backdrop-blur-sm">
-          <form onSubmit={handleCancelBooking} className="w-full max-w-lg rounded-[32px] bg-white p-7 shadow-2xl space-y-4">
-            <div className="flex items-center gap-3 text-red-600">
-              <AlertTriangle className="h-6 w-6 shrink-0" />
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/85 p-4 backdrop-blur-md font-sans">
+          <form onSubmit={handleCancelBooking} className="w-full max-w-lg rounded-3xl bg-[#0f0f12] border border-red-500/30 p-7 shadow-2xl space-y-4 text-white">
+            <div className="flex items-center gap-3 text-red-400">
+              <AlertTriangle className="h-6 w-6 shrink-0 text-red-400" />
               <div>
-                <span className="text-[10px] font-black uppercase tracking-[.2em]">Acción de Propietario</span>
-                <h3 className="font-serif text-2xl font-bold text-[#13322E]">Cancelar Reserva {cancellingBooking.code}</h3>
+                <span className="text-[10px] font-mono font-bold uppercase tracking-[.2em] text-red-400">Protocolo de Cancelación</span>
+                <h3 className="text-xl font-bold text-white">Cancelar Reserva {cancellingBooking.code}</h3>
               </div>
             </div>
 
-            <p className="text-xs text-[#6B726E] leading-relaxed">
-              Al cancelar esta reserva, se liberarán automáticamente los días bloqueados en el calendario de tu furgoneta ({cancellingBooking.vehicle.title}) y se enviará un correo explicativo a <strong>{cancellingBooking.traveler.firstName}</strong>.
+            <p className="text-xs text-white/60 leading-relaxed font-sans">
+              Al cancelar esta reserva, se liberarán automáticamente los días bloqueados en el calendario de tu superdeportivo ({cancellingBooking.vehicle.title}) y se notificará a <strong>{cancellingBooking.traveler.firstName}</strong>.
             </p>
 
             <div>
-              <label className="block text-xs font-bold text-[#13322E] mb-1.5">
-                Motivo de la cancelación (se incluirá en el correo al cliente) *
+              <label className="block text-xs font-mono font-bold text-white mb-1.5 uppercase">
+                Motivo de la cancelación *
               </label>
               <textarea
                 required
                 rows={3}
                 value={cancelReason}
                 onChange={(e) => setCancelReason(e.target.value)}
-                placeholder="Ej. Avería imprevista en el alternador, problema de disponibilidad o ajuste de fechas acordado previamente."
-                className="w-full rounded-2xl border border-[#E9E1D2] p-3 text-xs bg-[#FAF7F0] focus:bg-white focus:border-red-500 focus:outline-none"
+                placeholder="Ej. Revisión técnica en taller oficial, mantenimiento de neumáticos o ajuste acordado."
+                className="w-full rounded-xl border border-white/15 p-3 text-xs bg-black/50 text-white placeholder:text-white/30 focus:border-red-500 focus:outline-none font-sans"
               />
             </div>
 
-            <div className="flex items-center justify-end gap-3 pt-2">
+            <div className="flex items-center justify-end gap-3 pt-2 font-mono">
               <button
                 type="button"
                 onClick={() => setCancellingBooking(null)}
-                className="rounded-full border border-[#E9E1D2] px-5 py-2.5 text-xs font-bold cursor-pointer"
+                className="rounded-xl border border-white/15 bg-white/5 px-5 py-2.5 text-xs font-bold text-white hover:bg-white/10 cursor-pointer"
               >
                 Volver
               </button>
               <button
                 type="submit"
                 disabled={cancellingLoading}
-                className="rounded-full bg-red-600 hover:bg-red-700 px-6 py-2.5 text-xs font-black text-white shadow-md cursor-pointer disabled:opacity-50"
+                className="rounded-xl bg-red-600 hover:bg-red-700 px-6 py-2.5 text-xs font-bold text-white shadow-md cursor-pointer disabled:opacity-50"
               >
-                {cancellingLoading ? 'Cancelando...' : 'Confirmar Cancelación'}
+                {cancellingLoading ? 'Procesando...' : 'Confirmar Cancelación'}
               </button>
             </div>
           </form>
@@ -341,30 +381,83 @@ export default function OwnerBookingsPanel({ initialBookings }: { initialBooking
       )}
 
       {decision && (
-        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-[#13322E]/60 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-md rounded-[32px] bg-white p-7 shadow-2xl">
-            <span className="text-[10px] font-black uppercase tracking-[.2em] text-[#16B8AA]">Confirmar decisión</span>
-            <h3 className="mt-2 font-serif text-3xl font-bold">{decision.action === 'accept' ? '¿Aceptar estas fechas?' : '¿Rechazar la solicitud?'}</h3>
-            <p className="mt-3 text-sm text-[#6B726E]">El viajero recibirá una notificación del cambio.</p>
-            <div className="mt-6 flex gap-2">
-              <button type="button" onClick={decide} className={`rounded-full px-5 py-3 text-xs font-bold text-white ${decision.action === 'accept' ? 'bg-[#16B8AA]' : 'bg-red-600'}`}>Confirmar</button>
-              <button type="button" onClick={() => setDecision(null)} className="rounded-full border border-[#E9E1D2] px-5 py-3 text-xs font-bold">Volver</button>
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/85 p-4 backdrop-blur-md font-sans">
+          <div className="w-full max-w-md rounded-3xl bg-[#0f0f12] border border-white/15 p-7 shadow-2xl text-white font-mono">
+            <span className="text-[10px] font-bold uppercase tracking-[.2em] text-[#D4AF37]">Confirmar Decisión</span>
+            <h3 className="mt-2 text-2xl font-bold font-sans text-white">
+              {decision.action === 'accept' ? '¿Aprobar fechas de conducción?' : '¿Rechazar solicitud?'}
+            </h3>
+            <p className="mt-3 text-sm text-white/60 font-sans">
+              {decision.action === 'accept'
+                ? 'El piloto VIP recibirá la confirmación para proceder con el depósito y firma de contrato.'
+                : 'La solicitud quedará cancelada y las fechas se mantendrán disponibles.'}
+            </p>
+            <div className="mt-6 flex gap-3">
+              <button
+                type="button"
+                onClick={decide}
+                className={`rounded-xl px-5 py-2.5 text-xs font-black uppercase tracking-wider ${
+                  decision.action === 'accept'
+                    ? 'bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black hover:brightness-110'
+                    : 'bg-red-600 text-white hover:bg-red-500'
+                } cursor-pointer shadow-md`}
+              >
+                Confirmar
+              </button>
+              <button
+                type="button"
+                onClick={() => setDecision(null)}
+                className="rounded-xl border border-white/15 bg-white/5 px-5 py-2.5 text-xs font-bold text-white hover:bg-white/10 cursor-pointer"
+              >
+                Volver
+              </button>
             </div>
           </div>
         </div>
       )}
 
       {reviewing && (
-        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-[#13322E]/60 p-4">
-          <form onSubmit={review} className="w-full max-w-md space-y-4 rounded-[32px] bg-white p-7 shadow-2xl">
-            <h3 className="font-serif text-3xl font-bold">Valorar a {reviewing.traveler.firstName}</h3>
-            <select value={rating} onChange={(event) => setRating(Number(event.target.value))} className="w-full rounded-xl border border-[#E9E1D2] p-3">
-              {[5, 4, 3, 2, 1].map((value) => <option key={value} value={value}>{value} estrellas</option>)}
-            </select>
-            <textarea required value={comment} onChange={(event) => setComment(event.target.value)} placeholder="¿Cómo fue la comunicación y el cuidado del vehículo?" className="min-h-28 w-full rounded-xl border border-[#E9E1D2] p-3 text-sm" />
-            <div className="flex gap-2">
-              <button className="rounded-full bg-[#16B8AA] px-5 py-3 text-xs font-bold text-white">Enviar valoración</button>
-              <button type="button" onClick={() => setReviewing(null)} className="rounded-full border border-[#E9E1D2] px-5 py-3 text-xs font-bold">Cancelar</button>
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/85 p-4 backdrop-blur-md font-sans">
+          <form onSubmit={review} className="w-full max-w-md space-y-4 rounded-3xl bg-[#0f0f12] border border-white/15 p-7 shadow-2xl text-white font-sans">
+            <h3 className="text-2xl font-bold font-mono text-white">Valorar a {reviewing.traveler.firstName}</h3>
+            <div>
+              <label className="block text-xs font-mono font-bold text-white/60 mb-1 uppercase">Puntuación</label>
+              <select
+                value={rating}
+                onChange={(event) => setRating(Number(event.target.value))}
+                className="w-full rounded-xl border border-white/15 bg-black p-3 text-sm text-white focus:border-[#D4AF37] focus:outline-none"
+              >
+                {[5, 4, 3, 2, 1].map((value) => (
+                  <option key={value} value={value} className="bg-black">
+                    {value} estrellas
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-mono font-bold text-white/60 mb-1 uppercase">Comentarios de pilotaje</label>
+              <textarea
+                required
+                value={comment}
+                onChange={(event) => setComment(event.target.value)}
+                placeholder="¿Cómo fue la comunicación y el cuidado del vehículo?"
+                className="min-h-28 w-full rounded-xl border border-white/15 bg-black p-3 text-sm text-white placeholder:text-white/30 focus:border-[#D4AF37] focus:outline-none"
+              />
+            </div>
+            <div className="flex gap-3 font-mono">
+              <button
+                type="submit"
+                className="rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B38B21] px-5 py-2.5 text-xs font-black uppercase tracking-wider text-black hover:brightness-110 shadow-md cursor-pointer"
+              >
+                Enviar Valoración
+              </button>
+              <button
+                type="button"
+                onClick={() => setReviewing(null)}
+                className="rounded-xl border border-white/15 bg-white/5 px-5 py-2.5 text-xs font-bold text-white hover:bg-white/10 cursor-pointer"
+              >
+                Cancelar
+              </button>
             </div>
           </form>
         </div>

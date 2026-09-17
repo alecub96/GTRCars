@@ -118,21 +118,21 @@ export async function sendWelcomeEmail(to: string, firstName: string) {
     <p>Te damos la bienvenida a <strong>vaneando.com</strong>, la comunidad de viajeros y propietarios locales de furgonetas camperizadas y autocaravanas de las Islas Canarias.</p>
     
     <div class="card">
-      <h3 style="margin-top: 0; color: #13322E; font-size: 16px;"> Datos de tu Cuenta de Acceso</h3>
+      <h3 style="margin-top: 0; color: #13322E; font-size: 16px;">Datos de tu Cuenta de Acceso</h3>
       <p style="margin: 6px 0;"><strong>Correo Electrónico:</strong> ${escapeHtml(to)}</p>
-      <p style="margin: 6px 0;"><strong>Plataforma:</strong> <a href="${appUrl}" style="color:#16B8AA;font-weight:bold;">vaneando.com</a></p>
-      <p style="margin: 6px 0; font-size: 13px; color: #6B726E;">Ya puedes iniciar sesión en cualquier momento con tu correo y contraseña elegida.</p>
+      <p style="margin: 6px 0;"><strong>Plataforma:</strong> <a href="${appUrl}" style="color:#D4AF37;font-weight:bold;">gtrcars.es</a></p>
+      <p style="margin: 6px 0; font-size: 13px; color: #6B726E;">Ya puedes iniciar sesión en cualquier momento con tu correo y contraseña.</p>
     </div>
 
-    <h3 style="color: #13322E; font-size: 16px; margin-top: 24px;">️ Lo que puedes hacer ahora:</h3>
+    <h3 style="color: #13322E; font-size: 16px; margin-top: 24px;">Lo que puedes hacer ahora:</h3>
     <ul style="padding-left: 20px; color: #4A5568;">
-      <li><strong>Explorar el archipiélago:</strong> Encuentra campers en Gran Canaria, Tenerife, Lanzarote, Fuerteventura y más.</li>
-      <li><strong>Alquilar a locales:</strong> Vehículos únicos, económicos y con recomendaciones secretas de pernocta.</li>
-      <li><strong>Publicar tu camper:</strong> Si tienes una furgoneta o autocaravana, consulta las condiciones y publica información precisa del vehículo.</li>
+      <li><strong>Explorar la flota VIP:</strong> Encuentra superdeportivos e hypercars en Gran Canaria y Tenerife.</li>
+      <li><strong>Custodia y seguridad garantizada:</strong> Protocolos de verificación y fianza retenida.</li>
+      <li><strong>Publicar tu superdeportivo:</strong> Rentabiliza tu vehículo de alta gama con control total.</li>
     </ul>
 
-    <p style="margin-top: 24px;">¡Nos vemos en la carretera!</p>
-    <p><strong>El equipo de vaneando.com</strong></p>
+    <p style="margin-top: 24px;">Atentamente,</p>
+    <p><strong>Equipo GTR Cars Canarias</strong></p>
   `;
 
   await transporter.sendMail({
@@ -535,12 +535,12 @@ export async function sendEmailTest(to: string) {
   await transporter.sendMail({
     from,
     to,
-    subject: 'Prueba de correo de vaneando.com ️',
-    text: 'La configuración de correo de vaneando.com funciona correctamente.',
+    subject: 'Prueba de correo de gtrcars.es',
+    text: 'La configuración de correo de gtrcars.es funciona correctamente.',
     html: renderEmailLayout({
       title: 'Prueba de Correo',
-      previewText: 'Verificación del servicio de mensajería SMTP de vaneando.com',
-      contentHtml: '<p>La configuración de correo SMTP de <strong>vaneando.com</strong> funciona perfectamente.</p>',
+      previewText: 'Verificación del servicio de mensajería SMTP de GTR Cars',
+      contentHtml: '<p>La configuración de correo SMTP de <strong>GTR Cars</strong> funciona perfectamente.</p>',
     }),
   });
 }

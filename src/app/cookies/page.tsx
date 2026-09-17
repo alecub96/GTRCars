@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import { Sparkles, Cookie } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Política de Cookies | vaneando.',
-  description: 'Información sobre el uso de cookies y almacenamiento local en la plataforma Vaneando.',
+  title: 'Política de Cookies | GTR Cars',
+  description: 'Información sobre el uso de cookies y almacenamiento local en la plataforma GTR Cars.',
   robots: {
     index: false,
     follow: true,
@@ -11,5 +13,81 @@ export const metadata: Metadata = {
 };
 
 export default function CookiesPage() {
-  return <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]"><Navbar /><main className="mx-auto max-w-4xl px-4 py-12"><article className="rounded-3xl border border-[#E9E1D2] bg-white p-8 shadow-sm sm:p-12"><div className="mb-8 border-b border-[#E9E1D2] pb-7"><span className="text-[11px] font-black uppercase tracking-[.25em] text-[#16B8AA]">Control de tu experiencia</span><h1 className="mt-2 font-serif text-4xl font-bold">Política de cookies</h1><p className="mt-3 text-sm leading-relaxed text-[#6B726E]">Última actualización: 11 de agosto de 2026.</p></div><div className="space-y-7 text-sm leading-7 text-[#52605B]"><section><h2 className="mb-2 font-serif text-xl font-bold">1. Qué son las cookies</h2><p>Son pequeños archivos que se guardan en tu dispositivo para mantener una sesión, recordar preferencias y entender cómo se utiliza la plataforma. Tecnologías equivalentes, como almacenamiento local, reciben el mismo tratamiento en esta política.</p></section><section><h2 className="mb-2 font-serif text-xl font-bold">2. Cookies necesarias</h2><p>Son imprescindibles para iniciar sesión, mantener tu rol de viajero o propietario, proteger formularios, conservar una reserva y recordar tus preferencias de cookies. No se utilizan para publicidad personalizada y no pueden desactivarse sin perder funciones esenciales.</p></section><section><h2 className="mb-2 font-serif text-xl font-bold">3. Cookies de preferencias</h2><p>Permiten recordar idioma, avisos ya vistos y opciones de interfaz. Solo se activan cuando son necesarias para ofrecer la preferencia que has solicitado.</p></section><section><h2 className="mb-2 font-serif text-xl font-bold">4. Medición y servicios externos</h2><p>Podremos incorporar medición agregada o servicios de terceros únicamente con la base legal y el consentimiento que corresponda. Los proveedores de pago, mapas, correo o seguridad pueden establecer sus propias cookies al prestar una función solicitada. Consulta sus políticas antes de utilizarlos.</p></section><section><h2 className="mb-2 font-serif text-xl font-bold">5. Cómo gestionar tus preferencias</h2><p>Puedes aceptar o rechazar las cookies no necesarias desde el aviso de privacidad de Vaneando y borrar las cookies desde la configuración de tu navegador. Bloquear las necesarias puede impedir el acceso, el pago o la gestión de reservas.</p></section><section><h2 className="mb-2 font-serif text-xl font-bold">6. Cambios y contacto</h2><p>Actualizaremos esta página si incorporamos nuevas tecnologías o cambia la normativa. Para dudas, escribe a <a className="font-bold text-[#0F766E] underline" href="mailto:contacto@vaneando.com">contacto@vaneando.com</a>.</p></section></div></article></main></div>;
+  return (
+    <div className="min-h-screen bg-[#070707] text-white selection:bg-[#D4AF37] selection:text-black">
+      <Navbar />
+      <main className="mx-auto max-w-4xl px-4 py-12 sm:py-16">
+        <article className="rounded-3xl border border-white/10 bg-[#0f0f12] p-8 shadow-2xl sm:p-12">
+          <div className="mb-8 border-b border-white/10 pb-7">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-[10px] font-mono tracking-widest uppercase mb-3">
+              <Cookie className="w-3 h-3" />
+              TRANSPARENCIA &amp; PRIVACIDAD
+            </div>
+            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-white">Política de Cookies</h1>
+            <p className="mt-2 text-xs font-mono text-neutral-400">Última actualización: Septiembre de 2026 // GTR Cars</p>
+          </div>
+
+          <div className="space-y-8 text-xs sm:text-sm font-mono leading-relaxed text-neutral-300">
+            <section className="space-y-2">
+              <h2 className="font-serif text-lg font-bold text-white flex items-center gap-2">
+                <span className="text-[#D4AF37]">1.</span> Qué son las Cookies
+              </h2>
+              <p>
+                Son pequeños identificadores digitales que se guardan en tu dispositivo para mantener una sesión segura, recordar preferencias de telemetría y entender cómo se utiliza el portal de GTR Cars.
+              </p>
+            </section>
+
+            <section className="space-y-2">
+              <h2 className="font-serif text-lg font-bold text-white flex items-center gap-2">
+                <span className="text-[#D4AF37]">2.</span> Cookies Técnicas y de Seguridad
+              </h2>
+              <p>
+                Son estrictamente necesarias para iniciar sesión, mantener la autenticación del rol de cliente o propietario de superdeportivo, proteger formularios contra ataques CSRF, procesar la pasarela de fianza con Stripe y conservar las reservas de vehículos.
+              </p>
+            </section>
+
+            <section className="space-y-2">
+              <h2 className="font-serif text-lg font-bold text-white flex items-center gap-2">
+                <span className="text-[#D4AF37]">3.</span> Cookies de Preferencias
+              </h2>
+              <p>
+                Permiten recordar el idioma seleccionado (Español o English), filtros de potencia y segmento de superdeportivo, y vistas del configurador.
+              </p>
+            </section>
+
+            <section className="space-y-2">
+              <h2 className="font-serif text-lg font-bold text-white flex items-center gap-2">
+                <span className="text-[#D4AF37]">4.</span> Servicios de Terceros
+              </h2>
+              <p>
+                Los proveedores de pago seguro (Stripe), mapas de entrega (Leaflet/OpenStreetMap) y analítica agregada pueden establecer identificadores para garantizar la prestación del servicio.
+              </p>
+            </section>
+
+            <section className="space-y-2">
+              <h2 className="font-serif text-lg font-bold text-white flex items-center gap-2">
+                <span className="text-[#D4AF37]">5.</span> Gestión de Preferencias
+              </h2>
+              <p>
+                Puedes configurar o borrar las cookies desde los ajustes de privacidad de tu navegador web en cualquier momento.
+              </p>
+            </section>
+
+            <section className="space-y-2">
+              <h2 className="font-serif text-lg font-bold text-white flex items-center gap-2">
+                <span className="text-[#D4AF37]">6.</span> Contacto
+              </h2>
+              <p>
+                Para cualquier consulta sobre protección de datos o cookies, puedes escribir al equipo de Concierge en{' '}
+                <a className="font-bold text-[#D4AF37] underline" href="mailto:vip@gtrcars.vip">
+                  vip@gtrcars.vip
+                </a>.
+              </p>
+            </section>
+          </div>
+        </article>
+      </main>
+      <Footer />
+    </div>
+  );
 }

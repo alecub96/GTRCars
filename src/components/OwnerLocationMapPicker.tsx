@@ -57,30 +57,28 @@ const ISLAND_BOUNDS: Record<string, { lat: number; lng: number; bounds: { minLat
 
 const MUNICIPALITY_PRESETS: Record<string, { lat: number; lng: number; label: string }[]> = {
   'Gran Canaria': [
-    { lat: 28.1235, lng: -15.4363, label: 'Las Palmas de Gran Canaria (Centro)' },
-    { lat: 27.9319, lng: -15.3866, label: 'Aeropuerto Gran Canaria (LPA)' },
-    { lat: 27.9940, lng: -15.4162, label: 'Telde' },
-    { lat: 27.7606, lng: -15.5860, label: 'Maspalomas / Playa del Inglés' },
+    { lat: 28.1235, lng: -15.4363, label: 'Las Palmas de Gran Canaria (Triana / Puerto)' },
+    { lat: 27.9319, lng: -15.3866, label: 'Aeropuerto Gran Canaria (LPA VIP Lounge)' },
+    { lat: 27.7606, lng: -15.5860, label: 'Maspalomas / Meloneras Resort' },
+    { lat: 27.8180, lng: -15.7640, label: 'Puerto Rico / Anfi del Mar' },
     { lat: 28.1470, lng: -15.6540, label: 'Gáldar / Agaete' },
   ],
   'Tenerife': [
-    { lat: 28.4636, lng: -16.2518, label: 'Santa Cruz de Tenerife' },
+    { lat: 28.4636, lng: -16.2518, label: 'Santa Cruz de Tenerife (Muelle VIP)' },
+    { lat: 28.0444, lng: -16.5725, label: 'Aeropuerto Tenerife Sur (TFS VIP)' },
+    { lat: 28.0550, lng: -16.7150, label: 'Costa Adeje / Playa del Duque' },
     { lat: 28.4874, lng: -16.3159, label: 'La Laguna / Aeropuerto TFN' },
-    { lat: 28.0444, lng: -16.5725, label: 'Aeropuerto Tenerife Sur (TFS)' },
-    { lat: 28.0550, lng: -16.7150, label: 'Los Cristianos / Adeje' },
     { lat: 28.4160, lng: -16.5500, label: 'Puerto de la Cruz' },
   ],
   'Lanzarote': [
-    { lat: 28.9630, lng: -13.5470, label: 'Arrecife' },
-    { lat: 28.9450, lng: -13.6050, label: 'Aeropuerto César Manrique (ACE)' },
-    { lat: 29.0469, lng: -13.5899, label: 'Teguise / Famara' },
-    { lat: 28.8600, lng: -13.8200, label: 'Playa Blanca' },
+    { lat: 28.9630, lng: -13.5470, label: 'Arrecife / Marina Lanzarote' },
+    { lat: 28.9450, lng: -13.6050, label: 'Aeropuerto César Manrique (ACE VIP)' },
+    { lat: 28.8600, lng: -13.8200, label: 'Playa Blanca / Marina Rubicón' },
   ],
   'Fuerteventura': [
     { lat: 28.5000, lng: -13.8600, label: 'Puerto del Rosario / Aeropuerto FUE' },
-    { lat: 28.7300, lng: -13.8700, label: 'Corralejo' },
-    { lat: 28.1800, lng: -14.2500, label: 'Costa Calma' },
-    { lat: 28.0500, lng: -14.3500, label: 'Morro Jable' },
+    { lat: 28.7300, lng: -13.8700, label: 'Corralejo Resort' },
+    { lat: 28.0500, lng: -14.3500, label: 'Morro Jable / Jandía' },
   ],
 };
 
@@ -161,18 +159,17 @@ export default function OwnerLocationMapPicker({
     circleRef.current?.remove();
     markerRef.current = L.marker([selectedCoords.lat, selectedCoords.lng], { draggable: true })
       .addTo(map)
-      .bindTooltip('Arrastra el pin a la zona elegida', { permanent: true, direction: 'top' });
+      .bindTooltip('Arrastra el pin al punto de entrega VIP', { permanent: true, direction: 'top' });
     markerRef.current.on('dragend', () => {
       const position = markerRef.current.getLatLng();
       const next = { lat: Number(position.lat.toFixed(6)), lng: Number(position.lng.toFixed(6)) };
       setSelectedCoords(next);
       onChange({ latitude: next.lat, longitude: next.lng, addressApprox });
     });
-    circleRef.current = L.circle([selectedCoords.lat, selectedCoords.lng], { radius: 1500, color: '#16B8AA', fillColor: '#16B8AA', fillOpacity: 0.18 }).addTo(map);
+    circleRef.current = L.circle([selectedCoords.lat, selectedCoords.lng], { radius: 1500, color: '#D4AF37', fillColor: '#D4AF37', fillOpacity: 0.18 }).addTo(map);
   }, [selectedCoords, mapReady]);
 
   useEffect(() => {
-    // Si cambia la isla en el formulario, reubicar el centro
     const newConfig = ISLAND_BOUNDS[island] || ISLAND_BOUNDS['Gran Canaria'];
     setSelectedCoords({ lat: newConfig.lat, lng: newConfig.lng });
     onChange({ latitude: newConfig.lat, longitude: newConfig.lng, addressApprox });
@@ -206,25 +203,25 @@ export default function OwnerLocationMapPicker({
   };
 
   return (
-    <div className="space-y-4 bg-white p-5 sm:p-6 rounded-3xl border border-[#E9E1D2] shadow-sm">
+    <div className="space-y-4 bg-[#0f0f12] p-5 sm:p-6 rounded-3xl border border-white/10 shadow-xl">
       <div>
-        <div className="flex items-center space-x-2 text-[10px] font-black uppercase tracking-[0.2em] text-[#16B8AA] mb-1">
+        <div className="flex items-center space-x-2 text-[10px] font-mono uppercase tracking-[0.2em] text-[#D4AF37] mb-1">
           <Compass className="w-3.5 h-3.5" />
-          <span>Geolocalización de Entrega</span>
+          <span>Geolocalización de Entrega Vault</span>
         </div>
-        <h3 className="text-xl font-bold text-[#13322E]">
-          Ubicación aproximada en el mapa ({island})
+        <h3 className="text-lg font-serif font-bold text-white">
+          Ubicación aproximada de entrega ({island})
         </h3>
-        <p className="text-xs text-[#6B726E] font-medium mt-1">
-          Arrastra el pin hasta la <strong>zona aproximada de recogida/entrega</strong> de tu camper. También puedes hacer clic en el mapa o usar las coordenadas.
+        <p className="text-xs text-neutral-400 font-mono mt-1">
+          Arrastra el pin hasta la <strong>zona o hangar de custodia</strong> de tu superdeportivo.
         </p>
       </div>
 
       {/* PUNTOS RÁPIDOS HABITUALES */}
       {presets.length > 0 && (
         <div className="space-y-1.5">
-          <span className="text-[10px] font-black uppercase text-[#6B726E] tracking-wider block">
-            Puntos habituales de entrega en {island}:
+          <span className="text-[10px] font-mono uppercase text-neutral-400 tracking-wider block">
+            Puntos habituales de entrega VIP en {island}:
           </span>
           <div className="flex flex-wrap gap-2">
             {presets.map((preset, idx) => (
@@ -232,10 +229,10 @@ export default function OwnerLocationMapPicker({
                 key={idx}
                 type="button"
                 onClick={() => handleSelectPreset(preset)}
-                className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border cursor-pointer ${
+                className={`px-3 py-1.5 rounded-full text-xs font-mono font-bold transition-all border cursor-pointer ${
                   addressApprox === preset.label
-                    ? 'bg-[#16B8AA] text-white border-[#16B8AA] shadow-sm'
-                    : 'bg-[#FAF7F0] text-[#13322E] border-[#E9E1D2] hover:bg-white'
+                    ? 'bg-[#D4AF37] text-black border-[#D4AF37] shadow-sm'
+                    : 'bg-neutral-900 text-neutral-300 border-white/10 hover:border-[#D4AF37]/50'
                 }`}
               >
                 <span>{preset.label}</span>
@@ -245,27 +242,27 @@ export default function OwnerLocationMapPicker({
         </div>
       )}
 
-      {/* MAPA INTERACTIVO DE SELECCIÓN DE UBICACIÓN */}
-      <div ref={mapContainerRef} className="relative z-0 h-64 sm:h-72 w-full rounded-2xl border border-[#E9E1D2] overflow-hidden cursor-crosshair shadow-inner" />
+      {/* MAPA INTERACTIVO */}
+      <div ref={mapContainerRef} className="relative z-0 h-64 sm:h-72 w-full rounded-2xl border border-white/10 overflow-hidden cursor-crosshair shadow-inner" />
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <label className="text-[10px] font-black uppercase tracking-wider text-[#6B726E]">
+        <label className="text-[10px] font-mono uppercase tracking-wider text-neutral-400">
           Latitud
-          <input type="number" step="0.000001" value={selectedCoords.lat} onChange={(event) => updateCoordinate('lat', event.target.value)} className="mt-1 w-full rounded-xl border border-[#E9E1D2] p-3 text-sm font-semibold text-[#13322E]" />
+          <input type="number" step="0.000001" value={selectedCoords.lat} onChange={(event) => updateCoordinate('lat', event.target.value)} className="mt-1 w-full rounded-xl border border-white/15 bg-neutral-900 p-3 text-sm font-mono font-semibold text-white focus:border-[#D4AF37] outline-none" />
         </label>
-        <label className="text-[10px] font-black uppercase tracking-wider text-[#6B726E]">
+        <label className="text-[10px] font-mono uppercase tracking-wider text-neutral-400">
           Longitud
-          <input type="number" step="0.000001" value={selectedCoords.lng} onChange={(event) => updateCoordinate('lng', event.target.value)} className="mt-1 w-full rounded-xl border border-[#E9E1D2] p-3 text-sm font-semibold text-[#13322E]" />
+          <input type="number" step="0.000001" value={selectedCoords.lng} onChange={(event) => updateCoordinate('lng', event.target.value)} className="mt-1 w-full rounded-xl border border-white/15 bg-neutral-900 p-3 text-sm font-mono font-semibold text-white focus:border-[#D4AF37] outline-none" />
         </label>
-        <button type="button" onClick={useBrowserLocation} className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl border border-[#16B8AA]/40 bg-[#16B8AA]/10 px-3 py-3 text-xs font-bold text-[#0F766E] hover:bg-[#16B8AA] hover:text-white">
+        <button type="button" onClick={useBrowserLocation} className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl border border-[#D4AF37]/30 bg-[#D4AF37]/10 px-3 py-3 text-xs font-mono font-bold text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition-colors">
           <LocateFixed className="h-4 w-4" /> Usar mi ubicación
         </button>
       </div>
 
       {/* DESCRIPCIÓN DE LA ZONA / REFERENCIA */}
       <div>
-        <label className="block text-[10px] font-black uppercase text-[#6B726E] mb-1">
-          Zona o punto de referencia visible para viajeros
+        <label className="block text-[10px] font-mono uppercase text-neutral-400 mb-1">
+          Zona o punto de entrega concierge visible para clientes
         </label>
         <input
           type="text"
@@ -274,16 +271,16 @@ export default function OwnerLocationMapPicker({
             setAddressApprox(e.target.value);
             onChange({ latitude: selectedCoords.lat, longitude: selectedCoords.lng, addressApprox: e.target.value });
           }}
-          placeholder="Ej: Cerca del Aeropuerto de Gran Canaria / Puerto de Las Palmas"
-          className="w-full p-3 rounded-xl border border-[#E9E1D2] text-xs font-medium focus:ring-1 focus:ring-[#16B8AA] outline-none"
+          placeholder="Ej: Terminal VIP Aeropuerto de Gran Canaria / Hotel Resort Costa Adeje"
+          className="w-full p-3 rounded-xl border border-white/15 bg-neutral-900 text-xs font-mono text-white focus:border-[#D4AF37] outline-none"
         />
       </div>
 
       {/* AVISO DE PRIVACIDAD */}
-      <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-[11px] text-emerald-900 flex items-start space-x-2">
-        <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+      <div className="p-3.5 rounded-xl bg-neutral-900/90 border border-white/10 text-[11px] font-mono text-neutral-300 flex items-start space-x-2">
+        <ShieldCheck className="w-4 h-4 text-[#D4AF37] shrink-0 mt-0.5" />
         <p>
-          <strong>Protección de Privacidad:</strong> Tu dirección exacta nunca se publicará en la web. Los viajeros únicamente verán este círculo de aproximación de ~1.5 km hasta que formalicen la reserva.
+          <strong>Protocolo de Privacidad y Discreción:</strong> La dirección exacta del garaje o hangar nunca se revela públicamente. Los clientes únicamente verán el radio de recogida hasta formalizar la fianza y verificación de identidad.
         </p>
       </div>
     </div>

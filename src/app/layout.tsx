@@ -7,56 +7,58 @@ import { activeSocialLinks } from '@/lib/social-links';
 import AnalyticsProvider from '@/components/AnalyticsProvider';
 
 export const viewport: Viewport = {
-  themeColor: '#13322E',
-  colorScheme: 'light',
+  themeColor: '#050505',
+  colorScheme: 'dark',
   width: 'device-width',
   initialScale: 1,
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://vaneando.com'),
+  metadataBase: new URL('https://gtrcars.vip'),
   title: {
-    default: 'Vaneando | Alquiler de campers en Canarias',
-    template: '%s | vaneando.',
+    default: 'GTR Cars | Alquiler de Deportivos y Superdeportivos en Gran Canaria y Tenerife',
+    template: '%s | GTR Cars',
   },
-  description: 'Busca y compara campers, autocaravanas, caravanas y vehículos recreativos disponibles en las Islas Canarias.',
-  applicationName: 'vaneando.',
-  authors: [{ name: 'vaneando. — Canarias sobre ruedas', url: 'https://vaneando.com' }],
-  creator: 'vaneando.',
-  publisher: 'vaneando.',
+  description: 'Alquiler exclusivo de deportivos, superdeportivos y hypercars en Gran Canaria y Tenerife directamente entre particulares con telemetría en vivo, contrato digital y depósito en custodia.',
+  applicationName: 'GTR Cars',
+  authors: [{ name: 'GTR Cars // Hypercar Vault', url: 'https://gtrcars.vip' }],
+  creator: 'GTR Cars',
+  publisher: 'GTR Cars',
   keywords: [
-    'alquiler camper Canarias',
-    'alquiler camper Gran Canaria barato',
-    'alquiler autocaravana Tenerife',
-    'alquiler furgoneta camperizada Canarias',
-    'alquiler 4x4 camperizado Canarias',
-    'alquiler camper particulares Canarias',
-    'alquiler autocaravanas Fuerteventura',
-    'alquiler camper Lanzarote',
+    'alquiler deportivos gran canaria',
+    'alquiler superdeportivos tenerife',
+    'alquiler ferrari gran canaria',
+    'alquiler lamborghini tenerife',
+    'alquiler porsche 911 gt3 rs canarias',
+    'alquiler coches lujo gran canaria',
+    'supercar rental canary islands',
+    'sports car hire tenerife',
+    'alquiler hypercar espana',
+    'gtr cars vault',
   ],
-  alternates: { canonical: 'https://vaneando.com' },
+  alternates: { canonical: 'https://gtrcars.vip' },
   openGraph: {
     type: 'website',
     locale: 'es_ES',
-    siteName: 'vaneando. — Canarias sobre ruedas',
-    title: 'Vaneando | Alquiler de campers y autocaravanas en Canarias',
-    description: 'Campers y autocaravanas disponibles en Canarias, con información clara del anuncio y contacto con propietarios.',
-    url: 'https://vaneando.com',
+    siteName: 'GTR Cars // P2P Hypercar Vault',
+    title: 'GTR Cars | Alquiler de Superdeportivos en Gran Canaria y Tenerife',
+    description: 'Accede al Vault más exclusivo de superdeportivos en Canarias. Alquila Ferrari, Lamborghini, Porsche y McLaren directamente de propietarios verificados.',
+    url: 'https://gtrcars.vip',
     images: [
       {
-        url: 'https://vaneando.com/og-image.png',
+        url: '/og-image.png',
         width: 1200,
         height: 630,
         type: 'image/png',
-        alt: 'vaneando. — Alquiler de campers y autocaravanas en las Islas Canarias',
+        alt: 'GTR Cars — Alquiler de Deportivos en Gran Canaria y Tenerife',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Vaneando | Campers en Canarias entre particulares',
-    description: 'Alquila furgonetas camperizadas, autocaravanas y 4x4 directamente a propietarios locales verificados en Canarias.',
-    images: ['https://vaneando.com/og-image.png'],
+    title: 'GTR Cars | Supercar & Hypercar Vault Canarias',
+    description: 'Alquiler exclusivo de deportivos, superdeportivos y hypercars en Gran Canaria y Tenerife.',
+    images: ['/og-image.png'],
   },
   robots: {
     index: true,
@@ -69,40 +71,33 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  verification: {
-    google: 'b_aBYmH5fbwoMGeDcDbEHlOhekFHl1pZoVNhw2dfufE',
-  },
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon.png', sizes: 'any' },
       { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
-      { url: '/vaneando-icon.svg', type: 'image/svg+xml' },
+      { url: '/gtcars-logo.svg', type: 'image/svg+xml' },
     ],
     apple: [
       { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
     ],
-    shortcut: ['/favicon.ico'],
+    shortcut: ['/favicon.png'],
   },
   manifest: '/site.webmanifest',
-  other: {
-    'google-site-verification': 'b_aBYmH5fbwoMGeDcDbEHlOhekFHl1pZoVNhw2dfufE',
-    'geo.region': 'ES-CN',
-    'geo.placename': 'Canary Islands, Spain',
-    'geo.position': '28.291564;-16.629130',
-    'ICBM': '28.291564, -16.629130',
-  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const jsonLdGlobalOrg = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'vaneando.',
-    url: 'https://vaneando.com',
-    logo: 'https://vaneando.com/vaneando-lockup.svg',
-    description: 'Marketplace de vehículos recreativos publicados para alquiler en las Islas Canarias.',
-    knowsLanguage: ['es'],
+    name: 'GTR Cars',
+    url: 'https://gtrcars.vip',
+    logo: 'https://gtrcars.vip/favicon.png',
+    description: 'Plataforma exclusiva de alquiler de superdeportivos e hypercars en Gran Canaria y Tenerife directamente entre particulares.',
+    knowsLanguage: ['es', 'en'],
     areaServed: [
+      { '@type': 'AdministrativeArea', name: 'Gran Canaria' },
+      { '@type': 'AdministrativeArea', name: 'Tenerife' },
+      { '@type': 'AdministrativeArea', name: 'Canarias' },
       { '@type': 'Country', name: 'Spain' },
     ],
     address: {
@@ -116,8 +111,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const jsonLdWebSite = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'vaneando.',
-    url: 'https://vaneando.com',
+    name: 'GTR Cars // P2P Supercar & Hypercar Vault',
+    url: 'https://gtrcars.vip',
   };
 
   return (

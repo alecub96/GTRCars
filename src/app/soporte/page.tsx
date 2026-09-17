@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Navbar from '@/components/Navbar';
-import { MessageSquare, Send, ShieldCheck, Mail, Phone, Clock, User, Sparkles, AlertCircle } from 'lucide-react';
+import Footer from '@/components/Footer';
+import { MessageSquare, Send, ShieldCheck, Mail, Phone, Clock, User, Sparkles, AlertCircle, Headphones } from 'lucide-react';
 import Link from 'next/link';
 
 export default function SupportPage() {
@@ -101,37 +102,38 @@ export default function SupportPage() {
   const isAdmin = currentUser?.role === 'ADMIN';
 
   return (
-    <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]">
+    <div className="min-h-screen bg-[#070707] text-white selection:bg-[#D4AF37] selection:text-black flex flex-col">
       <Navbar />
-      <main className="mx-auto max-w-6xl px-4 py-8 sm:py-12">
-        <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <main className="flex-1 mx-auto max-w-6xl px-4 py-8 sm:py-12 w-full">
+        <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <span className="text-[11px] font-black uppercase tracking-[0.25em] text-[#16B8AA]">
-              Centro de Ayuda & Atención al Cliente
-            </span>
-            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#13322E] mt-1">
-              {isAdmin ? 'Panel de Soporte con Usuarios' : 'Habla con el equipo de vaneando.'}
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-[10px] font-mono tracking-widest uppercase mb-2">
+              <Headphones className="w-3.5 h-3.5" />
+              CONSERJERÍA VIP GTR CARS
+            </div>
+            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-white mt-1">
+              {isAdmin ? 'Panel de Soporte con Usuarios' : 'Canal Privado con Conserjería VIP'}
             </h1>
           </div>
-          <div className="flex items-center space-x-2 bg-emerald-50 border border-emerald-200 px-3.5 py-1.5 rounded-full text-emerald-800 text-xs font-bold w-fit">
-            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>Soporte activo en Canarias (8:00 - 22:00)</span>
+          <div className="flex items-center space-x-2 bg-emerald-950/40 border border-emerald-500/30 px-3.5 py-1.5 rounded-full text-emerald-400 text-xs font-mono font-bold w-fit">
+            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
+            <span>Conserjería activa 24/7 en Canarias</span>
           </div>
         </div>
 
         {/* SI EL USUARIO NO ESTÁ AUTENTICADO */}
         {!isAuthLoading && !currentUser && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div className="md:col-span-2 rounded-3xl border border-[#E9E1D2] bg-white p-8 sm:p-10 shadow-xl flex flex-col justify-between">
+            <div className="md:col-span-2 rounded-3xl border border-white/10 bg-[#0f0f12] p-8 sm:p-10 shadow-2xl flex flex-col justify-between space-y-6">
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-[#16B8AA]/10 text-[#16B8AA] flex items-center justify-center mb-4">
+                <div className="w-12 h-12 rounded-2xl bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/30 flex items-center justify-center mb-4">
                   <MessageSquare className="w-6 h-6" />
                 </div>
-                <h2 className="font-serif text-2xl font-bold text-[#13322E] mb-2">
-                  Inicia sesión para abrir un ticket de chat
+                <h2 className="font-serif text-2xl font-bold text-white mb-2">
+                  Inicia sesión para abrir un canal con Conserjería
                 </h2>
-                <p className="text-sm text-[#6B726E] leading-relaxed mb-6">
-                  Para poder asociar tu consulta a tus reservas, contrato o furgoneta y responderte con la mayor rapidez, identifícate en la plataforma.
+                <p className="text-xs sm:text-sm text-neutral-400 font-mono leading-relaxed">
+                  Para poder asociar tu consulta a tu reserva de superdeportivo, fianza o custodia en el Vault, identifícate en la plataforma.
                 </p>
               </div>
 
@@ -142,33 +144,33 @@ export default function SupportPage() {
                     new CustomEvent('open-auth-modal', {
                       detail: {
                         mode: 'login',
-                        subtitle: 'Inicia sesión o regístrate para chatear con el equipo de soporte.',
+                        subtitle: 'Inicia sesión para chatear con el equipo de Conserjería VIP.',
                       },
                     })
                   )
                 }
-                className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-8 py-3.5 rounded-full bg-[#16B8AA] hover:bg-[#0F766E] text-white text-xs font-black uppercase tracking-wider shadow-md transition-all cursor-pointer"
+                className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B38B21] hover:brightness-110 text-black text-xs font-mono font-bold uppercase tracking-wider shadow-lg transition-all cursor-pointer"
               >
                 <User className="w-4 h-4" />
-                <span>Acceder / Crear Cuenta para Chatear</span>
+                <span>Acceder a mi Cuenta VIP</span>
               </button>
             </div>
 
             <div className="space-y-4">
-              <div className="rounded-3xl border border-[#E9E1D2] bg-white p-6 shadow-sm">
-                <Mail className="w-5 h-5 text-[#16B8AA] mb-2" />
-                <h3 className="text-sm font-bold text-[#13322E]">Correo Electrónico</h3>
-                <p className="text-xs text-[#6B726E] mt-0.5">soporte@vaneando.com</p>
+              <div className="rounded-3xl border border-white/10 bg-[#0f0f12] p-6 shadow-xl space-y-1">
+                <Mail className="w-5 h-5 text-[#D4AF37] mb-2" />
+                <h3 className="text-sm font-mono font-bold text-white">Correo VIP</h3>
+                <p className="text-xs font-mono text-neutral-400">vip@gtrcars.vip</p>
               </div>
-              <div className="rounded-3xl border border-[#E9E1D2] bg-white p-6 shadow-sm">
-                <Clock className="w-5 h-5 text-[#16B8AA] mb-2" />
-                <h3 className="text-sm font-bold text-[#13322E]">Tiempo de respuesta</h3>
-                <p className="text-xs text-[#6B726E] mt-0.5">Menos de 15 minutos en horario diurno</p>
+              <div className="rounded-3xl border border-white/10 bg-[#0f0f12] p-6 shadow-xl space-y-1">
+                <Clock className="w-5 h-5 text-[#D4AF37] mb-2" />
+                <h3 className="text-sm font-mono font-bold text-white">Tiempo de respuesta</h3>
+                <p className="text-xs font-mono text-neutral-400">Menos de 15 minutos (24/7)</p>
               </div>
-              <div className="rounded-3xl border border-[#E9E1D2] bg-white p-6 shadow-sm">
-                <ShieldCheck className="w-5 h-5 text-[#16B8AA] mb-2" />
-                <h3 className="text-sm font-bold text-[#13322E]">Emergencias en ruta</h3>
-                <p className="text-xs text-[#6B726E] mt-0.5">Asistencia telefónica 24/7 en tu contrato</p>
+              <div className="rounded-3xl border border-white/10 bg-[#0f0f12] p-6 shadow-xl space-y-1">
+                <ShieldCheck className="w-5 h-5 text-[#D4AF37] mb-2" />
+                <h3 className="text-sm font-mono font-bold text-white">Emergencias en ruta</h3>
+                <p className="text-xs font-mono text-neutral-400">Asistencia de plataforma baja 24/7</p>
               </div>
             </div>
           </div>
@@ -176,36 +178,36 @@ export default function SupportPage() {
 
         {/* CHAT DE SOPORTE PARA USUARIOS AUTENTICADOS */}
         {currentUser && (
-          <div className="grid h-[620px] grid-cols-1 overflow-hidden rounded-3xl border border-[#E9E1D2] bg-white shadow-xl md:grid-cols-3">
+          <div className="grid h-[620px] grid-cols-1 overflow-hidden rounded-3xl border border-white/10 bg-[#0f0f12] shadow-2xl md:grid-cols-3">
             {isAdmin && (
-              <aside className="overflow-y-auto border-r border-[#E9E1D2] bg-[#FAF7F0] p-4">
-                <h2 className="mb-3 font-bold text-sm text-[#13322E] flex items-center justify-between">
+              <aside className="overflow-y-auto border-r border-white/10 bg-black/60 p-4">
+                <h2 className="mb-3 font-mono font-bold text-sm text-white flex items-center justify-between">
                   <span>Conversaciones activas</span>
-                  <span className="text-xs bg-[#16B8AA] text-white px-2 py-0.5 rounded-full font-bold">
+                  <span className="text-xs bg-[#D4AF37] text-black px-2 py-0.5 rounded-full font-bold">
                     {conversations.length}
                   </span>
                 </h2>
                 {conversations.length === 0 ? (
-                  <p className="text-xs text-[#6B726E] p-3 text-center">No hay tickets abiertos.</p>
+                  <p className="text-xs font-mono text-neutral-400 p-3 text-center">No hay tickets abiertos.</p>
                 ) : (
                   conversations.map((conversation) => (
                     <button
                       key={conversation.id}
                       onClick={() => setActiveId(conversation.id)}
-                      className={`mb-2 w-full rounded-2xl border p-3 text-left transition-all cursor-pointer ${
+                      className={`mb-2 w-full rounded-2xl border p-3 text-left transition-all cursor-pointer font-mono ${
                         activeId === conversation.id
-                          ? 'border-[#16B8AA] bg-white shadow-sm ring-2 ring-[#16B8AA]/10'
-                          : 'border-transparent hover:bg-white/60'
+                          ? 'border-[#D4AF37] bg-neutral-900 shadow-md ring-1 ring-[#D4AF37]'
+                          : 'border-white/5 hover:bg-neutral-900/60 text-neutral-400'
                       }`}
                     >
-                      <strong className="block text-sm text-[#13322E]">
+                      <strong className="block text-sm text-white">
                         {conversation.user.firstName} {conversation.user.lastName}
                       </strong>
-                      <span className="block truncate text-xs text-[#6B726E]">
+                      <span className="block truncate text-xs text-neutral-400">
                         {conversation.user.email}
                       </span>
                       {conversation._count?.messages > 0 && (
-                        <span className="mt-1 inline-block rounded-full bg-[#16B8AA] px-2 py-0.5 text-[10px] font-bold text-white">
+                        <span className="mt-1 inline-block rounded-full bg-[#D4AF37] px-2 py-0.5 text-[10px] font-bold text-black">
                           {conversation._count.messages} nuevos
                         </span>
                       )}
@@ -216,17 +218,17 @@ export default function SupportPage() {
             )}
 
             <section className={`flex flex-col ${isAdmin ? 'md:col-span-2' : 'md:col-span-3'}`}>
-              <div className="flex-1 space-y-3 overflow-y-auto p-4 sm:p-6 custom-scrollbar">
+              <div className="flex-1 space-y-3 overflow-y-auto p-4 sm:p-6 custom-scrollbar bg-black/40">
                 {messages.length === 0 && (
                   <div className="text-center py-16 px-4">
-                    <MessageSquare className="w-10 h-10 text-[#16B8AA] mx-auto mb-3 opacity-60" />
-                    <p className="text-sm font-bold text-[#13322E]">
+                    <MessageSquare className="w-10 h-10 text-[#D4AF37] mx-auto mb-3 opacity-60" />
+                    <p className="text-sm font-mono font-bold text-white">
                       {isAdmin && !activeId
                         ? 'Selecciona una conversación de la lista.'
-                        : '¡Hola! Escribe tu consulta abajo.'}
+                        : '¡Hola! Escribe tu consulta al equipo de Conserjería VIP.'}
                     </p>
-                    <p className="text-xs text-[#6B726E] mt-1 max-w-sm mx-auto">
-                      Un agente de Vaneando te responderá de inmediato.
+                    <p className="text-xs font-mono text-neutral-400 mt-1 max-w-sm mx-auto">
+                      Un agente de GTR Cars te responderá de inmediato.
                     </p>
                   </div>
                 )}
@@ -243,19 +245,19 @@ export default function SupportPage() {
                     }`}
                   >
                     <div
-                      className={`max-w-[85%] sm:max-w-[75%] rounded-2xl p-3.5 text-sm shadow-sm ${
+                      className={`max-w-[85%] sm:max-w-[75%] rounded-2xl p-3.5 text-xs sm:text-sm shadow-md font-mono ${
                         message.system
-                          ? 'border border-[#16B8AA]/30 bg-[#F4F9F8] text-center text-[#13322E] text-xs font-medium'
+                          ? 'border border-[#D4AF37]/30 bg-neutral-900 text-center text-white'
                           : message.sender?.id === currentUser?.id
-                          ? 'bg-[#13322E] text-white rounded-br-none'
-                          : 'bg-[#FAF7F0] border border-[#E9E1D2] text-[#13322E] rounded-bl-none'
+                          ? 'bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black font-semibold rounded-br-none'
+                          : 'bg-neutral-900 border border-white/10 text-white rounded-bl-none'
                       }`}
                     >
                       <strong className="mb-1 block text-[10px] uppercase tracking-wider opacity-70">
                         {message.system
-                          ? 'Asistente Vaneando'
+                          ? 'Sistema GTR Cars'
                           : message.sender?.role === 'ADMIN'
-                          ? 'Equipo Vaneando'
+                          ? 'Conserjería VIP'
                           : `${message.sender?.firstName || ''} ${message.sender?.lastName || ''}`}
                       </strong>
                       <div className="whitespace-pre-wrap leading-relaxed">{message.content}</div>
@@ -272,26 +274,26 @@ export default function SupportPage() {
               </div>
 
               {error && (
-                <div className="border-t border-red-200 bg-red-50 px-4 py-2 text-xs font-bold text-red-700 flex items-center gap-2">
+                <div className="border-t border-red-500/30 bg-red-950/40 px-4 py-2 text-xs font-mono text-red-400 flex items-center gap-2">
                   <AlertCircle className="w-4 h-4 shrink-0" />
                   <span>{error}</span>
                 </div>
               )}
 
               {(!isAdmin || activeId) && (
-                <form onSubmit={send} className="flex gap-2 border-t border-[#E9E1D2] p-3 sm:p-4 bg-white">
+                <form onSubmit={send} className="flex gap-2 border-t border-white/10 p-3 sm:p-4 bg-[#0f0f12]">
                   <input
                     value={content}
                     onChange={(event) => setContent(event.target.value)}
                     required
                     disabled={sending}
-                    placeholder="Escribe tu mensaje al equipo de soporte..."
-                    className="flex-1 rounded-xl border border-[#E9E1D2] px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#16B8AA] disabled:bg-slate-50"
+                    placeholder="Escribe tu mensaje a Conserjería VIP..."
+                    className="flex-1 rounded-xl border border-white/15 bg-neutral-900 px-4 py-3 text-xs sm:text-sm font-mono text-white focus:outline-none focus:border-[#D4AF37] disabled:bg-neutral-800"
                   />
                   <button
                     type="submit"
                     disabled={sending || !content.trim()}
-                    className="rounded-xl bg-[#16B8AA] hover:bg-[#0F766E] disabled:bg-slate-300 px-5 py-3 text-white transition-all shadow-sm cursor-pointer disabled:cursor-not-allowed flex items-center justify-center"
+                    className="rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B38B21] hover:brightness-110 disabled:opacity-40 px-5 py-3 text-black transition-all shadow-md cursor-pointer disabled:cursor-not-allowed flex items-center justify-center"
                     aria-label="Enviar mensaje"
                   >
                     <Send className="h-5 w-5" />
@@ -302,6 +304,7 @@ export default function SupportPage() {
           </div>
         )}
       </main>
+      <Footer />
     </div>
   );
 }

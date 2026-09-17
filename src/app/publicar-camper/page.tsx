@@ -4,35 +4,53 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import { CANARY_ISLANDS } from '@/lib/pricing';
-import { BusFront, CarFront, Caravan, CheckCircle2, Mountain, Ship, Truck, Upload, AlertCircle, FileText, ShieldAlert } from 'lucide-react';
+import {
+  Gauge,
+  Zap,
+  Shield,
+  Upload,
+  AlertCircle,
+  CheckCircle2,
+  Sparkles,
+  Trophy,
+  Compass,
+} from 'lucide-react';
+import {
+  HypercarSilhouette,
+  SupercarV8Silhouette,
+  TrackGTSilhouette,
+  GranTurismoSilhouette,
+  SpyderSilhouette,
+  SuperSUVSilhouette,
+} from '@/components/SupercarIcons';
 import OwnerLocationMapPicker from '@/components/OwnerLocationMapPicker';
 import { analytics } from '@/lib/analytics';
 
-const EQUIPMENT = [
-  'Aire acondicionado',
-  'Calefacción',
-  'Ducha interior',
-  'WC',
-  'Cocina',
-  'Frigorífico',
-  'Agua caliente',
-  'Placa solar',
-  'Toldo',
-  'Portabicicletas',
-  'Menaje',
-  'Ropa de cama',
+const SUPERCAR_EQUIPMENT = [
+  'Escape Deportivo Valvetronic',
+  'Frenos Carbocerámicos (PCCB/CCM)',
+  'Launch Control',
+  'Suspensión Neumática con Eje Elevable (Front Lift)',
+  'Telemetría de Circuito & Lap Timer',
+  'Interior en Fibra de Carbono & Alcantara',
+  'Asientos Baquet de Competición',
+  'Sistema de Sonido Premium (Burmester/B&O)',
+  'Apple CarPlay / Cockpit Digital',
+  'Cámaras 360º de Maniobra',
+  'Tracción Total Inteligente (AWD)',
+  'Alerón Aerodinámico Activo / DRS',
 ];
 
-const VEHICLE_TYPES = [
-  { value: 'TURISMO_CAMPERIZADO', label: 'Camper Pequeña', icon: CarFront },
-  { value: 'CAMPER_GRAN_VOLUMEN', label: 'Camper Gran Volumen', icon: Truck },
-  { value: 'CARAVANA', label: 'Caravana', icon: Caravan },
-  { value: 'AUTOCARAVANA', label: 'Autocaravana', icon: BusFront },
-  { value: '4X4_CAMPERIZADO', label: '4x4 Camper', icon: Mountain },
-  { value: 'BARCO', label: 'Barco / Velero', icon: Ship },
+const SUPERCAR_CATEGORIES = [
+  { value: 'HYPERCAR', label: 'Hypercar V12 / Híbrido', icon: HypercarSilhouette, desc: 'Ferrari SF90, Revuelto, Aventador' },
+  { value: 'SUPERCAR_V8_V10', label: 'Superdeportivo V8 / V10', icon: SupercarV8Silhouette, desc: 'Ferrari 296, Huracán, 765LT, R8' },
+  { value: 'TRACK_TOY', label: 'Track Focused / GT', icon: TrackGTSilhouette, desc: 'Porsche 911 GT3 RS, AMG Black Series' },
+  { value: 'GRAN_TURISMO', label: 'Gran Turismo V8 / V12', icon: GranTurismoSilhouette, desc: 'Aston Martin DBS, Bentley GT, Roma' },
+  { value: 'SPYDER_CABRIO', label: 'Spyder / Descapotable', icon: SpyderSilhouette, desc: 'F8 Spider, Huracán Spyder, 911 Cabrio' },
+  { value: 'SUV_LUXURY', label: 'Super SUV Deportivo', icon: SuperSUVSilhouette, desc: 'Lamborghini Urus, Purosangue, DBX' },
 ] as const;
 
-export default function PublishCamperPage() {
+export default function PublishSupercarPage() {
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -41,6 +59,7 @@ export default function PublishCamperPage() {
   const [photoFiles, setPhotoFiles] = useState<File[]>([]);
   const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
   const [coverPhotoIndex, setCoverPhotoIndex] = useState(0);
+
   useEffect(() => { analytics.track('vehicle_creation_start'); }, []);
 
   useEffect(() => {
@@ -49,11 +68,11 @@ export default function PublishCamperPage() {
       .then((data) => {
         const isLoggedIn = Boolean(data.user);
         setAuthorized(isLoggedIn);
-        if (!isLoggedIn) window.location.href = '/';
+        if (!isLoggedIn) window.location.href = '/login?callbackUrl=/publicar-camper';
       })
       .catch(() => {
         setAuthorized(false);
-        window.location.href = '/';
+        window.location.href = '/login?callbackUrl=/publicar-camper';
       });
   }, []);
 
@@ -61,26 +80,29 @@ export default function PublishCamperPage() {
     title: '',
     brand: '',
     model: '',
-    vehicleType: 'TURISMO_CAMPERIZADO',
+    vehicleType: 'SUPERCAR_V8_V10',
     year: new Date().getFullYear(),
     island: 'Gran Canaria',
     municipality: 'Las Palmas de Gran Canaria',
-    passengers: 4,
-    beds: 4,
-    doors: 4,
+    passengers: 2,
+    beds: 0,
+    doors: 2,
     transmission: 'AUTOMATIC',
-    fuelType: 'DIESEL',
+    fuelType: 'GASOLINE',
     fuelConsumption: '',
-    basePricePerDay: 65,
+    powerCv: 650,
+    acceleration0100: 3.0,
+    topSpeed: 330,
+    basePricePerDay: 950,
     includedKmPerDay: 150,
-    extraKmPrice: 0.25,
+    extraKmPrice: 3.5,
     unlimitedMileage: false,
-    securityDeposit: 400,
-    cleaningFee: 30,
-    minDays: 2,
+    securityDeposit: 3000,
+    cleaningFee: 50,
+    minDays: 1,
     maxDays: 30,
     bookingType: 'REQUEST_TO_BOOK',
-    cancellationPolicy: 'MODERATE',
+    cancellationPolicy: 'STRICT',
     addressApprox: '',
     latitude: null as number | null,
     longitude: null as number | null,
@@ -89,12 +111,12 @@ export default function PublishCamperPage() {
     features: [] as string[],
   });
 
-  // GESTIÓN DE TARIFAS POR TEMPORADA / FECHAS PERSONALIZADAS
+  // GESTIÓN DE TARIFAS POR TEMPORADA / EVENTOS
   const [pricingRules, setPricingRules] = useState<Array<{ id: string; name: string; startDate: string; endDate: string; pricePerDay: number }>>([]);
   const [ruleName, setRuleName] = useState('');
   const [ruleStart, setRuleStart] = useState('');
   const [ruleEnd, setRuleEnd] = useState('');
-  const [rulePrice, setRulePrice] = useState<number>(55);
+  const [rulePrice, setRulePrice] = useState<number>(1200);
 
   const handleAddPricingRule = () => {
     if (!ruleStart || !ruleEnd) {
@@ -105,14 +127,14 @@ export default function PublishCamperPage() {
       setError('La fecha de fin debe ser posterior a la de inicio.');
       return;
     }
-    if (rulePrice < 10) {
-      setError('El precio de la tarifa especial debe ser al menos de 10€/día.');
+    if (rulePrice < 50) {
+      setError('El precio de la tarifa especial debe ser al menos de 50€/día.');
       return;
     }
     setError('');
     const newRule = {
       id: Math.random().toString(36).substring(7),
-      name: ruleName.trim() || 'Tarifa de temporada',
+      name: ruleName.trim() || 'Tarifa Evento / Temporada Alta',
       startDate: ruleStart,
       endDate: ruleEnd,
       pricePerDay: Number(rulePrice),
@@ -121,14 +143,13 @@ export default function PublishCamperPage() {
     setRuleName('');
     setRuleStart('');
     setRuleEnd('');
-    setRulePrice(formData.basePricePerDay ? Math.round(formData.basePricePerDay * 1.2) : 60);
+    setRulePrice(formData.basePricePerDay ? Math.round(formData.basePricePerDay * 1.25) : 1200);
   };
 
   const handleRemovePricingRule = (id: string) => {
     setPricingRules(pricingRules.filter((r) => r.id !== id));
   };
 
-  // HELPER PARA EVITAR CEROS A LA IZQUIERDA EN NÚMEROS (Ej. 065 -> 65)
   const handleNumberInput = (field: keyof typeof formData, rawVal: string) => {
     const cleanStr = rawVal.replace(/^0+(?=\d)/, '');
     const val = cleanStr === '' ? 0 : Number(cleanStr);
@@ -142,15 +163,15 @@ export default function PublishCamperPage() {
       return false;
     }
     if (!formData.brand || formData.brand.trim().length < 2) {
-      setError('Introduce la marca del vehículo (ejemplo: Volkswagen, Fiat).');
+      setError('Introduce la marca del superdeportivo (ej: Porsche, Ferrari, Lamborghini).');
       return false;
     }
     if (!formData.model || formData.model.trim().length < 1) {
-      setError('Introduce el modelo del vehículo (ejemplo: California).');
+      setError('Introduce el modelo del vehículo (ej: 911 GT3 RS, Huracán STO).');
       return false;
     }
     if (!formData.municipality || formData.municipality.trim().length < 2) {
-      setError('Introduce el municipio donde se encuentra la camper.');
+      setError('Introduce la zona donde se ubica el vehículo.');
       return false;
     }
     return true;
@@ -158,24 +179,24 @@ export default function PublishCamperPage() {
 
   const validateStep3 = () => {
     setError('');
-    if (formData.basePricePerDay < 10) {
-      setError('El precio por día debe ser de al menos 10€.');
+    if (formData.basePricePerDay < 50) {
+      setError('El precio por día debe ser de al menos 50€.');
       return false;
     }
-    if (formData.securityDeposit < 0) {
-      setError('La fianza no puede ser negativa.');
+    if (formData.securityDeposit < 500) {
+      setError('La fianza recomendada para vehículos de alta gama es de al menos 500€.');
       return false;
     }
     if (!formData.description || formData.description.trim().length < 20) {
-      setError('Escribe una descripción de al menos 20 caracteres.');
+      setError('Escribe una descripción de al menos 20 caracteres sobre las especificaciones y estado del vehículo.');
       return false;
     }
     if (formData.rules.trim().length < 10) {
-      setError(`Las normas y condiciones deben tener al menos 10 caracteres (llevas ${formData.rules.trim().length}/10).`);
+      setError(`Las normas y requisitos deben tener al menos 10 caracteres (llevas ${formData.rules.trim().length}/10).`);
       return false;
     }
-    if (photoFiles.length < 5) {
-      setError(`Debes adjuntar al menos 5 fotos (${photoFiles.length}/5). Exterior, habitáculo, conducción, cama/interior y baño.`);
+    if (photoFiles.length < 3) {
+      setError(`Debes adjuntar al menos 3 fotos de alta resolución (${photoFiles.length}/3).`);
       return false;
     }
     if (photoFiles.length > 10) {
@@ -209,17 +230,17 @@ export default function PublishCamperPage() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Error al publicar camper');
+      if (!res.ok) throw new Error(data.error || 'Error al publicar vehículo');
 
       for (let index = 0; index < photoFiles.length; index += 1) {
         const upload = new FormData();
         upload.set('file', photoFiles[index]);
-        upload.set('caption', ['Exterior', 'Zona de habitáculo', 'Zona de conducción', 'Zona de cama e interior', 'Baño'][index] || 'Foto adicional');
+        upload.set('caption', ['Exterior Frontal', 'Interior Cockpit', 'Trasera & Motor', 'Detalle Llanta / Frenos', 'Lateral'][index] || 'Foto adicional');
         upload.set('isCover', String(index === coverPhotoIndex));
         const photoResponse = await fetch(`/api/vehicles/${data.vehicle.id}/photos`, { method: 'POST', body: upload });
         if (!photoResponse.ok) {
           const photoData = await photoResponse.json();
-          throw new Error(photoData.error || 'El anuncio se creó, pero no se pudo subir la foto.');
+          throw new Error(photoData.error || 'El vehículo se registró, pero ocurrió un fallo al subir la fotografía.');
         }
       }
 
@@ -233,47 +254,56 @@ export default function PublishCamperPage() {
     }
   };
 
-  if (authorized !== true) return <div className="min-h-screen bg-[#F7F6F2]" />;
+  if (authorized !== true) return <div className="min-h-screen bg-[#070707]" />;
 
   return (
-    <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]">
+    <div className="min-h-screen bg-[#070707] text-white selection:bg-[#D4AF37] selection:text-black">
       <Navbar />
 
-      <main className="max-w-3xl mx-auto px-4 py-8 sm:py-12">
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E9E1D2] shadow-xl space-y-8">
+      <main className="max-w-4xl mx-auto px-4 py-8 sm:py-12">
+        <div className="bg-[#0f0f12] rounded-3xl p-6 sm:p-10 border border-white/10 shadow-2xl backdrop-blur-2xl space-y-8">
           {/* CABECERA PASOS */}
-          <div className="border-b border-[#E9E1D2] pb-6 text-center">
-            <span className="text-[11px] font-black uppercase tracking-[0.2em] text-[#D97706]">
-              Onboarding Propietarios
-            </span>
-            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#13322E] mt-1">
-              Publica tu Camper en Canarias
+          <div className="border-b border-white/10 pb-6 text-center">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-[10px] font-mono tracking-widest uppercase mb-3">
+              <Sparkles className="w-3.5 h-3.5" />
+              GTR CARS // PARTNERS VAULT
+            </div>
+            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-white tracking-tight">
+              Publica tu Superdeportivo en Canarias
             </h1>
-            <p className="text-xs text-[#6B726E] font-medium mt-2">
-              Paso {step} de 3 — Completa una ficha fiable para enviarla a revisión
+            <p className="text-xs text-neutral-400 font-mono mt-2">
+              Paso {step} de 3 — Protocolo de homologación e inspección técnica para propietarios
             </p>
           </div>
 
           {/* ALERTA DE ERROR */}
           {error && (
-            <div className="p-4 rounded-2xl bg-red-50 text-red-700 text-xs font-bold border border-red-200 flex items-start space-x-2 animate-in fade-in">
+            <div className="p-4 rounded-2xl bg-red-950/40 text-red-400 text-xs font-mono border border-red-500/30 flex items-start space-x-2 animate-in fade-in">
               <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
               <span>{error}</span>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* PASO 1 */}
+            {/* PASO 1: DATOS TÉCNICOS & TELEMETRÍA */}
             {step === 1 && (
-              <div className="space-y-5">
-                <h3 className="font-serif text-xl font-bold text-[#13322E]">1. Datos del Vehículo</h3>
+              <div className="space-y-6">
+                <div>
+                  <h3 className="font-serif text-xl font-bold text-white flex items-center gap-2">
+                    <Gauge className="w-5 h-5 text-[#D4AF37]" />
+                    1. Categoría y Telemetría del Vehículo
+                  </h3>
+                  <p className="text-xs text-neutral-400 font-mono mt-1">
+                    Selecciona el segmento de ingeniería y datos de rendimiento para el configurador.
+                  </p>
+                </div>
 
                 <fieldset>
-                  <legend className="mb-3 text-xs font-black uppercase tracking-wider text-[#6B726E]">
-                    Tipo de vehículo
+                  <legend className="mb-3 text-xs font-mono uppercase tracking-wider text-neutral-400">
+                    Segmento Superdeportivo
                   </legend>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                    {VEHICLE_TYPES.map(({ value, label, icon: Icon }) => {
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {SUPERCAR_CATEGORIES.map(({ value, label, icon: Icon, desc }) => {
                       const selected = formData.vehicleType === value;
                       return (
                         <button
@@ -281,14 +311,22 @@ export default function PublishCamperPage() {
                           type="button"
                           aria-pressed={selected}
                           onClick={() => setFormData({ ...formData, vehicleType: value })}
-                          className={`flex flex-col items-center justify-center rounded-2xl border p-4 text-center transition cursor-pointer ${
+                          className={`group flex flex-col items-start p-4 rounded-2xl border text-left transition-all cursor-pointer ${
                             selected
-                              ? 'border-[#16B8AA] bg-[#F0FDFA] text-[#0F766E] ring-2 ring-[#16B8AA]/30 font-bold'
-                              : 'border-[#E9E1D2] bg-white text-[#6B726E] hover:border-[#16B8AA]/60'
+                              ? 'border-[#D4AF37] bg-[#D4AF37]/10 text-white ring-1 ring-[#D4AF37] shadow-[0_0_20px_rgba(212,175,55,0.15)]'
+                              : 'border-white/10 bg-neutral-900/80 text-neutral-400 hover:border-white/30 hover:bg-neutral-900 hover:text-white'
                           }`}
                         >
-                          <Icon className="mb-2 h-7 w-7 text-[#16B8AA]" strokeWidth={1.7} />
-                          <span className="text-[11px] font-bold leading-tight">{label}</span>
+                          <div className="flex items-center justify-between w-full mb-3">
+                            <Icon className={`w-16 h-8 transition-all ${selected ? 'text-[#D4AF37] scale-105' : 'text-neutral-300 group-hover:text-white'}`} />
+                            {selected ? (
+                              <span className="h-2 w-2 rounded-full bg-[#D4AF37] shadow-[0_0_8px_#D4AF37]" />
+                            ) : (
+                              <span className="h-2 w-2 rounded-full bg-white/10 group-hover:bg-white/30" />
+                            )}
+                          </div>
+                          <span className="text-xs font-mono font-bold text-white block leading-tight">{label}</span>
+                          <span className="text-[10px] font-mono text-neutral-400 mt-1 block leading-tight">{desc}</span>
                         </button>
                       );
                     })}
@@ -297,30 +335,30 @@ export default function PublishCamperPage() {
 
                 <div>
                   <div className="flex justify-between items-center mb-1">
-                    <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E]">
-                      Título del Anuncio
+                    <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400">
+                      Título del Anuncio (Ej: Ferrari 296 GTB V6 Hybrid Assetto Fiorano)
                     </label>
-                    <span className={`text-[10px] font-bold ${formData.title.length >= 5 ? 'text-emerald-600' : 'text-amber-600'}`}>
-                      Mínimo 5 caracteres ({formData.title.length}/5)
+                    <span className={`text-[10px] font-mono ${formData.title.length >= 5 ? 'text-emerald-400' : 'text-amber-400'}`}>
+                      {formData.title.length}/5 mín.
                     </span>
                   </div>
                   <input
                     type="text"
                     required
-                    placeholder="Ej. VW California Ocean T6.1 Las Palmas"
+                    placeholder="Ej. Porsche 911 GT3 RS Weissach Package (Gran Canaria)"
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full p-3.5 rounded-xl border border-[#E9E1D2] text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+                    className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:outline-none focus:border-[#D4AF37]"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">Isla</label>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1">Isla</label>
                     <select
                       value={formData.island}
                       onChange={(e) => setFormData({ ...formData, island: e.target.value })}
-                      className="w-full p-3.5 rounded-xl border border-[#E9E1D2] text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:outline-none focus:border-[#D4AF37] cursor-pointer"
                     >
                       {CANARY_ISLANDS.map((is) => (
                         <option key={is.id} value={is.name}>
@@ -330,14 +368,14 @@ export default function PublishCamperPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">Municipio</label>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1">Municipio / Zona</label>
                     <input
                       type="text"
                       required
-                      placeholder="Ej. Telde, Las Palmas"
+                      placeholder="Ej. Las Palmas / Meloneras / Costa Adeje"
                       value={formData.municipality}
                       onChange={(e) => setFormData({ ...formData, municipality: e.target.value })}
-                      className="w-full p-3.5 rounded-xl border border-[#E9E1D2] text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:outline-none focus:border-[#D4AF37]"
                     />
                   </div>
                 </div>
@@ -360,35 +398,35 @@ export default function PublishCamperPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">Marca</label>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1">Marca</label>
                     <input
                       type="text"
                       required
-                      placeholder="Ej. Volkswagen"
+                      placeholder="Ej. Porsche"
                       value={formData.brand}
                       onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
-                      className="w-full p-3.5 rounded-xl border border-[#E9E1D2] text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:outline-none focus:border-[#D4AF37]"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">Modelo</label>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1">Modelo</label>
                     <input
                       type="text"
                       required
-                      placeholder="Ej. California Ocean"
+                      placeholder="Ej. 911 GT3 RS"
                       value={formData.model}
                       onChange={(e) => setFormData({ ...formData, model: e.target.value })}
-                      className="w-full p-3.5 rounded-xl border border-[#E9E1D2] text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:outline-none focus:border-[#D4AF37]"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">Año</label>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1">Año</label>
                     <input
                       type="number"
                       required
                       value={formData.year || ''}
                       onChange={(e) => handleNumberInput('year', e.target.value)}
-                      className="w-full p-3.5 rounded-xl border border-[#E9E1D2] text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:outline-none focus:border-[#D4AF37]"
                     />
                   </div>
                 </div>
@@ -398,94 +436,104 @@ export default function PublishCamperPage() {
                   onClick={() => {
                     if (validateStep1()) setStep(2);
                   }}
-                  className="w-full py-4 rounded-full bg-[#16B8AA] text-white font-black text-xs uppercase tracking-widest hover:bg-[#0F766E] transition-all cursor-pointer shadow-md"
+                  className="w-full py-4 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black font-mono font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all cursor-pointer shadow-lg"
                 >
-                  Continuar a Equipamiento y Precios →
+                  Continuar a Prestaciones y Equipamiento →
                 </button>
               </div>
             )}
 
-            {/* PASO 2 */}
+            {/* PASO 2: PRESTACIONES & ESPECIFICACIONES */}
             {step === 2 && (
-              <div className="space-y-5">
-                <h3 className="font-serif text-xl font-bold text-[#13322E]">2. Capacidad y equipamiento</h3>
+              <div className="space-y-6">
+                <div>
+                  <h3 className="font-serif text-xl font-bold text-white flex items-center gap-2">
+                    <Zap className="w-5 h-5 text-[#D4AF37]" />
+                    2. Prestaciones de Conducción y Equipamiento
+                  </h3>
+                  <p className="text-xs text-neutral-400 font-mono mt-1">
+                    Detalla la potencia y paquete aerodinámico del superdeportivo.
+                  </p>
+                </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">Nº Viajeros</label>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1">Potencia (CV)</label>
                     <input
                       type="number"
-                      value={formData.passengers || ''}
-                      onChange={(e) => handleNumberInput('passengers', e.target.value)}
-                      className="w-full p-3.5 rounded-xl border border-[#E9E1D2] text-sm font-medium"
+                      placeholder="Ej. 525"
+                      value={formData.powerCv || ''}
+                      onChange={(e) => handleNumberInput('powerCv', e.target.value)}
+                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-[#D4AF37] font-bold focus:border-[#D4AF37] outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">Nº Camas</label>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1">0-100 km/h (s)</label>
                     <input
                       type="number"
-                      value={formData.beds || ''}
-                      onChange={(e) => handleNumberInput('beds', e.target.value)}
-                      className="w-full p-3.5 rounded-xl border border-[#E9E1D2] text-sm font-medium"
+                      step="0.1"
+                      placeholder="Ej. 3.2"
+                      value={formData.acceleration0100 || ''}
+                      onChange={(e) => handleNumberInput('acceleration0100', e.target.value)}
+                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:border-[#D4AF37] outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1">Plazas</label>
+                    <input
+                      type="number"
+                      min="1"
+                      max="5"
+                      value={formData.passengers || ''}
+                      onChange={(e) => handleNumberInput('passengers', e.target.value)}
+                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:border-[#D4AF37] outline-none"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <label className="text-xs font-black uppercase tracking-wider text-[#6B726E]">
-                    Puertas
-                    <input
-                      type="number"
-                      min="2"
-                      max="8"
-                      value={formData.doors || ''}
-                      onChange={(e) => handleNumberInput('doors', e.target.value)}
-                      className="mt-1 w-full p-3.5 rounded-xl border border-[#E9E1D2] text-sm font-medium"
-                    />
-                  </label>
-                  <label className="text-xs font-black uppercase tracking-wider text-[#6B726E]">
-                    Cambio
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <label className="text-xs font-mono uppercase tracking-wider text-neutral-400">
+                    Caja de Cambios
                     <select
                       value={formData.transmission}
                       onChange={(e) => setFormData({ ...formData, transmission: e.target.value })}
-                      className="mt-1 w-full p-3.5 rounded-xl border border-[#E9E1D2] text-sm font-medium"
+                      className="mt-1 w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:border-[#D4AF37] outline-none cursor-pointer"
                     >
-                      <option value="MANUAL">Manual</option>
-                      <option value="AUTOMATIC">Automático</option>
+                      <option value="AUTOMATIC">Automático / Doble Embrague (PDK/DCT)</option>
+                      <option value="MANUAL">Manual Deportivo con Rev-Match</option>
                     </select>
                   </label>
-                  <label className="text-xs font-black uppercase tracking-wider text-[#6B726E]">
-                    Combustible
+                  <label className="text-xs font-mono uppercase tracking-wider text-neutral-400">
+                    Motorización
                     <select
                       value={formData.fuelType}
                       onChange={(e) => setFormData({ ...formData, fuelType: e.target.value })}
-                      className="mt-1 w-full p-3.5 rounded-xl border border-[#E9E1D2] text-sm font-medium"
+                      className="mt-1 w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:border-[#D4AF37] outline-none cursor-pointer"
                     >
-                      <option value="DIESEL">Diésel</option>
-                      <option value="GASOLINE">Gasolina</option>
-                      <option value="HYBRID">Híbrido</option>
-                      <option value="ELECTRIC">Eléctrico</option>
+                      <option value="GASOLINE">Gasolina Atmosférico / Turbo (98 Octanos)</option>
+                      <option value="HYBRID">Híbrido Enchufable de Altas Prestaciones (PHEV)</option>
+                      <option value="ELECTRIC">100% Eléctrico (Dual/Tri-Motor)</option>
                     </select>
                   </label>
                 </div>
 
                 <fieldset>
-                  <legend className="mb-2 text-xs font-black uppercase tracking-wider text-[#6B726E]">
-                    Equipamiento incluido
+                  <legend className="mb-2 text-xs font-mono uppercase tracking-wider text-neutral-400">
+                    Equipamiento y Opcionales de Circuito
                   </legend>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                    {EQUIPMENT.map((item) => (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {SUPERCAR_EQUIPMENT.map((item) => (
                       <label
                         key={item}
-                        className={`rounded-xl border p-3 text-xs font-bold cursor-pointer transition-colors ${
+                        className={`rounded-xl border p-3 text-xs font-mono cursor-pointer transition-all flex items-center ${
                           formData.features.includes(item)
-                            ? 'border-[#16B8AA] bg-[#F0FDFA] text-[#0F766E]'
-                            : 'border-[#E9E1D2] bg-white text-[#13322E]'
+                            ? 'border-[#D4AF37] bg-[#D4AF37]/10 text-white font-bold'
+                            : 'border-white/10 bg-neutral-900/60 text-neutral-400 hover:border-white/20'
                         }`}
                       >
                         <input
                           type="checkbox"
-                          className="mr-2 accent-[#16B8AA]"
+                          className="mr-3 accent-[#D4AF37]"
                           checked={formData.features.includes(item)}
                           onChange={() =>
                             setFormData({
@@ -506,182 +554,184 @@ export default function PublishCamperPage() {
                   <button
                     type="button"
                     onClick={() => setStep(1)}
-                    className="w-1/3 py-4 rounded-full border border-[#E9E1D2] font-bold text-xs uppercase tracking-wider hover:bg-[#F8FAFC] cursor-pointer"
+                    className="w-1/3 py-4 rounded-xl border border-white/15 font-mono font-bold text-xs uppercase tracking-wider text-neutral-300 hover:bg-white/5 cursor-pointer"
                   >
                     Atrás
                   </button>
                   <button
                     type="button"
                     onClick={() => setStep(3)}
-                    className="w-2/3 py-4 rounded-full bg-[#16B8AA] text-white font-black text-xs uppercase tracking-widest hover:bg-[#0F766E] transition-all cursor-pointer shadow-md"
+                    className="w-2/3 py-4 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black font-mono font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all cursor-pointer shadow-lg"
                   >
-                    Continuar a tarifas y condiciones →
+                    Continuar a Tarifas y Condiciones →
                   </button>
                 </div>
               </div>
             )}
 
-            {/* PASO 3 */}
+            {/* PASO 3: TARIFAS, FIANZA & CONDICIONES */}
             {step === 3 && (
-              <div className="space-y-5">
-                <h3 className="font-serif text-xl font-bold text-[#13322E]">3. Tarifas, condiciones y presentación</h3>
+              <div className="space-y-6">
+                <div>
+                  <h3 className="font-serif text-xl font-bold text-white flex items-center gap-2">
+                    <Shield className="w-5 h-5 text-[#D4AF37]" />
+                    3. Tarifas, Fianza y Galería de Fotos
+                  </h3>
+                  <p className="text-xs text-neutral-400 font-mono mt-1">
+                    Establece el precio por jornada y el depósito de garantía.
+                  </p>
+                </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">
-                      Tu precio base por día (€)
+                    <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1">
+                      Precio Diario (€ / jornada)
                     </label>
                     <input
                       type="number"
                       required
-                      min="10"
+                      min="50"
                       value={formData.basePricePerDay || ''}
                       onChange={(e) => handleNumberInput('basePricePerDay', e.target.value)}
-                      placeholder="70"
-                      className="w-full p-3.5 rounded-xl border border-[#E9E1D2] text-base font-extrabold text-[#16B8AA] focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+                      placeholder="950"
+                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-lg font-mono font-extrabold text-[#D4AF37] focus:outline-none focus:border-[#D4AF37]"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">
-                      Fianza (€)
+                    <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1">
+                      Fianza / Depósito de Seguridad (€)
                     </label>
                     <input
                       type="number"
                       required
-                      min="0"
+                      min="500"
                       value={formData.securityDeposit || ''}
                       onChange={(e) => handleNumberInput('securityDeposit', e.target.value)}
-                      placeholder="400"
-                      className="w-full p-3.5 rounded-xl border border-[#E9E1D2] text-base font-bold text-[#13322E] focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+                      placeholder="3000"
+                      className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-lg font-mono font-bold text-white focus:outline-none focus:border-[#D4AF37]"
                     />
                   </div>
                 </div>
 
                 {/* DESGLOSE ECONÓMICO EN TIEMPO REAL */}
                 {formData.basePricePerDay > 0 && (
-                  <div className="rounded-2xl border border-teal-200 bg-teal-50/50 p-4 sm:p-5 space-y-3">
+                  <div className="rounded-2xl border border-[#D4AF37]/30 bg-neutral-900/80 p-5 space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-black uppercase tracking-wider text-[#0F766E]">
-                        Desglose económico transparente
+                      <span className="text-[11px] font-mono uppercase tracking-wider text-[#D4AF37]">
+                        Liquidación de Ingresos GTR Cars
                       </span>
-                      <span className="text-[10px] bg-[#16B8AA] text-white font-bold px-2.5 py-0.5 rounded-full">
-                        División automática en Stripe
+                      <span className="text-[10px] font-mono bg-[#D4AF37]/20 text-[#D4AF37] font-bold px-2.5 py-0.5 rounded-full border border-[#D4AF37]/30">
+                        Transferencia Bancaria Directa
                       </span>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                      <div className="bg-white p-3.5 rounded-xl border border-teal-100 shadow-sm">
-                        <span className="block text-[11px] text-[#6B726E] font-medium">
-                          El viajero verá y pagará:
+                      <div className="bg-black/60 p-4 rounded-xl border border-white/10">
+                        <span className="block text-[11px] text-neutral-400 font-mono">
+                          El cliente abonará:
                         </span>
                         <div className="flex items-baseline space-x-1.5 mt-0.5">
-                          <strong className="text-xl font-bold text-[#13322E]">
+                          <strong className="text-xl font-bold font-mono text-white">
                             {(Math.round(formData.basePricePerDay * 1.045 * 100) / 100).toFixed(2)} €
                           </strong>
-                          <span className="text-xs text-[#6B726E]">/ día</span>
+                          <span className="text-xs text-neutral-400 font-mono">/ jornada</span>
                         </div>
-                        <p className="text-[10px] text-[#6B726E] mt-1">
-                          (Tu precio de {formData.basePricePerDay}€ + 4,5% tarifa de servicio)
+                        <p className="text-[10px] text-neutral-500 font-mono mt-1">
+                          (Tu tarifa + tarifa de concierge y seguro de cobertura total)
                         </p>
                       </div>
 
-                      <div className="bg-white p-3.5 rounded-xl border border-teal-100 shadow-sm">
-                        <span className="block text-[11px] text-[#6B726E] font-medium">
-                          Tú recibirás en tu banco:
+                      <div className="bg-black/60 p-4 rounded-xl border border-white/10">
+                        <span className="block text-[11px] text-neutral-400 font-mono">
+                          Ingreso neto para el propietario:
                         </span>
                         <div className="flex items-baseline space-x-1.5 mt-0.5">
-                          <strong className="text-xl font-bold text-[#16B8AA]">
+                          <strong className="text-xl font-bold font-mono text-[#D4AF37]">
                             {(Math.round(formData.basePricePerDay * 0.90 * 100) / 100).toFixed(2)} €
                           </strong>
-                          <span className="text-xs text-[#6B726E]">netos / día</span>
+                          <span className="text-xs text-neutral-400 font-mono">netos / jornada</span>
                         </div>
-                        <p className="text-[10px] text-[#6B726E] mt-1">
-                          (Tras el 10% de comisión de intermediación de Vaneando)
+                        <p className="text-[10px] text-neutral-500 font-mono mt-1">
+                          (Tras el 10% de gestión y custodia de plataforma)
                         </p>
                       </div>
                     </div>
                   </div>
                 )}
 
-                {/* MODULO INTERACTIVO DE TARIFAS POR FECHAS Y TEMPORADA */}
-                <div className="p-5 rounded-2xl bg-[#FAF7F0] border border-[#E9E1D2] space-y-4">
+                {/* MODULO INTERACTIVO DE TARIFAS POR EVENTOS */}
+                <div className="p-5 rounded-2xl bg-neutral-900/60 border border-white/10 space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h4 className="text-sm font-bold text-[#13322E] flex items-center gap-1.5">
-                        <span>Tarifas especiales según fechas y temporada</span>
+                      <h4 className="text-sm font-mono font-bold text-white flex items-center gap-1.5">
+                        <span>Tarifas especiales para eventos / temporada alta</span>
                       </h4>
-                      <p className="text-[11px] text-[#6B726E] mt-0.5">
-                        Personaliza el precio por día para períodos de alta demanda (ej: Semana Santa, Verano, Fines de semana).
+                      <p className="text-[11px] text-neutral-400 font-mono mt-0.5">
+                        Personaliza el precio para semanas de Rallyes, concentraciones de superdeportivos o festivos.
                       </p>
                     </div>
                   </div>
 
                   {/* FORMULARIO PARA AÑADIR NUEVA TARIFA */}
-                  <div className="bg-white p-4 rounded-xl border border-[#E9E1D2] space-y-3">
+                  <div className="bg-black/60 p-4 rounded-xl border border-white/10 space-y-3">
                     <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
                       <div className="sm:col-span-2">
-                        <label className="block text-[10px] font-black uppercase tracking-wider text-[#6B726E] mb-1">
-                          Nombre / Motivo
+                        <label className="block text-[10px] font-mono uppercase tracking-wider text-neutral-400 mb-1">
+                          Motivo / Evento
                         </label>
                         <input
                           type="text"
-                          placeholder="Ej. Alta demanda / Semana Santa"
+                          placeholder="Ej. Rally Islas Canarias / Fin de Año"
                           value={ruleName}
                           onChange={(e) => setRuleName(e.target.value)}
-                          className="w-full p-2.5 rounded-lg border border-[#E9E1D2] text-xs font-medium"
+                          className="w-full p-2.5 rounded-lg border border-white/15 bg-neutral-900 text-xs font-mono text-white focus:border-[#D4AF37] outline-none"
                         />
                       </div>
                       <div>
-                        <label className="block text-[10px] font-black uppercase tracking-wider text-[#6B726E] mb-1">
+                        <label className="block text-[10px] font-mono uppercase tracking-wider text-neutral-400 mb-1">
                           Desde
                         </label>
                         <input
                           type="date"
                           value={ruleStart}
                           onChange={(e) => setRuleStart(e.target.value)}
-                          className="w-full p-2.5 rounded-lg border border-[#E9E1D2] text-xs font-medium"
+                          className="w-full p-2.5 rounded-lg border border-white/15 bg-neutral-900 text-xs font-mono text-white focus:border-[#D4AF37] outline-none"
                         />
                       </div>
                       <div>
-                        <label className="block text-[10px] font-black uppercase tracking-wider text-[#6B726E] mb-1">
+                        <label className="block text-[10px] font-mono uppercase tracking-wider text-neutral-400 mb-1">
                           Hasta
                         </label>
                         <input
                           type="date"
                           value={ruleEnd}
                           onChange={(e) => setRuleEnd(e.target.value)}
-                          className="w-full p-2.5 rounded-lg border border-[#E9E1D2] text-xs font-medium"
+                          className="w-full p-2.5 rounded-lg border border-white/15 bg-neutral-900 text-xs font-mono text-white focus:border-[#D4AF37] outline-none"
                         />
                       </div>
                     </div>
 
                     <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
                       <div className="flex items-center gap-2">
-                        <label className="text-xs font-black uppercase tracking-wider text-[#13322E]">
-                          Precio en estas fechas:
+                        <label className="text-xs font-mono uppercase tracking-wider text-neutral-300">
+                          Tarifa en estas fechas:
                         </label>
                         <div className="flex items-center gap-1">
                           <input
                             type="number"
-                            min="10"
+                            min="50"
                             value={rulePrice || ''}
                             onChange={(e) => setRulePrice(Number(e.target.value))}
-                            className="w-20 p-2 rounded-lg border border-[#E9E1D2] text-xs font-black text-[#16B8AA] text-center"
+                            className="w-24 p-2 rounded-lg border border-white/15 bg-neutral-900 text-xs font-mono font-bold text-[#D4AF37] text-center"
                           />
-                          <span className="text-xs font-bold text-[#6B726E]">€/día</span>
+                          <span className="text-xs font-mono text-neutral-400">€/día</span>
                         </div>
                       </div>
-
-                      {rulePrice > 0 && (
-                        <div className="text-[11px] bg-teal-50 border border-teal-200 px-3 py-1.5 rounded-lg text-[#0F766E] font-medium">
-                          Viajero pagará: <strong>{(rulePrice * 1.045).toFixed(2)}€</strong> | Recibirás: <strong>{(rulePrice * 0.90).toFixed(2)}€ netos</strong>
-                        </div>
-                      )}
 
                       <button
                         type="button"
                         onClick={handleAddPricingRule}
-                        className="px-4 py-2 rounded-lg bg-[#13322E] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#16B8AA] transition-colors cursor-pointer"
+                        className="px-4 py-2 rounded-lg bg-[#D4AF37] text-black text-xs font-mono font-bold uppercase tracking-wider hover:brightness-110 transition-all cursor-pointer"
                       >
                         + Añadir Tarifa
                       </button>
@@ -689,193 +739,173 @@ export default function PublishCamperPage() {
                   </div>
 
                   {/* LISTA DE TARIFAS CONFIGURADAS */}
-                  {pricingRules.length > 0 ? (
+                  {pricingRules.length > 0 && (
                     <div className="space-y-2 pt-1">
-                      <span className="text-[10px] font-black uppercase tracking-wider text-[#6B726E] block">
-                        Tarifas especiales programadas ({pricingRules.length}):
+                      <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 block">
+                        Tarifas especiales activas ({pricingRules.length}):
                       </span>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         {pricingRules.map((r) => (
                           <div
                             key={r.id}
-                            className="p-3 bg-white rounded-xl border border-[#E9E1D2] flex items-center justify-between text-xs shadow-sm"
+                            className="p-3 bg-neutral-900 rounded-xl border border-white/10 flex items-center justify-between text-xs shadow-sm font-mono"
                           >
                             <div>
-                              <span className="font-bold text-[#13322E] block">{r.name}</span>
-                              <span className="text-[10px] text-[#6B726E]">
+                              <span className="font-bold text-white block">{r.name}</span>
+                              <span className="text-[10px] text-neutral-400">
                                 {new Date(r.startDate).toLocaleDateString()} al {new Date(r.endDate).toLocaleDateString()}
                               </span>
                             </div>
                             <div className="flex items-center gap-3">
-                              <span className="font-extrabold text-[#16B8AA] text-sm">{r.pricePerDay} €/día</span>
+                              <span className="font-extrabold text-[#D4AF37] text-sm">{r.pricePerDay} €/día</span>
                               <button
                                 type="button"
                                 onClick={() => handleRemovePricingRule(r.id)}
-                                className="text-red-500 hover:text-red-700 font-bold text-xs p-1"
+                                className="text-red-400 hover:text-red-300 font-bold text-xs p-1"
                                 title="Eliminar tarifa"
                               >
-                                <span className="sr-only">Eliminar tarifa</span>
+                                ×
                               </button>
                             </div>
                           </div>
                         ))}
                       </div>
                     </div>
-                  ) : (
-                    <p className="text-[11px] text-[#6B726E] italic">
-                      No has añadido tarifas de temporada. Se aplicará el precio base de {formData.basePricePerDay || 0}€/día durante todo el año.
-                    </p>
                   )}
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                  <label className="text-xs font-black uppercase tracking-wider text-[#6B726E]">
-                    Km incluidos/día
+                  <label className="text-xs font-mono uppercase tracking-wider text-neutral-400">
+                    Km diarios inc.
                     <input
                       type="number"
                       min="0"
                       value={formData.includedKmPerDay || ''}
                       onChange={(e) => handleNumberInput('includedKmPerDay', e.target.value)}
-                      className="mt-1 w-full p-3.5 rounded-xl border border-[#E9E1D2] text-sm font-medium"
+                      className="mt-1 w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:border-[#D4AF37] outline-none"
                     />
                   </label>
-                  <label className="text-xs font-black uppercase tracking-wider text-[#6B726E]">
+                  <label className="text-xs font-mono uppercase tracking-wider text-neutral-400">
                     Km extra (€)
                     <input
                       type="number"
                       min="0"
-                      step="0.01"
+                      step="0.1"
                       value={formData.extraKmPrice || ''}
                       onChange={(e) => handleNumberInput('extraKmPrice', e.target.value)}
-                      className="mt-1 w-full p-3.5 rounded-xl border border-[#E9E1D2] text-sm font-medium"
+                      className="mt-1 w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:border-[#D4AF37] outline-none"
                     />
                   </label>
-                  <label className="text-xs font-black uppercase tracking-wider text-[#6B726E]">
+                  <label className="text-xs font-mono uppercase tracking-wider text-neutral-400">
                     Mínimo días
                     <input
                       type="number"
                       min="1"
                       value={formData.minDays || ''}
                       onChange={(e) => handleNumberInput('minDays', e.target.value)}
-                      className="mt-1 w-full p-3.5 rounded-xl border border-[#E9E1D2] text-sm font-medium"
+                      className="mt-1 w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:border-[#D4AF37] outline-none"
                     />
                   </label>
-                  <label className="text-xs font-black uppercase tracking-wider text-[#6B726E]">
+                  <label className="text-xs font-mono uppercase tracking-wider text-neutral-400">
                     Máximo días
                     <input
                       type="number"
                       min={formData.minDays}
                       value={formData.maxDays || ''}
                       onChange={(e) => handleNumberInput('maxDays', e.target.value)}
-                      className="mt-1 w-full p-3.5 rounded-xl border border-[#E9E1D2] text-sm font-medium"
+                      className="mt-1 w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:border-[#D4AF37] outline-none"
                     />
                   </label>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <label className="text-xs font-black uppercase tracking-wider text-[#6B726E]">
-                    Tipo de reserva
+                  <label className="text-xs font-mono uppercase tracking-wider text-neutral-400">
+                    Modalidad de Reserva
                     <select
                       value={formData.bookingType}
                       onChange={(e) => setFormData({ ...formData, bookingType: e.target.value })}
-                      className="mt-1 w-full p-3.5 rounded-xl border border-[#E9E1D2] text-sm font-bold"
+                      className="mt-1 w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:border-[#D4AF37] outline-none cursor-pointer"
                     >
-                      <option value="REQUEST_TO_BOOK">Solicitud con aprobación</option>
-                      <option value="INSTANT_BOOKING">Reserva inmediata</option>
+                      <option value="REQUEST_TO_BOOK">Solicitud Concierge con Validación</option>
+                      <option value="INSTANT_BOOKING">Reserva Inmediata con Fianza</option>
                     </select>
                   </label>
-                  <label className="text-xs font-black uppercase tracking-wider text-[#6B726E]">
-                    Cancelación
+                  <label className="text-xs font-mono uppercase tracking-wider text-neutral-400">
+                    Política de Cancelación
                     <select
                       value={formData.cancellationPolicy}
                       onChange={(e) => setFormData({ ...formData, cancellationPolicy: e.target.value })}
-                      className="mt-1 w-full p-3.5 rounded-xl border border-[#E9E1D2] text-sm font-bold"
+                      className="mt-1 w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:border-[#D4AF37] outline-none cursor-pointer"
                     >
-                      <option value="FLEXIBLE">Flexible</option>
-                      <option value="MODERATE">Moderada</option>
-                      <option value="STRICT">Estricta</option>
+                      <option value="STRICT">Estricta (Recomendada para Superdeportivos)</option>
+                      <option value="MODERATE">Moderada (7 días de antelación)</option>
+                      <option value="FLEXIBLE">Flexible (48 horas de antelación)</option>
                     </select>
                   </label>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">
-                    Punto aproximado de recogida
-                  </label>
-                  <input
-                    required
-                    placeholder="Zona o barrio (ej. Las Canteras, Telde); la dirección exacta no será pública"
-                    value={formData.addressApprox}
-                    onChange={(e) => setFormData({ ...formData, addressApprox: e.target.value })}
-                    className="w-full p-3.5 rounded-xl border border-[#E9E1D2] text-sm font-medium"
-                  />
-                </div>
-
-                {/* DESCRIPCIÓN CON CONTADOR Y MÍNIMO DE CARACTERES */}
-                <div>
                   <div className="flex justify-between items-center mb-1">
-                    <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E]">
-                      Descripción de la Camper
+                    <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400">
+                      Descripción del Superdeportivo
                     </label>
-                    <span
-                      className={`text-[10px] font-bold ${
-                        formData.description.trim().length >= 40 ? 'text-emerald-600' : 'text-amber-600'
-                      }`}
-                    >
-                      Mínimo 40 caracteres ({formData.description.trim().length}/40)
+                    <span className={`text-[10px] font-mono ${formData.description.trim().length >= 20 ? 'text-emerald-400' : 'text-amber-400'}`}>
+                      {formData.description.trim().length}/20 mín.
                     </span>
                   </div>
                   <textarea
                     rows={4}
                     required
-                    placeholder="Describe los puntos fuertes de tu camper, equipamiento de cocina, placas solares, estado mecánico, etc. (mínimo 40 caracteres)"
+                    placeholder="Describe el estado de conservación, configuración de fábrica, sonido del escape, mantenimiento en servicio oficial, etc."
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    className="w-full p-3.5 rounded-xl border border-[#E9E1D2] text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+                    className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:outline-none focus:border-[#D4AF37]"
                   />
                 </div>
 
-                {/* NORMAS CON CONTADOR Y MÍNIMO DE CARACTERES */}
                 <div>
                   <div className="flex justify-between items-center mb-1">
-                    <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E]">
-                      Normas y condiciones de uso
+                    <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400">
+                      Requisitos de Conducción y Normas
                     </label>
-                    <span
-                      className={`text-[10px] font-bold ${
-                        formData.rules.trim().length >= 10 ? 'text-emerald-600' : 'text-amber-600'
-                      }`}
-                    >
-                      Mínimo 10 caracteres ({formData.rules.trim().length}/10)
+                    <span className={`text-[10px] font-mono ${formData.rules.trim().length >= 10 ? 'text-emerald-400' : 'text-amber-400'}`}>
+                      {formData.rules.trim().length}/10 mín.
                     </span>
                   </div>
                   <textarea
                     rows={3}
                     required
-                    placeholder="Mascotas, fumar, festivales, horarios de entrega, experiencia mínima de conducción..."
+                    placeholder="Edad mínima (ej: +25 años, 3 años de carnet), prohibición de circuito cerrado sin autorización, combustible 98 octanos obligatorio..."
                     value={formData.rules}
                     onChange={(e) => setFormData({ ...formData, rules: e.target.value })}
-                    className="w-full p-3.5 rounded-xl border border-[#E9E1D2] text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+                    className="w-full p-3.5 rounded-xl border border-white/15 bg-neutral-900 text-sm font-mono text-white focus:outline-none focus:border-[#D4AF37]"
                   />
                 </div>
 
-                  {/* GALERÍA OBLIGATORIA */}
+                {/* GALERÍA OBLIGATORIA */}
                 <div>
-                  <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E] mb-1">
-                    Fotos del vehículo (5 mínimas, 10 máximas)
+                  <label className="block text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1">
+                    Fotografías del Vehículo (Mínimo 3, Máximo 10)
                   </label>
-                  <label className="flex min-h-44 cursor-pointer items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-[#16B8AA]/40 bg-[#F0FDFA] text-center hover:bg-[#E6FFFA] transition-colors">
+                  <label className="flex min-h-44 cursor-pointer items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-[#D4AF37]/40 bg-black/60 text-center hover:bg-black/90 transition-colors">
                     {photoPreviews.length ? (
                       <div className="grid w-full grid-cols-2 gap-2 p-3 sm:grid-cols-5">
-                        {photoPreviews.map((preview, index) => <img key={preview} src={preview} alt={`Foto ${index + 1}`} className={`h-28 w-full rounded-xl object-cover ${index === coverPhotoIndex ? 'ring-4 ring-[#16B8AA]' : ''}`} />)}
+                        {photoPreviews.map((preview, index) => (
+                          <img
+                            key={preview}
+                            src={preview}
+                            alt={`Foto ${index + 1}`}
+                            className={`h-28 w-full rounded-xl object-cover ${index === coverPhotoIndex ? 'ring-4 ring-[#D4AF37]' : ''}`}
+                          />
+                        ))}
                       </div>
                     ) : (
                       <div className="p-6 text-center space-y-2">
-                        <Upload className="w-8 h-8 text-[#16B8AA] mx-auto" />
-                        <span className="block text-sm font-bold text-[#0F766E]">
-                          Pulsa para subir entre 5 y 10 fotos JPG, PNG o WEBP
+                        <Upload className="w-8 h-8 text-[#D4AF37] mx-auto" />
+                        <span className="block text-sm font-mono font-bold text-white">
+                          Pulsa para subir fotografías de alta calidad (JPG, PNG o WEBP)
                         </span>
-                        <span className="block text-[11px] text-[#6B726E]">Máximo 5 MB</span>
+                        <span className="block text-[11px] font-mono text-neutral-400">Máximo 10 MB por imagen</span>
                       </div>
                     )}
                     <input
@@ -887,20 +917,41 @@ export default function PublishCamperPage() {
                       className="hidden"
                       onChange={(event) => {
                         const files = Array.from(event.target.files || []);
-                        if (files.length > 10) { setError('Puedes adjuntar como máximo 10 fotos.'); return; }
+                        if (files.length > 10) {
+                          setError('Puedes adjuntar como máximo 10 fotos.');
+                          return;
+                        }
                         setPhotoFiles(files);
                         setPhotoPreviews(files.map((file) => URL.createObjectURL(file)));
                         setCoverPhotoIndex(0);
                       }}
                     />
                   </label>
-                  {photoPreviews.length > 0 && <div className="mt-3 grid gap-2 sm:grid-cols-2"><p className="text-xs font-bold text-[#6B726E]">Orden recomendado: 1 exterior · 2 habitáculo · 3 conducción · 4 cama/interior · 5 baño.</p><label className="text-xs font-bold text-[#6B726E]">Foto de portada<select value={coverPhotoIndex} onChange={(event) => setCoverPhotoIndex(Number(event.target.value))} className="ml-2 rounded-lg border border-[#E9E1D2] p-1.5">{photoPreviews.map((_, index) => <option key={index} value={index}>Foto {index + 1}</option>)}</select></label></div>}
+                  {photoPreviews.length > 0 && (
+                    <div className="mt-3 flex items-center justify-between text-xs font-mono text-neutral-400">
+                      <span>{photoPreviews.length} fotos seleccionadas</span>
+                      <label>
+                        Portada:{' '}
+                        <select
+                          value={coverPhotoIndex}
+                          onChange={(e) => setCoverPhotoIndex(Number(e.target.value))}
+                          className="ml-2 rounded-lg border border-white/15 bg-neutral-900 p-1.5 text-white"
+                        >
+                          {photoPreviews.map((_, index) => (
+                            <option key={index} value={index}>
+                              Foto {index + 1}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                    </div>
+                  )}
                 </div>
 
-                <div className="rounded-2xl border border-[#16B8AA]/30 bg-[#F0FDFA] p-4 text-xs font-medium text-[#0F766E] flex items-center space-x-2">
-                  <CheckCircle2 className="h-5 w-5 text-[#16B8AA] shrink-0" />
+                <div className="rounded-2xl border border-[#D4AF37]/30 bg-[#D4AF37]/5 p-4 text-xs font-mono text-neutral-300 flex items-center space-x-2.5">
+                  <CheckCircle2 className="h-5 w-5 text-[#D4AF37] shrink-0" />
                   <span>
-                    El anuncio quedará en revisión inicial. Una vez aprobado aparecerá públicamente para recibir reservas.
+                    El superdeportivo entrará en fase de verificación y auditoría por el equipo de GTR Cars antes de su activación pública en el Vault.
                   </span>
                 </div>
 
@@ -908,16 +959,16 @@ export default function PublishCamperPage() {
                   <button
                     type="button"
                     onClick={() => setStep(2)}
-                    className="w-1/3 py-4 rounded-full border border-[#E9E1D2] font-bold text-xs uppercase tracking-wider hover:bg-[#F8FAFC] cursor-pointer"
+                    className="w-1/3 py-4 rounded-xl border border-white/15 font-mono font-bold text-xs uppercase tracking-wider text-neutral-300 hover:bg-white/5 cursor-pointer"
                   >
                     Atrás
                   </button>
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-2/3 py-4 rounded-full bg-[#16B8AA] text-white font-black text-xs uppercase tracking-widest hover:bg-[#0F766E] transition-all cursor-pointer shadow-md flex items-center justify-center space-x-2"
+                    className="w-2/3 py-4 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black font-mono font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all cursor-pointer shadow-lg flex items-center justify-center space-x-2"
                   >
-                    <span>{loading ? 'Enviando anuncio...' : 'ENVIAR ANUNCIO A REVISIÓN'}</span>
+                    <span>{loading ? 'PUBLICANDO SUPERDEPORTIVO...' : 'HOMOLOGAR Y REGISTRAR EN EL VAULT'}</span>
                   </button>
                 </div>
               </div>

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { DollarSign, Landmark, CreditCard, Clock, ShieldCheck, ArrowUpRight, Receipt, FileText, Sparkles, Building2, CheckCircle2 } from 'lucide-react';
 import StripeConnectOnboarding from '@/components/StripeConnectOnboarding';
@@ -41,22 +42,23 @@ export default function OwnerFinancePage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]">
+    <div className="min-h-screen bg-[#070707] text-white selection:bg-[#D4AF37] selection:text-black flex flex-col">
       <Navbar />
       {showBankSetup && <StripeConnectOnboarding onClose={() => setShowBankSetup(false)} />}
 
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
+      <main className="flex-1 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 w-full">
         {/* CABECERA DE FINANZAS */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
-            <span className="text-xs font-black uppercase tracking-[0.25em] text-[#16B8AA]">
-              Contabilidad del Propietario
-            </span>
-            <h1 className="font-serif text-3xl sm:text-5xl font-bold text-[#13322E] mt-1">
-              Finanzas y Cobros
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D4AF37]/10 text-[#D4AF37] text-[10px] font-mono tracking-widest uppercase mb-2 border border-[#D4AF37]/30">
+              <Sparkles className="w-3 h-3" />
+              CONTABILIDAD &amp; LIQUIDACIONES DEL VAULT
+            </div>
+            <h1 className="font-serif text-3xl sm:text-5xl font-bold text-white mt-1">
+              Finanzas y Liquidaciones
             </h1>
-            <p className="mt-2 text-sm text-[#6B726E] font-medium">
-              Gestión transparente de ingresos, comisiones aplicadas y transferencias a tu IBAN bancario.
+            <p className="mt-2 text-xs sm:text-sm text-neutral-400 font-mono">
+              Gestión transparente de ingresos brutos, comisión de custodia (10%) y transferencias directas a tu IBAN.
             </p>
           </div>
 
@@ -64,122 +66,122 @@ export default function OwnerFinancePage() {
             <button
               type="button"
               onClick={() => setShowBankSetup(true)}
-              className="inline-flex items-center space-x-2 bg-[#13322E] hover:bg-[#254842] text-white px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider shadow-md transition-all cursor-pointer"
+              className="inline-flex items-center space-x-2 bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black px-5 py-2.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider shadow-lg hover:brightness-110 transition-all cursor-pointer"
             >
-              <Landmark className="w-4 h-4 text-[#16B8AA]" />
+              <Landmark className="w-4 h-4" />
               <span>Configurar Cuenta Bancaria (IBAN)</span>
             </button>
           </div>
         </div>
 
         {/* 1. TARJETAS FINANCIERAS PRINCIPALES */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-          <div className="bg-white p-6 rounded-3xl border border-[#E9E1D2] shadow-sm flex flex-col justify-between">
-            <div className="flex items-center justify-between text-[#6B726E] mb-4">
-              <span className="text-[10px] font-black uppercase tracking-wider">Volumen Cobrado</span>
-              <DollarSign className="w-4 h-4 text-[#16B8AA]" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10 font-mono">
+          <div className="bg-[#0f0f12] p-6 rounded-3xl border border-white/10 shadow-xl flex flex-col justify-between">
+            <div className="flex items-center justify-between text-neutral-400 mb-4">
+              <span className="text-[10px] uppercase tracking-wider">Volumen Facturado</span>
+              <DollarSign className="w-4 h-4 text-[#D4AF37]" />
             </div>
             <div>
-              <strong className="font-serif text-3xl sm:text-4xl text-[#13322E]">
+              <strong className="font-serif text-3xl sm:text-4xl text-white">
                 {loading ? '0.00 €' : `${Number(finance.gross || 0).toFixed(2)} €`}
               </strong>
-              <span className="block text-[11px] text-[#6B726E] font-medium mt-1">Total pagado por viajeros</span>
+              <span className="block text-[11px] text-neutral-400 mt-1">Total abonado por clientes VIP</span>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-3xl border border-[#E9E1D2] shadow-sm flex flex-col justify-between">
-            <div className="flex items-center justify-between text-[#6B726E] mb-4">
-              <span className="text-[10px] font-black uppercase tracking-wider">Comisión Plataforma</span>
-              <Receipt className="w-4 h-4 text-[#16B8AA]" />
+          <div className="bg-[#0f0f12] p-6 rounded-3xl border border-white/10 shadow-xl flex flex-col justify-between">
+            <div className="flex items-center justify-between text-neutral-400 mb-4">
+              <span className="text-[10px] uppercase tracking-wider">Custodia y Gestión</span>
+              <Receipt className="w-4 h-4 text-[#D4AF37]" />
             </div>
             <div>
-              <strong className="font-serif text-3xl sm:text-4xl text-[#13322E]">
+              <strong className="font-serif text-3xl sm:text-4xl text-white">
                 {loading ? '0.00 €' : `${Number(finance.platformFees || 0).toFixed(2)} €`}
               </strong>
-              <span className="block text-[11px] text-[#6B726E] font-medium mt-1">Servicio de intermediación y gestión Vaneando</span>
+              <span className="block text-[11px] text-neutral-400 mt-1">Gestión de plataforma (10%)</span>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-3xl border border-[#E9E1D2] shadow-sm flex flex-col justify-between">
-            <div className="flex items-center justify-between text-[#6B726E] mb-4">
-              <span className="text-[10px] font-black uppercase tracking-wider">Neto a Transferir</span>
-              <Landmark className="w-4 h-4 text-[#16B8AA]" />
+          <div className="bg-[#0f0f12] p-6 rounded-3xl border border-[#D4AF37]/30 shadow-xl flex flex-col justify-between bg-gradient-to-br from-neutral-900 to-black">
+            <div className="flex items-center justify-between text-[#D4AF37] mb-4">
+              <span className="text-[10px] uppercase tracking-wider font-bold">Neto Propietario</span>
+              <Landmark className="w-4 h-4 text-[#D4AF37]" />
             </div>
             <div>
-              <strong className="font-serif text-3xl sm:text-4xl text-[#16B8AA]">
+              <strong className="font-serif text-3xl sm:text-4xl text-[#D4AF37]">
                 {loading ? '0.00 €' : `${Number(finance.net || 0).toFixed(2)} €`}
               </strong>
-              <span className="block text-[11px] text-[#6B726E] font-medium mt-1">Liquidación a tu banco</span>
+              <span className="block text-[11px] text-neutral-400 mt-1">Liquidación bancaria directa</span>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-3xl border border-[#E9E1D2] shadow-sm flex flex-col justify-between">
-            <div className="flex items-center justify-between text-[#6B726E] mb-4">
-              <span className="text-[10px] font-black uppercase tracking-wider">Pendiente / Próximos</span>
-              <Clock className="w-4 h-4 text-[#D97706]" />
+          <div className="bg-[#0f0f12] p-6 rounded-3xl border border-white/10 shadow-xl flex flex-col justify-between">
+            <div className="flex items-center justify-between text-neutral-400 mb-4">
+              <span className="text-[10px] uppercase tracking-wider">Pendiente / Próximos</span>
+              <Clock className="w-4 h-4 text-amber-400" />
             </div>
             <div>
-              <strong className="font-serif text-3xl sm:text-4xl text-[#D97706]">
+              <strong className="font-serif text-3xl sm:text-4xl text-amber-400">
                 {loading ? '0.00 €' : `${Number(finance.pending || 0).toFixed(2)} €`}
               </strong>
-              <span className="block text-[11px] text-[#6B726E] font-medium mt-1">Solicitudes y pendientes</span>
+              <span className="block text-[11px] text-neutral-400 mt-1">Reservas en curso</span>
             </div>
           </div>
         </div>
 
         {/* 2. HISTORIAL Y DESGLOSE DE TRANSACCIONES Y RESERVAS */}
-        <div className="bg-white rounded-3xl border border-[#E9E1D2] p-6 shadow-sm mb-10">
-          <div className="flex items-center justify-between pb-4 border-b border-[#E9E1D2] mb-6">
+        <div className="bg-[#0f0f12] rounded-3xl border border-white/10 p-6 shadow-xl mb-10 font-mono">
+          <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-6">
             <div className="flex items-center space-x-3">
-              <CreditCard className="w-5 h-5 text-[#16B8AA]" />
-              <h2 className="font-serif text-2xl font-bold text-[#13322E]">Historial de Reservas y Cobros</h2>
+              <CreditCard className="w-5 h-5 text-[#D4AF37]" />
+              <h2 className="font-serif text-2xl font-bold text-white">Historial de Reservas y Liquidaciones</h2>
             </div>
-            <span className="text-xs font-bold text-[#6B726E]">
+            <span className="text-xs text-neutral-400">
               {bookings.length} {bookings.length === 1 ? 'registro' : 'registros'}
             </span>
           </div>
 
           {loading ? (
-            <div className="py-12 text-center text-sm text-[#6B726E]">Cargando transacciones...</div>
+            <div className="py-12 text-center text-sm text-neutral-400">Cargando transacciones...</div>
           ) : bookings && bookings.length > 0 ? (
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-[#E9E1D2] text-[10px] font-black uppercase tracking-wider text-[#6B726E]">
+                  <tr className="border-b border-white/10 text-[10px] uppercase tracking-wider text-neutral-400">
                     <th className="py-3 px-2">Código</th>
-                    <th className="py-3 px-2">Camper</th>
-                    <th className="py-3 px-2">Viajero</th>
+                    <th className="py-3 px-2">Superdeportivo</th>
+                    <th className="py-3 px-2">Cliente VIP</th>
                     <th className="py-3 px-2">Fechas</th>
                     <th className="py-3 px-2">Estado</th>
                     <th className="py-3 px-2 text-right">Neto Propietario</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#E9E1D2]/60 text-xs font-medium">
+                <tbody className="divide-y divide-white/5 text-xs">
                   {bookings.map((booking) => (
-                    <tr key={booking.id} className="hover:bg-[#FAF7F0] transition-colors">
-                      <td className="py-3 px-2 font-mono font-bold text-[#16B8AA]">{booking.code}</td>
-                      <td className="py-3 px-2 font-bold text-[#13322E]">{booking.vehicle?.title || 'Camper'}</td>
-                      <td className="py-3 px-2 text-[#6B726E]">
+                    <tr key={booking.id} className="hover:bg-neutral-900/60 transition-colors">
+                      <td className="py-3 px-2 text-[#D4AF37] font-bold">{booking.code}</td>
+                      <td className="py-3 px-2 font-bold text-white">{booking.vehicle?.title || 'Superdeportivo'}</td>
+                      <td className="py-3 px-2 text-neutral-400">
                         {booking.traveler?.firstName} {booking.traveler?.lastName}
                       </td>
-                      <td className="py-3 px-2 text-[#6B726E]">
+                      <td className="py-3 px-2 text-neutral-400">
                         {new Date(booking.pickupDate || booking.createdAt).toLocaleDateString('es-ES')} -{' '}
                         {new Date(booking.returnDate || booking.createdAt).toLocaleDateString('es-ES')}
                       </td>
                       <td className="py-3 px-2">
                         <span
-                          className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase ${
+                          className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase border ${
                             booking.status === 'CONFIRMED' || booking.status === 'COMPLETED'
-                              ? 'bg-emerald-100 text-emerald-800'
+                              ? 'bg-emerald-950/40 text-emerald-400 border-emerald-500/30'
                               : booking.status === 'REQUESTED'
-                              ? 'bg-amber-100 text-amber-800'
-                              : 'bg-slate-100 text-slate-700'
+                              ? 'bg-amber-950/40 text-amber-300 border-amber-500/30'
+                              : 'bg-neutral-900 text-neutral-400 border-white/10'
                           }`}
                         >
                           {booking.status}
                         </span>
                       </td>
-                      <td className="py-3 px-2 text-right font-serif text-sm font-bold text-[#13322E]">
+                      <td className="py-3 px-2 text-right font-serif text-sm font-bold text-[#D4AF37]">
                         {Number(booking.ownerPayout || 0).toFixed(2)} €
                       </td>
                     </tr>
@@ -188,39 +190,40 @@ export default function OwnerFinancePage() {
               </table>
             </div>
           ) : (
-            <div className="py-12 text-center text-sm text-[#6B726E]">
-              <FileText className="w-10 h-10 text-[#16B8AA] mx-auto mb-3 opacity-60" />
-              <p className="font-bold text-[#13322E]">Aún no tienes historial de cobros o reservas pagadas.</p>
-              <p className="text-xs mt-1">
-                Cuando recibas y confirmes tu primera reserva, verás aquí el desglose detallado de cada importe pagado y tu ganancia neta.
+            <div className="py-12 text-center text-sm text-neutral-400 space-y-2">
+              <FileText className="w-10 h-10 text-[#D4AF37] mx-auto mb-3 opacity-60" />
+              <p className="font-bold text-white">Aún no tienes historial de cobros o reservas pagadas.</p>
+              <p className="text-xs text-neutral-400">
+                Cuando recibas y confirmes tu primera reserva, verás aquí el desglose detallado de cada liquidación neta.
               </p>
             </div>
           )}
         </div>
 
         {/* 3. PANEL INFORMATIVO DE SEGURIDAD FINANCIERA */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white p-6 rounded-3xl border border-[#E9E1D2] shadow-sm">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-mono">
+          <div className="bg-[#0f0f12] p-6 rounded-3xl border border-white/10 shadow-xl space-y-2">
             <div className="flex items-center space-x-3 mb-3">
-              <ShieldCheck className="w-5 h-5 text-[#16B8AA]" />
-              <h3 className="font-serif text-xl font-bold text-[#13322E]">Garantía de Cobro y Transferencia</h3>
+              <ShieldCheck className="w-5 h-5 text-[#D4AF37]" />
+              <h3 className="font-serif text-xl font-bold text-white">Garantía de Liquidación Bancaria</h3>
             </div>
-            <p className="text-xs text-[#6B726E] leading-relaxed font-medium">
-              Vaneando retiene de forma segura el importe de la reserva y lo transfiere a tu cuenta bancaria (IBAN) en un plazo de 7 días hábiles después de que finalice el periodo de alquiler.
+            <p className="text-xs text-neutral-400 leading-relaxed">
+              GTR Cars custodia de forma segura el importe de la reserva y transfiere los fondos netos a tu cuenta bancaria (IBAN) tras la finalización del alquiler con total trazabilidad.
             </p>
           </div>
 
-          <div className="bg-white p-6 rounded-3xl border border-[#E9E1D2] shadow-sm">
+          <div className="bg-[#0f0f12] p-6 rounded-3xl border border-white/10 shadow-xl space-y-2">
             <div className="flex items-center space-x-3 mb-3">
-              <Building2 className="w-5 h-5 text-[#16B8AA]" />
-              <h3 className="font-serif text-xl font-bold text-[#13322E]">Fiscalidad e IGIC (Canarias)</h3>
+              <Building2 className="w-5 h-5 text-[#D4AF37]" />
+              <h3 className="font-serif text-xl font-bold text-white">Fiscalidad e IGIC (Canarias)</h3>
             </div>
-            <p className="text-xs text-[#6B726E] leading-relaxed font-medium">
-              Todos los cobros calculados incluyen los impuestos e IGIC correspondiente según la normativa de la Comunidad Autónoma de Canarias. Los recibos de alquiler se generan automáticamente.
+            <p className="text-xs text-neutral-400 leading-relaxed">
+              Todas las facturas y liquidaciones se emiten conforme a la normativa fiscal y régimen de IGIC de la Comunidad Autónoma de Canarias.
             </p>
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

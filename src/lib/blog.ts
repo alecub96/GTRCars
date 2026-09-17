@@ -156,7 +156,7 @@ const BASE_BLOG_ARTICLES: BlogArticle[] = [
           'Analicemos los costes reales promedio para dos personas disfrutando de una estancia de una semana en Gran Canaria:',
         ],
         bullets: [
-          'Opción Hotel + Coche: Hotel 4★ (140€/noche x 7 = 980€) + Coche de alquiler (35€/día x 7 = 245€) + Comidas fuera (65€/día x 7 = 455€) = 1.680€ Total.',
+          'Opción Hotel + Coche: Hotel 4 estrellas (140€/noche x 7 = 980€) + Coche de alquiler (35€/día x 7 = 245€) + Comidas fuera (65€/día x 7 = 455€) = 1.680€ Total.',
           'Opción Vaneando Camper: Camper equipada (65€/día x 7 = 455€) + Compra supermercado local (20€/día x 7 = 140€) + Combustible / Servicios (70€) = 665€ Total.',
           'Ahorro neto con Camper: Más de 1.000€ de ahorro directo (hasta un 60% menos) manteniendo total autonomía y comodidad.',
         ],

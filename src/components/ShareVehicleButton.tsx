@@ -35,7 +35,7 @@ export default function ShareVehicleButton({
   const getShareText = () => {
     const priceText = price ? ` por ${price}€/día` : '';
     const islandText = island ? ` en ${island}` : '';
-    return `¡Mira esta camper${islandText}${priceText} en Vaneando!: ${vehicleTitle}`;
+    return `Descubre esta unidad de superdeportivo${islandText}${priceText} en GT Cars Vault: ${vehicleTitle}`;
   };
 
   const handleShareClick = async (e: React.MouseEvent) => {
@@ -46,7 +46,7 @@ export default function ShareVehicleButton({
     const shareText = getShareText();
     trackEvent('vehicle_share', { channel: 'share' in navigator ? 'native' : 'fallback' });
 
-    // Intentar Web Share API nativa (WhatsApp, Instagram, AirDrop, Telegram en móviles)
+    // Intentar Web Share API nativa
     if (typeof navigator !== 'undefined' && navigator.share) {
       try {
         await navigator.share({
@@ -56,12 +56,11 @@ export default function ShareVehicleButton({
         });
         return;
       } catch (err: any) {
-        // Si el usuario cancela, no hacemos nada; si da error, abrimos modal fallback
         if (err?.name === 'AbortError') return;
       }
     }
 
-    // Modal fallback para escritorio o navegadores sin Web Share
+    // Modal fallback
     setShowModal(true);
   };
 
@@ -83,9 +82,9 @@ export default function ShareVehicleButton({
         <button
           type="button"
           onClick={handleShareClick}
-          aria-label="Compartir este vehículo"
+          aria-label="Compartir este superdeportivo"
           title="Compartir"
-          className={`h-9 w-9 rounded-full bg-white/90 backdrop-blur-md hover:bg-white text-[#13322E] hover:text-[#16B8AA] flex items-center justify-center transition-all shadow-md active:scale-90 cursor-pointer ${className}`}
+          className={`h-10 w-10 rounded-xl bg-white/[0.05] backdrop-blur-md hover:bg-white/[0.1] text-white hover:text-[#D4AF37] border border-white/10 flex items-center justify-center transition-all shadow-md active:scale-90 cursor-pointer ${className}`}
         >
           <Share2 className="w-4 h-4" />
         </button>
@@ -93,10 +92,10 @@ export default function ShareVehicleButton({
         <button
           type="button"
           onClick={handleShareClick}
-          aria-label="Compartir este anuncio"
-          className={`inline-flex items-center space-x-2 px-3.5 py-2 rounded-full border border-[#E9E1D2] bg-white hover:bg-slate-50 text-[#13322E] hover:text-[#16B8AA] text-xs font-bold transition-all shadow-xs active:scale-95 cursor-pointer ${className}`}
+          aria-label="Compartir este superdeportivo"
+          className={`inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] hover:border-[#D4AF37]/50 text-white text-xs font-mono font-bold uppercase tracking-wider transition-all shadow-xs active:scale-95 cursor-pointer ${className}`}
         >
-          <Share2 className="w-3.5 h-3.5 text-[#16B8AA]" />
+          <Share2 className="w-3.5 h-3.5 text-[#D4AF37]" />
           <span>Compartir</span>
         </button>
       )}
@@ -104,41 +103,41 @@ export default function ShareVehicleButton({
       {/* MODAL DE COMPARTIR FALLBACK */}
       {showModal && (
         <div
-          className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-fade-in"
+          className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-fade-in font-sans"
           onClick={() => setShowModal(false)}
         >
           <div
-            className="w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl border border-[#E9E1D2] space-y-5 animate-fade-in-up"
+            className="w-full max-w-sm rounded-3xl bg-[#0f0f12] p-6 shadow-2xl border border-white/15 space-y-5 animate-fade-in-up text-white"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between border-b border-[#E9E1D2] pb-3">
-              <div className="flex items-center space-x-2 text-[#13322E]">
-                <Share2 className="w-5 h-5 text-[#16B8AA]" />
-                <h3 className="font-serif text-lg font-bold">Compartir anuncio</h3>
+            <div className="flex items-center justify-between border-b border-white/10 pb-3 font-mono">
+              <div className="flex items-center space-x-2">
+                <Share2 className="w-5 h-5 text-[#D4AF37]" />
+                <h3 className="text-sm font-bold uppercase tracking-wider text-white">Compartir Supercar</h3>
               </div>
               <button
                 type="button"
                 onClick={() => setShowModal(false)}
-                className="p-1 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-all cursor-pointer"
+                className="p-1 rounded-full text-white/40 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <p className="text-xs text-[#6B726E] line-clamp-2">
+            <p className="text-xs text-white/60 line-clamp-2 font-mono">
               {vehicleTitle}
             </p>
 
             {/* OPCIONES DE COMPARTIR */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3 font-mono">
               {/* WhatsApp */}
               <a
                 href={`https://api.whatsapp.com/send?text=${encodedText}%20${encodedUrl}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center space-x-2.5 p-3 rounded-2xl bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#128C7E] font-bold text-xs transition-all"
+                className="flex items-center space-x-2.5 p-3 rounded-xl bg-white/[0.03] hover:bg-emerald-500/20 border border-white/10 text-emerald-400 font-bold text-xs transition-all"
               >
-                <MessageCircle className="w-5 h-5 text-[#25D366]" />
+                <MessageCircle className="w-5 h-5 text-emerald-400" />
                 <span>WhatsApp</span>
               </a>
 
@@ -147,33 +146,33 @@ export default function ShareVehicleButton({
                 href={`https://t.me/share/url?url=${encodedUrl}&text=${encodedText}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center space-x-2.5 p-3 rounded-2xl bg-[#0088cc]/10 hover:bg-[#0088cc]/20 text-[#0088cc] font-bold text-xs transition-all"
+                className="flex items-center space-x-2.5 p-3 rounded-xl bg-white/[0.03] hover:bg-sky-500/20 border border-white/10 text-sky-400 font-bold text-xs transition-all"
               >
-                <Send className="w-5 h-5" />
+                <Send className="w-5 h-5 text-sky-400" />
                 <span>Telegram</span>
               </a>
             </div>
 
             {/* COPIAR ENLACE DIRECTO */}
-            <div className="pt-2">
+            <div className="pt-2 font-mono">
               <button
                 type="button"
                 onClick={handleCopyLink}
-                className={`w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-2xl font-bold text-xs transition-all cursor-pointer shadow-xs ${
+                className={`w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-xl font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-xs ${
                   copied
-                    ? 'bg-[#13322E] text-[#16B8AA]'
-                    : 'bg-[#16B8AA] hover:bg-[#0F766E] text-white'
+                    ? 'bg-white/10 text-[#D4AF37] border border-[#D4AF37]/50'
+                    : 'bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black hover:brightness-110'
                 }`}
               >
                 {copied ? (
                   <>
                     <Check className="w-4 h-4" />
-                    <span>¡Enlace copiado al portapapeles!</span>
+                    <span>¡Enlace copiado!</span>
                   </>
                 ) : (
                   <>
                     <Copy className="w-4 h-4" />
-                    <span>Copiar enlace del anuncio</span>
+                    <span>Copiar Enlace de Vault</span>
                   </>
                 )}
               </button>
