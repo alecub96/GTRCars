@@ -53,6 +53,25 @@ const nextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: '/camper/:slug*',
+        destination: '/coche/:slug*',
+        permanent: true,
+      },
+      {
+        source: '/publicar-camper',
+        destination: '/publicar-coche',
+        permanent: true,
+      },
+      {
+        source: '/alquiler-camper/:path*',
+        destination: '/buscar',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

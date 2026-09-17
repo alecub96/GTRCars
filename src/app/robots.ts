@@ -11,6 +11,7 @@ export default function robots(): MetadataRoute.Robots {
         '/cuenta/',
         '/perfil/',
         '/propietario/',
+        '/publicar-coche/',
         '/publicar-camper/',
         '/reserva/',
         '/mensajes/',
@@ -20,7 +21,7 @@ export default function robots(): MetadataRoute.Robots {
         '/checkout/',
       ],
     },
-    sitemap: 'https://vaneando.com/sitemap.xml',
-    host: 'https://vaneando.com',
+    sitemap: 'https://gtrcars.vip/sitemap.xml',
+    host: 'https://gtrcars.vip',
   };
 }

@@ -8,178 +8,169 @@ import { ShieldCheck, Star, Zap, Gauge, Flame, CheckCircle, ArrowUpRight } from 
 const COMMUNITY_SUPERCARS = [
   {
     id: 'gt-1',
-    slug: 'lamborghini-huracan-sto',
-    brand: 'LAMBORGHINI',
-    model: 'Huracán STO Squadra Corse',
+    slug: 'porsche-911-gt3-touring',
+    brand: 'PORSCHE',
+    model: '911 GT3 Touring Manual',
     year: 2024,
-    hp: 640,
-    accel: '3.0s',
-    topSpeed: 310,
-    city: 'Madrid',
-    price: 1950,
-    image: '/supercars/huracan-sto.jpg',
-    owner: { name: 'Raúl S.', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80', rating: 5.0, verified: true }
+    hp: 510,
+    accel: '3.9s',
+    topSpeed: 320,
+    city: 'Mallorca',
+    price: 1750,
+    image: '/supercars/brands/porsche.png',
+    owner: { name: 'Raúl E.', avatar: 'https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?w=100&auto=format&fit=crop&q=80', rating: 4.99, verified: true }
   },
   {
     id: 'gt-2',
-    slug: 'ferrari-296-gtb-assetto',
+    slug: 'ferrari-sf90-stradale',
     brand: 'FERRARI',
-    model: '296 GTB V6 Hybrid',
+    model: 'SF90 Assetto Fiorano',
     year: 2024,
-    hp: 830,
-    accel: '2.9s',
-    topSpeed: 330,
+    hp: 1000,
+    accel: '2.5s',
+    topSpeed: 340,
     city: 'Barcelona',
-    price: 2100,
-    image: '/supercars/ferrari-296.jpg',
-    owner: { name: 'Mateo C.', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&auto=format&fit=crop&q=80', rating: 4.9, verified: true }
+    price: 2900,
+    image: '/supercars/brands/ferrari.png',
+    owner: { name: 'Javier V.', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80', rating: 4.98, verified: true }
   },
   {
     id: 'gt-3',
-    slug: 'aston-martin-dbs-superleggera',
-    brand: 'ASTON MARTIN',
-    model: 'DBS Superleggera V12',
-    year: 2023,
-    hp: 725,
-    accel: '3.4s',
-    topSpeed: 340,
+    slug: 'lamborghini-revuelto-v12',
+    brand: 'LAMBORGHINI',
+    model: 'Revuelto V12 HPEV Hybrid',
+    year: 2025,
+    hp: 1015,
+    accel: '2.5s',
+    topSpeed: 350,
     city: 'Marbella',
-    price: 1650,
-    image: '/supercars/aston-dbs.jpg',
-    owner: { name: 'Ignacio D.', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100&auto=format&fit=crop&q=80', rating: 5.0, verified: true }
+    price: 3300,
+    image: '/supercars/brands/lamborghini.png',
+    owner: { name: 'Carlos M.', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80', rating: 5.0, verified: true }
   },
   {
     id: 'gt-4',
-    slug: 'porsche-911-gt3-rs-weissach',
-    brand: 'PORSCHE',
-    model: '911 GT3 RS Weissach',
+    slug: 'mclaren-750s-spider',
+    brand: 'MCLAREN',
+    model: '750S Spider Carbon',
     year: 2024,
-    hp: 525,
-    accel: '3.2s',
-    topSpeed: 296,
-    city: 'Valencia',
-    price: 1850,
-    image: '/supercars/porsche-gt3rs.jpg',
-    owner: { name: 'Hugo F.', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80', rating: 4.95, verified: true }
+    hp: 750,
+    accel: '2.8s',
+    topSpeed: 332,
+    city: 'Tenerife',
+    price: 2500,
+    image: '/supercars/brands/mclaren.png',
+    owner: { name: 'Alejandro G.', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&auto=format&fit=crop&q=80', rating: 5.0, verified: true }
   },
   {
     id: 'gt-5',
-    slug: 'mclaren-765lt-spider',
-    brand: 'MCLAREN',
-    model: '765LT Spider Carbon',
-    year: 2024,
-    hp: 765,
-    accel: '2.8s',
-    topSpeed: 330,
-    city: 'Tenerife',
-    price: 2400,
-    image: '/supercars/mclaren-765lt.jpg',
-    owner: { name: 'Guillermo L.', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80', rating: 5.0, verified: true }
-  },
-  {
-    id: 'gt-6',
     slug: 'mercedes-amg-gt-black-series',
-    brand: 'MERCEDES-AMG',
+    brand: 'MERCEDES-BENZ',
     model: 'AMG GT Black Series',
-    year: 2023,
+    year: 2024,
     hp: 730,
     accel: '3.2s',
     topSpeed: 325,
-    city: 'Gran Canaria',
-    price: 2600,
-    image: '/supercars/amg-black-series.jpg',
-    owner: { name: 'David M.', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80', rating: 5.0, verified: true }
+    city: 'Bilbao',
+    price: 2350,
+    image: '/supercars/brands/mercedes-benz.png',
+    owner: { name: 'Alberto B.', avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=100&auto=format&fit=crop&q=80', rating: 5.0, verified: true }
+  },
+  {
+    id: 'gt-6',
+    slug: 'aston-martin-dbs-superleggera',
+    brand: 'ASTON MARTIN',
+    model: 'DBS Superleggera V12',
+    year: 2024,
+    hp: 725,
+    accel: '3.4s',
+    topSpeed: 340,
+    city: 'Madrid',
+    price: 2100,
+    image: '/supercars/brands/aston-martin.png',
+    owner: { name: 'Gonzalo S.', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100&auto=format&fit=crop&q=80', rating: 5.0, verified: true }
   }
 ];
 
 export default function SupercarGrid() {
   return (
-    <section className="py-24 bg-[#080808] border-t border-white/10 text-white relative">
+    <section className="py-24 bg-white border-t border-gray-100 text-black relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* SECTION HEADER */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-6 border-b border-white/10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-6 border-b border-gray-200">
           <div>
-            <div className="flex items-center space-x-2 mb-2">
-              <span className="w-2 h-2 bg-[#D4AF37] rounded-full animate-pulse" />
-              <span className="text-xs font-mono uppercase tracking-[0.25em] text-[#D4AF37]">
-                DISPONIBILIDAD INMEDIATA ENTRE PARTICULARES
-              </span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-white">
-              COLECCIÓN DE SUPERDEPORTIVOS
+            <h2 className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-black font-sans">
+              COLECCIÓN DE VEHÍCULOS
             </h2>
-            <p className="text-xs sm:text-sm text-white/50 font-mono mt-1">
-              Vehículos verificados bajo contrato de alquiler digital y fianza protegida.
-            </p>
           </div>
 
           <div className="mt-4 md:mt-0">
             <Link
               href="/buscar"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-white/10 border border-white/20 text-xs font-mono tracking-wider uppercase transition-all rounded-sm"
+              className="inline-flex items-center gap-2 px-6 py-2.5 bg-gray-100 hover:bg-black hover:text-white border border-gray-200 text-xs font-mono tracking-wider uppercase transition-all rounded-full font-bold"
             >
-              <span>VER COLECCIÓN COMPLETA</span>
-              <ArrowUpRight className="w-4 h-4 text-[#D4AF37]" />
+              <span>VER GARAJE COMPLETO</span>
+              <ArrowUpRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
 
         {/* CARDS GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {COMMUNITY_SUPERCARS.map((car) => (
-            <div
+            <Link
               key={car.id}
-              className="group bg-[#0E0E0E] border border-white/10 hover:border-[#D4AF37]/60 transition-all duration-300 rounded-sm flex flex-col justify-between overflow-hidden shadow-2xl"
+              href={`/coche/${car.slug}`}
+              className="group bg-gray-50 border border-gray-200 hover:border-black hover:shadow-2xl transition-all duration-500 rounded-2xl flex flex-col justify-between overflow-hidden cursor-pointer block"
             >
               <div>
-                {/* PHOTO CONTAINER */}
-                <div className="relative aspect-[16/10] overflow-hidden bg-black">
-                  <Image
-                    src={car.image}
-                    alt={car.model}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0E0E0E] via-transparent to-black/40" />
+                {/* PHOTO CONTAINER (PNG recortado sobre lienzo limpio) */}
+                <div className="relative aspect-[16/10] overflow-hidden bg-white flex items-center justify-center p-4 border-b border-gray-100">
+                  <div className="relative w-full h-full">
+                    <Image
+                      src={car.image}
+                      alt={car.model}
+                      fill
+                      className="object-contain group-hover:scale-105 transition-transform duration-700 drop-shadow-[0_12px_18px_rgba(0,0,0,0.12)]"
+                    />
+                  </div>
 
                   {/* Top Badges */}
-                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
-                    <span className="px-2.5 py-1 bg-black/80 backdrop-blur-md border border-white/20 text-[10px] font-mono font-bold tracking-widest text-[#D4AF37] uppercase">
+                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
+                    <span className="px-3 py-1 bg-black text-[9px] font-mono font-bold tracking-widest text-white uppercase rounded-full shadow-sm">
                       {car.brand}
                     </span>
-                    <span className="px-2.5 py-1 bg-black/70 backdrop-blur-md border border-white/10 text-[10px] font-mono text-white/80 uppercase">
+                    <span className="px-3 py-1 bg-gray-100 border border-gray-200 text-[9px] font-mono font-bold text-gray-700 uppercase rounded-full shadow-sm">
                       {car.city}
                     </span>
                   </div>
                 </div>
 
                 {/* CONTENT */}
-                <div className="p-5">
-                  <div className="flex items-center justify-between text-xs font-mono text-white/40 mb-1.5">
+                <div className="p-6">
+                  <div className="flex items-center justify-between text-[10px] font-mono text-gray-400 mb-1.5 font-bold">
                     <span>AÑO {car.year}</span>
-                    <span className="text-emerald-400 font-bold">VERIFICADO</span>
+                    <span className="text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full font-bold">VERIFICADO</span>
                   </div>
 
-                  <h3 className="text-lg font-bold text-white group-hover:text-[#D4AF37] transition-colors leading-snug truncate">
-                    <Link href={`/camper/${car.slug}`}>
-                      {car.model}
-                    </Link>
+                  <h3 className="text-lg font-black text-black group-hover:text-neutral-600 transition-colors leading-snug truncate font-sans">
+                    {car.model}
                   </h3>
 
                   {/* SPECS HUD */}
-                  <div className="grid grid-cols-3 gap-2 py-3.5 my-3 border-y border-white/10 text-center font-mono">
+                  <div className="grid grid-cols-3 gap-2 py-3.5 my-3 border-y border-gray-200 text-center font-mono">
                     <div>
-                      <span className="text-[9px] text-white/40 block">POTENCIA</span>
-                      <span className="text-xs font-bold text-white">{car.hp} CV</span>
+                      <span className="text-[9px] text-gray-400 block font-bold">POTENCIA</span>
+                      <span className="text-xs font-bold text-black">{car.hp} CV</span>
                     </div>
-                    <div className="border-x border-white/10">
-                      <span className="text-[9px] text-white/40 block">0-100 KM/H</span>
-                      <span className="text-xs font-bold text-[#D4AF37]">{car.accel}</span>
+                    <div className="border-x border-gray-200">
+                      <span className="text-[9px] text-gray-400 block font-bold">0-100 KM/H</span>
+                      <span className="text-xs font-bold text-black">{car.accel}</span>
                     </div>
                     <div>
-                      <span className="text-[9px] text-white/40 block">V. MÁX</span>
-                      <span className="text-xs font-bold text-white">{car.topSpeed} KM/H</span>
+                      <span className="text-[9px] text-gray-400 block font-bold">V. MÁX</span>
+                      <span className="text-xs font-bold text-black">{car.topSpeed} KM/H</span>
                     </div>
                   </div>
 
@@ -189,34 +180,31 @@ export default function SupercarGrid() {
                       <img
                         src={car.owner.avatar}
                         alt={car.owner.name}
-                        className="w-6 h-6 rounded-full border border-white/20 object-cover"
+                        className="w-6 h-6 rounded-full border border-gray-300 object-cover"
                       />
-                      <span className="text-white/70">{car.owner.name}</span>
+                      <span className="text-gray-700 font-bold">{car.owner.name}</span>
                     </div>
-                    <span className="text-[#D4AF37] flex items-center gap-1">
-                      <Star className="w-3 h-3 fill-[#D4AF37]" /> {car.owner.rating}
+                    <span className="text-black font-bold flex items-center gap-1">
+                      <Star className="w-3 h-3 fill-black text-black" /> {car.owner.rating}
                     </span>
                   </div>
                 </div>
               </div>
 
               {/* FOOTER ACTION */}
-              <div className="p-5 pt-0 flex items-center justify-between border-t border-white/5 mt-2 pt-4">
+              <div className="p-5 flex items-center justify-between border-t border-gray-200 bg-gray-100 group-hover:bg-gray-200/70 transition-colors">
                 <div>
-                  <span className="text-[9px] font-mono text-white/40 uppercase block">DESDE</span>
-                  <span className="text-lg font-mono font-bold text-[#D4AF37]">{car.price}€</span>
-                  <span className="text-[10px] font-mono text-white/50"> / DÍA</span>
+                  <span className="text-[9px] font-mono text-gray-500 uppercase block font-bold">DESDE</span>
+                  <span className="text-lg font-mono font-black text-black">{car.price}€</span>
+                  <span className="text-[10px] font-mono text-gray-500 font-bold"> / DÍA</span>
                 </div>
 
-                <Link
-                  href={`/camper/${car.slug}`}
-                  className="px-4 py-2 bg-white/10 hover:bg-[#D4AF37] hover:text-black text-white text-xs font-mono font-bold uppercase tracking-wider transition-colors rounded-sm"
-                >
-                  CONFIGURAR
-                </Link>
+                <span className="px-4 py-2 bg-black group-hover:bg-gray-800 text-white text-xs font-mono font-bold uppercase tracking-wider transition-colors rounded-full shadow-sm">
+                  SELECCIONAR
+                </span>
               </div>
 
-            </div>
+            </Link>
           ))}
         </div>
 

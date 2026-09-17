@@ -4,11 +4,11 @@ export interface PricingBreakdown {
   basePriceTotal: number;
   cleaningFee: number;
   extrasTotal: number;
-  travelerFee: number;       // Tarifa de servicio al viajero (4.3%)
-  ownerFee: number;          // Comisión descontada al propietario (9.7%)
-  ownerPayout: number;       // Lo que transfieres al propietario tras tu comisión
+  travelerFee: number;       // Tarifa de gestión de plataforma al cliente (9.7%)
+  ownerFee: number;          // Comisión al propietario (0%, el propietario no paga nada)
+  ownerPayout: number;       // Pago íntegro al propietario (100% de la tarifa)
   subtotalBeforeFees: number;
-  totalAmount: number;       // Lo que cobras tú al viajero
+  totalAmount: number;       // Lo que paga el cliente (subtotal + 9.7% gestión)
   discountPct: number;
 }
 
@@ -56,18 +56,17 @@ export function calculatePricing({
 
   const subtotalBeforeFees = basePriceTotal + extrasTotal + cleaningFee;
 
-  // Viajero: 4.3% de gastos de gestión
-  const travelerFee = Math.round(subtotalBeforeFees * 0.043 * 100) / 100;
+  // Viajero: 9.7% de tarifa de gestión de plataforma (no hay cobertura de seguro)
+  const travelerFee = Math.round(subtotalBeforeFees * 0.097 * 100) / 100;
   
-  // Propietario: 9.7% de comisión si es de un tercero (0% si es camper propia de tu plataforma)
-  const ownerFeeRatio = ownershipType === 'PLATFORM' ? 0.0 : 0.097;
-  const ownerFee = Math.round(subtotalBeforeFees * ownerFeeRatio * 100) / 100;
+  // Propietario: 0% de comisión (el propietario no paga nada, cobra el 100% de su tarifa fijada)
+  const ownerFee = 0;
 
-  // Total cobrado al viajero = Subtotal + comisión viajero
-  const totalAmount = subtotalBeforeFees + travelerFee;
+  // Total cobrado al cliente/viajero = Subtotal + tarifa de gestión de plataforma (9.7%)
+  const totalAmount = Math.round((subtotalBeforeFees + travelerFee) * 100) / 100;
 
-  // Pago al propietario = Subtotal - comisión del propietario
-  const ownerPayout = subtotalBeforeFees - ownerFee;
+  // Pago al propietario = 100% del subtotal (sin deducciones)
+  const ownerPayout = subtotalBeforeFees;
 
   return {
     totalDays,

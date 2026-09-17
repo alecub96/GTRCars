@@ -19,12 +19,12 @@ function Month({ month, startDate, endDate, blocked, onSelect }: { month: Date; 
   
   return (
     <div className="min-w-0 flex-1 font-mono">
-      <h4 className="mb-4 text-center font-bold text-sm text-white capitalize tracking-wider">
+      <h4 className="mb-4 text-center font-bold text-sm text-black capitalize tracking-wider">
         {month.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}
       </h4>
       <div className="grid grid-cols-7 gap-1">
         {WEEK.map((day) => (
-          <span key={day} className="pb-2 text-center text-[10px] font-bold text-white/30">
+          <span key={day} className="pb-2 text-center text-[10px] font-bold text-gray-400">
             {day}
           </span>
         ))}
@@ -47,14 +47,14 @@ function Month({ month, startDate, endDate, blocked, onSelect }: { month: Date; 
               }}
               className={`relative aspect-square rounded-xl text-xs font-bold transition-all ${
                 selected
-                  ? 'z-10 bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black shadow-[0_0_15px_rgba(212,175,55,0.4)] scale-105 font-black'
+                  ? 'z-10 bg-black text-white shadow-md scale-105 font-black'
                   : inRange
-                  ? 'bg-[#D4AF37]/20 text-white font-bold border border-[#D4AF37]/40 rounded-xl'
+                  ? 'bg-gray-100 text-black font-bold border border-gray-200 rounded-xl'
                   : isBlocked
-                  ? 'cursor-not-allowed bg-red-950/30 text-red-500/50 line-through'
+                  ? 'cursor-not-allowed bg-red-50 text-red-300 line-through'
                   : disabled
-                  ? 'cursor-not-allowed text-white/20 line-through'
-                  : 'text-white/80 hover:bg-white/10 hover:text-white cursor-pointer'
+                  ? 'cursor-not-allowed text-gray-300 line-through'
+                  : 'text-gray-700 hover:bg-gray-100 hover:text-black cursor-pointer'
               }`}
               title={isBlocked ? 'Fecha reservada' : undefined}
             >
@@ -118,11 +118,11 @@ export default function DateRangeCalendar({
 
   // Contenido puro del calendario
   const calendarContent = (
-    <div className="w-full text-white font-mono">
-      <div className="mb-5 flex items-center justify-between border-b border-white/10 pb-4">
+    <div className="w-full text-black font-mono">
+      <div className="mb-5 flex items-center justify-between border-b border-gray-100 pb-4">
         <div>
-          <span className="text-[10px] font-bold uppercase tracking-[.18em] text-[#D4AF37]">Selección de Fechas</span>
-          <p className="text-xs text-white/50 font-normal">Días de entrega y devolución en el Vault</p>
+          <span className="text-[10px] font-bold uppercase tracking-[.18em] text-gray-500">Selección de Fechas</span>
+          <p className="text-xs text-gray-500 font-normal">Días de entrega y devolución en el Garaje</p>
         </div>
         <div className="flex items-center gap-2">
           <button
@@ -132,7 +132,7 @@ export default function DateRangeCalendar({
               e.stopPropagation();
               setMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1));
             }}
-            className="rounded-xl border border-white/10 p-2 hover:bg-white/10 text-white/70 hover:text-white transition-colors cursor-pointer"
+            className="rounded-xl border border-gray-200 p-2 hover:bg-gray-100 text-gray-600 hover:text-black transition-colors cursor-pointer"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
@@ -143,7 +143,7 @@ export default function DateRangeCalendar({
               e.stopPropagation();
               setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1));
             }}
-            className="rounded-xl border border-white/10 p-2 hover:bg-white/10 text-white/70 hover:text-white transition-colors cursor-pointer"
+            className="rounded-xl border border-gray-200 p-2 hover:bg-gray-100 text-gray-600 hover:text-black transition-colors cursor-pointer"
           >
             <ChevronRight className="h-4 w-4" />
           </button>
@@ -155,7 +155,7 @@ export default function DateRangeCalendar({
                 e.stopPropagation();
                 setOpen(false);
               }}
-              className="ml-1 rounded-xl p-2 hover:bg-white/10 text-white/40 hover:text-white transition-colors cursor-pointer"
+              className="ml-1 rounded-xl p-2 hover:bg-gray-100 text-gray-400 hover:text-black transition-colors cursor-pointer"
             >
               <X className="h-5 w-5" />
             </button>
@@ -170,19 +170,19 @@ export default function DateRangeCalendar({
         </div>
       </div>
 
-      <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl bg-white/[0.02] p-4 border border-white/10">
+      <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl bg-gray-50 p-4 border border-gray-200">
         <div className="flex items-center gap-4 text-xs font-mono">
           <div>
-            <small className="block text-white/40 font-bold text-[10px] uppercase tracking-wider">Entrega</small>
-            <strong className="text-sm font-bold text-white">{pretty(startDate)}</strong>
+            <small className="block text-gray-400 font-bold text-[10px] uppercase tracking-wider">Entrega</small>
+            <strong className="text-sm font-bold text-black">{pretty(startDate)}</strong>
           </div>
-          <span className="text-[#D4AF37] font-bold">→</span>
+          <span className="text-gray-400 font-bold">→</span>
           <div>
-            <small className="block text-white/40 font-bold text-[10px] uppercase tracking-wider">Devolución</small>
-            <strong className="text-sm font-bold text-white">{pretty(endDate)}</strong>
+            <small className="block text-gray-400 font-bold text-[10px] uppercase tracking-wider">Devolución</small>
+            <strong className="text-sm font-bold text-black">{pretty(endDate)}</strong>
           </div>
           {calculatedNights > 0 && (
-            <span className="bg-[#D4AF37]/15 text-[#D4AF37] border border-[#D4AF37]/30 px-3 py-1 rounded-full font-bold text-xs">
+            <span className="bg-black text-white px-3 py-1 rounded-full font-bold text-xs">
               {calculatedNights} {calculatedNights === 1 ? 'día de conducción' : 'días de conducción'}
             </span>
           )}
@@ -195,7 +195,7 @@ export default function DateRangeCalendar({
                 e.stopPropagation();
                 onChange('', '');
               }}
-              className="text-xs font-bold text-white/50 hover:text-white hover:underline cursor-pointer"
+              className="text-xs font-bold text-gray-500 hover:text-black hover:underline cursor-pointer"
             >
               Limpiar
             </button>
@@ -207,7 +207,7 @@ export default function DateRangeCalendar({
                 e.stopPropagation();
                 setOpen(false);
               }}
-              className="bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow-md hover:brightness-110 transition-all cursor-pointer"
+              className="bg-black text-white px-6 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider shadow-md hover:bg-gray-800 transition-all cursor-pointer"
             >
               Confirmar Fechas
             </button>
@@ -220,7 +220,7 @@ export default function DateRangeCalendar({
   // Variante inline
   if (variant === 'inline') {
     return (
-      <div className="w-full rounded-2xl border border-white/10 bg-[#0f0f12] p-5 shadow-2xl">
+      <div className="w-full rounded-2xl border border-gray-200 bg-white p-5 shadow-xl">
         {calendarContent}
       </div>
     );
@@ -235,19 +235,19 @@ export default function DateRangeCalendar({
           e.stopPropagation();
           setOpen(true);
         }}
-        className="flex w-full items-center space-x-3 text-left cursor-pointer p-3.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-[#D4AF37]/50 hover:bg-white/[0.06] transition-all shadow-sm group"
+        className="flex w-full items-center space-x-3 text-left cursor-pointer p-3.5 rounded-xl bg-white border border-gray-200 hover:border-black transition-all shadow-xs group"
       >
-        <CalendarDays className="h-5 w-5 shrink-0 text-[#D4AF37] group-hover:scale-110 transition-transform" />
+        <CalendarDays className="h-5 w-5 shrink-0 text-black group-hover:scale-110 transition-transform" />
         <div className="grid flex-1 grid-cols-2 gap-2 min-w-0">
           <div className="truncate">
-            <small className="block text-[9px] font-bold uppercase tracking-wider text-white/40">Entrega</small>
-            <strong className="text-xs sm:text-sm font-bold text-white truncate block">
+            <small className="block text-[9px] font-bold uppercase tracking-wider text-gray-400">Entrega</small>
+            <strong className="text-xs sm:text-sm font-bold text-black truncate block">
               {pretty(startDate)}
             </strong>
           </div>
           <div className="truncate">
-            <small className="block text-[9px] font-bold uppercase tracking-wider text-white/40">Devolución</small>
-            <strong className="text-xs sm:text-sm font-bold text-white truncate block">
+            <small className="block text-[9px] font-bold uppercase tracking-wider text-gray-400">Devolución</small>
+            <strong className="text-xs sm:text-sm font-bold text-black truncate block">
               {pretty(endDate)}
             </strong>
           </div>
@@ -257,11 +257,11 @@ export default function DateRangeCalendar({
       {open && mounted && createPortal(
         <div
           tabIndex={-1}
-          className="fixed inset-0 z-[999999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
+          className="fixed inset-0 z-[999999] flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-in fade-in duration-200"
           onClick={() => setOpen(false)}
         >
           <div
-            className="relative z-[1000000] w-[min(740px,calc(100vw-32px))] max-h-[90vh] overflow-y-auto rounded-3xl border border-white/15 bg-[#0f0f12] p-5 sm:p-7 text-white shadow-2xl animate-soft-appear"
+            className="relative z-[1000000] w-[min(740px,calc(100vw-32px))] max-h-[90vh] overflow-y-auto rounded-3xl border border-gray-200 bg-white p-5 sm:p-7 text-black shadow-2xl animate-soft-appear"
             onClick={(e) => e.stopPropagation()}
           >
             {calendarContent}

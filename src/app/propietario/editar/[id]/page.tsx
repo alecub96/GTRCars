@@ -214,6 +214,10 @@ export default function EditCamperPage({ params }: { params: Promise<{ id: strin
   };
 
   const handleDeletePhoto = async (photoId: string) => {
+    if (existingPhotos.length <= 5) {
+      alert('Un superdeportivo debe contar con al menos 5 fotografías en la galería.');
+      return;
+    }
     if (!confirm('¿Deseas eliminar esta fotografía?')) return;
 
     try {

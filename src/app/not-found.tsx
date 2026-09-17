@@ -5,56 +5,56 @@ import { Gauge, MapPin, Sparkles } from 'lucide-react';
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-[#070707] text-white selection:bg-[#D4AF37] selection:text-black flex flex-col">
+    <div className="min-h-screen bg-white text-black selection:bg-black selection:text-white flex flex-col font-sans">
       <Navbar />
 
       <main className="flex-1 flex items-center justify-center px-4 py-16">
         <section className="max-w-2xl text-center space-y-6">
-          <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/30 mx-auto">
+          <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gray-100 text-black border border-gray-200 mx-auto">
             <Gauge className="h-10 w-10" />
           </div>
 
-          <span className="text-[10px] font-mono font-bold uppercase tracking-[0.25em] text-[#D4AF37] block">
+          <span className="text-[10px] font-mono font-bold uppercase tracking-[0.25em] text-gray-500 block">
             ERROR 404 • PÁGINA NO ENCONTRADA
           </span>
 
-          <h1 className="font-serif text-3xl sm:text-5xl font-bold tracking-tight text-white">
+          <h1 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-black font-sans">
             Esta curva no lleva a ningún superdeportivo
           </h1>
 
-          <p className="text-xs sm:text-sm text-neutral-400 font-mono max-w-md mx-auto leading-relaxed">
-            Es posible que el enlace haya expirado, el vehículo esté reservado en el Vault o la dirección haya cambiado.
+          <p className="text-xs sm:text-sm text-gray-500 font-mono max-w-md mx-auto leading-relaxed">
+            Es posible que el enlace haya expirado, el vehículo haya cambiado de titularidad o la dirección haya sido reubicada.
           </p>
 
           <div className="flex flex-wrap justify-center gap-3 pt-2">
             <Link
               href="/"
-              className="rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B38B21] px-7 py-3.5 text-xs font-mono font-bold uppercase tracking-wider text-black hover:brightness-110 transition-all shadow-lg"
+              className="rounded-xl bg-black px-7 py-3.5 text-xs font-mono font-bold uppercase tracking-wider text-white hover:bg-neutral-800 transition-all shadow-sm"
             >
-              Volver al Vault Principal
+              Volver al Garaje Principal
             </Link>
             <Link
-              href="/#flota"
-              className="rounded-xl border border-white/15 bg-neutral-900 hover:bg-neutral-800 px-7 py-3.5 text-xs font-mono font-bold text-white transition-all"
+              href="/buscar"
+              className="rounded-xl border border-gray-300 bg-white hover:bg-gray-50 px-7 py-3.5 text-xs font-mono font-bold text-black transition-all shadow-sm"
             >
-              Explorar Flota Disponible
+              Explorar Colección Disponible
             </Link>
           </div>
 
           {/* DESTINOS POPULARES */}
-          <div className="pt-8 border-t border-white/10 max-w-lg mx-auto">
-            <span className="text-[10px] font-mono font-bold text-neutral-400 uppercase tracking-wider block mb-3">
+          <div className="pt-8 border-t border-gray-200 max-w-lg mx-auto">
+            <span className="text-[10px] font-mono font-bold text-gray-500 uppercase tracking-wider block mb-3">
               Bases de Custodia y Entrega VIP
             </span>
             <div className="flex flex-wrap justify-center gap-2">
-              {['Gran Canaria (LPA)', 'Tenerife Sur (TFS)', 'Costa Adeje', 'Maspalomas'].map((island) => (
+              {['Madrid (MAD)', 'Barcelona (BCN)', 'Gran Canaria (LPA)', 'Tenerife Sur (TFS)', 'Londres (LHR)'].map((base) => (
                 <Link
-                  key={island}
-                  href={`/buscar?island=${encodeURIComponent(island.split(' ')[0])}`}
-                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-neutral-900 border border-white/10 hover:border-[#D4AF37]/50 text-xs font-mono text-neutral-300 transition-all"
+                  key={base}
+                  href={`/buscar?city=${encodeURIComponent(base.split(' ')[0])}`}
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-gray-100 border border-gray-200 hover:border-black text-xs font-mono text-gray-700 transition-all font-bold"
                 >
-                  <MapPin className="w-3 h-3 text-[#D4AF37]" />
-                  <span>{island}</span>
+                  <MapPin className="w-3 h-3 text-black" />
+                  <span>{base}</span>
                 </Link>
               ))}
             </div>

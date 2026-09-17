@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import AuthModal from '@/components/AuthModal';
-import OnboardingTour from '@/components/OnboardingTour';
 import LanguageSelector from '@/components/LanguageSelector';
 import {
   LifeBuoy,
@@ -88,83 +87,76 @@ export default function Navbar() {
   };
 
   return (
-    <header className="w-full relative z-40">
-      {/* BARRA SUPERIOR BANNER CON ACCESO DIRECTO DEMO */}
-      <div className="bg-[#050505] text-[#D4AF37] text-[10px] font-mono tracking-[0.15em] uppercase py-2 px-3 sm:px-4 flex items-center justify-between border-b border-white/5">
-        <span className="hidden sm:inline">GTR CARS // ALQUILER DE SUPERDEPORTIVOS E HYPERCARS EN GRAN CANARIA Y TENERIFE</span>
-        <span className="sm:hidden">GTR CARS // HYPERCAR P2P</span>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => openAuth('login')}
-            className="text-[9px] font-bold uppercase text-[#D4AF37] hover:underline flex items-center gap-1.5 cursor-pointer"
-          >
-            <KeyRound className="w-3 h-3 text-[#D4AF37]" />
-            Acceso Demo
-          </button>
-        </div>
-      </div>
-
-      {/* NAVEGACIÓN PRINCIPAL */}
-      <nav className="bg-[#090909]/95 backdrop-blur-md border-b border-white/10 px-4 sm:px-8 py-3.5 sm:py-4 flex items-center justify-between shadow-2xl">
-        {/* LOGO OFICIAL GTR CARS */}
+    <header className="w-full relative z-40 bg-white border-b border-gray-100">
+      {/* NAVEGACIÓN PRINCIPAL LIMPIA ESTILO PORSCHE (FONDO BLANCO) */}
+      <nav className="bg-white px-6 sm:px-10 py-4 flex items-center justify-between">
+        {/* LOGO MINIMALISTA PORSCHE STYLE */}
         <Link href="/" className="group flex items-center space-x-3">
-          <div className="relative w-9 h-9 rounded-xl overflow-hidden border border-[#D4AF37]/50 shadow-[0_0_20px_rgba(212,175,55,0.35)] group-hover:scale-105 transition-transform bg-black">
-            <img
-              src="/favicon.png"
-              alt="GTR Cars Emblem"
-              className="w-full h-full object-cover"
-            />
+          <div className="w-8 h-8 rounded-full border border-black bg-black flex items-center justify-center font-black text-xs text-white">
+            GT
           </div>
           <div>
-            <span className="font-black text-xl tracking-[0.15em] text-white uppercase block leading-none font-sans">
-              GTR CARS<span className="text-[#D4AF37]">.</span>
+            <span className="font-black text-xl tracking-[0.2em] text-black uppercase block leading-none font-sans">
+              GTR CARS
             </span>
-            <span className="text-[8px] font-mono tracking-[0.3em] uppercase text-[#D4AF37]/80 block mt-0.5">
-              CANARY HYPERCAR VAULT
+            <span className="text-[8px] font-mono tracking-[0.3em] uppercase text-gray-400 block mt-0.5">
+              SELECTION
             </span>
           </div>
         </Link>
 
-        {/* ENLACES CENTRALES (DESKTOP) */}
-        <div className="hidden md:flex items-center space-x-7 text-xs font-mono font-bold uppercase tracking-wider text-white/80">
-          {(role === 'TRAVELER' || role === 'ANONYMOUS') && (
-            <Link href="/buscar" className="hover:text-[#D4AF37] transition-colors">
-              SUPERDEPORTIVOS
-            </Link>
+        {/* ENLACES CENTRALES ESTILO PORSCHE (NEGRO/GRIS) */}
+        <div className="hidden md:flex items-center space-x-6 text-xs font-mono font-bold tracking-widest text-gray-700">
+          <Link href="/buscar" className="hover:text-black transition-colors flex items-center gap-1.5">
+            <Search className="w-3.5 h-3.5 text-black" />
+            <span>BUSCADOR</span>
+          </Link>
+
+          {/* SÓLO PARA MODO PILOTO VIP O ANÓNIMO */}
+          {role !== 'OWNER' && (
+            <>
+              <Link href="/buscar" className="hover:text-black transition-colors">
+                SUPERDEPORTIVOS
+              </Link>
+              {role === 'TRAVELER' && (
+                <Link href="/cuenta" className="hover:text-black transition-colors">
+                  MIS RESERVAS
+                </Link>
+              )}
+            </>
           )}
-          {role === 'TRAVELER' && (
-            <Link href="/cuenta" className="hover:text-[#D4AF37] transition-colors">
-              MIS RESERVAS
-            </Link>
-          )}
-          {(role === 'TRAVELER' || role === 'ANONYMOUS') && (
-            <Link href="/publicar-camper" className="rounded-sm bg-[#D4AF37] px-4 py-2 text-black font-black hover:bg-[#F5C542] transition-colors shadow-[0_0_15px_rgba(212,175,55,0.25)]">
+
+          {/* SÓLO PARA USUARIO ANÓNIMO O PROPIETARIO */}
+          {role === 'ANONYMOUS' && (
+            <Link href="/publicar-coche" className="px-4 py-1.5 rounded-full border border-black text-black hover:bg-black hover:text-white transition-all font-bold">
               PUBLICAR MI COCHE
             </Link>
           )}
-          <Link href="/blog" className="hover:text-[#D4AF37] transition-colors">
-            BLOG & RUTAS
-          </Link>
-          <Link href="/seguridad" className="hover:text-[#D4AF37] transition-colors">
-            GARANTÍAS & SEGUROS
-          </Link>
+
           {role === 'OWNER' && (
             <>
-              <Link href="/propietario" className="text-[#D4AF37] hover:brightness-110 transition-colors">
+              <Link href="/propietario" className="text-black font-bold hover:text-gray-600 transition-colors">
                 PANEL PROPIETARIO
               </Link>
-              <Link href="/publicar-camper" className="rounded-sm bg-[#D4AF37] px-4 py-2 text-black font-black hover:bg-[#F5C542] transition-colors shadow-[0_0_15px_rgba(212,175,55,0.25)]">
-                + AÑADIR SUPERCAR
+              <Link href="/publicar-coche" className="px-4 py-1.5 rounded-full bg-black text-white font-bold hover:bg-neutral-800 transition-all">
+                + AÑADIR VEHÍCULO
               </Link>
             </>
           )}
+
+          <Link href="/blog" className="hover:text-black transition-colors">
+            EXPERIENCIAS
+          </Link>
+          <Link href="/seguridad" className="hover:text-black transition-colors">
+            GARANTÍAS
+          </Link>
           {role === 'ADMIN' && (
-            <Link href="/admin" className="hover:text-[#D4AF37] transition-colors">
+            <Link href="/admin" className="hover:text-black transition-colors">
               ADMINISTRACIÓN
             </Link>
           )}
-          <Link href="/contacto" className="hover:text-[#D4AF37] transition-colors">
-            CONSERJERÍA 24/7
+          <Link href="/contacto" className="hover:text-black transition-colors">
+            CONSERJERÍA
           </Link>
         </div>
 
@@ -176,9 +168,9 @@ export default function Navbar() {
               href="/soporte"
               aria-label="Contactar con soporte"
               title="Contactar con soporte"
-              className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-2 text-xs font-mono font-bold text-white hover:border-[#D4AF37]/50 hover:bg-white/[0.08] transition-all"
+              className="flex items-center gap-1.5 rounded-full border border-gray-200 bg-gray-50 px-3.5 py-2 text-xs font-mono font-bold text-black hover:border-black hover:bg-gray-100 transition-all"
             >
-              <LifeBuoy className="h-4 w-4 text-[#D4AF37]" />
+              <LifeBuoy className="h-4 w-4 text-black" />
               <span>Soporte VIP</span>
             </Link>
           )}
@@ -190,42 +182,42 @@ export default function Navbar() {
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Menú principal"
-            className="flex items-center space-x-2 rounded-full border border-white/15 bg-white/[0.04] px-3.5 py-1.5 text-xs font-mono font-bold text-white hover:bg-white/[0.08] transition-all shadow-sm cursor-pointer"
+            className="flex items-center space-x-2 rounded-full border border-gray-200 bg-white px-3.5 py-1.5 text-xs font-mono font-bold text-black hover:bg-gray-100 transition-all shadow-xs cursor-pointer"
           >
             {user ? (
               <>
-                <div className="w-6 h-6 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black flex items-center justify-center text-[10px] font-black uppercase">
+                <div className="w-6 h-6 rounded-full bg-black text-white flex items-center justify-center text-[10px] font-black uppercase">
                   {user.firstName ? user.firstName[0] : 'U'}
                 </div>
-                <span className="font-sans font-bold max-w-[80px] truncate">{user.firstName}</span>
-                <Menu className="w-4 h-4 text-white/70" />
+                <span className="font-sans font-bold max-w-[80px] truncate text-black">{user.firstName}</span>
+                <Menu className="w-4 h-4 text-gray-700" />
               </>
             ) : (
               <>
-                <User className="w-4 h-4 text-[#D4AF37]" />
-                <span className="uppercase text-[11px] tracking-wider font-mono font-bold">Menú</span>
-                <Menu className="w-4 h-4 text-white/70" />
+                <User className="w-4 h-4 text-black" />
+                <span className="uppercase text-[11px] tracking-wider font-mono font-bold text-black">Menú</span>
+                <Menu className="w-4 h-4 text-gray-700" />
               </>
             )}
           </button>
         </div>
       </nav>
 
-      {/* MENÚ MÓVIL ÚNICO Y COMPLETO (SLIDE-OVER DRAWER DARK LUXURY) */}
+      {/* MENÚ MÓVIL ÚNICO Y COMPLETO (SLIDE-OVER DRAWER BLANCO PORSCHE) */}
       {mobileOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md md:hidden animate-in fade-in duration-200 font-sans">
-          <div className="fixed inset-y-0 right-0 w-full max-w-sm rounded-l-3xl bg-[#070707] border-l border-white/10 shadow-2xl flex flex-col z-50 animate-in slide-in-from-right duration-300 text-white">
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs md:hidden animate-in fade-in duration-200 font-sans">
+          <div className="fixed inset-y-0 right-0 w-full max-w-sm rounded-l-3xl bg-white border-l border-gray-200 shadow-2xl flex flex-col z-50 animate-in slide-in-from-right duration-300 text-black">
             {/* CABECERA DEL MENÚ */}
-            <div className="px-5 py-4 border-b border-white/10 flex items-center justify-between bg-[#0f0f12] font-mono">
+            <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50 font-mono">
               <div className="flex items-center space-x-2">
-                <span className="text-xs font-black uppercase tracking-widest text-[#D4AF37]">
-                  GT CARS // VAULT
+                <span className="text-xs font-black uppercase tracking-widest text-black">
+                  GTR CARS // GARAJE
                 </span>
               </div>
               <button
                 onClick={() => setMobileOpen(false)}
                 aria-label="Cerrar menú"
-                className="p-2 rounded-full text-white/40 hover:text-white hover:bg-white/10 transition-colors"
+                className="p-2 rounded-full text-gray-400 hover:text-black hover:bg-gray-100 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -235,64 +227,64 @@ export default function Navbar() {
             <div className="flex-1 overflow-y-auto p-5 space-y-6">
               {/* TARJETA DE USUARIO Y CAMBIO DE MODO (SI ESTÁ LOGUEADO) */}
               {user ? (
-                <div className="rounded-2xl border border-white/10 bg-[#0f0f12] p-4 shadow-xl space-y-3 font-mono">
+                <div className="rounded-2xl border border-gray-200 bg-gray-50 p-4 shadow-xs space-y-3 font-mono">
                   <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black flex items-center justify-center text-sm font-black uppercase shadow-sm shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center text-sm font-black uppercase shadow-xs shrink-0">
                       {user.firstName ? user.firstName[0] : 'U'}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <span className="text-[9px] font-bold uppercase tracking-wider text-[#D4AF37] block">
+                      <span className="text-[9px] font-bold uppercase tracking-wider text-gray-500 block">
                         {user.role === 'ADMIN' ? 'Administrador' : user.role === 'OWNER' ? 'Cuenta Propietario' : 'Cuenta Piloto VIP'}
                       </span>
-                      <h4 className="font-bold text-sm text-white truncate font-sans">
+                      <h4 className="font-bold text-sm text-black truncate font-sans">
                         {user.firstName} {user.lastName}
                       </h4>
-                      <p className="text-[11px] text-white/40 truncate">{user.email}</p>
+                      <p className="text-[11px] text-gray-500 truncate">{user.email}</p>
                     </div>
                   </div>
                 </div>
               ) : (
                 /* ACCESO PARA USUARIOS NO LOGUEADOS */
-                <div className="rounded-2xl border border-[#D4AF37]/30 bg-[#0f0f12] p-5 shadow-xl space-y-3 font-mono">
-                  <span className="text-[10px] font-bold uppercase text-[#D4AF37] tracking-wider block">
-                    Acceso Vault & Demostración
+                <div className="rounded-2xl border border-gray-200 bg-gray-50 p-5 shadow-xs space-y-3 font-mono">
+                  <span className="text-[10px] font-bold uppercase text-gray-500 tracking-wider block">
+                    Acceso Garaje
                   </span>
-                  <p className="text-xs text-white/60 font-normal">
+                  <p className="text-xs text-gray-600 font-normal">
                     Accede a tu cuenta o prueba los paneles con un solo clic:
                   </p>
                   <button
                     onClick={() => openAuth('login')}
-                    className="w-full py-3 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black font-black text-xs uppercase tracking-widest hover:brightness-110 transition-all shadow-[0_0_15px_rgba(212,175,55,0.2)] cursor-pointer"
+                    className="w-full py-3 rounded-full bg-black text-white font-black text-xs uppercase tracking-widest hover:bg-gray-800 transition-all shadow-md cursor-pointer"
                   >
                     ACCEDER // IDENTIFICARME
                   </button>
                 </div>
               )}
 
-              {/* SECCIÓN MI CUENTA (SI ESTÁ LOGUEADO) */}
+              {/* SECCIÓN PANELES DE USUARIO */}
               {user && (
                 <div className="space-y-2 font-mono">
-                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#D4AF37] px-2 block">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 px-2 block">
                     Gestión Personal
                   </span>
-                  <div className="grid gap-1 text-xs font-bold text-white/80">
+                  <div className="grid gap-1 text-xs font-bold text-gray-700">
                     {user.role !== 'ADMIN' && (
                       <Link
                         onClick={() => setMobileOpen(false)}
                         href="/mensajes"
-                        className="flex items-center space-x-3 rounded-xl p-3 hover:bg-white/[0.05] transition-colors hover:text-white"
+                        className="flex items-center space-x-3 rounded-xl p-3 hover:bg-gray-100 transition-colors hover:text-black"
                       >
-                        <MessageSquare className="w-4 h-4 text-[#D4AF37]" />
-                        <span>Mensajería & Vault</span>
+                        <MessageSquare className="w-4 h-4 text-black" />
+                        <span>Mensajería & Garaje</span>
                       </Link>
                     )}
 
                     <Link
                       onClick={() => setMobileOpen(false)}
                       href="/perfil"
-                      className="flex items-center space-x-3 rounded-xl p-3 hover:bg-white/[0.05] transition-colors hover:text-white"
+                      className="flex items-center space-x-3 rounded-xl p-3 hover:bg-gray-100 transition-colors hover:text-black"
                     >
-                      <UserCircle className="w-4 h-4 text-[#D4AF37]" />
+                      <UserCircle className="w-4 h-4 text-black" />
                       <span>Mi Perfil</span>
                     </Link>
 
@@ -300,9 +292,9 @@ export default function Navbar() {
                       <Link
                         onClick={() => setMobileOpen(false)}
                         href="/propietario"
-                        className="flex items-center space-x-3 rounded-xl p-3 bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/20 transition-colors"
+                        className="flex items-center space-x-3 rounded-xl p-3 bg-gray-100 text-black border border-gray-200 transition-colors"
                       >
-                        <Truck className="w-4 h-4 text-[#D4AF37]" />
+                        <Truck className="w-4 h-4 text-black" />
                         <span>Panel de Propietario</span>
                       </Link>
                     )}
@@ -311,9 +303,9 @@ export default function Navbar() {
                       <Link
                         onClick={() => setMobileOpen(false)}
                         href="/cuenta"
-                        className="flex items-center space-x-3 rounded-xl p-3 bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/20 transition-colors"
+                        className="flex items-center space-x-3 rounded-xl p-3 bg-gray-100 text-black border border-gray-200 transition-colors"
                       >
-                        <Compass className="w-4 h-4 text-[#D4AF37]" />
+                        <Compass className="w-4 h-4 text-black" />
                         <span>Mis Reservas Supercars</span>
                       </Link>
                     )}
@@ -322,9 +314,9 @@ export default function Navbar() {
                       <Link
                         onClick={() => setMobileOpen(false)}
                         href="/admin"
-                        className="flex items-center space-x-3 rounded-xl p-3 bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/20 transition-colors"
+                        className="flex items-center space-x-3 rounded-xl p-3 bg-gray-100 text-black border border-gray-200 transition-colors"
                       >
-                        <KeyRound className="w-4 h-4 text-[#D4AF37]" />
+                        <KeyRound className="w-4 h-4 text-black" />
                         <span>Panel de Administración</span>
                       </Link>
                     )}
@@ -333,9 +325,9 @@ export default function Navbar() {
                       <Link
                         onClick={() => setMobileOpen(false)}
                         href="/verificacion"
-                        className="flex items-center space-x-3 rounded-xl p-3 hover:bg-white/[0.05] transition-colors hover:text-white"
+                        className="flex items-center space-x-3 rounded-xl p-3 hover:bg-gray-100 transition-colors hover:text-black"
                       >
-                        <ShieldCheck className="w-4 h-4 text-[#D4AF37]" />
+                        <ShieldCheck className="w-4 h-4 text-black" />
                         <span>Verificación de Licencia VIP</span>
                       </Link>
                     )}
@@ -345,44 +337,44 @@ export default function Navbar() {
 
               {/* SECCIÓN NAVEGACIÓN GENERAL */}
               <div className="space-y-2 font-mono">
-                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#D4AF37] px-2 block">
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 px-2 block">
                   Explorar Plataforma
                 </span>
-                <div className="grid gap-1 text-xs font-bold text-white/80">
+                <div className="grid gap-1 text-xs font-bold text-gray-700">
                   <Link
                     onClick={() => setMobileOpen(false)}
                     href="/buscar"
-                    className="flex items-center space-x-3 rounded-xl p-3 hover:bg-white/[0.05] transition-colors hover:text-white"
+                    className="flex items-center space-x-3 rounded-xl p-3 hover:bg-gray-100 transition-colors hover:text-black"
                   >
-                    <Search className="w-4 h-4 text-[#D4AF37]" />
-                    <span>Explorar Vault</span>
+                    <Search className="w-4 h-4 text-black" />
+                    <span>Explorar Garaje</span>
                   </Link>
 
                   <Link
                     onClick={() => setMobileOpen(false)}
                     href="/seguridad"
-                    className="flex items-center space-x-3 rounded-xl p-3 hover:bg-white/[0.05] transition-colors hover:text-white"
+                    className="flex items-center space-x-3 rounded-xl p-3 hover:bg-gray-100 transition-colors hover:text-black"
                   >
-                    <ShieldCheck className="w-4 h-4 text-[#D4AF37]" />
-                    <span>Protocolo de Garantía & Escrow</span>
+                    <ShieldCheck className="w-4 h-4 text-black" />
+                    <span>Protocolo de Garantía & Pagos</span>
                   </Link>
 
                   <Link
                     onClick={() => setMobileOpen(false)}
                     href="/sobre-nosotros"
-                    className="flex items-center space-x-3 rounded-xl p-3 hover:bg-white/[0.05] transition-colors hover:text-white"
+                    className="flex items-center space-x-3 rounded-xl p-3 hover:bg-gray-100 transition-colors hover:text-black"
                   >
-                    <User className="w-4 h-4 text-[#D4AF37]" />
-                    <span>Sobre GT Cars</span>
+                    <User className="w-4 h-4 text-black" />
+                    <span>Sobre GTRCars</span>
                   </Link>
 
                   <Link
                     onClick={() => setMobileOpen(false)}
                     href="/contacto"
-                    className="flex items-center space-x-3 rounded-xl p-3 hover:bg-white/[0.05] transition-colors hover:text-white"
+                    className="flex items-center space-x-3 rounded-xl p-3 hover:bg-gray-100 transition-colors hover:text-black"
                   >
-                    <Mail className="w-4 h-4 text-[#D4AF37]" />
-                    <span>VIP Concierge 24/7</span>
+                    <Mail className="w-4 h-4 text-black" />
+                    <span>Concierge 24/7</span>
                   </Link>
                 </div>
               </div>
@@ -390,10 +382,10 @@ export default function Navbar() {
 
             {/* PIE DEL MENÚ: CERRAR SESIÓN */}
             {user && (
-              <div className="p-4 border-t border-white/10 bg-[#0f0f12]">
+              <div className="p-4 border-t border-gray-100 bg-gray-50">
                 <button
                   onClick={handleLogout}
-                  className="w-full flex items-center justify-center space-x-2 p-3 rounded-xl bg-red-950/40 text-red-400 hover:bg-red-950/70 transition-colors font-mono font-bold text-xs cursor-pointer"
+                  className="w-full flex items-center justify-center space-x-2 p-3 rounded-full bg-red-50 text-red-600 hover:bg-red-100 transition-colors font-mono font-bold text-xs cursor-pointer"
                 >
                   <LogOut className="w-4 h-4" />
                   <span>Cerrar Sesión</span>
@@ -404,7 +396,6 @@ export default function Navbar() {
         </div>
       )}
 
-      {role && role !== 'ANONYMOUS' && role !== 'ADMIN' && <OnboardingTour role={role} />}
     </header>
   );
 }

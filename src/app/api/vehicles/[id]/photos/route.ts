@@ -44,11 +44,15 @@ export async function DELETE(request: Request, context: { params: Promise<{ id: 
 
     const vehicle = await prisma.vehicle.findUnique({
       where: { id },
-      include: { owner: { select: { id: true, email: true } } },
+      include: { photos: true, owner: { select: { id: true, email: true } } },
     });
     if (!vehicle) return NextResponse.json({ error: 'Vehículo no encontrado' }, { status: 404 });
     const isOwner = vehicle.ownerId === user.id || vehicle.owner?.email === user.email || user.role === 'ADMIN';
     if (!isOwner) return NextResponse.json({ error: 'No tienes permiso para modificar este vehículo' }, { status: 403 });
+
+    if (user.role !== 'ADMIN' && vehicle.photos.length <= 5) {
+      return NextResponse.json({ error: 'El anuncio debe mantener al menos 5 fotografías.' }, { status: 400 });
+    }
 
     if (photoId) {
       await prisma.vehiclePhoto.deleteMany({

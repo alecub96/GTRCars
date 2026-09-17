@@ -769,4 +769,209 @@ export const BLOG_ARTICLES: BlogArticleData[] = [
       ],
     },
   },
+  {
+    slug: 'alquiler-superdeportivos-madrid-guia-rutas-sierra-jarama',
+    category: 'Supercars',
+    image: '/images/fleet/gt3rs.png',
+    publishedAt: '2026-09-17',
+    readingTime: '8 min',
+    keywords: [
+      'alquiler superdeportivos madrid',
+      'supercar hire madrid',
+      'alquiler ferrari madrid',
+      'alquiler lamborghini madrid la moraleja',
+      'alquilar porsche madrid jarama',
+      'rentabilizar superdeportivo madrid propietarios',
+    ],
+    es: {
+      title: 'Alquiler de Superdeportivos en Madrid: De la Castellana a la Sierra de Guadarrama',
+      excerpt: 'Guía definitiva para alquilar o rentabilizar superdeportivos en Madrid. Modelos Ferrari, Lamborghini y Porsche con entrega VIP en La Moraleja, Salamanca y Aeropuerto Barajas.',
+      metaDescription: 'Alquila un superdeportivo en Madrid con GTR Cars. Ferrari, Porsche GT3 RS y Lamborghini en La Moraleja y Barajas. Oportunidad para propietarios de rentabilizar su vehículo.',
+      content: `Madrid se ha consolidado como una de las capitales mundiales del automovilismo de lujo y el estilo de vida sofisticado. Con avenidas icónicas, centros financieros de primer orden y los puertos de montaña de la Sierra de Guadarrama a menos de 45 minutos (Puerto de Navacerrada, La Morcuera y Cruz Verde), la capital ofrece un entorno insuperable para conducir un deportivo de altas prestaciones. GTR Cars conecta a pilotos exigentes con propietarios de superdeportivos verificados en La Moraleja, Pozuelo de Alarcón, Barrio de Salamanca y Puerta de Hierro, garantizando un servicio Concierge con custodia y fianza protegida.`,
+      sections: [
+        {
+          heading: 'Bases VIP en Madrid: Aeropuerto Adolfo Suárez Barajas y Fincas Privadas',
+          body: 'Ofrecemos entrega personalizada directamente en la Terminal Ejecutiva de Barajas (FBO), en los principales hoteles cinco estrellas (Four Seasons Madrid, Rosewood Villa Magna, Mandarin Oriental Ritz) o en tu residencia privada.',
+        },
+        {
+          heading: 'Rutas legendarias por la Sierra Norte y Circuito del Jarama',
+          body: 'Disfruta del empuje de un motor atmosférico o biturbo en las reviradas carreteras de la Sierra de Madrid o coordina jornadas de trackday en el mítico Circuito del Jarama.',
+        },
+        {
+          heading: 'Para Propietarios en Madrid: Monetiza tu Superdeportivo con Seguridad Absoluta',
+          body: 'Si tienes un Ferrari, Porsche o Lamborghini matriculado en Madrid y pasa largas temporadas en el garaje, nuestro programa GTR Cars Club te permite generar ingresos netos superiores al 12% anual con clientes minuciosamente filtrados, contrato digital y fianza en custodia.',
+        },
+      ],
+      faqs: [
+        {
+          question: '¿Cómo funciona la entrega en el Aeropuerto de Madrid Barajas?',
+          answer: 'Un agente de nuestro equipo Concierge te espera en la zona de llegadas o en la terminal ejecutiva con el vehículo inspeccionado y listo.',
+        },
+        {
+          question: '¿Puedo inscribir mi superdeportivo como propietario en Madrid?',
+          answer: 'Sí, tras una inspección técnica y validación documental, tu superdeportivo se publica en el Garaje de Madrid.',
+        },
+      ],
+    },
+    en: {
+      title: 'Supercar Rental in Madrid: From Paseo de la Castellana to the Guadarrama Passes',
+      excerpt: 'The premier supercar rental and owner monetization network in Madrid. Hire Ferrari, Lamborghini, and Porsche with delivery to La Moraleja and Barajas Airport.',
+      metaDescription: 'Supercar hire in Madrid. Rent Ferrari 296 GTB, Lamborghini Huracán STO, and Porsche GT3 RS with VIP concierge. High-yield owner management in Madrid.',
+      content: `Madrid is Europe's vibrant hub for luxury lifestyle and exotic motoring. With sweeping boulevards, ultra-exclusive residential communities like La Moraleja and La Finca, and scenic mountain roads less than 40 minutes away, Madrid is the ultimate supercar playground. GTR Cars provides seamless access to privately-owned supercars with full white-glove concierge handovers and ironclad deposits.`,
+      sections: [
+        {
+          heading: 'VIP Airport & Hotel Drop-off in Madrid',
+          body: 'We deliver directly to Barajas Private Aviation Terminal, 5-star hotels (Four Seasons, Villa Magna, Ritz), or private estates.',
+        },
+        {
+          heading: 'Mountain Ascents & Historic Passes',
+          body: 'Experience razor-sharp dynamics across Puerto de Navacerrada, Cruz Verde, or private track sessions at Circuito del Jarama.',
+        },
+        {
+          heading: 'Madrid Owners: High-Yield Supercar Asset Management',
+          body: 'Turn your idle exotic into a high-earning asset. GTR Cars vets every single driver and coordinates complete logistics and insurance.',
+        },
+      ],
+      faqs: [
+        {
+          question: 'Can cars be delivered to Madrid Barajas Airport?',
+          answer: 'Yes, 24/7 dedicated concierge delivery to both commercial and private aviation terminals.',
+        },
+      ],
+    },
+  },
+  {
+    slug: 'alquiler-superdeportivos-barcelona-costa-brava-montmelo',
+    category: 'Supercars',
+    image: '/images/fleet/sf90.png',
+    publishedAt: '2026-09-17',
+    readingTime: '8 min',
+    keywords: [
+      'alquiler superdeportivos barcelona',
+      'supercar rental barcelona',
+      'alquiler ferrari barcelona pedralbes',
+      'alquiler lamborghini costa brava',
+      'superdeportivos montmelo trackday',
+      'rentabilizar superdeportivo barcelona',
+    ],
+    es: {
+      title: 'Alquiler de Superdeportivos en Barcelona y Costa Brava: Pasión Mediterránea',
+      excerpt: 'Alquila superdeportivos de élite en Barcelona con entrega en El Prat, Pedralbes o la Costa Brava. Club exclusivo para pilotos y propietarios.',
+      metaDescription: 'Supercars en alquiler en Barcelona: Ferrari SF90, Lamborghini Revuelto y McLaren 750S. Entrega VIP en aeropuerto El Prat y Costa Brava.',
+      content: `Barcelona combina el magnetismo cosmopolita con una de las tradiciones de competición automovilística más prestigiosas de Europa. Desde las colinas de Pedralbes y la carretera de las Aguas hasta las espectaculares curvas de la Costa Brava (Tossa de Mar a Sant Feliu de Guíxols) y la cercanía del Circuit de Barcelona-Catalunya (Montmeló), la Ciudad Condal es un escenario idóneo para disfrutar de un superdeportivo. GTR Cars ofrece una cuidada selección de vehículos de propietarios verificados listos para entrega inmediata.`,
+      sections: [
+        {
+          heading: 'De la Diagonal a las Calas de la Costa Brava',
+          body: 'Conduce por la carretera GI-682, famosa internacionalmente por sus 365 curvas bordeando acantilados sobre el mar Mediterráneo, o desplázate a Sitges por los míticos Costes del Garraf.',
+        },
+        {
+          heading: 'Entrega VIP en Aeropuerto Josep Tarradellas Barcelona-El Prat (BCN)',
+          body: 'Coordinamos la recepción en la terminal corporativa o comercial, así como en hoteles de lujo como W Barcelona, Hotel Arts o Mandarin Oriental.',
+        },
+        {
+          heading: 'Rentabilidad para Propietarios en Cataluña',
+          body: 'Monetiza tu superdeportivo en Barcelona con total tranquilidad. Todos los alquileres incluyen fianza bancaria autorizada, telemetría y seguro a todo riesgo con franquicia reducida.',
+        },
+      ],
+      faqs: [
+        {
+          question: '¿Se puede entregar el coche en Platja d’Aro o S’Agaró en la Costa Brava?',
+          answer: 'Sí, nuestro servicio de conserjería cubre Barcelona ciudad, Sitges y toda la franja costera de la Costa Brava.',
+        },
+      ],
+    },
+    en: {
+      title: 'Supercar Rental in Barcelona & Costa Brava: Mediterranean Exotic Touring',
+      excerpt: 'Rent prestigious supercars in Barcelona with white-glove delivery to El Prat Airport, Pedralbes, and Costa Brava luxury villas.',
+      metaDescription: 'Supercar hire Barcelona & Costa Brava. Ferrari SF90, Lamborghini, and Porsche rentals. Dedicated management for Catalan exotic car owners.',
+      content: `Barcelona is a world-class destination for motorsport lovers. Combining rich racing heritage at Circuit de Barcelona-Catalunya with scenic cliffside roads along the Costa Brava, driving a supercar here is unforgettable. GTR Cars provides seamless access to immaculate private exotics with tailored delivery across Barcelona and surrounding regions.`,
+      sections: [
+        {
+          heading: 'Coastal Roads: The Famous 365 Curves of Tossa de Mar',
+          body: 'Tackle the renowned GI-682 coastal pass overlooking turquoise Mediterranean waters with the soundtrack of an exotic engine.',
+        },
+        {
+          heading: 'White-Glove Handover at BCN Airport & Luxury Resorts',
+          body: 'We deliver directly to Barcelona Airport (BCN) private gates or leading hotels including Hotel Arts and Mandarin Oriental.',
+        },
+      ],
+      faqs: [
+        {
+          question: 'Can you deliver to Costa Brava villas?',
+          answer: 'Yes, we provide direct delivery and collection anywhere across Costa Brava including Begur, S’Agaró, and Cadaqués.',
+        },
+      ],
+    },
+  },
+  {
+    slug: 'supercar-rental-london-mayfair-knightsbridge-uk',
+    category: 'Supercars',
+    image: '/images/fleet/huracan.png',
+    publishedAt: '2026-09-17',
+    readingTime: '8 min',
+    keywords: [
+      'supercar rental london',
+      'alquiler superdeportivos londres',
+      'supercar hire mayfair knightsbridge',
+      'rent ferrari london heathrow',
+      'monetize supercar owners london uk',
+      'gtr cars international london',
+    ],
+    es: {
+      title: 'Supercar Rental en Londres: Mayfair, Knightsbridge y Escapadas por la Campiña Inglesa',
+      excerpt: 'Servicio internacional de alquiler y gestión de superdeportivos en Londres. Ferrari, McLaren, Lamborghini y Rolls-Royce con entrega en Heathrow, Mayfair y Chelsea.',
+      metaDescription: 'Alquiler de superdeportivos en Londres (UK) con GTR Cars. Entrega en Mayfair, Knightsbridge y Heathrow. Monetización para propietarios de supercars en Reino Unido.',
+      content: `Londres es la capital indiscutible del hiperlujo en el norte de Europa. Con las calles de Mayfair, Knightsbridge y Belgravia como escaparate de las máquinas más deseadas del mundo y los serpenteantes trazados de la campiña británica (Cotswolds, Goodwood y Surrey Hills) a tiro de piedra, la ciudad ofrece una atmósfera automovilística única. GTR Cars expande su red internacional conectando a clientes VIP y propietarios en el Reino Unido con los estándares más rigurosos de custodia, telemetría y liquidaciones bancarias.`,
+      sections: [
+        {
+          heading: 'Entrega VIP en Aeropuerto de Heathrow (LHR) y Helipuerto de Battersea',
+          body: 'Recibe tu superdeportivo nada más aterrizar en Londres, con entrega directa en terminales privadas, hoteles de prestigio (The Dorchester, The Ritz London, Claridge’s) o residencias en Chelsea.',
+        },
+        {
+          heading: 'Escapadas de Fin de Semana: Goodwood y The Cotswolds',
+          body: 'Escápate del ajetreo metropolitano y conduce por carreteras de ensueño en dirección al legendario Goodwood Motor Circuit o los valles de Oxfordshire.',
+        },
+        {
+          heading: 'Para Propietarios en Londres: Gestión de Flota VIP en UK',
+          body: 'Nuestra red internacional permite a coleccionistas y propietarios en Londres monetizar sus superdeportivos con las máximas garantías legales, verificación biométrica de pilotos y seguro a todo riesgo internacional.',
+        },
+      ],
+      faqs: [
+        {
+          question: '¿Qué requisitos se solicitan a conductores internacionales en Londres?',
+          answer: 'Carnet de conducir válido (UK, UE o Internacional), edad mínima de 25 años y verificación de fianza mediante pre-autorización bancaria.',
+        },
+        {
+          question: '¿Se aplican las normativas ULEZ y Congestion Charge en Londres?',
+          answer: 'Todos nuestros vehículos en Londres cumplen los estándares de emisiones y las tarifas de acceso urbano están completamente gestionadas.',
+        },
+      ],
+    },
+    en: {
+      title: 'Supercar Rental in London: Mayfair, Knightsbridge & British Countryside Escapes',
+      excerpt: 'Exclusive supercar rental and asset monetization in London. Ferrari, Lamborghini, McLaren, and Rolls-Royce with VIP delivery to Heathrow and Mayfair.',
+      metaDescription: 'Supercar hire London. Rent Ferrari, Lamborghini, and Porsche in Mayfair, Chelsea, and Heathrow Airport (LHR). Management program for UK exotic owners.',
+      content: `London stands as Europe’s paramount epicenter for hyper-luxury and ultra-rare automotive engineering. From the grand architecture of Mayfair and Knightsbridge to the iconic winding B-roads of Surrey Hills, Goodwood, and the Cotswolds, London presents an incomparable driving theatre. GTR Cars brings its verified peer-to-peer supercar model to London, providing verified drivers and discerning collectors with peerless custody and seamless digital checkouts.`,
+      sections: [
+        {
+          heading: 'VIP Airport & Concierge Delivery in Central London',
+          body: 'We deliver directly to London Heathrow (LHR), Battersea Heliport, or flagship luxury hotels including Claridge’s, The Dorchester, and The Connaught.',
+        },
+        {
+          heading: 'Weekend Country Escapes to Goodwood & The Cotswolds',
+          body: 'Escape the city to experience pure dynamic balance on open British countryside roads and historic racing grounds.',
+        },
+        {
+          heading: 'London Supercar Owners: Secure Asset Monetization',
+          body: 'Join the GTR Cars Vault network in the UK. Maximize your exotic’s yield with comprehensive vetting, telemetry monitoring, and automated bank payouts.',
+        },
+      ],
+      faqs: [
+        {
+          question: 'Are London ULEZ and Congestion Charges handled?',
+          answer: 'Yes, all vehicles comply with environmental standards and urban access charges are fully coordinated.',
+        },
+      ],
+    },
+  },
 ];

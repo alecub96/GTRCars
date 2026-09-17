@@ -12,36 +12,36 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="bg-[#050505] text-white/70 border-t border-white/10 font-mono text-xs">
+    <footer className="bg-gray-100 text-gray-700 border-t border-gray-200 font-mono text-xs">
       {/* SILUETAS VECTORIALES DE SUPERDEPORTIVOS */}
-      <div className="border-b border-white/5 bg-black/40 py-6 px-4">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-6 opacity-60 hover:opacity-100 transition-opacity">
-          <div className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-[#D4AF37]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]" />
+      <div className="border-b border-gray-200 bg-gray-50 py-6 px-4">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-6 opacity-70 hover:opacity-100 transition-opacity">
+          <div className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-black font-bold">
+            <span className="w-1.5 h-1.5 rounded-full bg-black" />
             GTR Vault Engineering
           </div>
           <div className="flex items-center gap-8 sm:gap-12 overflow-x-auto py-1">
-            <div className="flex flex-col items-center gap-1 text-neutral-400 hover:text-[#D4AF37] transition-colors">
+            <div className="flex flex-col items-center gap-1 text-gray-600 hover:text-black transition-colors font-bold">
               <HypercarSilhouette className="w-16 h-7 text-current" />
               <span className="text-[8px] uppercase tracking-wider">Hypercar V12</span>
             </div>
-            <div className="flex flex-col items-center gap-1 text-neutral-400 hover:text-[#D4AF37] transition-colors">
+            <div className="flex flex-col items-center gap-1 text-gray-600 hover:text-black transition-colors font-bold">
               <SupercarV8Silhouette className="w-16 h-7 text-current" />
               <span className="text-[8px] uppercase tracking-wider">Berlinetta V8</span>
             </div>
-            <div className="flex flex-col items-center gap-1 text-neutral-400 hover:text-[#D4AF37] transition-colors">
+            <div className="flex flex-col items-center gap-1 text-gray-600 hover:text-black transition-colors font-bold">
               <TrackGTSilhouette className="w-16 h-7 text-current" />
               <span className="text-[8px] uppercase tracking-wider">Track GT3 RS</span>
             </div>
-            <div className="flex flex-col items-center gap-1 text-neutral-400 hover:text-[#D4AF37] transition-colors">
+            <div className="flex flex-col items-center gap-1 text-gray-600 hover:text-black transition-colors font-bold">
               <GranTurismoSilhouette className="w-16 h-7 text-current" />
               <span className="text-[8px] uppercase tracking-wider">Gran Turismo</span>
             </div>
-            <div className="flex flex-col items-center gap-1 text-neutral-400 hover:text-[#D4AF37] transition-colors">
+            <div className="flex flex-col items-center gap-1 text-gray-600 hover:text-black transition-colors font-bold">
               <SpyderSilhouette className="w-16 h-7 text-current" />
               <span className="text-[8px] uppercase tracking-wider">Spyder Open-Air</span>
             </div>
-            <div className="flex flex-col items-center gap-1 text-neutral-400 hover:text-[#D4AF37] transition-colors">
+            <div className="flex flex-col items-center gap-1 text-gray-600 hover:text-black transition-colors font-bold">
               <SuperSUVSilhouette className="w-16 h-7 text-current" />
               <span className="text-[8px] uppercase tracking-wider">Super SUV</span>
             </div>
@@ -54,57 +54,57 @@ export default function Footer() {
           {/* COLUMNA 1: BRAND */}
           <div className="lg:col-span-2 space-y-4">
             <Link href="/" className="inline-flex items-center space-x-2">
-              <span className="font-serif text-xl font-bold tracking-wider text-white">
-                GTR <span className="text-[#D4AF37]">CARS</span>
+              <span className="font-sans text-xl font-black tracking-wider text-black">
+                GTR <span className="text-gray-500">CARS</span>
               </span>
-              <span className="px-2 py-0.5 rounded-full bg-[#D4AF37]/15 text-[#D4AF37] text-[9px] uppercase tracking-widest border border-[#D4AF37]/30">
-                VAULT CANARIAS
+              <span className="px-2 py-0.5 rounded-full bg-gray-200 text-black text-[9px] uppercase tracking-widest font-bold border border-gray-300">
+                SELECTION
               </span>
             </Link>
-            <p className="text-neutral-400 text-xs leading-relaxed max-w-sm">
-              Plataforma de intermediación y alquiler de superdeportivos, hypercars y vehículos de altas prestaciones en las Islas Canarias. Entrega VIP en Gran Canaria y Tenerife.
+            <p className="text-gray-600 text-xs leading-relaxed max-w-sm font-medium">
+              Plataforma internacional de intermediación y alquiler de superdeportivos, hypercars y vehículos de altas prestaciones. Entrega VIP en Madrid, Barcelona, Gran Canaria, Tenerife y Londres.
             </p>
-            <div className="pt-2 flex items-center space-x-3 text-neutral-400">
+            <div className="pt-2 flex flex-wrap items-center gap-2 text-gray-600 font-bold">
               <span className="flex items-center gap-1">
-                <MapPin className="w-3.5 h-3.5 text-[#D4AF37]" />
-                Gran Canaria · Tenerife
+                <MapPin className="w-3.5 h-3.5 text-black" />
+                Madrid · Barcelona · Canarias · Londres
               </span>
               <span>•</span>
               <span className="flex items-center gap-1">
-                <Mail className="w-3.5 h-3.5 text-[#D4AF37]" />
-                vip@gtrcars.vip
+                <Mail className="w-3.5 h-3.5 text-black" />
+                vip@gtrcars.es
               </span>
             </div>
           </div>
 
           {/* COLUMNA 2: SUPERDEPORTIVOS */}
           <div className="space-y-3">
-            <h4 className="text-white font-bold uppercase tracking-wider text-[11px] text-[#D4AF37]">
+            <h4 className="text-black font-black uppercase tracking-wider text-[11px]">
               Flota Vault
             </h4>
-            <ul className="space-y-2 text-neutral-400 text-xs">
+            <ul className="space-y-2 text-gray-600 font-medium text-xs">
               <li>
-                <Link href="/#flota" className="hover:text-white transition-colors">
+                <Link href="/#flota" className="hover:text-black transition-colors">
                   Porsche 911 GT3 RS
                 </Link>
               </li>
               <li>
-                <Link href="/#flota" className="hover:text-white transition-colors">
+                <Link href="/#flota" className="hover:text-black transition-colors">
                   Ferrari 296 GTB &amp; SF90
                 </Link>
               </li>
               <li>
-                <Link href="/#flota" className="hover:text-white transition-colors">
+                <Link href="/#flota" className="hover:text-black transition-colors">
                   Lamborghini Revuelto &amp; STO
                 </Link>
               </li>
               <li>
-                <Link href="/#flota" className="hover:text-white transition-colors">
+                <Link href="/#flota" className="hover:text-black transition-colors">
                   McLaren 765LT
                 </Link>
               </li>
               <li>
-                <Link href="/#flota" className="hover:text-white transition-colors">
+                <Link href="/#flota" className="hover:text-black transition-colors">
                   Aston Martin DBS
                 </Link>
               </li>
@@ -113,19 +113,19 @@ export default function Footer() {
 
           {/* COLUMNA 3: RUTAS & BLOG */}
           <div className="space-y-3">
-            <h4 className="text-white font-bold uppercase tracking-wider text-[11px] text-[#D4AF37]">
+            <h4 className="text-black font-black uppercase tracking-wider text-[11px]">
               Blog &amp; Rutas VIP
             </h4>
-            <ul className="space-y-2 text-neutral-400 text-xs">
+            <ul className="space-y-2 text-gray-600 font-medium text-xs">
               <li>
-                <Link href="/blog" className="hover:text-white transition-colors">
+                <Link href="/blog" className="hover:text-black transition-colors">
                   Todos los Artículos
                 </Link>
               </li>
               <li>
                 <Link
                   href="/blog/alquiler-deportivos-gran-canaria-rutas-guia-completa"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-black transition-colors"
                 >
                   Rutas Gran Canaria
                 </Link>
@@ -133,7 +133,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/blog/alquiler-superdeportivos-tenerife-teide-lujo"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-black transition-colors"
                 >
                   Ascensión Teide Tenerife
                 </Link>
@@ -141,7 +141,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/blog/requisitos-fianza-seguro-alquiler-superdeportivos-canarias"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-black transition-colors"
                 >
                   Fianzas y Requisitos
                 </Link>
@@ -149,7 +149,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/blog/gtr-cars-club-vault-propietarios-superdeportivos-canarias"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-black transition-colors"
                 >
                   Monetizar Superdeportivo
                 </Link>
@@ -159,32 +159,32 @@ export default function Footer() {
 
           {/* COLUMNA 4: LEGAL & EMPRESA */}
           <div className="space-y-3">
-            <h4 className="text-white font-bold uppercase tracking-wider text-[11px] text-[#D4AF37]">
+            <h4 className="text-black font-black uppercase tracking-wider text-[11px]">
               Legal &amp; Privacidad
             </h4>
-            <ul className="space-y-2 text-neutral-400 text-xs">
+            <ul className="space-y-2 text-gray-600 font-medium text-xs">
               <li>
-                <Link href="/sobre-nosotros" className="hover:text-white transition-colors">
+                <Link href="/sobre-nosotros" className="hover:text-black transition-colors">
                   Sobre Nosotros
                 </Link>
               </li>
               <li>
-                <Link href="/contacto" className="hover:text-white transition-colors">
+                <Link href="/contacto" className="hover:text-black transition-colors">
                   Contacto Concierge
                 </Link>
               </li>
               <li>
-                <Link href="/terminos" className="hover:text-white transition-colors">
+                <Link href="/terminos" className="hover:text-black transition-colors">
                   Términos y Condiciones
                 </Link>
               </li>
               <li>
-                <Link href="/privacidad" className="hover:text-white transition-colors">
+                <Link href="/privacidad" className="hover:text-black transition-colors">
                   Política de Privacidad
                 </Link>
               </li>
               <li>
-                <Link href="/cookies" className="hover:text-white transition-colors">
+                <Link href="/cookies" className="hover:text-black transition-colors">
                   Política de Cookies
                 </Link>
               </li>
@@ -192,8 +192,8 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-neutral-500 text-[11px]">
-          <p>© 2026 GTR Cars // Canary Hypercar Vault. Todos los derechos reservados.</p>
+        <div className="mt-12 pt-8 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-gray-500 font-medium text-[11px]">
+          <p>© 2026 GTRCars.es // Canary Hypercar Vault. Todos los derechos reservados.</p>
           <div className="flex items-center space-x-4">
             <span>Gran Canaria (LPA)</span>
             <span>•</span>

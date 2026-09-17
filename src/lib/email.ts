@@ -20,14 +20,14 @@ const transporter = smtpPassword && smtpUser
     })
   : null;
 
-const from = process.env.EMAIL_FROM || (smtpUser ? `vaneando. <${smtpUser}>` : 'vaneando. <contacto@vaneando.com>');
+const from = process.env.EMAIL_FROM || (smtpUser ? `GTRCars.es <${smtpUser}>` : 'GTRCars.es <contacto@gtrcars.es>');
 
 function escapeHtml(value: string) {
   return value.replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[character] || character);
 }
 
 /**
- * Plantilla Maestra HTML para todos los correos de Vaneando.com
+ * Plantilla Maestra HTML para todos los correos de GTRCars.es
  */
 function renderEmailLayout({
   title,
@@ -42,7 +42,7 @@ function renderEmailLayout({
   ctaText?: string;
   ctaUrl?: string;
 }) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://vaneando.com';
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://gtrcars.es';
 
   return `
 <!DOCTYPE html>
@@ -52,31 +52,31 @@ function renderEmailLayout({
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${escapeHtml(title)}</title>
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #F7F6F2; margin: 0; padding: 0; color: #13322E; }
-    .container { max-width: 600px; margin: 30px auto; background: #ffffff; border-radius: 20px; overflow: hidden; border: 1px solid #E9E1D2; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-    .header { background-color: #13322E; padding: 32px; text-align: center; color: #ffffff; }
-    .header h1 { font-family: Georgia, serif; margin: 0; font-size: 32px; font-weight: bold; letter-spacing: -0.5px; }
-    .header h1 span { color: #16B8AA; }
-    .header p { margin: 6px 0 0 0; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #16B8AA; opacity: 0.9; }
-    .body { padding: 36px 32px; font-size: 15px; line-height: 1.6; color: #2D3748; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #FAFAFA; margin: 0; padding: 0; color: #111827; }
+    .container { max-width: 600px; margin: 30px auto; background: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #E5E7EB; box-shadow: 0 4px 20px rgba(0,0,0,0.04); }
+    .header { background-color: #0A0A0A; padding: 32px; text-align: center; color: #ffffff; }
+    .header h1 { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; font-size: 26px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; }
+    .header h1 span { color: #D4AF37; }
+    .header p { margin: 6px 0 0 0; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; color: #9CA3AF; }
+    .body { padding: 36px 32px; font-size: 15px; line-height: 1.6; color: #374151; }
     .button-container { text-align: center; margin: 32px 0 24px 0; }
-    .btn { display: inline-block; background-color: #16B8AA; color: #ffffff !important; text-decoration: none; padding: 14px 32px; border-radius: 50px; font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 14px rgba(22, 184, 170, 0.3); }
-    .btn:hover { background-color: #0F766E; }
-    .card { background-color: #FAF7F0; border: 1px solid #E9E1D2; border-radius: 16px; padding: 20px; margin: 24px 0; }
+    .btn { display: inline-block; background-color: #000000; color: #ffffff !important; text-decoration: none; padding: 14px 32px; border-radius: 12px; font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; border: 1px solid #D4AF37; }
+    .btn:hover { background-color: #1F2937; }
+    .card { background-color: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 14px; padding: 20px; margin: 24px 0; }
     .invoice-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px; }
-    .invoice-table th { text-align: left; padding: 10px 0; border-bottom: 2px solid #E9E1D2; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #6B726E; }
-    .invoice-table td { padding: 12px 0; border-bottom: 1px solid #E9E1D2; }
-    .invoice-total { font-size: 18px; font-weight: bold; color: #13322E; text-align: right; padding-top: 14px; }
-    .footer { background-color: #F7F6F2; padding: 24px 32px; text-align: center; font-size: 12px; color: #718096; border-top: 1px solid #E9E1D2; }
-    .footer a { color: #16B8AA; text-decoration: none; font-weight: bold; }
+    .invoice-table th { text-align: left; padding: 10px 0; border-bottom: 2px solid #E5E7EB; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #6B7280; }
+    .invoice-table td { padding: 12px 0; border-bottom: 1px solid #E5E7EB; }
+    .invoice-total { font-size: 18px; font-weight: bold; color: #111827; text-align: right; padding-top: 14px; }
+    .footer { background-color: #F9FAFB; padding: 24px 32px; text-align: center; font-size: 12px; color: #6B7280; border-top: 1px solid #E5E7EB; }
+    .footer a { color: #111827; text-decoration: none; font-weight: bold; }
   </style>
 </head>
 <body>
   ${previewText ? `<div style="display:none;font-size:1px;color:#333;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">${escapeHtml(previewText)}</div>` : ''}
   <div class="container">
     <div class="header">
-      <h1>vaneando<span>.com</span></h1>
-      <p>Canarias sobre ruedas</p>
+      <h1>GTR<span>CARS</span>.ES</h1>
+      <p>Supercar & Hypercar Club</p>
     </div>
     <div class="body">
       ${contentHtml}
@@ -87,11 +87,10 @@ function renderEmailLayout({
       ` : ''}
     </div>
     <div class="footer">
-  <p><strong>vaneando.com</strong> — Alquiler de campers y vehículos recreativos en las Islas Canarias.</p>
-      <p>¿Tienes alguna duda? Contáctanos en <a href="mailto:contacto@vaneando.com">contacto@vaneando.com</a></p>
-      <p style="margin-top:12px;font-size:11px;color:#A0AEC0;">
-        Las Palmas de Gran Canaria / Santa Cruz de Tenerife · España<br>
-        Desglose de precio · Información del anuncio · Soporte de reserva
+      <p><strong>GTRCars.es</strong> — Alquiler exclusivo de superdeportivos y vehículos de altas prestaciones.</p>
+      <p>¿Tienes alguna consulta? Escríbenos a <a href="mailto:contacto@gtrcars.es">contacto@gtrcars.es</a></p>
+      <p style="margin-top:12px;font-size:11px;color:#9CA3AF;">
+        Gran Canaria / Tenerife · Islas Canarias · España
       </p>
     </div>
   </div>
@@ -543,4 +542,57 @@ export async function sendEmailTest(to: string) {
       contentHtml: '<p>La configuración de correo SMTP de <strong>GTR Cars</strong> funciona perfectamente.</p>',
     }),
   });
+}
+
+/**
+ * Notificación de mensaje privado no leído tras 30 minutos de inactividad
+ */
+export async function sendUnreadMessageNotificationEmail(
+  to: string,
+  recipientName: string,
+  senderName: string,
+  messageContent: string,
+  conversationId: string,
+  vehicleTitle?: string
+) {
+  if (!transporter) {
+    console.warn('Aviso de mensaje omitido: transporte SMTP no configurado');
+    return;
+  }
+
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://gtrcars.es';
+  const title = `Nuevo mensaje de ${senderName}`;
+  const previewText = `${senderName} te ha enviado un mensaje: "${messageContent.slice(0, 80)}..."`;
+
+  const contentHtml = `
+    <h2 style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #111827; margin-top: 0; font-size: 20px;">
+      Tienes un mensaje pendiente de responder
+    </h2>
+    <p>Hola <strong>${escapeHtml(recipientName)}</strong>,</p>
+    <p><strong>${escapeHtml(senderName)}</strong> te envió un mensaje privado${vehicleTitle ? ` con relación a <strong>${escapeHtml(vehicleTitle)}</strong>` : ''} hace más de 30 minutos y aún no ha recibido respuesta:</p>
+
+    <div class="card" style="border-left: 3px solid #D4AF37; background-color: #F9FAFB; padding: 16px 20px; font-style: italic;">
+      <p style="margin: 0; color: #1F2937; font-size: 14px; line-height: 1.6;">
+        "${escapeHtml(messageContent)}"
+      </p>
+    </div>
+
+    <p style="font-size: 13px; color: #6B7280; margin-top: 20px;">
+      Para mantener una experiencia ágil y una alta valoración en la comunidad GTRCars, te recomendamos responder lo antes posible directamente desde tu buzón.
+    </p>
+  `;
+
+  await transporter.sendMail({
+    from,
+    to,
+    subject: `Tienes un nuevo mensaje de ${senderName} en GTRCars.es`,
+    text: `Hola ${recipientName},\n\n${senderName} te escribió un mensaje hace más de 30 minutos:\n\n"${messageContent}"\n\nRespóndele directamente aquí: ${appUrl}/mensajes?conversationId=${conversationId}`,
+    html: renderEmailLayout({
+      title,
+      previewText,
+      contentHtml,
+      ctaText: 'Ver y Responder Mensaje',
+      ctaUrl: `${appUrl}/mensajes?conversationId=${conversationId}`,
+    }),
+  }).catch((err: any) => console.error('Error enviando notificación de mensaje no leído:', err));
 }

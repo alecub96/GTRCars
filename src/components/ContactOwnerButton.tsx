@@ -70,13 +70,13 @@ export default function ContactOwnerButton({
           type="button"
           onClick={handleClick}
           disabled={loading}
-          className={`w-full py-3.5 px-4 rounded-xl border border-white/10 bg-white/[0.04] hover:bg-[#D4AF37]/20 hover:border-[#D4AF37]/50 text-white font-bold text-xs flex items-center justify-center space-x-2 transition-all shadow-xs group cursor-pointer ${className}`}
+          className={`w-full py-3.5 px-4 rounded-xl border border-gray-200 bg-white hover:bg-gray-100 hover:border-gray-400 text-black font-bold text-xs flex items-center justify-center space-x-2 transition-all shadow-xs group cursor-pointer ${className}`}
         >
-          <MessageSquare className="w-4 h-4 text-[#D4AF37] transition-colors" />
+          <MessageSquare className="w-4 h-4 text-black transition-colors" />
           <span className="uppercase tracking-wider">Contactar a {ownerName}</span>
         </button>
         {notice && (
-          <p className="mt-2 text-[11px] font-semibold text-amber-300 bg-amber-950/40 p-2 rounded-xl border border-amber-500/30 text-center animate-fade-in">
+          <p className="mt-2 text-[11px] font-semibold text-gray-800 bg-gray-100 p-2 rounded-xl border border-gray-300 text-center animate-fade-in">
             {notice}
           </p>
         )}
@@ -91,13 +91,13 @@ export default function ContactOwnerButton({
           type="button"
           onClick={handleClick}
           disabled={loading}
-          className={`inline-flex items-center space-x-2 py-2.5 px-4 rounded-xl border border-white/15 bg-white/[0.03] text-white/80 hover:text-white hover:border-[#D4AF37] hover:bg-[#D4AF37]/10 font-bold text-xs uppercase tracking-wider transition-all shadow-xs cursor-pointer ${className}`}
+          className={`inline-flex items-center space-x-2 py-2.5 px-4 rounded-xl border border-gray-200 bg-white text-gray-700 hover:text-black hover:border-black hover:bg-gray-50 font-bold text-xs uppercase tracking-wider transition-all shadow-xs cursor-pointer ${className}`}
         >
-          <MessageSquare className="w-3.5 h-3.5 text-[#D4AF37]" />
+          <MessageSquare className="w-3.5 h-3.5 text-black" />
           <span>Consultar al Propietario</span>
         </button>
         {notice && (
-          <p className="mt-2 text-[11px] font-semibold text-amber-300 bg-amber-950/40 p-2 rounded-xl border border-amber-500/30 text-center">
+          <p className="mt-2 text-[11px] font-semibold text-gray-800 bg-gray-100 p-2 rounded-xl border border-gray-300 text-center">
             {notice}
           </p>
         )}
@@ -111,13 +111,13 @@ export default function ContactOwnerButton({
         type="button"
         onClick={handleClick}
         disabled={loading}
-        className={`inline-flex items-center space-x-2 py-3 px-5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black font-bold text-xs uppercase tracking-wider hover:brightness-110 transition-all shadow-md active:scale-95 cursor-pointer ${className}`}
+        className={`inline-flex items-center space-x-2 py-3 px-5 rounded-full bg-black text-white font-bold text-xs uppercase tracking-wider hover:bg-gray-800 transition-all shadow-md active:scale-95 cursor-pointer ${className}`}
       >
         <MessageSquare className="w-4 h-4" />
         <span>Enviar Mensaje</span>
       </button>
       {notice && (
-        <p className="mt-2 text-[11px] font-semibold text-amber-300 bg-amber-950/40 p-2 rounded-xl border border-amber-500/30 text-center">
+        <p className="mt-2 text-[11px] font-semibold text-gray-800 bg-gray-100 p-2 rounded-xl border border-gray-300 text-center">
           {notice}
         </p>
       )}

@@ -2,8 +2,8 @@ import React from 'react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Seguridad y confianza | vaneando.',
-  description: 'Medidas de seguridad, verificación, pagos y protección de reservas en Vaneando.',
+  title: 'Garantías y Protección | GTRCars.es',
+  description: 'Medidas de seguridad, verificación de identidad y garantías de reserva en GTRCars.',
   alternates: { canonical: '/seguridad' },
   robots: { index: false, follow: true },
 };

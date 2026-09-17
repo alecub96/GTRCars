@@ -1,6 +1,8 @@
+'use client';
+
 import React from 'react';
 import Navbar from '@/components/Navbar';
-import Link from 'next/link';
+import Footer from '@/components/Footer';
 import {
   ShieldCheck,
   CheckCircle2,
@@ -16,16 +18,13 @@ import {
   UserCheck,
 } from 'lucide-react';
 
-export const metadata = {
-  title: 'Garantías, Seguros y Protocolo de Fianza | GTCars',
-  description: 'Protocolo de máxima seguridad para el alquiler de superdeportivos entre particulares. Fianzas bancarias custodiadas y verificación biométrica.',
-};
+
 
 export default function SecurityPage() {
   const faqs = [
     {
-      q: '¿Cómo funciona la fianza y el depósito de seguridad?',
-      a: 'La fianza (desde 5.000€ hasta 15.000€ según la categoría del vehículo) se retiene de forma segura mediante autorización bancaria temporal antes de la entrega y se libera automáticamente tras el Check-out conforme.',
+      q: '¿Cómo funciona la fianza y el cobro del alquiler?',
+      a: 'La fianza se fija en el anuncio y se gestiona directamente entre las partes (propietario y conductor). Por su parte, GTRCars procesa el cobro del alquiler al cliente, lo retiene de forma segura durante todo el viaje y lo transfiere al propietario en un plazo de 5 días hábiles tras la finalización del servicio.',
     },
     {
       q: '¿Qué requisitos debe cumplir el conductor?',
@@ -42,22 +41,22 @@ export default function SecurityPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#070707] text-[#F5F5F5] font-sans antialiased selection:bg-[#D4AF37] selection:text-black">
+    <div className="min-h-screen bg-white text-black font-sans antialiased selection:bg-black selection:text-white">
       <Navbar />
 
       {/* HERO SECTION */}
-      <section className="relative py-20 px-4 border-b border-white/10 bg-[#090909] text-center">
+      <section className="relative py-16 sm:py-20 px-4 border-b border-gray-200 bg-gray-50 text-center">
         <div className="max-w-4xl mx-auto space-y-4">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-xs font-mono font-bold uppercase tracking-widest rounded-sm">
-            <ShieldCheck className="w-4 h-4" />
-            <span>PROTOCOLO DE MÁXIMA SEGURIDAD GTCARS</span>
+          <div className="inline-flex items-center space-x-2 px-3 py-1 bg-gray-200 text-gray-800 text-xs font-mono font-bold uppercase tracking-widest rounded-full">
+            <ShieldCheck className="w-4 h-4 text-black" />
+            <span>PROTOCOLO DE MÁXIMA SEGURIDAD GTR CARS</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white">
+          <h1 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-black font-sans">
             GARANTÍAS Y PROTECCIÓN DE SUPERDEPORTIVOS
           </h1>
 
-          <p className="text-xs sm:text-sm text-white/50 font-mono max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xs sm:text-sm text-gray-600 font-mono max-w-2xl mx-auto leading-relaxed">
             Diseñado específicamente para proteger el valor de las piezas más exclusivas del mundo del motor. Alquiler directo entre particulares con total respaldo legal y bancario.
           </p>
         </div>
@@ -67,26 +66,26 @@ export default function SecurityPage() {
       <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           
-          <div className="p-8 bg-[#0E0E0E] border border-white/10 rounded-sm space-y-4">
-            <Lock className="w-8 h-8 text-[#D4AF37]" />
-            <h3 className="text-lg font-bold text-white font-mono uppercase">01 / FIANZA CUSTODIADA</h3>
-            <p className="text-xs text-white/60 font-mono leading-relaxed">
-              Retención de depósito bancario de hasta 15.000€ retenido en depósito de garantía durante todo el periodo del alquiler.
+          <div className="p-8 bg-white border border-gray-200 rounded-2xl space-y-4 shadow-sm">
+            <Lock className="w-8 h-8 text-black" />
+            <h3 className="text-lg font-black text-black font-sans uppercase">01 / FIANZA DIRECTA &amp; PAGO RETENIDO</h3>
+            <p className="text-xs text-gray-600 font-mono leading-relaxed font-medium">
+              La fianza se acuerda y gestiona directamente entre las partes. GTRCars retiene el importe del alquiler y lo liquida en un plazo de 5 días hábiles tras finalizar el servicio conforme.
             </p>
           </div>
 
-          <div className="p-8 bg-[#0E0E0E] border border-white/10 rounded-sm space-y-4">
-            <UserCheck className="w-8 h-8 text-[#D4AF37]" />
-            <h3 className="text-lg font-bold text-white font-mono uppercase">02 / BIOMETRÍA Y FILTRO VIP</h3>
-            <p className="text-xs text-white/60 font-mono leading-relaxed">
+          <div className="p-8 bg-white border border-gray-200 rounded-2xl space-y-4 shadow-sm">
+            <UserCheck className="w-8 h-8 text-black" />
+            <h3 className="text-lg font-black text-black font-sans uppercase">02 / BIOMETRÍA Y FILTRO VIP</h3>
+            <p className="text-xs text-gray-600 font-mono leading-relaxed font-medium">
               Verificación de identidad oficial, análisis de antecedentes de conducción y validación biométrica facial obligatoria.
             </p>
           </div>
 
-          <div className="p-8 bg-[#0E0E0E] border border-white/10 rounded-sm space-y-4">
-            <FileText className="w-8 h-8 text-[#D4AF37]" />
-            <h3 className="text-lg font-bold text-white font-mono uppercase">03 / CONTRATOS LEGALES eIDAS</h3>
-            <p className="text-xs text-white/60 font-mono leading-relaxed">
+          <div className="p-8 bg-white border border-gray-200 rounded-2xl space-y-4 shadow-sm">
+            <FileText className="w-8 h-8 text-black" />
+            <h3 className="text-lg font-black text-black font-sans uppercase">03 / CONTRATOS LEGALES eIDAS</h3>
+            <p className="text-xs text-gray-600 font-mono leading-relaxed font-medium">
               Firma digital avanzada con validez jurídica plena en la Unión Europea y registro fotográfico en cadena de bloques.
             </p>
           </div>
@@ -94,16 +93,16 @@ export default function SecurityPage() {
         </div>
 
         {/* FAQS SECTION */}
-        <div className="mt-20 border-t border-white/10 pt-16 max-w-3xl mx-auto space-y-6">
-          <h2 className="text-2xl font-bold font-mono text-center text-white uppercase tracking-wider mb-8">
+        <div className="mt-20 border-t border-gray-200 pt-16 max-w-3xl mx-auto space-y-6">
+          <h2 className="text-2xl font-black font-sans text-center text-black uppercase tracking-wider mb-8">
             PREGUNTAS FRECUENTES SOBRE GARANTÍAS
           </h2>
 
           <div className="space-y-4">
             {faqs.map((faq, idx) => (
-              <div key={idx} className="p-6 bg-[#0E0E0E] border border-white/10 rounded-sm space-y-2 font-mono">
-                <h4 className="text-sm font-bold text-[#D4AF37] uppercase">{faq.q}</h4>
-                <p className="text-xs text-white/70 leading-relaxed font-sans">{faq.a}</p>
+              <div key={idx} className="p-6 bg-gray-50 border border-gray-200 rounded-2xl space-y-2 font-mono">
+                <h4 className="text-sm font-bold text-black uppercase">{faq.q}</h4>
+                <p className="text-xs text-gray-600 leading-relaxed font-sans">{faq.a}</p>
               </div>
             ))}
           </div>
@@ -111,9 +110,7 @@ export default function SecurityPage() {
       </section>
 
       {/* FOOTER */}
-      <footer className="bg-[#030303] text-white/50 py-12 border-t border-white/10 font-mono text-xs text-center">
-        <p>© 2026 GTCars Vault — Protocolo de Alquiler de Superdeportivos.</p>
-      </footer>
+      <Footer />
     </div>
   );
 }

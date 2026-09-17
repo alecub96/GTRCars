@@ -72,36 +72,68 @@ export default function SupercarConfiguratorShowcase({
   const total = validPhotos.length;
   const currentPhoto = validPhotos[currentIndex]?.url || validPhotos[0]?.url;
 
-  // Derive specs if not present
+  // Derive target specs
   const displayModel = (model || title || 'SUPERCAR').toUpperCase();
-  const displayHp = hp || 720;
-  const displaySpeed = topSpeed || 330;
-  const displayAccel = accel || '2.9 S';
+  const targetHp = hp || 720;
+  const targetSpeed = topSpeed || 330;
+  const targetAccelNum = parseFloat(accel || '2.9');
+
+  // ANIMATED VALUES FOR APPLE-STYLE ROLLER EFFECT INSIDE ANNOUNCEMENTS
+  const [animatedHp, setAnimatedHp] = useState(0);
+  const [animatedSpeed, setAnimatedSpeed] = useState(0);
+  const [animatedAccel, setAnimatedAccel] = useState(0);
+
+  useEffect(() => {
+    const duration = 700; // ms
+    const steps = 35;
+    const intervalTime = duration / steps;
+    let currentStep = 0;
+
+    const timer = setInterval(() => {
+      currentStep++;
+      const progress = currentStep / steps;
+      // Easing function (easeOutCubic)
+      const easeProgress = 1 - Math.pow(1 - progress, 3);
+
+      setAnimatedHp(Math.round(targetHp * easeProgress));
+      setAnimatedSpeed(Math.round(targetSpeed * easeProgress));
+      setAnimatedAccel(parseFloat((targetAccelNum * easeProgress).toFixed(1)));
+
+      if (currentStep >= steps) {
+        clearInterval(timer);
+        setAnimatedHp(targetHp);
+        setAnimatedSpeed(targetSpeed);
+        setAnimatedAccel(targetAccelNum);
+      }
+    }, intervalTime);
+
+    return () => clearInterval(timer);
+  }, [targetHp, targetSpeed, targetAccelNum]);
 
   const nextPhoto = () => setCurrentIndex((prev) => (prev === total - 1 ? 0 : prev + 1));
   const prevPhoto = () => setCurrentIndex((prev) => (prev === 0 ? total - 1 : prev - 1));
 
   return (
-    <div className="relative w-full bg-[#080808] border-b border-white/10 select-none overflow-hidden text-white font-sans">
+    <div className="relative w-full bg-white border-b border-gray-100 select-none overflow-hidden text-black font-sans">
       
       {/* 1. TOP BAR CONFIGURATOR CONTROLS */}
       <div className="relative z-30 flex items-center justify-between px-4 sm:px-8 pt-4 pb-2">
         <Link
           href="/buscar"
-          className="flex items-center justify-center w-10 h-10 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-sm transition-all"
+          className="flex items-center justify-center w-10 h-10 bg-gray-50 hover:bg-black hover:text-white border border-gray-200 text-black rounded-full transition-all shadow-xs"
         >
           <ArrowLeft className="w-5 h-5" />
         </Link>
 
         <div className="flex items-center space-x-3">
-          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-black/60 border border-white/10 text-white/70 text-[11px] font-mono uppercase tracking-wider rounded-sm">
-            <Globe className="w-3.5 h-3.5 text-[#D4AF37]" />
+          <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 bg-gray-50 border border-gray-200 text-gray-700 text-[11px] font-mono uppercase tracking-wider rounded-full">
+            <Globe className="w-3.5 h-3.5 text-black" />
             <span>{island} {municipality ? `// ${municipality}` : ''}</span>
           </div>
 
           <button
             onClick={() => setLightboxOpen(true)}
-            className="flex items-center justify-center w-10 h-10 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-sm transition-all"
+            className="flex items-center justify-center w-10 h-10 bg-gray-50 hover:bg-black hover:text-white border border-gray-200 text-black rounded-full transition-all shadow-xs"
             title="Pantalla completa"
           >
             <Maximize2 className="w-4 h-4" />
@@ -109,73 +141,72 @@ export default function SupercarConfiguratorShowcase({
         </div>
       </div>
 
-      {/* 2. OVERLAY HUD: BIG TITLE & TELEMETRY (Lamborghini Configurator Style) */}
-      <div className="relative z-20 px-6 sm:px-12 pt-2 pb-6 max-w-7xl mx-auto pointer-events-none">
+      {/* 2. MAIN VEHICLE STAGE / BACKGROUND PHOTO WITH OVERLAY HUD */}
+      <div className="relative w-full h-[62vh] sm:h-[75vh] min-h-[500px] max-h-[820px] flex items-center justify-center bg-black overflow-hidden">
         
-        {/* BIG MODEL NAME */}
-        <h1 className="text-4xl sm:text-7xl md:text-8xl font-black uppercase tracking-tighter text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)] font-sans">
-          {displayModel}
-        </h1>
-
-        {/* TELEMETRY SPECS HUD (Floating directly over the background photo) */}
-        <div className="mt-4 flex items-center space-x-8 sm:space-x-14 font-mono">
-          <div>
-            <span className="text-[10px] sm:text-xs text-white/60 uppercase tracking-widest block font-bold">
-              POWER
-            </span>
-            <span className="text-xl sm:text-3xl md:text-4xl font-black text-white tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
-              {displayHp} <span className="text-sm sm:text-xl text-[#D4AF37]">CV</span>
-            </span>
-          </div>
-
-          <div className="border-l border-white/20 pl-8 sm:pl-14">
-            <span className="text-[10px] sm:text-xs text-white/60 uppercase tracking-widest block font-bold">
-              MAX SPEED
-            </span>
-            <span className="text-xl sm:text-3xl md:text-4xl font-black text-white tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
-              {displaySpeed} <span className="text-sm sm:text-xl text-[#D4AF37]">KM/H</span>
-            </span>
-          </div>
-
-          <div className="border-l border-white/20 pl-8 sm:pl-14">
-            <span className="text-[10px] sm:text-xs text-white/60 uppercase tracking-widest block font-bold">
-              0-100 KM/H
-            </span>
-            <span className="text-xl sm:text-3xl md:text-4xl font-black text-white tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
-              {displayAccel}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* 3. MAIN VEHICLE STAGE / BACKGROUND PHOTO (Dynamic based on selected index or uploaded photo) */}
-      <div className="relative w-full h-[52vh] sm:h-[68vh] min-h-[420px] max-h-[750px] flex items-center justify-center -mt-24 sm:-mt-32">
-        
-        {/* Atmospheric Dark Studio Gradient Overlays */}
-        <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#080808] via-transparent to-black/60 pointer-events-none" />
-        <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/40 via-transparent to-black/40 pointer-events-none" />
-
         {/* Dynamic Photo */}
         <img
           key={currentPhoto}
           src={currentPhoto}
           alt={`${title} - Foto ${currentIndex + 1}`}
-          className="w-full h-full object-contain sm:object-cover object-center transition-all duration-700 brightness-[0.92] contrast-[1.05]"
+          className="w-full h-full object-cover object-center transition-all duration-700"
         />
+
+        {/* Gradiente superior suave para garantizar 100% de contraste del texto blanco */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/30 to-transparent pointer-events-none" />
+
+        {/* OVERLAY HUD: BIG TITLE & TELEMETRY EN BLANCO DIRECTAMENTE SOBRE LA FOTO */}
+        <div className="absolute top-0 left-0 right-0 z-20 px-6 sm:px-12 pt-6 pb-6 max-w-7xl mx-auto pointer-events-none">
+          
+          {/* BIG MODEL NAME EN BLANCO */}
+          <h1 className="text-4xl sm:text-7xl md:text-8xl font-black uppercase tracking-tighter text-white font-sans drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]">
+            {displayModel}
+          </h1>
+
+          {/* TELEMETRY SPECS HUD EN BLANCO */}
+          <div className="mt-4 flex items-center space-x-8 sm:space-x-14 font-mono">
+            <div>
+              <span className="text-[10px] sm:text-xs text-white/70 uppercase tracking-widest block font-bold drop-shadow-md">
+                POTENCIA
+              </span>
+              <span className="text-xl sm:text-3xl md:text-4xl font-black text-white tracking-tight tabular-nums drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+                {animatedHp} <span className="text-sm sm:text-xl text-white/70 font-bold">CV</span>
+              </span>
+            </div>
+
+            <div className="border-l border-white/20 pl-8 sm:pl-14">
+              <span className="text-[10px] sm:text-xs text-white/70 uppercase tracking-widest block font-bold drop-shadow-md">
+                VELOCIDAD MÁX.
+              </span>
+              <span className="text-xl sm:text-3xl md:text-4xl font-black text-white tracking-tight tabular-nums drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+                {animatedSpeed} <span className="text-sm sm:text-xl text-white/70 font-bold">KM/H</span>
+              </span>
+            </div>
+
+            <div className="border-l border-white/20 pl-8 sm:pl-14">
+              <span className="text-[10px] sm:text-xs text-white/70 uppercase tracking-widest block font-bold drop-shadow-md">
+                0-100 KM/H
+              </span>
+              <span className="text-xl sm:text-3xl md:text-4xl font-black text-white tracking-tight tabular-nums drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+                {animatedAccel.toFixed(1)} S
+              </span>
+            </div>
+          </div>
+        </div>
 
         {/* NAVIGATION ARROWS */}
         {total > 1 && (
           <>
             <button
               onClick={prevPhoto}
-              className="absolute left-4 sm:left-8 z-30 p-3 bg-black/60 hover:bg-[#D4AF37] hover:text-black text-white rounded-sm backdrop-blur-md border border-white/20 transition-all cursor-pointer"
+              className="absolute left-4 sm:left-8 z-30 p-3 bg-white/90 hover:bg-black hover:text-white text-black rounded-full backdrop-blur-md border border-gray-200 transition-all shadow-md cursor-pointer"
               aria-label="Foto anterior"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
             <button
               onClick={nextPhoto}
-              className="absolute right-4 sm:right-8 z-30 p-3 bg-black/60 hover:bg-[#D4AF37] hover:text-black text-white rounded-sm backdrop-blur-md border border-white/20 transition-all cursor-pointer"
+              className="absolute right-4 sm:right-8 z-30 p-3 bg-white/90 hover:bg-black hover:text-white text-black rounded-full backdrop-blur-md border border-gray-200 transition-all shadow-md cursor-pointer"
               aria-label="Foto siguiente"
             >
               <ChevronRight className="w-6 h-6" />
@@ -184,19 +215,19 @@ export default function SupercarConfiguratorShowcase({
         )}
       </div>
 
-      {/* 4. BOTTOM CONFIGURATOR DOCK (Hexagonal Color/Angle Selectors & Booking CTA) */}
-      <div className="relative z-20 px-4 sm:px-8 py-4 bg-[#0A0A0A]/95 backdrop-blur-md border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
+      {/* 4. BOTTOM CONFIGURATOR DOCK */}
+      <div className="relative z-20 px-4 sm:px-8 py-4 bg-white/95 backdrop-blur-md border-t border-gray-100 flex flex-wrap items-center justify-between gap-4">
         
-        {/* PHOTO / ANGLE SELECTOR DOCK (Hexagonal pill style like Lamborghini configurator) */}
+        {/* PHOTO / ANGLE SELECTOR DOCK */}
         <div className="flex items-center space-x-3 overflow-x-auto py-1">
           {validPhotos.map((photo, idx) => (
             <button
               key={photo.id || idx}
               onClick={() => setCurrentIndex(idx)}
-              className={`relative h-12 w-20 sm:h-14 sm:w-24 rounded-sm overflow-hidden border-2 transition-all cursor-pointer shrink-0 ${
+              className={`relative h-12 w-20 sm:h-14 sm:w-24 rounded-xl overflow-hidden border-2 transition-all cursor-pointer shrink-0 ${
                 currentIndex === idx
-                  ? 'border-[#D4AF37] shadow-[0_0_15px_rgba(212,175,55,0.4)] scale-105'
-                  : 'border-white/20 opacity-60 hover:opacity-100'
+                  ? 'border-black shadow-md scale-105'
+                  : 'border-gray-200 opacity-60 hover:opacity-100'
               }`}
             >
               <img
@@ -212,33 +243,19 @@ export default function SupercarConfiguratorShowcase({
         </div>
 
         {/* ACTION CTA (INICIAR RESERVA / CONFIGURACIÓN) */}
-        <div className="flex items-center space-x-4 ml-auto">
+        <div className="flex items-center space-x-5 ml-auto">
           <div className="text-right hidden sm:block">
-            <span className="text-[10px] font-mono text-white/50 uppercase block">DESDE</span>
-            <span className="text-xl font-mono font-bold text-[#D4AF37]">{pricePerDay}€</span>
-            <span className="text-[10px] font-mono text-white/50"> / DÍA</span>
+            <span className="text-[10px] font-mono text-gray-500 uppercase block">DESDE</span>
+            <span className="text-2xl font-mono font-black text-black">{pricePerDay}€</span>
+            <span className="text-[10px] font-mono text-gray-500"> / DÍA</span>
           </div>
 
           <a
             href="#reserva-widget"
-            className="px-8 py-4 bg-[#D4AF37] hover:bg-[#F5C542] text-black font-black text-xs font-mono uppercase tracking-[0.2em] transition-all shadow-[0_0_25px_rgba(212,175,55,0.3)] rounded-sm"
+            className="px-8 py-4 bg-black hover:bg-gray-800 text-white font-black text-xs font-mono uppercase tracking-[0.2em] transition-all rounded-full shadow-md"
           >
-            INICIAR CONFIGURACIÓN & RESERVA
+            SELECCIONAR & RESERVAR
           </a>
-        </div>
-      </div>
-
-      {/* 5. LEGAL / WLTP BAR (Lamborghini Aesthetic) */}
-      <div className="bg-[#050505] px-4 sm:px-8 py-2.5 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between text-[9px] font-mono text-white/40 tracking-wider gap-2">
-        <p>
-          Consumo de energía (combinado ponderado): {consumption}; emisiones de CO₂ (combinadas ponderadas): {co2}
-        </p>
-        <div className="flex space-x-4 uppercase text-white/60">
-          <span>FIANZA CUSTODIADA</span>
-          <span>•</span>
-          <span>CONTRATO eIDAS</span>
-          <span>•</span>
-          <span>PROPIETARIO VERIFICADO</span>
         </div>
       </div>
 

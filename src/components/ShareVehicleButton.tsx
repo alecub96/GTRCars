@@ -26,16 +26,16 @@ export default function ShareVehicleButton({
 
   const getFullUrl = () => {
     if (typeof window !== 'undefined') {
-      if (slug) return `${window.location.origin}/camper/${slug}`;
+      if (slug) return `${window.location.origin}/coche/${slug}`;
       return window.location.href;
     }
-    return `https://vaneando.com/camper/${slug || ''}`;
+    return `https://gtrcars.es/coche/${slug || ''}`;
   };
 
   const getShareText = () => {
     const priceText = price ? ` por ${price}€/día` : '';
     const islandText = island ? ` en ${island}` : '';
-    return `Descubre esta unidad de superdeportivo${islandText}${priceText} en GT Cars Vault: ${vehicleTitle}`;
+    return `Descubre esta unidad de superdeportivo${islandText}${priceText} en GTRCars: ${vehicleTitle}`;
   };
 
   const handleShareClick = async (e: React.MouseEvent) => {
@@ -84,7 +84,7 @@ export default function ShareVehicleButton({
           onClick={handleShareClick}
           aria-label="Compartir este superdeportivo"
           title="Compartir"
-          className={`h-10 w-10 rounded-xl bg-white/[0.05] backdrop-blur-md hover:bg-white/[0.1] text-white hover:text-[#D4AF37] border border-white/10 flex items-center justify-center transition-all shadow-md active:scale-90 cursor-pointer ${className}`}
+          className={`h-10 w-10 rounded-xl bg-white hover:bg-gray-100 text-gray-700 hover:text-black border border-gray-200 flex items-center justify-center transition-all shadow-xs active:scale-90 cursor-pointer ${className}`}
         >
           <Share2 className="w-4 h-4" />
         </button>
@@ -93,9 +93,9 @@ export default function ShareVehicleButton({
           type="button"
           onClick={handleShareClick}
           aria-label="Compartir este superdeportivo"
-          className={`inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] hover:border-[#D4AF37]/50 text-white text-xs font-mono font-bold uppercase tracking-wider transition-all shadow-xs active:scale-95 cursor-pointer ${className}`}
+          className={`inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-100 hover:border-gray-400 text-black text-xs font-mono font-bold uppercase tracking-wider transition-all shadow-xs active:scale-95 cursor-pointer ${className}`}
         >
-          <Share2 className="w-3.5 h-3.5 text-[#D4AF37]" />
+          <Share2 className="w-3.5 h-3.5 text-black" />
           <span>Compartir</span>
         </button>
       )}
@@ -103,28 +103,28 @@ export default function ShareVehicleButton({
       {/* MODAL DE COMPARTIR FALLBACK */}
       {showModal && (
         <div
-          className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-fade-in font-sans"
+          className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 animate-fade-in font-sans"
           onClick={() => setShowModal(false)}
         >
           <div
-            className="w-full max-w-sm rounded-3xl bg-[#0f0f12] p-6 shadow-2xl border border-white/15 space-y-5 animate-fade-in-up text-white"
+            className="w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl border border-gray-200 space-y-5 animate-fade-in-up text-black"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between border-b border-white/10 pb-3 font-mono">
+            <div className="flex items-center justify-between border-b border-gray-100 pb-3 font-mono">
               <div className="flex items-center space-x-2">
-                <Share2 className="w-5 h-5 text-[#D4AF37]" />
-                <h3 className="text-sm font-bold uppercase tracking-wider text-white">Compartir Supercar</h3>
+                <Share2 className="w-5 h-5 text-black" />
+                <h3 className="text-sm font-bold uppercase tracking-wider text-black">Compartir Superdeportivo</h3>
               </div>
               <button
                 type="button"
                 onClick={() => setShowModal(false)}
-                className="p-1 rounded-full text-white/40 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
+                className="p-1 rounded-full text-gray-400 hover:text-black hover:bg-gray-100 transition-all cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <p className="text-xs text-white/60 line-clamp-2 font-mono">
+            <p className="text-xs text-gray-600 line-clamp-2 font-mono">
               {vehicleTitle}
             </p>
 
@@ -135,9 +135,9 @@ export default function ShareVehicleButton({
                 href={`https://api.whatsapp.com/send?text=${encodedText}%20${encodedUrl}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center space-x-2.5 p-3 rounded-xl bg-white/[0.03] hover:bg-emerald-500/20 border border-white/10 text-emerald-400 font-bold text-xs transition-all"
+                className="flex items-center space-x-2.5 p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 text-emerald-700 font-bold text-xs transition-all"
               >
-                <MessageCircle className="w-5 h-5 text-emerald-400" />
+                <MessageCircle className="w-5 h-5 text-emerald-600" />
                 <span>WhatsApp</span>
               </a>
 
@@ -146,9 +146,9 @@ export default function ShareVehicleButton({
                 href={`https://t.me/share/url?url=${encodedUrl}&text=${encodedText}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center space-x-2.5 p-3 rounded-xl bg-white/[0.03] hover:bg-sky-500/20 border border-white/10 text-sky-400 font-bold text-xs transition-all"
+                className="flex items-center space-x-2.5 p-3 rounded-xl bg-gray-50 hover:bg-sky-50 border border-gray-200 text-sky-700 font-bold text-xs transition-all"
               >
-                <Send className="w-5 h-5 text-sky-400" />
+                <Send className="w-5 h-5 text-sky-600" />
                 <span>Telegram</span>
               </a>
             </div>
@@ -158,10 +158,10 @@ export default function ShareVehicleButton({
               <button
                 type="button"
                 onClick={handleCopyLink}
-                className={`w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-xl font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-xs ${
+                className={`w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-full font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-xs ${
                   copied
-                    ? 'bg-white/10 text-[#D4AF37] border border-[#D4AF37]/50'
-                    : 'bg-gradient-to-r from-[#D4AF37] to-[#B38B21] text-black hover:brightness-110'
+                    ? 'bg-gray-100 text-black border border-gray-300'
+                    : 'bg-black text-white hover:bg-gray-800'
                 }`}
               >
                 {copied ? (
@@ -172,7 +172,7 @@ export default function ShareVehicleButton({
                 ) : (
                   <>
                     <Copy className="w-4 h-4" />
-                    <span>Copiar Enlace de Vault</span>
+                    <span>Copiar Enlace</span>
                   </>
                 )}
               </button>

@@ -4,21 +4,8 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { 
-  Gauge, 
-  Zap, 
-  ShieldCheck, 
-  Flame, 
-  Compass, 
-  ChevronRight, 
-  Calendar, 
-  CheckCircle2, 
-  Sparkles,
-  Sliders,
-  Volume2,
-  KeyRound,
-  Shield,
-  Award,
-  Star
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 
 interface Supercar {
@@ -38,6 +25,7 @@ interface Supercar {
   drive: string;
   pricePerDay: number;
   securityDeposit: number;
+  watermarkText: string;
   owner: {
     name: string;
     avatar: string;
@@ -54,52 +42,54 @@ interface Supercar {
 
 const FEATURED_FLEET: Supercar[] = [
   {
-    id: '1',
-    slug: 'lamborghini-revuelto-v12-hybrid',
-    name: 'Lamborghini Revuelto',
-    brand: 'LAMBORGHINI',
-    model: 'Revuelto V12 HPEV',
-    tagline: 'From Now On: 1015 CV V12 Híbrido Enchufable',
-    year: 2025,
-    category: 'HYPERCAR',
-    hp: 1015,
-    accel: '2.5s',
-    topSpeed: 350,
-    engine: '6.5L V12 + 3 Motores Eléctricos',
-    transmission: '8 velocidades doble embrague',
-    drive: 'Tracción Total AWD',
-    pricePerDay: 3200,
-    securityDeposit: 9000,
+    id: 'porsche',
+    slug: 'porsche-911-gt3-touring',
+    name: '911 GT3 TOURING',
+    brand: 'PORSCHE',
+    model: '992 GT3 Touring Manual',
+    tagline: 'Esencia pura: motor atmosférico a 9.000 rpm, cambio manual y estética limpia sin alerón fijo',
+    year: 2024,
+    category: 'TRACK_SPECIAL',
+    hp: 510,
+    accel: '3.9 S',
+    topSpeed: 320,
+    engine: '4.0L Boxer 6 Atmosférico',
+    transmission: 'Manual GT Deportivo 6 Vel',
+    drive: 'Propulsión Trasera RWD',
+    pricePerDay: 1750,
+    securityDeposit: 4500,
+    watermarkText: 'PORSCHE',
     owner: {
-      name: 'Carlos M.',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80',
+      name: 'Raúl E.',
+      avatar: 'https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?w=120&auto=format&fit=crop&q=80',
       verified: true,
-      rating: 5.0,
-      trips: 18,
-      location: 'Madrid / Marbella'
+      rating: 4.99,
+      trips: 28,
+      location: 'Mallorca / Ibiza'
     },
-    colorName: 'Arancio Apodis',
-    colorHex: '#FF5722',
-    image: '/supercars/lambo-revuelto.jpg',
-    badgeText: 'HYPERCAR V12'
+    colorName: 'Signal Yellow',
+    colorHex: '#EAB308',
+    image: '/supercars/brands/porsche.png',
+    badgeText: '6-SPEED MANUAL'
   },
   {
-    id: '2',
-    slug: 'ferrari-sf90-stradale-assetto-fiorano',
-    name: 'Ferrari SF90 Stradale',
+    id: 'ferrari',
+    slug: 'ferrari-sf90-stradale',
+    name: 'SF90 STRADALE',
     brand: 'FERRARI',
     model: 'SF90 Assetto Fiorano',
-    tagline: 'Beyond Imagination: 1000 CV de pura precisión de Maranello',
+    tagline: '1.000 CV de pura ingeniería híbrida nacida directamente de la Scuderia Ferrari',
     year: 2024,
     category: 'HYPERCAR',
     hp: 1000,
-    accel: '2.5s',
+    accel: '2.5 S',
     topSpeed: 340,
     engine: '4.0L V8 Bi-Turbo PHEV',
     transmission: 'F1 Doble Embrague 8 Vel',
     drive: 'e-4WD',
     pricePerDay: 2900,
     securityDeposit: 8000,
+    watermarkText: 'FERRARI',
     owner: {
       name: 'Javier V.',
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&auto=format&fit=crop&q=80',
@@ -110,56 +100,58 @@ const FEATURED_FLEET: Supercar[] = [
     },
     colorName: 'Rosso Corsa',
     colorHex: '#D40000',
-    image: '/supercars/ferrari-sf90.jpg',
+    image: '/supercars/brands/ferrari.png',
     badgeText: 'ASSETTO FIORANO'
   },
   {
-    id: '3',
-    slug: 'porsche-911-gt3-rs-weissach',
-    name: 'Porsche 911 GT3 RS',
-    brand: 'PORSCHE',
-    model: '992 GT3 RS Weissach Package',
-    tagline: 'Aerodinámica de competición DRS y atmosférico 9.000 rpm',
-    year: 2024,
-    category: 'TRACK_SPECIAL',
-    hp: 525,
-    accel: '3.2s',
-    topSpeed: 296,
-    engine: '4.0L Boxer 6 Atmosférico',
-    transmission: 'PDK 7 Velocidades',
-    drive: 'Propulsión Trasera RWD',
-    pricePerDay: 1850,
-    securityDeposit: 5000,
+    id: 'lamborghini',
+    slug: 'lamborghini-revuelto-v12',
+    name: 'REVUELTO V12',
+    brand: 'LAMBORGHINI',
+    model: 'Revuelto V12 HPEV Hybrid',
+    tagline: 'V12 atmosférico híbrido de 1.015 CV con aerodinámica activa y monocasco de carbono',
+    year: 2025,
+    category: 'HYPERCAR',
+    hp: 1015,
+    accel: '2.5 S',
+    topSpeed: 350,
+    engine: '6.5L V12 + 3 Motores Eléctricos',
+    transmission: '8 Vel Doble Embrague',
+    drive: 'Tracción Total AWD',
+    pricePerDay: 3300,
+    securityDeposit: 9500,
+    watermarkText: 'LAMBORGHINI',
     owner: {
-      name: 'Marcos R.',
-      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&auto=format&fit=crop&q=80',
+      name: 'Carlos M.',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80',
       verified: true,
       rating: 5.0,
-      trips: 31,
-      location: 'Madrid / Circuito Jarama'
+      trips: 18,
+      location: 'Madrid / Marbella'
     },
-    colorName: 'Ice Grey Metallic',
-    colorHex: '#BAC4C8',
-    image: '/supercars/porsche-gt3rs.jpg',
-    badgeText: 'WEISSACH DRS'
+    colorName: 'Blu Eleos',
+    colorHex: '#1D4ED8',
+    image: '/supercars/brands/lamborghini.png',
+    badgeText: 'HYPERCAR V12'
   },
   {
-    id: '4',
-    slug: 'mclaren-765lt-spider-carbon',
-    name: 'McLaren 765LT Spider',
+    id: 'mclaren',
+    slug: 'mclaren-750s-spider',
+    name: '750S SPIDER',
     brand: 'MCLAREN',
-    model: '765LT MSO Carbon',
-    tagline: 'Longtail: ligereza extrema y aceleración salvaje al aire libre',
+    model: '750S Spider Carbon Edition',
+    tagline: 'Monocasco ultra ligero con 750 CV, alerón aerofreno y aceleración fulgurante',
     year: 2024,
     category: 'SUPERCAR',
-    hp: 765,
-    accel: '2.8s',
-    topSpeed: 330,
+    hp: 750,
+    accel: '2.8 S',
+    topSpeed: 332,
     engine: '4.0L V8 Twin-Turbo',
     transmission: 'SSG 7 Velocidades',
-    drive: 'Propulsión RWD',
-    pricePerDay: 2400,
+    drive: 'Propulsión Trasera RWD',
+    pricePerDay: 2500,
     securityDeposit: 7500,
+    watermarkText: 'MCLAREN',
     owner: {
       name: 'Alejandro G.',
       avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&auto=format&fit=crop&q=80',
@@ -168,290 +160,448 @@ const FEATURED_FLEET: Supercar[] = [
       trips: 15,
       location: 'Tenerife / Las Palmas'
     },
-    colorName: 'Papaya Spark',
-    colorHex: '#FF8000',
-    image: '/supercars/mclaren-765lt.jpg',
-    badgeText: 'MSO 1 DE 765'
+    colorName: 'Papaya Orange',
+    colorHex: '#EA580C',
+    image: '/supercars/brands/mclaren.png',
+    badgeText: 'CARBON MONOCELL'
+  },
+  {
+    id: 'mercedes',
+    slug: 'mercedes-amg-gt-black-series',
+    name: 'AMG GT BLACK',
+    brand: 'MERCEDES-BENZ',
+    model: 'AMG GT Black Series Flat-Plane V8',
+    tagline: 'V8 biturbo de 730 CV y carga aerodinámica masiva directa de la categoría GT3',
+    year: 2024,
+    category: 'TRACK_SPECIAL',
+    hp: 730,
+    accel: '3.2 S',
+    topSpeed: 325,
+    engine: '4.0L V8 Biturbo Flat-Plane',
+    transmission: 'AMG SPEEDSHIFT DCT 7G',
+    drive: 'Propulsión Trasera RWD',
+    pricePerDay: 2350,
+    securityDeposit: 7000,
+    watermarkText: 'MERCEDES-BENZ',
+    owner: {
+      name: 'Alberto B.',
+      avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=120&auto=format&fit=crop&q=80',
+      verified: true,
+      rating: 5.0,
+      trips: 17,
+      location: 'Bilbao / Santander'
+    },
+    colorName: 'Magno Graphite',
+    colorHex: '#374151',
+    image: '/supercars/brands/mercedes-benz.png',
+    badgeText: 'NORDSCHLEIFE RECORD'
+  },
+  {
+    id: 'aston-martin',
+    slug: 'aston-martin-dbs-superleggera',
+    name: 'DBS V12',
+    brand: 'ASTON MARTIN',
+    model: 'DBS Superleggera V12 Bi-Turbo',
+    tagline: 'Gran Turismo definitivo: 725 CV británicos esculpidos en fibra de carbono',
+    year: 2024,
+    category: 'GRAND_TOURER',
+    hp: 725,
+    accel: '3.4 S',
+    topSpeed: 340,
+    engine: '5.2L V12 Twin-Turbo',
+    transmission: 'ZF 8 Velocidades',
+    drive: 'Propulsión Trasera RWD',
+    pricePerDay: 2100,
+    securityDeposit: 6000,
+    watermarkText: 'ASTON MARTIN',
+    owner: {
+      name: 'Gonzalo S.',
+      avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=120&auto=format&fit=crop&q=80',
+      verified: true,
+      rating: 5.0,
+      trips: 19,
+      location: 'Madrid / Salamanca'
+    },
+    colorName: 'British Green',
+    colorHex: '#1E3A2F',
+    image: '/supercars/brands/aston-martin.png',
+    badgeText: 'TWIN TURBO V12'
+  },
+  {
+    id: 'audi',
+    slug: 'audi-r8-v10-performance',
+    name: 'R8 V10 GT',
+    brand: 'AUDI',
+    model: 'R8 V10 Performance GT RWD',
+    tagline: 'El legendario motor V10 atmosférico en su despedida más radical y purista',
+    year: 2024,
+    category: 'SUPERCAR',
+    hp: 620,
+    accel: '3.1 S',
+    topSpeed: 331,
+    engine: '5.2L FSI V10 Atmosférico',
+    transmission: 'S tronic 7 Velocidades',
+    drive: 'Propulsión Trasera RWD',
+    pricePerDay: 1900,
+    securityDeposit: 5500,
+    watermarkText: 'AUDI',
+    owner: {
+      name: 'Marcos T.',
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&auto=format&fit=crop&q=80',
+      verified: true,
+      rating: 4.96,
+      trips: 21,
+      location: 'Zaragoza / Madrid'
+    },
+    colorName: 'Suzuka Grey',
+    colorHex: '#9CA3AF',
+    image: '/supercars/brands/audi.png',
+    badgeText: 'V10 PERFORMANCE'
+  },
+  {
+    id: 'bmw',
+    slug: 'bmw-m4-csl',
+    name: 'M4 CSL',
+    brand: 'BMW',
+    model: 'M4 Competition Sport Lightweight',
+    tagline: 'Edición limitada CSL con 550 CV, dieta estricta de carbono y ajustes de circuito',
+    year: 2024,
+    category: 'TRACK_SPECIAL',
+    hp: 550,
+    accel: '3.7 S',
+    topSpeed: 307,
+    engine: '3.0L M TwinPower Turbo 6L',
+    transmission: 'M Steptronic 8 Vel con Drivelogic',
+    drive: 'Propulsión Trasera RWD',
+    pricePerDay: 1600,
+    securityDeposit: 4500,
+    watermarkText: 'BMW',
+    owner: {
+      name: 'David P.',
+      avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=120&auto=format&fit=crop&q=80',
+      verified: true,
+      rating: 4.95,
+      trips: 16,
+      location: 'Sevilla / Málaga'
+    },
+    colorName: 'Frozen Brooklyn Grey',
+    colorHex: '#64748B',
+    image: '/supercars/brands/bmew.png',
+    badgeText: 'CSL LIMITED'
+  },
+  {
+    id: 'bentley',
+    slug: 'bentley-continental-gt-speed',
+    name: 'CONTINENTAL GT',
+    brand: 'BENTLEY',
+    model: 'Continental GT Speed W12',
+    tagline: 'El pináculo del gran turismo artesanal: 659 CV con tracción total activa',
+    year: 2024,
+    category: 'GRAND_TOURER',
+    hp: 659,
+    accel: '3.6 S',
+    topSpeed: 335,
+    engine: '6.0L W12 TSI Twin-Turbo',
+    transmission: 'Doble Embrague 8 Vel',
+    drive: 'Tracción Total AWD',
+    pricePerDay: 2250,
+    securityDeposit: 6500,
+    watermarkText: 'BENTLEY',
+    owner: {
+      name: 'Felipe M.',
+      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&auto=format&fit=crop&q=80',
+      verified: true,
+      rating: 5.0,
+      trips: 13,
+      location: 'Madrid / Marbella'
+    },
+    colorName: 'Verdant Green',
+    colorHex: '#14532D',
+    image: '/supercars/brands/bentley.png',
+    badgeText: 'W12 SPEED'
+  },
+  {
+    id: 'rolls-royce',
+    slug: 'rolls-royce-spectre-v12',
+    name: 'SPECTRE',
+    brand: 'ROLLS-ROYCE',
+    model: 'Spectre Ultra-Luxury Coupé',
+    tagline: 'Lujo absoluto e insonorización perfecta en la silueta coupé más imponente del mundo',
+    year: 2024,
+    category: 'GRAND_TOURER',
+    hp: 585,
+    accel: '4.5 S',
+    topSpeed: 250,
+    engine: 'Twin Electric Powertrain 900 Nm',
+    transmission: 'Direct Drive',
+    drive: 'Tracción Total AWD',
+    pricePerDay: 3500,
+    securityDeposit: 10000,
+    watermarkText: 'ROLLS-ROYCE',
+    owner: {
+      name: 'Lucas B.',
+      avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=120&auto=format&fit=crop&q=80',
+      verified: true,
+      rating: 5.0,
+      trips: 11,
+      location: 'Madrid / Puerto Banús'
+    },
+    colorName: 'Anthracite Dark',
+    colorHex: '#1F2937',
+    image: '/supercars/brands/rolls-royce.png',
+    badgeText: 'ULTRA LUXURY'
+  },
+  {
+    id: 'chevrolet',
+    slug: 'chevrolet-corvette-z06',
+    name: 'CORVETTE Z06',
+    brand: 'CHEVROLET',
+    model: 'Corvette Z06 5.5L Flat-Plane',
+    tagline: 'El V8 atmosférico de producción más potente del mundo: 670 CV a 8.600 rpm',
+    year: 2024,
+    category: 'TRACK_SPECIAL',
+    hp: 670,
+    accel: '2.6 S',
+    topSpeed: 314,
+    engine: '5.5L LT6 V8 Flat-Plane Crank',
+    transmission: 'Tremec 8 Vel Doble Embrague',
+    drive: 'Propulsión Trasera RWD',
+    pricePerDay: 1950,
+    securityDeposit: 5500,
+    watermarkText: 'CHEVROLET',
+    owner: {
+      name: 'Sergio L.',
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&auto=format&fit=crop&q=80',
+      verified: true,
+      rating: 4.98,
+      trips: 14,
+      location: 'Madrid / Las Rozas'
+    },
+    colorName: 'Accelerate Yellow',
+    colorHex: '#CA8A04',
+    image: '/supercars/brands/chevrolet.png',
+    badgeText: 'LT6 FLAT-PLANE'
+  },
+  {
+    id: 'dodge',
+    slug: 'dodge-challenger-srt-demon',
+    name: 'SRT HELLCAT',
+    brand: 'DODGE',
+    model: 'Challenger SRT Super Stock Hellcat',
+    tagline: 'Puro músculo americano: 807 CV sobrealimentados por compresor volumétrico',
+    year: 2024,
+    category: 'SUPERCAR',
+    hp: 807,
+    accel: '3.2 S',
+    topSpeed: 326,
+    engine: '6.2L HEMI V8 Supercharged',
+    transmission: 'TorqueFlite 8 Velocidades',
+    drive: 'Propulsión Trasera RWD',
+    pricePerDay: 1800,
+    securityDeposit: 5000,
+    watermarkText: 'DODGE',
+    owner: {
+      name: 'Manuel K.',
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&auto=format&fit=crop&q=80',
+      verified: true,
+      rating: 4.97,
+      trips: 20,
+      location: 'Alicante / Benidorm'
+    },
+    colorName: 'Plum Crazy Dark',
+    colorHex: '#581C87',
+    image: '/supercars/brands/dodge.png',
+    badgeText: 'HEMI SUPERCHARGED'
+  },
+  {
+    id: 'ford',
+    slug: 'ford-gt-carbon-edition',
+    name: 'FORD GT',
+    brand: 'FORD',
+    model: 'Ford GT Carbon Series EcoBoost',
+    tagline: 'Superdeportivo ganador de Le Mans con chasis monocasco de fibra de carbono',
+    year: 2024,
+    category: 'HYPERCAR',
+    hp: 660,
+    accel: '2.9 S',
+    topSpeed: 348,
+    engine: '3.5L Twin-Turbo EcoBoost V6',
+    transmission: 'Getrag 7 Vel Doble Embrague',
+    drive: 'Propulsión Trasera RWD',
+    pricePerDay: 2800,
+    securityDeposit: 8500,
+    watermarkText: 'FORD',
+    owner: {
+      name: 'Adrián R.',
+      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&auto=format&fit=crop&q=80',
+      verified: true,
+      rating: 5.0,
+      trips: 12,
+      location: 'Barcelona / Sitges'
+    },
+    colorName: 'Liquid Red',
+    colorHex: '#991B1B',
+    image: '/supercars/brands/ford.png',
+    badgeText: 'LE MANS DNA'
   }
 ];
 
 export default function SupercarConfiguratorHero() {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [selectedDelivery, setSelectedDelivery] = useState<'airport' | 'villa' | 'circuit'>('villa');
-  const [selectedMileage, setSelectedMileage] = useState<'150km' | '300km' | 'unlimited'>('150km');
-  const [soundActive, setSoundActive] = useState(false);
 
-  const car = FEATURED_FLEET[selectedIndex];
+  const total = FEATURED_FLEET.length;
+  const currentCar = FEATURED_FLEET[selectedIndex];
+
+  const prevCar = () => setSelectedIndex((prev) => (prev === 0 ? total - 1 : prev - 1));
+  const nextCar = () => setSelectedIndex((prev) => (prev === total - 1 ? 0 : prev + 1));
+
+  // Soporte para gestos táctiles (Swipe en móvil)
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartX(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX === null) return;
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) {
+      if (diff > 0) nextCar();
+      else prevCar();
+    }
+    setTouchStartX(null);
+  };
+
+  const getFontSize = (text: string) => {
+    const len = text.length;
+    if (len <= 4) return 'text-[20vw] sm:text-[18vw]';
+    if (len <= 7) return 'text-[14vw] sm:text-[14vw]';
+    if (len <= 9) return 'text-[11vw] sm:text-[11vw]';
+    if (len <= 11) return 'text-[9vw] sm:text-[9.5vw]';
+    return 'text-[7.5vw] sm:text-[8vw]';
+  };
 
   return (
-    <div className="relative min-h-[92vh] w-full bg-[#050505] text-[#F5F5F5] overflow-hidden flex flex-col justify-between selection:bg-[#D4AF37] selection:text-black">
-      {/* BACKGROUND SPOTLIGHT & GRID EFFECT (Lamborghini Stage) */}
-      <div className="absolute inset-0 pointer-events-none z-0">
-        {/* Radial stage lighting */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] max-w-[1200px] h-[550px] bg-gradient-to-b from-[#D4AF37]/15 via-transparent to-transparent blur-[140px] rounded-full" />
-        <div className="absolute bottom-0 inset-x-0 h-96 bg-gradient-to-t from-[#050505] via-[#050505]/90 to-transparent" />
-        
-        {/* Fine geometric backdrop lines */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#151515_1px,transparent_1px),linear-gradient(to_bottom,#151515_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_40%,#000_70%,transparent_100%)] opacity-30" />
+    <section className="relative min-h-[70vh] sm:min-h-[82vh] w-full bg-white text-black overflow-hidden flex flex-col justify-between selection:bg-black selection:text-white pt-6 sm:pt-8 pb-6 sm:pb-8">
+      
+      {/* 1. MARCA EN EL FONDO (Tipografía oscura, visible y adaptada a móvil) */}
+      <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden z-0 px-2 sm:px-8">
+        <span 
+          className={`font-black uppercase tracking-tight text-gray-400/80 sm:text-gray-400/85 select-none leading-none font-sans transition-all duration-700 text-center whitespace-nowrap -translate-y-12 sm:-translate-y-20 ${getFontSize(currentCar.watermarkText)}`}
+        >
+          {currentCar.watermarkText}
+        </span>
       </div>
 
-      {/* TOP CONFIGURATOR HUD BAR */}
-      <div className="relative z-20 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-6 pb-2">
-        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4">
-          <div className="flex items-center space-x-3">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-[#D4AF37]/15 border border-[#D4AF37]/40 text-[#D4AF37] text-[10px] font-mono font-bold tracking-[0.2em] uppercase">
-              <Sparkles className="w-3 h-3" /> P2P HYPERCAR VAULT
-            </span>
-            <span className="text-white/40 text-xs font-mono">|</span>
-            <span className="text-xs text-white/70 font-mono tracking-wider uppercase">
-              ALQUILER DIRECTO ENTRE PARTICULARES
-            </span>
-          </div>
+      {/* 2. ESPACIADOR SUPERIOR */}
+      <div className="pt-2 sm:pt-4" />
 
-          <div className="flex items-center space-x-6 text-xs font-mono">
-            <span className="text-white/50 flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-[#D4AF37]" /> Fianza Custodiada
-            </span>
-            <span className="text-white/50 flex items-center gap-1.5">
-              <Award className="w-4 h-4 text-[#D4AF37]" /> Propietarios VIP Verificados
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* MAIN STAGE / CONFIGURATOR VIEW */}
-      <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-4 my-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+      {/* 3. CENTRO: CARRUSEL TIPO RUEDA DE APPLE / LIBRO 3D CON SOPORTE SWIPE */}
+      <div 
+        className="relative z-10 w-full max-w-7xl mx-auto px-2 sm:px-4 my-auto flex items-center justify-center overflow-visible touch-pan-y"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         
-        {/* LEFT: SPECS & BADGE */}
-        <div className="lg:col-span-4 space-y-6 order-2 lg:order-1">
-          <div>
-            <div className="flex items-center space-x-2 mb-2">
-              <span className="text-xs font-mono uppercase tracking-[0.25em] text-[#D4AF37] font-bold">
-                {car.brand}
-              </span>
-              <span className="text-white/30 text-xs">/</span>
-              <span className="text-xs font-mono text-white/60 tracking-wider">
-                {car.badgeText}
-              </span>
-            </div>
-            
-            <h1 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white leading-none">
-              {car.name}
-            </h1>
-            
-            <p className="mt-2 text-xs sm:text-sm text-white/60 font-light leading-relaxed">
-              {car.tagline}
-            </p>
-          </div>
+        {/* Flecha izquierda */}
+        <button
+          onClick={prevCar}
+          aria-label="Coche anterior"
+          className="absolute left-1 sm:left-6 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/90 hover:bg-black hover:text-white border border-gray-200 shadow-md flex items-center justify-center transition-all duration-300 cursor-pointer backdrop-blur-sm group"
+        >
+          <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700 group-hover:text-white transition-colors" />
+        </button>
 
-          {/* TELEMETRY HUD TILES */}
-          <div className="grid grid-cols-3 gap-2.5 pt-2">
-            <div className="bg-[#111111]/80 border border-white/10 rounded-sm p-3 backdrop-blur-md hover:border-[#D4AF37]/50 transition-colors">
-              <span className="text-[10px] font-mono uppercase text-white/50 block">POTENCIA</span>
-              <div className="flex items-baseline space-x-1 mt-1">
-                <span className="text-xl sm:text-2xl font-black text-white">{car.hp}</span>
-                <span className="text-[10px] font-mono text-[#D4AF37] font-bold">CV</span>
-              </div>
-            </div>
+        {/* Contenedor 3D de coches (centro nítido, laterales borrosos/escalados) */}
+        <div 
+          className="relative w-full max-w-4xl h-[220px] sm:h-[360px] md:h-[430px] flex items-center justify-center"
+          style={{ perspective: '1000px' }}
+        >
+          {FEATURED_FLEET.map((car, idx) => {
+            // Calcular distancia circular respecto al seleccionado
+            let diff = idx - selectedIndex;
+            if (diff > total / 2) diff -= total;
+            if (diff < -total / 2) diff += total;
 
-            <div className="bg-[#111111]/80 border border-white/10 rounded-sm p-3 backdrop-blur-md hover:border-[#D4AF37]/50 transition-colors">
-              <span className="text-[10px] font-mono uppercase text-white/50 block">0 - 100 KM/H</span>
-              <div className="flex items-baseline space-x-1 mt-1">
-                <span className="text-xl sm:text-2xl font-black text-white">{car.accel}</span>
-              </div>
-            </div>
+            const isCenter = diff === 0;
+            const isNear = Math.abs(diff) <= 2;
 
-            <div className="bg-[#111111]/80 border border-white/10 rounded-sm p-3 backdrop-blur-md hover:border-[#D4AF37]/50 transition-colors">
-              <span className="text-[10px] font-mono uppercase text-white/50 block">V. MÁXIMA</span>
-              <div className="flex items-baseline space-x-1 mt-1">
-                <span className="text-xl sm:text-2xl font-black text-white">{car.topSpeed}</span>
-                <span className="text-[10px] font-mono text-[#D4AF37] font-bold">KM/H</span>
-              </div>
-            </div>
-          </div>
+            if (!isNear) return null;
 
-          {/* MOTOR & TRACCIÓN INFO */}
-          <div className="space-y-1.5 text-xs font-mono text-white/70 bg-[#0C0C0C] border border-white/5 p-3 rounded-sm">
-            <div className="flex justify-between">
-              <span className="text-white/40">MOTORIZACIÓN:</span>
-              <span className="text-white font-medium">{car.engine}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-white/40">TRANSMISIÓN:</span>
-              <span className="text-white font-medium">{car.transmission}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-white/40">TRACCIÓN:</span>
-              <span className="text-white font-medium">{car.drive}</span>
-            </div>
-          </div>
+            // En móvil desplazamos un poco más lateralmente para dar espacio al centro
+            const translateX = diff * 62; 
+            const scale = isCenter ? 1 : Math.max(0.65, 1 - Math.abs(diff) * 0.25);
+            const rotateY = diff * -25;
+            const blur = isCenter ? 0 : Math.abs(diff) * 4;
+            const opacity = isCenter ? 1 : Math.max(0.2, 0.65 - Math.abs(diff) * 0.25);
+            const zIndex = isCenter ? 20 : 10 - Math.abs(diff);
 
-          {/* PROPIETARIO CARD */}
-          <div className="flex items-center justify-between p-3.5 bg-[#121212]/90 border border-white/10 rounded-sm backdrop-blur-md">
-            <div className="flex items-center space-x-3">
-              <img 
-                src={car.owner.avatar} 
-                alt={car.owner.name}
-                className="w-10 h-10 rounded-full border border-[#D4AF37]/60 object-cover" 
-              />
-              <div>
-                <div className="flex items-center space-x-1.5">
-                  <span className="text-xs font-bold text-white">{car.owner.name}</span>
-                  {car.owner.verified && (
-                    <CheckCircle2 className="w-3.5 h-3.5 text-[#D4AF37] fill-[#D4AF37]/20" />
-                  )}
+            return (
+              <div
+                key={car.id}
+                onClick={() => setSelectedIndex(idx)}
+                className={`absolute inset-0 flex items-center justify-center transition-all duration-700 ease-out select-none ${
+                  isCenter ? 'cursor-default' : 'cursor-pointer'
+                }`}
+                style={{
+                  transform: `translateX(${translateX}%) scale(${scale}) rotateY(${rotateY}deg)`,
+                  filter: `blur(${blur}px)`,
+                  opacity,
+                  zIndex,
+                  transformStyle: 'preserve-3d',
+                }}
+              >
+                <div className="relative w-full h-full max-w-[85%] sm:max-w-3xl flex items-center justify-center">
+                  <Image
+                    src={car.image}
+                    alt={car.brand}
+                    fill
+                    sizes="(max-width: 768px) 90vw, 850px"
+                    priority={isCenter}
+                    className="object-contain filter drop-shadow-[0_20px_25px_rgba(0,0,0,0.14)] transition-transform duration-700"
+                  />
                 </div>
-                <span className="text-[10px] text-white/50 font-mono block">
-                  {car.owner.location} • {car.owner.trips} alquileres
-                </span>
               </div>
-            </div>
-            <div className="text-right flex flex-col items-end">
-              <span className="text-[9px] font-mono text-emerald-400 block uppercase tracking-wider font-bold">
-                DISPONIBLE
-              </span>
-              <span className="text-[11px] font-mono text-white/60 flex items-center gap-1 mt-0.5">
-                <Star className="w-3 h-3 text-[#D4AF37] fill-[#D4AF37]" />
-                {car.owner.rating}
-              </span>
-            </div>
-          </div>
+            );
+          })}
         </div>
 
-        {/* CENTER / RIGHT: 3D STUDIO VISUALIZER */}
-        <div className="lg:col-span-8 flex flex-col items-center justify-center relative order-1 lg:order-2">
-          {/* STAGE LIGHT EMITTER */}
-          <div className="relative w-full max-w-3xl aspect-[16/9] flex items-center justify-center">
-            <div className="absolute inset-0 bg-radial from-white/10 via-transparent to-transparent opacity-50 rounded-full scale-110" />
-            
-            <Image
-              src={car.image}
-              alt={car.name}
-              fill
-              priority
-              className="object-cover rounded-xl border border-white/10 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.95)] hover:scale-[1.01] transition-transform duration-700"
-            />
+        {/* Flecha derecha */}
+        <button
+          onClick={nextCar}
+          aria-label="Siguiente coche"
+          className="absolute right-1 sm:right-6 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/90 hover:bg-black hover:text-white border border-gray-200 shadow-md flex items-center justify-center transition-all duration-300 cursor-pointer backdrop-blur-sm group"
+        >
+          <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700 group-hover:text-white transition-colors" />
+        </button>
 
-            {/* LIVE WATERMARK / BADGE */}
-            <div className="absolute top-4 left-4 z-20 flex items-center gap-2">
-              <span className="px-2.5 py-1 bg-black/80 backdrop-blur-md border border-white/20 text-white text-[10px] font-mono uppercase tracking-widest">
-                STAGE 01 // HIGH-RESOLUTION STUDIO
-              </span>
-            </div>
+      </div>
 
-            {/* SOUND TRIGGER SIMULATOR */}
-            <button
-              onClick={() => setSoundActive(!soundActive)}
-              className="absolute bottom-4 right-4 z-20 px-3 py-1.5 bg-black/80 backdrop-blur-md border border-[#D4AF37]/50 text-[#D4AF37] text-[10px] font-mono uppercase tracking-wider flex items-center gap-2 hover:bg-[#D4AF37] hover:text-black transition-all cursor-pointer"
-            >
-              <Volume2 className="w-3.5 h-3.5" />
-              <span>{soundActive ? 'V12 EXHAUST ACTIVE' : 'TEST SOUND'}</span>
-            </button>
-          </div>
-
-          {/* VEHICLE SWITCHER DOCK (Configurator Style) */}
-          <div className="w-full max-w-3xl mt-6">
-            <div className="flex items-center justify-between mb-3 px-1">
-              <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-white/50">
-                SELECCIONA SUPERDEPORTIVO DE LA COMUNIDAD:
-              </span>
-              <span className="text-[11px] font-mono text-[#D4AF37]">
-                0{selectedIndex + 1} / 0{FEATURED_FLEET.length}
-              </span>
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-              {FEATURED_FLEET.map((fCar, idx) => (
+      {/* 4. SELECTOR ESTILO PORSCHE (PILLS CON SCROLL HORIZONTAL FLUIDO EN MÓVIL) */}
+      <div className="relative z-20 max-w-7xl mx-auto w-full px-2 sm:px-8">
+        <div className="flex items-center justify-start sm:justify-center overflow-x-auto no-scrollbar py-2 px-1">
+          <div className="inline-flex items-center gap-1 sm:gap-1.5 bg-gray-100/95 backdrop-blur-md p-1.5 rounded-full border border-gray-200 shadow-sm mx-auto flex-nowrap sm:flex-wrap">
+            {FEATURED_FLEET.map((fCar, idx) => {
+              const isSelected = selectedIndex === idx;
+              return (
                 <button
                   key={fCar.id}
                   onClick={() => setSelectedIndex(idx)}
-                  className={`p-3 text-left transition-all rounded-sm border cursor-pointer ${
-                    selectedIndex === idx 
-                      ? 'bg-[#181818] border-[#D4AF37] shadow-[0_0_20px_rgba(212,175,55,0.15)]' 
-                      : 'bg-[#0E0E0E] border-white/10 hover:border-white/30 text-white/60'
+                  className={`px-3 sm:px-5 py-1.5 sm:py-2 text-[10px] sm:text-xs font-mono uppercase tracking-wider transition-all rounded-full cursor-pointer whitespace-nowrap shrink-0 ${
+                    isSelected
+                      ? 'bg-black text-white font-bold shadow-md scale-105'
+                      : 'text-gray-600 hover:text-black hover:bg-gray-200'
                   }`}
                 >
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[9px] font-mono uppercase tracking-wider text-[#D4AF37]">
-                      {fCar.brand}
-                    </span>
-                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: fCar.colorHex }} />
-                  </div>
-                  <h4 className="text-xs font-bold text-white truncate">{fCar.name}</h4>
-                  <span className="text-[10px] font-mono text-white/40 block mt-0.5">
-                    Desde {fCar.pricePerDay}€ / día
-                  </span>
+                  {fCar.brand}
                 </button>
-              ))}
-            </div>
+              );
+            })}
           </div>
         </div>
       </div>
 
-      {/* BOTTOM ACTION BAR (Booking & Delivery Options) */}
-      <div className="relative z-20 border-t border-white/10 bg-[#090909]/95 backdrop-blur-xl py-4 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          
-          {/* Quick options */}
-          <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
-            <span className="text-[10px] font-mono text-white/40 uppercase tracking-widest hidden sm:inline-block">
-              ENTREGA VIP:
-            </span>
-            <button
-              onClick={() => setSelectedDelivery('villa')}
-              className={`px-3 py-1.5 text-[11px] font-mono rounded-sm border transition-all cursor-pointer ${
-                selectedDelivery === 'villa'
-                  ? 'bg-white text-black border-white font-bold'
-                  : 'bg-black/60 text-white/60 border-white/10 hover:border-white/30'
-              }`}
-            >
-              Villa / Residencia Privada
-            </button>
-            <button
-              onClick={() => setSelectedDelivery('airport')}
-              className={`px-3 py-1.5 text-[11px] font-mono rounded-sm border transition-all cursor-pointer ${
-                selectedDelivery === 'airport'
-                  ? 'bg-white text-black border-white font-bold'
-                  : 'bg-black/60 text-white/60 border-white/10 hover:border-white/30'
-              }`}
-            >
-              Terminal VIP Aeropuerto
-            </button>
-            <button
-              onClick={() => setSelectedDelivery('circuit')}
-              className={`px-3 py-1.5 text-[11px] font-mono rounded-sm border transition-all cursor-pointer ${
-                selectedDelivery === 'circuit'
-                  ? 'bg-white text-black border-white font-bold'
-                  : 'bg-black/60 text-white/60 border-white/10 hover:border-white/30'
-              }`}
-            >
-              Paddock Circuito
-            </button>
-          </div>
-
-          {/* Pricing & CTA */}
-          <div className="flex items-center justify-between w-full md:w-auto gap-6">
-            <div className="text-right">
-              <span className="text-[10px] font-mono text-white/50 uppercase block">TARIFA PROPIETARIO</span>
-              <div className="flex items-baseline space-x-1">
-                <span className="text-2xl sm:text-3xl font-black text-[#D4AF37] font-mono">{car.pricePerDay}€</span>
-                <span className="text-xs text-white/60 font-mono">/ DÍA</span>
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-3">
-              <Link
-                href={`/buscar?supercar=${car.slug}`}
-                className="px-6 py-3.5 bg-[#D4AF37] hover:bg-[#F5C542] text-black font-black text-xs font-mono uppercase tracking-[0.15em] transition-all shadow-[0_0_30px_rgba(212,175,55,0.3)] hover:scale-105 flex items-center gap-2"
-              >
-                <span>SOLICITAR RESERVA</span>
-                <ChevronRight className="w-4 h-4" />
-              </Link>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
+    </section>
   );
 }
+
