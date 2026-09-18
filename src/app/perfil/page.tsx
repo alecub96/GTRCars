@@ -13,8 +13,8 @@ export default async function ProfilePage() {
   const profileRole = isOwner ? 'OWNER' : 'TRAVELER';
 
   let reviews: any[] = [];
-  try {
-    if (!isAdmin) {
+  if (!isAdmin && !user.id?.includes('demo') && !user.email?.includes('gtcars.club')) {
+    try {
       reviews = await prisma.review.findMany({
         where: { subjectId: user.id, subjectRole: profileRole },
         select: {
@@ -26,27 +26,32 @@ export default async function ProfilePage() {
         orderBy: { createdAt: 'desc' },
         take: 5,
       });
+    } catch (error) {
+      console.warn('Perfil page reviews query timeout/unavailable:', error);
+      reviews = [];
     }
-  } catch (error) {
-    console.error('Perfil page reviews query error:', error);
   }
 
   let vehiclesCount = 0;
-  try {
-    vehiclesCount = await prisma.vehicle.count({ where: { ownerId: user.id } });
-  } catch (error) {
-    console.error('Perfil page vehicles count error:', error);
+  if (isOwner && !user.id?.includes('demo') && !user.email?.includes('gtcars.club')) {
+    try {
+      vehiclesCount = await prisma.vehicle.count({ where: { ownerId: user.id } });
+    } catch (error) {
+      console.warn('Perfil page vehicles count timeout/unavailable:', error);
+      vehiclesCount = 0;
+    }
   }
 
   let bookingsCount = 0;
-  try {
-    if (!isAdmin) {
+  if (!isAdmin && !user.id?.includes('demo') && !user.email?.includes('gtcars.club')) {
+    try {
       bookingsCount = await prisma.booking.count({
         where: isOwner ? { ownerId: user.id } : { travelerId: user.id },
       });
+    } catch (error) {
+      console.warn('Perfil page bookings count timeout/unavailable:', error);
+      bookingsCount = 0;
     }
-  } catch (error) {
-    console.error('Perfil page bookings count error:', error);
   }
 
   const rating = reviews.length ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length : 5.0;

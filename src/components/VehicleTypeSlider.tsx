@@ -4,33 +4,22 @@ import React, { useRef } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import {
-  CarFront,
-  Truck,
-  Caravan,
-  BusFront,
-  Mountain,
-  Ship,
   LayoutGrid,
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
-
-const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
-  CarFront,
-  Truck,
-  Caravan,
-  BusFront,
-  Mountain,
-  Ship,
-};
+import {
+  SupercarV8Silhouette,
+  SpyderSilhouette,
+  SedanDeportivoSilhouette,
+  SuperSUVSilhouette,
+} from '@/components/SupercarIcons';
 
 export const VEHICLE_SLIDER_ITEMS = [
-  { id: 'TURISMO_CAMPERIZADO', label: 'Camper Pequeña', iconName: 'CarFront' },
-  { id: 'CAMPER_GRAN_VOLUMEN', label: 'Gran Volumen', iconName: 'Truck' },
-  { id: 'CARAVANA', label: 'Caravana', iconName: 'Caravan' },
-  { id: 'AUTOCARAVANA', label: 'Autocaravana', iconName: 'BusFront' },
-  { id: '4X4_CAMPERIZADO', label: '4x4 Camper', iconName: 'Mountain' },
-  { id: 'BARCO', label: 'Barco / Velero', iconName: 'Ship' },
+  { id: 'COUPE', label: 'Coupé', icon: SupercarV8Silhouette },
+  { id: 'CABRIO', label: 'Descapotable', icon: SpyderSilhouette },
+  { id: 'SEDAN_DEPORTIVO', label: 'Sedán Deportivo', icon: SedanDeportivoSilhouette },
+  { id: 'SUV_DEPORTIVO', label: 'Super SUV', icon: SuperSUVSilhouette },
 ];
 
 interface VehicleTypeSliderProps {
@@ -75,7 +64,7 @@ export default function VehicleTypeSlider({
         type="button"
         onClick={() => scroll('left')}
         aria-label="Deslizar a la izquierda"
-        className="lg:hidden absolute left-1 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/95 text-[#13322E] shadow-md border border-[#E9E1D2] flex items-center justify-center hover:bg-[#16B8AA] hover:text-white transition-all cursor-pointer"
+        className="lg:hidden absolute left-1 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/95 text-black shadow-md border border-gray-200 flex items-center justify-center hover:bg-black hover:text-white transition-all cursor-pointer"
       >
         <ChevronLeft className="w-4 h-4" />
       </button>
@@ -83,7 +72,7 @@ export default function VehicleTypeSlider({
       {/* CONTENEDOR SLIDER DE CATEGORÍAS */}
       <div
         ref={sliderRef}
-        className="flex items-center justify-start lg:justify-center flex-nowrap gap-2 sm:gap-2.5 overflow-x-auto py-2 px-10 lg:px-2 scrollbar-none touch-pan-x scroll-smooth"
+        className="flex items-center justify-start lg:justify-center flex-nowrap gap-2 sm:gap-3 overflow-x-auto py-2 px-10 lg:px-2 scrollbar-none touch-pan-x scroll-smooth"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {showAllOption && (
@@ -91,32 +80,31 @@ export default function VehicleTypeSlider({
             <button
               type="button"
               onClick={() => onSelectType('')}
-              className={`flex items-center space-x-1.5 sm:space-x-2 px-3.5 py-2 sm:py-2.5 rounded-2xl border text-[11px] sm:text-xs font-bold shrink-0 transition-all shadow-sm cursor-pointer whitespace-nowrap active:scale-95 ${
+              className={`flex items-center space-x-2 px-4 py-2 rounded-2xl border text-xs font-mono font-bold shrink-0 transition-all shadow-sm cursor-pointer whitespace-nowrap active:scale-95 ${
                 !currentType
-                  ? 'border-[#16B8AA] bg-[#16B8AA] text-white ring-2 ring-[#16B8AA]/30'
-                  : 'border-white/70 bg-white/95 text-[#13322E] hover:bg-white hover:border-[#16B8AA]'
+                  ? 'border-black bg-black text-white ring-1 ring-black'
+                  : 'border-gray-200 bg-white text-gray-800 hover:border-gray-400 hover:text-black'
               }`}
             >
-              <LayoutGrid className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+              <LayoutGrid className="w-4 h-4 shrink-0" />
               <span>Todas las opciones</span>
             </button>
           ) : (
             <Link
               href={buildUrl('')}
-              className={`flex items-center space-x-1.5 sm:space-x-2 px-3.5 py-2 sm:py-2.5 rounded-2xl border text-[11px] sm:text-xs font-bold shrink-0 transition-all shadow-sm cursor-pointer whitespace-nowrap active:scale-95 ${
+              className={`flex items-center space-x-2 px-4 py-2 rounded-2xl border text-xs font-mono font-bold shrink-0 transition-all shadow-sm cursor-pointer whitespace-nowrap active:scale-95 ${
                 !currentType
-                  ? 'border-[#16B8AA] bg-[#16B8AA] text-white ring-2 ring-[#16B8AA]/30'
-                  : 'border-white/70 bg-white/95 text-[#13322E] hover:bg-white hover:border-[#16B8AA]'
+                  ? 'border-black bg-black text-white ring-1 ring-black'
+                  : 'border-gray-200 bg-white text-gray-800 hover:border-gray-400 hover:text-black'
               }`}
             >
-              <LayoutGrid className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+              <LayoutGrid className="w-4 h-4 shrink-0" />
               <span>Todas las opciones</span>
             </Link>
           )
         )}
 
-        {VEHICLE_SLIDER_ITEMS.map(({ id, label, iconName }) => {
-          const IconComponent = ICON_MAP[iconName] || CarFront;
+        {VEHICLE_SLIDER_ITEMS.map(({ id, label, icon: IconComponent }) => {
           const isActive = currentType === id;
 
           return onSelectType ? (
@@ -124,26 +112,26 @@ export default function VehicleTypeSlider({
               key={id}
               type="button"
               onClick={() => onSelectType(id)}
-              className={`flex items-center space-x-1.5 sm:space-x-2 px-3.5 py-2 sm:py-2.5 rounded-2xl border text-[11px] sm:text-xs font-bold shrink-0 transition-all shadow-sm cursor-pointer whitespace-nowrap active:scale-95 ${
+              className={`flex items-center space-x-2.5 px-4 py-1.5 rounded-2xl border text-xs font-mono font-bold shrink-0 transition-all shadow-sm cursor-pointer whitespace-nowrap active:scale-95 ${
                 isActive
-                  ? 'border-[#16B8AA] bg-[#16B8AA] text-white ring-2 ring-[#16B8AA]/30'
-                  : 'border-white/70 bg-white/95 text-[#13322E] hover:bg-white hover:border-[#16B8AA]'
+                  ? 'border-black bg-black text-white ring-1 ring-black'
+                  : 'border-gray-200 bg-white text-gray-800 hover:border-gray-400 hover:text-black'
               }`}
             >
-              <IconComponent className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+              <IconComponent className={`h-5 w-auto object-contain ${isActive ? 'brightness-0 invert' : ''}`} alt={label} />
               <span>{label}</span>
             </button>
           ) : (
             <Link
               key={id}
               href={buildUrl(id)}
-              className={`flex items-center space-x-1.5 sm:space-x-2 px-3.5 py-2 sm:py-2.5 rounded-2xl border text-[11px] sm:text-xs font-bold shrink-0 transition-all shadow-sm cursor-pointer whitespace-nowrap active:scale-95 ${
+              className={`flex items-center space-x-2.5 px-4 py-1.5 rounded-2xl border text-xs font-mono font-bold shrink-0 transition-all shadow-sm cursor-pointer whitespace-nowrap active:scale-95 ${
                 isActive
-                  ? 'border-[#16B8AA] bg-[#16B8AA] text-white ring-2 ring-[#16B8AA]/30'
-                  : 'border-white/70 bg-white/95 text-[#13322E] hover:bg-white hover:border-[#16B8AA]'
+                  ? 'border-black bg-black text-white ring-1 ring-black'
+                  : 'border-gray-200 bg-white text-gray-800 hover:border-gray-400 hover:text-black'
               }`}
             >
-              <IconComponent className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+              <IconComponent className={`h-5 w-auto object-contain ${isActive ? 'brightness-0 invert' : ''}`} alt={label} />
               <span>{label}</span>
             </Link>
           );
@@ -155,7 +143,7 @@ export default function VehicleTypeSlider({
         type="button"
         onClick={() => scroll('right')}
         aria-label="Deslizar a la derecha"
-        className="lg:hidden absolute right-1 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/95 text-[#13322E] shadow-md border border-[#E9E1D2] flex items-center justify-center hover:bg-[#16B8AA] hover:text-white transition-all cursor-pointer"
+        className="lg:hidden absolute right-1 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/95 text-black shadow-md border border-gray-200 flex items-center justify-center hover:bg-black hover:text-white transition-all cursor-pointer"
       >
         <ChevronRight className="w-4 h-4" />
       </button>

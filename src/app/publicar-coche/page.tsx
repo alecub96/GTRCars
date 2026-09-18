@@ -19,15 +19,25 @@ import {
   Image as ImageIcon,
 } from 'lucide-react';
 import {
-  HypercarSilhouette,
   SupercarV8Silhouette,
-  TrackGTSilhouette,
-  GranTurismoSilhouette,
   SpyderSilhouette,
+  SedanDeportivoSilhouette,
   SuperSUVSilhouette,
 } from '@/components/SupercarIcons';
-import OwnerLocationMapPicker from '@/components/OwnerLocationMapPicker';
+import dynamic from 'next/dynamic';
 import { analytics } from '@/lib/analytics';
+
+const OwnerLocationMapPicker = dynamic(
+  () => import('@/components/OwnerLocationMapPicker'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-80 rounded-2xl bg-gray-100 animate-pulse flex items-center justify-center text-xs font-mono text-gray-500 border border-gray-200">
+        Cargando mapa interactivo...
+      </div>
+    ),
+  }
+);
 
 const SUPERCAR_EQUIPMENT = [
   'Escape Deportivo Valvetronic',
@@ -45,27 +55,16 @@ const SUPERCAR_EQUIPMENT = [
 ];
 
 const SUPERCAR_CATEGORIES = [
-  { value: 'HYPERCAR', label: 'Hypercar V12 / Híbrido', icon: HypercarSilhouette, desc: 'Ferrari SF90, Revuelto, Aventador, 812' },
-  { value: 'SUPERCAR_V8_V10', label: 'Superdeportivo V8 / V10', icon: SupercarV8Silhouette, desc: 'Ferrari 296, Huracán, 750S, R8' },
-  { value: 'TRACK_TOY', label: 'Track Focused / GT', icon: TrackGTSilhouette, desc: 'Porsche 911 GT3 RS, AMG Black Series' },
-  { value: 'GRAN_TURISMO', label: 'Gran Turismo V8 / V12', icon: GranTurismoSilhouette, desc: 'Aston Martin DBS, Bentley Continental GT' },
-  { value: 'SPYDER_CABRIO', label: 'Spyder / Descapotable', icon: SpyderSilhouette, desc: 'F8 Spider, 750S Spider, 911 Cabrio' },
-  { value: 'SUV_LUXURY', label: 'Super SUV Deportivo', icon: SuperSUVSilhouette, desc: 'Lamborghini Urus, Purosangue, DBX707' },
+  { value: 'COUPE', label: 'Coupé', icon: SupercarV8Silhouette, desc: 'Porsche 911, Ferrari 296, Huracán, McLaren' },
+  { value: 'CABRIO', label: 'Descapotable', icon: SpyderSilhouette, desc: 'Spyder, Cabriolet, Targa, Roadster' },
+  { value: 'SEDAN_DEPORTIVO', label: 'Sedán Deportivo', icon: SedanDeportivoSilhouette, desc: 'Panamera, RS6, RS7, M5, AMG GT 4P' },
+  { value: 'SUV_DEPORTIVO', label: 'Super SUV', icon: SuperSUVSilhouette, desc: 'Lamborghini Urus, Purosangue, DBX, Cayenne GT' },
 ] as const;
 
-const VIP_LOCATIONS = [
-  { id: 'gran-canaria', name: 'Gran Canaria' },
-  { id: 'tenerife', name: 'Tenerife' },
-  { id: 'madrid', name: 'Madrid' },
-  { id: 'barcelona', name: 'Barcelona' },
-  { id: 'marbella', name: 'Marbella' },
-  { id: 'baleares', name: 'Baleares' },
-  { id: 'londres', name: 'Londres' },
-  { id: 'dubai', name: 'Dubái' },
-  { id: 'miami', name: 'Miami' },
-  { id: 'lanzarote', name: 'Lanzarote' },
-  { id: 'fuerteventura', name: 'Fuerteventura' },
-];
+import {
+  SUPERCAR_LOCATIONS,
+  getCitiesByCountry,
+} from '@/lib/supercar-locations';
 
 export default function PublishSupercarPage() {
   const router = useRouter();
@@ -81,19 +80,22 @@ export default function PublishSupercarPage() {
     analytics.track('vehicle_creation_start');
   }, []);
 
+  const [currentUser, setCurrentUser] = useState<any>(null);
+
   useEffect(() => {
     fetch('/api/auth/me')
       .then((response) => response.json())
       .then((data) => {
-        const isLoggedIn = Boolean(data.user);
-        setAuthorized(isLoggedIn);
-        if (!isLoggedIn) {
-          window.location.href = '/login?callbackUrl=/publicar-coche';
+        if (data.user) {
+          setCurrentUser(data.user);
+          setAuthorized(true);
+        } else {
+          // Si no está logueado, permitir rellenar el formulario e invocar modal al intentar publicar
+          setAuthorized(true);
         }
       })
       .catch(() => {
-        setAuthorized(false);
-        window.location.href = '/login?callbackUrl=/publicar-coche';
+        setAuthorized(true);
       });
   }, []);
 
@@ -101,18 +103,21 @@ export default function PublishSupercarPage() {
     title: '',
     brand: '',
     model: '',
-    vehicleType: 'SUPERCAR_V8_V10',
+    vehicleType: 'COUPE',
     year: new Date().getFullYear(),
-    island: 'Madrid',
+    countryCode: 'ES',
+    island: 'Madrid (Barajas / La Moraleja)',
     municipality: 'Madrid Centro / La Moraleja',
     passengers: 2,
     beds: 0,
     doors: 2,
-    transmission: 'AUTOMATIC', // Opciones exactas requeridas: 'AUTOMATIC' o 'MANUAL'
+    transmission: 'AUTOMATIC', // Opciones: 'AUTOMATIC' o 'MANUAL'
+    drivetrain: 'RWD', // 'RWD', 'AWD', 'FWD'
     fuelType: 'GASOLINE',
     fuelConsumption: '',
     powerCv: 650,
-    acceleration0100: 3.0,
+    acceleration0100: 3.0 as number | null,
+    accelerationUnknown: false,
     topSpeed: 330,
     basePricePerDay: 950,
     includedKmPerDay: 150,
@@ -230,6 +235,22 @@ export default function PublishSupercarPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateStep3()) return;
+
+    if (!currentUser) {
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(
+          new CustomEvent('open-auth-modal', {
+            detail: {
+              mode: 'register',
+              role: 'OWNER',
+              subtitle: 'Identifícate o crea tu cuenta de propietario para publicar tu anuncio en el Vault.',
+            },
+          })
+        );
+      }
+      setError('Debes iniciar sesión o registrarte como propietario para publicar el anuncio.');
+      return;
+    }
 
     setLoading(true);
     setError('');
@@ -378,7 +399,7 @@ export default function PublishSupercarPage() {
                   <legend className="mb-3 text-xs font-mono uppercase tracking-wider text-gray-600 font-bold">
                     Categoría de Vehículo
                   </legend>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                     {SUPERCAR_CATEGORIES.map(({ value, label, icon: Icon, desc }) => {
                       const selected = formData.vehicleType === value;
                       return (
@@ -387,22 +408,30 @@ export default function PublishSupercarPage() {
                           type="button"
                           aria-pressed={selected}
                           onClick={() => setFormData({ ...formData, vehicleType: value })}
-                          className={`group flex flex-col items-start p-4 rounded-2xl border text-left transition-all cursor-pointer ${
+                          className={`group relative flex flex-col justify-between p-4 rounded-2xl border text-left transition-all cursor-pointer min-h-[140px] ${
                             selected
                               ? 'border-black bg-gray-50 text-black ring-1 ring-black shadow-sm'
                               : 'border-gray-200 bg-white text-gray-600 hover:border-gray-400 hover:text-black'
                           }`}
                         >
-                          <div className="flex items-center justify-between w-full mb-3">
-                            <Icon className={`w-14 h-7 transition-all ${selected ? 'text-black scale-105' : 'text-gray-400 group-hover:text-black'}`} />
+                          {/* Indicador de selección */}
+                          <div className="absolute top-3.5 right-3.5">
                             {selected ? (
-                              <span className="h-2.5 w-2.5 rounded-full bg-black" />
+                              <span className="h-2.5 w-2.5 rounded-full bg-black block" />
                             ) : (
-                              <span className="h-2.5 w-2.5 rounded-full bg-gray-200 group-hover:bg-gray-400" />
+                              <span className="h-2.5 w-2.5 rounded-full bg-gray-200 group-hover:bg-gray-400 block" />
                             )}
                           </div>
-                          <span className="text-xs font-mono font-bold text-black block leading-tight">{label}</span>
-                          <span className="text-[10px] font-mono text-gray-500 mt-1 block leading-tight">{desc}</span>
+
+                          {/* Silueta grande y destacada en el recuadro */}
+                          <div className="w-full h-16 sm:h-20 flex items-center justify-start pr-6 mb-2">
+                            <Icon className={`h-full w-full object-contain object-left transition-all duration-200 ${selected ? 'scale-105 opacity-100' : 'opacity-70 group-hover:opacity-100'}`} />
+                          </div>
+
+                          <div>
+                            <span className="text-xs font-mono font-bold text-black block leading-tight">{label}</span>
+                            <span className="text-[10px] font-mono text-gray-500 mt-1 block leading-tight">{desc}</span>
+                          </div>
                         </button>
                       );
                     })}
@@ -465,24 +494,153 @@ export default function PublishSupercarPage() {
                   </div>
                 </div>
 
-                {/* UBICACIÓN: PAÍS / CIUDAD / ZONA */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* ESPECIFICACIONES CLAVE: CV, CAJA, TRACCIÓN Y 0-100 */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {/* POTENCIA (CV) */}
                   <div>
-                    <label className="block text-xs font-mono uppercase tracking-wider text-gray-700 font-bold mb-1">Ciudad / Base VIP</label>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-gray-700 font-bold mb-1">
+                      Potencia (CV)
+                    </label>
+                    <input
+                      type="number"
+                      placeholder="Ej. 525"
+                      value={formData.powerCv || ''}
+                      onChange={(e) => handleNumberInput('powerCv', e.target.value)}
+                      className="w-full p-3.5 rounded-xl border border-gray-300 bg-white text-sm font-mono text-black font-bold focus:outline-none focus:border-black"
+                    />
+                  </div>
+
+                  {/* CAJA DE CAMBIOS */}
+                  <div>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-gray-700 font-bold mb-1">
+                      Caja de Cambios
+                    </label>
+                    <select
+                      value={formData.transmission}
+                      onChange={(e) => setFormData({ ...formData, transmission: e.target.value })}
+                      className="w-full p-3.5 rounded-xl border border-gray-300 bg-white text-sm font-mono text-black focus:outline-none focus:border-black cursor-pointer"
+                    >
+                      <option value="AUTOMATIC">Automática (PDK / DKG / Secuencial)</option>
+                      <option value="MANUAL">Manual</option>
+                    </select>
+                  </div>
+
+                  {/* TRACCIÓN */}
+                  <div>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-gray-700 font-bold mb-1">
+                      Tracción
+                    </label>
+                    <select
+                      value={formData.drivetrain}
+                      onChange={(e) => setFormData({ ...formData, drivetrain: e.target.value })}
+                      className="w-full p-3.5 rounded-xl border border-gray-300 bg-white text-sm font-mono text-black focus:outline-none focus:border-black cursor-pointer"
+                    >
+                      <option value="RWD">Trasera (RWD)</option>
+                      <option value="AWD">Total (AWD / 4x4)</option>
+                      <option value="FWD">Delantera (FWD)</option>
+                    </select>
+                  </div>
+
+                  {/* 0-100 KM/H CON OPCIÓN 'NO LO SÉ' */}
+                  <div>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="block text-xs font-mono uppercase tracking-wider text-gray-700 font-bold">
+                        0 a 100 km/h
+                      </label>
+                      <label className="inline-flex items-center gap-1.5 text-[11px] font-mono text-gray-500 cursor-pointer select-none hover:text-black">
+                        <input
+                          type="checkbox"
+                          checked={formData.accelerationUnknown}
+                          onChange={(e) => {
+                            const isUnknown = e.target.checked;
+                            setFormData({
+                              ...formData,
+                              accelerationUnknown: isUnknown,
+                              acceleration0100: isUnknown ? null : 3.0,
+                            });
+                          }}
+                          className="rounded accent-black cursor-pointer w-3.5 h-3.5"
+                        />
+                        <span>No lo sé</span>
+                      </label>
+                    </div>
+                    {formData.accelerationUnknown ? (
+                      <div className="w-full p-3.5 rounded-xl border border-dashed border-gray-300 bg-gray-50 text-xs font-mono text-gray-500 flex items-center justify-center">
+                        No especificado
+                      </div>
+                    ) : (
+                      <div className="relative">
+                        <input
+                          type="number"
+                          step="0.1"
+                          placeholder="Ej. 3.2"
+                          value={formData.acceleration0100 ?? ''}
+                          onChange={(e) => {
+                            const val = e.target.value === '' ? null : Number(e.target.value);
+                            setFormData({ ...formData, acceleration0100: val });
+                          }}
+                          className="w-full p-3.5 rounded-xl border border-gray-300 bg-white text-sm font-mono text-black focus:outline-none focus:border-black pr-8"
+                        />
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-mono text-gray-400">
+                          seg
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* UBICACIÓN: PAÍS, CIUDAD Y ZONA */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  {/* 1. PAÍS */}
+                  <div>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-gray-700 font-bold mb-1">
+                      País
+                    </label>
+                    <select
+                      value={formData.countryCode}
+                      onChange={(e) => {
+                        const newCountry = e.target.value;
+                        const availableCities = getCitiesByCountry(newCountry);
+                        const defaultCity = availableCities[0]?.name || '';
+                        setFormData({
+                          ...formData,
+                          countryCode: newCountry,
+                          island: defaultCity,
+                        });
+                      }}
+                      className="w-full p-3.5 rounded-xl border border-gray-300 bg-white text-sm font-mono text-black focus:outline-none focus:border-black cursor-pointer"
+                    >
+                      {SUPERCAR_LOCATIONS.map((c) => (
+                        <option key={c.code} value={c.code}>
+                          {c.flag} {c.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* 2. CIUDAD / BASE VIP (DEPENDIENTE DEL PAÍS) */}
+                  <div>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-gray-700 font-bold mb-1">
+                      Ciudad / Base VIP
+                    </label>
                     <select
                       value={formData.island}
                       onChange={(e) => setFormData({ ...formData, island: e.target.value })}
                       className="w-full p-3.5 rounded-xl border border-gray-300 bg-white text-sm font-mono text-black focus:outline-none focus:border-black cursor-pointer"
                     >
-                      {VIP_LOCATIONS.map((loc) => (
-                        <option key={loc.id} value={loc.name}>
-                          {loc.name}
+                      {getCitiesByCountry(formData.countryCode).map((city) => (
+                        <option key={city.id} value={city.name}>
+                          {city.name} {city.popular ? '★' : ''}
                         </option>
                       ))}
                     </select>
                   </div>
+
+                  {/* 3. ZONA / BARRIO / AEROPUERTO */}
                   <div>
-                    <label className="block text-xs font-mono uppercase tracking-wider text-gray-700 font-bold mb-1">Zona / Barrio / Aeropuerto</label>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-gray-700 font-bold mb-1">
+                      Zona / Barrio / Aeropuerto
+                    </label>
                     <input
                       type="text"
                       required
@@ -540,28 +698,17 @@ export default function PublishSupercarPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-xs font-mono uppercase tracking-wider text-gray-700 font-bold mb-1">Potencia (CV)</label>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-gray-700 font-bold mb-1">Velocidad Máx. (km/h)</label>
                     <input
                       type="number"
-                      placeholder="Ej. 650"
-                      value={formData.powerCv || ''}
-                      onChange={(e) => handleNumberInput('powerCv', e.target.value)}
+                      placeholder="Ej. 330"
+                      value={formData.topSpeed || ''}
+                      onChange={(e) => handleNumberInput('topSpeed', e.target.value)}
                       className="w-full p-3.5 rounded-xl border border-gray-300 bg-white text-sm font-mono text-black font-bold focus:border-black outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-mono uppercase tracking-wider text-gray-700 font-bold mb-1">0-100 km/h (s)</label>
-                    <input
-                      type="number"
-                      step="0.1"
-                      placeholder="Ej. 3.0"
-                      value={formData.acceleration0100 || ''}
-                      onChange={(e) => handleNumberInput('acceleration0100', e.target.value)}
-                      className="w-full p-3.5 rounded-xl border border-gray-300 bg-white text-sm font-mono text-black focus:border-black outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-mono uppercase tracking-wider text-gray-700 font-bold mb-1">Plazas</label>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-gray-700 font-bold mb-1">Plazas Homologadas</label>
                     <input
                       type="number"
                       min="1"
@@ -571,34 +718,17 @@ export default function PublishSupercarPage() {
                       className="w-full p-3.5 rounded-xl border border-gray-300 bg-white text-sm font-mono text-black focus:border-black outline-none"
                     />
                   </div>
-                </div>
-
-                {/* CAJA DE CAMBIOS Y COMBUSTIBLE */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-mono uppercase tracking-wider text-gray-700 font-bold mb-1">
-                      Caja de Cambios
-                    </label>
-                    <select
-                      value={formData.transmission}
-                      onChange={(e) => setFormData({ ...formData, transmission: e.target.value })}
-                      className="w-full p-3.5 rounded-xl border border-gray-300 bg-white text-sm font-mono text-black focus:border-black outline-none cursor-pointer"
-                    >
-                      <option value="AUTOMATIC">Automático</option>
-                      <option value="MANUAL">Manual</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-mono uppercase tracking-wider text-gray-700 font-bold mb-1">
-                      Motorización / Combustible
+                      Combustible / Propulsión
                     </label>
                     <select
                       value={formData.fuelType}
                       onChange={(e) => setFormData({ ...formData, fuelType: e.target.value })}
                       className="w-full p-3.5 rounded-xl border border-gray-300 bg-white text-sm font-mono text-black focus:border-black outline-none cursor-pointer"
                     >
-                      <option value="GASOLINE">Gasolina</option>
-                      <option value="HYBRID">Híbrido</option>
+                      <option value="GASOLINE">Gasolina Premium 98</option>
+                      <option value="HYBRID">Híbrido / Enchufable</option>
                       <option value="ELECTRIC">100% Eléctrico</option>
                       <option value="DIESEL">Diésel</option>
                     </select>

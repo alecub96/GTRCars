@@ -22,6 +22,7 @@ import {
   User,
   HeartHandshake,
   FileText,
+  Plus,
 } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -128,7 +129,7 @@ export default function Navbar() {
           {/* SÓLO PARA USUARIO ANÓNIMO O PROPIETARIO */}
           {role === 'ANONYMOUS' && (
             <Link href="/publicar-coche" className="px-4 py-1.5 rounded-full border border-black text-black hover:bg-black hover:text-white transition-all font-bold">
-              PUBLICAR MI COCHE
+              PUBLICAR ANUNCIO
             </Link>
           )}
 
@@ -138,7 +139,7 @@ export default function Navbar() {
                 PANEL PROPIETARIO
               </Link>
               <Link href="/publicar-coche" className="px-4 py-1.5 rounded-full bg-black text-white font-bold hover:bg-neutral-800 transition-all">
-                + AÑADIR VEHÍCULO
+                + PUBLICAR ANUNCIO
               </Link>
             </>
           )}
@@ -309,14 +310,24 @@ export default function Navbar() {
                     </Link>
 
                     {user.role === 'OWNER' && (
-                      <Link
-                        onClick={() => setMobileOpen(false)}
-                        href="/propietario"
-                        className="flex items-center space-x-3 rounded-xl p-3 bg-gray-100 text-black border border-gray-200 transition-colors"
-                      >
-                        <Truck className="w-4 h-4 text-black" />
-                        <span>Panel de Propietario</span>
-                      </Link>
+                      <>
+                        <Link
+                          onClick={() => setMobileOpen(false)}
+                          href="/propietario"
+                          className="flex items-center space-x-3 rounded-xl p-3 bg-gray-100 text-black border border-gray-200 transition-colors"
+                        >
+                          <Truck className="w-4 h-4 text-black" />
+                          <span>Panel de Propietario</span>
+                        </Link>
+                        <Link
+                          onClick={() => setMobileOpen(false)}
+                          href="/publicar-coche"
+                          className="flex items-center space-x-3 rounded-xl p-3 bg-black text-white font-bold transition-colors"
+                        >
+                          <Plus className="w-4 h-4" />
+                          <span>+ Publicar Anuncio</span>
+                        </Link>
+                      </>
                     )}
 
                     {user.role === 'TRAVELER' && (
@@ -361,6 +372,15 @@ export default function Navbar() {
                   Explorar Plataforma
                 </span>
                 <div className="grid gap-1 text-xs font-bold text-gray-700">
+                  <Link
+                    onClick={() => setMobileOpen(false)}
+                    href="/publicar-coche"
+                    className="flex items-center space-x-3 rounded-xl p-3 hover:bg-gray-100 transition-colors hover:text-black"
+                  >
+                    <Plus className="w-4 h-4 text-black" />
+                    <span>Publicar Anuncio</span>
+                  </Link>
+
                   <Link
                     onClick={() => setMobileOpen(false)}
                     href="/buscar"

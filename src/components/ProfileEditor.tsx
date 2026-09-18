@@ -330,7 +330,7 @@ export default function ProfileEditor({ user }: { user: any }) {
                   <Sparkles className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-black font-sans">+ Añadir Superdeportivo</h4>
+                  <h4 className="text-sm font-bold text-black font-sans">+ Publicar Anuncio</h4>
                   <p className="text-xs text-gray-500 font-sans">Publica un nuevo vehículo en el catálogo</p>
                 </div>
               </div>

@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Compass, ShieldCheck, LocateFixed } from 'lucide-react';
+import { Compass, LocateFixed } from 'lucide-react';
+import { getCoordinatesForLocation } from '@/lib/supercar-locations';
+import 'leaflet/dist/leaflet.css';
 
 interface OwnerLocationMapPickerProps {
   island: string;
@@ -12,76 +14,6 @@ interface OwnerLocationMapPickerProps {
   onChange: (data: { latitude: number; longitude: number; addressApprox: string }) => void;
 }
 
-const ISLAND_BOUNDS: Record<string, { lat: number; lng: number; bounds: { minLat: number; maxLat: number; minLng: number; maxLng: number } }> = {
-  'Gran Canaria': {
-    lat: 27.9600,
-    lng: -15.5800,
-    bounds: { minLat: 27.70, maxLat: 28.20, minLng: -15.85, maxLng: -15.35 },
-  },
-  'Tenerife': {
-    lat: 28.2915,
-    lng: -16.6291,
-    bounds: { minLat: 28.00, maxLat: 28.60, minLng: -16.95, maxLng: -16.10 },
-  },
-  'Lanzarote': {
-    lat: 29.0469,
-    lng: -13.5899,
-    bounds: { minLat: 28.80, maxLat: 29.30, minLng: -13.90, maxLng: -13.40 },
-  },
-  'Fuerteventura': {
-    lat: 28.3587,
-    lng: -14.0536,
-    bounds: { minLat: 28.05, maxLat: 28.75, minLng: -14.50, maxLng: -13.80 },
-  },
-  'La Palma': {
-    lat: 28.6835,
-    lng: -17.8339,
-    bounds: { minLat: 28.45, maxLat: 28.90, minLng: -18.05, maxLng: -17.70 },
-  },
-  'La Gomera': {
-    lat: 28.1173,
-    lng: -17.2250,
-    bounds: { minLat: 28.00, maxLat: 28.25, minLng: -17.35, maxLng: -17.05 },
-  },
-  'El Hierro': {
-    lat: 27.7470,
-    lng: -18.0163,
-    bounds: { minLat: 27.60, maxLat: 27.90, minLng: -18.20, maxLng: -17.85 },
-  },
-  'La Graciosa': {
-    lat: 29.2500,
-    lng: -13.5000,
-    bounds: { minLat: 29.20, maxLat: 29.30, minLng: -13.55, maxLng: -13.45 },
-  },
-};
-
-const MUNICIPALITY_PRESETS: Record<string, { lat: number; lng: number; label: string }[]> = {
-  'Gran Canaria': [
-    { lat: 28.1235, lng: -15.4363, label: 'Las Palmas de Gran Canaria (Triana / Puerto)' },
-    { lat: 27.9319, lng: -15.3866, label: 'Aeropuerto Gran Canaria (LPA VIP Lounge)' },
-    { lat: 27.7606, lng: -15.5860, label: 'Maspalomas / Meloneras Resort' },
-    { lat: 27.8180, lng: -15.7640, label: 'Puerto Rico / Anfi del Mar' },
-    { lat: 28.1470, lng: -15.6540, label: 'Gáldar / Agaete' },
-  ],
-  'Tenerife': [
-    { lat: 28.4636, lng: -16.2518, label: 'Santa Cruz de Tenerife (Muelle VIP)' },
-    { lat: 28.0444, lng: -16.5725, label: 'Aeropuerto Tenerife Sur (TFS VIP)' },
-    { lat: 28.0550, lng: -16.7150, label: 'Costa Adeje / Playa del Duque' },
-    { lat: 28.4874, lng: -16.3159, label: 'La Laguna / Aeropuerto TFN' },
-    { lat: 28.4160, lng: -16.5500, label: 'Puerto de la Cruz' },
-  ],
-  'Lanzarote': [
-    { lat: 28.9630, lng: -13.5470, label: 'Arrecife / Marina Lanzarote' },
-    { lat: 28.9450, lng: -13.6050, label: 'Aeropuerto César Manrique (ACE VIP)' },
-    { lat: 28.8600, lng: -13.8200, label: 'Playa Blanca / Marina Rubicón' },
-  ],
-  'Fuerteventura': [
-    { lat: 28.5000, lng: -13.8600, label: 'Puerto del Rosario / Aeropuerto FUE' },
-    { lat: 28.7300, lng: -13.8700, label: 'Corralejo Resort' },
-    { lat: 28.0500, lng: -14.3500, label: 'Morro Jable / Jandía' },
-  ],
-};
-
 export default function OwnerLocationMapPicker({
   island,
   municipality,
@@ -90,98 +22,140 @@ export default function OwnerLocationMapPicker({
   initialAddressApprox = '',
   onChange,
 }: OwnerLocationMapPickerProps) {
-  const currentIslandConfig = ISLAND_BOUNDS[island] || ISLAND_BOUNDS['Gran Canaria'];
-  
+  const defaultCoords = getCoordinatesForLocation(island);
+
   const [selectedCoords, setSelectedCoords] = useState<{ lat: number; lng: number }>({
-    lat: initialLat || currentIslandConfig.lat,
-    lng: initialLng || currentIslandConfig.lng,
+    lat: initialLat ?? defaultCoords.lat,
+    lng: initialLng ?? defaultCoords.lng,
   });
-  const [addressApprox, setAddressApprox] = useState<string>(initialAddressApprox || municipality);
+
+  const [addressApprox, setAddressApprox] = useState<string>(
+    initialAddressApprox || municipality || island
+  );
+
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<any>(null);
   const markerRef = useRef<any>(null);
   const circleRef = useRef<any>(null);
-  const [mapReady, setMapReady] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    const cssId = 'owner-location-leaflet-css';
-    const scriptId = 'owner-location-leaflet-js';
-    if (!document.getElementById(cssId)) {
-      const link = document.createElement('link');
-      link.id = cssId;
-      link.rel = 'stylesheet';
-      link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
-      document.head.appendChild(link);
-    }
-
-    const initialiseMap = () => {
-      if (!mapContainerRef.current || mapRef.current || !(window as any).L) return;
-      const L = (window as any).L;
-      const map = L.map(mapContainerRef.current, { scrollWheelZoom: true }).setView(
-        [selectedCoords.lat, selectedCoords.lng],
-        10,
-      );
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors',
-        maxZoom: 19,
-      }).addTo(map);
-      map.on('click', (event: any) => {
-        const next = { lat: Number(event.latlng.lat.toFixed(6)), lng: Number(event.latlng.lng.toFixed(6)) };
-        setSelectedCoords(next);
-        onChange({ latitude: next.lat, longitude: next.lng, addressApprox });
-      });
-      mapRef.current = map;
-      setMapReady(true);
-    };
-
-    const existing = document.getElementById(scriptId);
-    if (existing) {
-      initialiseMap();
-    } else {
-      const script = document.createElement('script');
-      script.id = scriptId;
-      script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-      script.onload = initialiseMap;
-      document.body.appendChild(script);
-    }
-    return () => {
-      mapRef.current?.remove();
-      mapRef.current = null;
-    };
+    setIsMounted(true);
   }, []);
 
+  // Inicializar Leaflet directamente desde node_modules (100% local, sin CDN unpkg)
   useEffect(() => {
-    const map = mapRef.current;
-    const L = (window as any).L;
-    if (!map || !L) return;
-    map.setView([selectedCoords.lat, selectedCoords.lng]);
-    markerRef.current?.remove();
-    circleRef.current?.remove();
-    markerRef.current = L.marker([selectedCoords.lat, selectedCoords.lng], { draggable: true })
-      .addTo(map)
-      .bindTooltip('Arrastra el pin al punto de entrega VIP', { permanent: true, direction: 'top' });
-    markerRef.current.on('dragend', () => {
-      const position = markerRef.current.getLatLng();
-      const next = { lat: Number(position.lat.toFixed(6)), lng: Number(position.lng.toFixed(6)) };
-      setSelectedCoords(next);
-      onChange({ latitude: next.lat, longitude: next.lng, addressApprox });
+    if (!isMounted || !mapContainerRef.current || mapRef.current) return;
+
+    let isCleanedUp = false;
+
+    import('leaflet').then((leafletModule) => {
+      if (isCleanedUp || !mapContainerRef.current) return;
+      const L = leafletModule.default || leafletModule;
+
+      try {
+        const map = L.map(mapContainerRef.current, {
+          center: [selectedCoords.lat, selectedCoords.lng],
+          zoom: 12,
+          scrollWheelZoom: true,
+          zoomControl: true,
+        });
+
+        // OpenStreetMap oficial estándar con HTTPS garantizado
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          subdomains: ['a', 'b', 'c'],
+          attribution: '&copy; OpenStreetMap contributors',
+        }).addTo(map);
+
+        // Pin de estilo deportivo de alto contraste
+        const customIcon = L.divIcon({
+          className: 'gtr-custom-pin',
+          html: `
+            <div style="background-color: #000; color: #fff; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2.5px solid #fff; box-shadow: 0 4px 14px rgba(0,0,0,0.45); cursor: pointer;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+            </div>
+          `,
+          iconSize: [34, 34],
+          iconAnchor: [17, 34],
+        });
+
+        const marker = L.marker([selectedCoords.lat, selectedCoords.lng], {
+          draggable: true,
+          icon: customIcon,
+        }).addTo(map);
+
+        const circle = L.circle([selectedCoords.lat, selectedCoords.lng], {
+          radius: 1200,
+          color: '#000000',
+          fillColor: '#000000',
+          fillOpacity: 0.08,
+          weight: 1.5,
+          dashArray: '4, 6',
+        }).addTo(map);
+
+        marker.on('dragend', () => {
+          const pos = marker.getLatLng();
+          const next = {
+            lat: Number(pos.lat.toFixed(6)),
+            lng: Number(pos.lng.toFixed(6)),
+          };
+          setSelectedCoords(next);
+          circle.setLatLng([next.lat, next.lng]);
+          onChange({ latitude: next.lat, longitude: next.lng, addressApprox });
+        });
+
+        map.on('click', (e: any) => {
+          const next = {
+            lat: Number(e.latlng.lat.toFixed(6)),
+            lng: Number(e.latlng.lng.toFixed(6)),
+          };
+          setSelectedCoords(next);
+          marker.setLatLng([next.lat, next.lng]);
+          circle.setLatLng([next.lat, next.lng]);
+          onChange({ latitude: next.lat, longitude: next.lng, addressApprox });
+        });
+
+        mapRef.current = map;
+        markerRef.current = marker;
+        circleRef.current = circle;
+
+        // Invalidate size en intervalos para asegurar que las teselas pinten inmediatamente
+        map.invalidateSize();
+        setTimeout(() => map.invalidateSize(), 150);
+        setTimeout(() => map.invalidateSize(), 400);
+      } catch (err) {
+        console.error('Leaflet mount error:', err);
+      }
     });
-    circleRef.current = L.circle([selectedCoords.lat, selectedCoords.lng], { radius: 1500, color: '#D4AF37', fillColor: '#D4AF37', fillOpacity: 0.18 }).addTo(map);
-  }, [selectedCoords, mapReady]);
 
+    return () => {
+      isCleanedUp = true;
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
+    };
+  }, [isMounted]);
+
+  // Al cambiar la ciudad seleccionada
   useEffect(() => {
-    const newConfig = ISLAND_BOUNDS[island] || ISLAND_BOUNDS['Gran Canaria'];
-    setSelectedCoords({ lat: newConfig.lat, lng: newConfig.lng });
-    onChange({ latitude: newConfig.lat, longitude: newConfig.lng, addressApprox });
+    const coords = getCoordinatesForLocation(island);
+    setSelectedCoords({ lat: coords.lat, lng: coords.lng });
+    const newAddress = municipality || island;
+    setAddressApprox(newAddress);
+    onChange({ latitude: coords.lat, longitude: coords.lng, addressApprox: newAddress });
+
+    if (mapRef.current) {
+      mapRef.current.setView([coords.lat, coords.lng], 12);
+      if (markerRef.current) markerRef.current.setLatLng([coords.lat, coords.lng]);
+      if (circleRef.current) circleRef.current.setLatLng([coords.lat, coords.lng]);
+      mapRef.current.invalidateSize();
+    }
   }, [island]);
-
-  const handleSelectPreset = (preset: { lat: number; lng: number; label: string }) => {
-    setSelectedCoords({ lat: preset.lat, lng: preset.lng });
-    setAddressApprox(preset.label);
-    onChange({ latitude: preset.lat, longitude: preset.lng, addressApprox: preset.label });
-  };
-
-  const presets = MUNICIPALITY_PRESETS[island] || [];
 
   const updateCoordinate = (key: 'lat' | 'lng', value: string) => {
     const numericValue = Number(value);
@@ -189,98 +163,127 @@ export default function OwnerLocationMapPicker({
     const next = { ...selectedCoords, [key]: numericValue };
     setSelectedCoords(next);
     onChange({ latitude: next.lat, longitude: next.lng, addressApprox });
+
+    if (mapRef.current && markerRef.current && circleRef.current) {
+      mapRef.current.setView([next.lat, next.lng], mapRef.current.getZoom() || 12);
+      markerRef.current.setLatLng([next.lat, next.lng]);
+      circleRef.current.setLatLng([next.lat, next.lng]);
+    }
   };
 
   const useBrowserLocation = () => {
     if (!navigator.geolocation) return;
-    navigator.geolocation.getCurrentPosition(({ coords }) => {
-      const { minLat, maxLat, minLng, maxLng } = currentIslandConfig.bounds;
-      if (coords.latitude < minLat || coords.latitude > maxLat || coords.longitude < minLng || coords.longitude > maxLng) return;
-      const next = { lat: Number(coords.latitude.toFixed(6)), lng: Number(coords.longitude.toFixed(6)) };
-      setSelectedCoords(next);
-      onChange({ latitude: next.lat, longitude: next.lng, addressApprox });
-    });
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        const next = {
+          lat: Number(coords.latitude.toFixed(6)),
+          lng: Number(coords.longitude.toFixed(6)),
+        };
+        setSelectedCoords(next);
+        onChange({ latitude: next.lat, longitude: next.lng, addressApprox });
+        if (mapRef.current && markerRef.current && circleRef.current) {
+          mapRef.current.setView([next.lat, next.lng], 14);
+          markerRef.current.setLatLng([next.lat, next.lng]);
+          circleRef.current.setLatLng([next.lat, next.lng]);
+        }
+      },
+      (err) => {
+        console.warn('Geolocation error:', err);
+      },
+      { enableHighAccuracy: true, timeout: 8000 }
+    );
   };
 
   return (
-    <div className="space-y-4 bg-[#0f0f12] p-5 sm:p-6 rounded-3xl border border-white/10 shadow-xl">
-      <div>
-        <div className="flex items-center space-x-2 text-[10px] font-mono uppercase tracking-[0.2em] text-[#D4AF37] mb-1">
-          <Compass className="w-3.5 h-3.5" />
-          <span>Geolocalización de Entrega Vault</span>
-        </div>
-        <h3 className="text-lg font-serif font-bold text-white">
-          Ubicación aproximada de entrega ({island})
-        </h3>
-        <p className="text-xs text-neutral-400 font-mono mt-1">
-          Arrastra el pin hasta la <strong>zona o hangar de custodia</strong> de tu superdeportivo.
-        </p>
-      </div>
-
-      {/* PUNTOS RÁPIDOS HABITUALES */}
-      {presets.length > 0 && (
-        <div className="space-y-1.5">
-          <span className="text-[10px] font-mono uppercase text-neutral-400 tracking-wider block">
-            Puntos habituales de entrega VIP en {island}:
-          </span>
-          <div className="flex flex-wrap gap-2">
-            {presets.map((preset, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => handleSelectPreset(preset)}
-                className={`px-3 py-1.5 rounded-full text-xs font-mono font-bold transition-all border cursor-pointer ${
-                  addressApprox === preset.label
-                    ? 'bg-[#D4AF37] text-black border-[#D4AF37] shadow-sm'
-                    : 'bg-neutral-900 text-neutral-300 border-white/10 hover:border-[#D4AF37]/50'
-                }`}
-              >
-                <span>{preset.label}</span>
-              </button>
-            ))}
+    <div className="space-y-4 bg-white p-6 rounded-3xl border border-gray-200 shadow-sm font-sans">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-gray-100 pb-4">
+        <div>
+          <div className="flex items-center space-x-2 text-[10px] font-mono uppercase tracking-[0.2em] text-gray-500 font-bold mb-1">
+            <Compass className="w-3.5 h-3.5 text-black" />
+            <span>Punto de Custodia y Entrega</span>
           </div>
+          <h3 className="text-base sm:text-lg font-bold text-black font-sans">
+            Geolocalización en {island || 'Base VIP'}
+          </h3>
+          <p className="text-xs text-gray-500 font-mono mt-0.5">
+            Haz clic en el mapa o arrastra el pin para ubicar la zona o hangar de entrega.
+          </p>
         </div>
-      )}
 
-      {/* MAPA INTERACTIVO */}
-      <div ref={mapContainerRef} className="relative z-0 h-64 sm:h-72 w-full rounded-2xl border border-white/10 overflow-hidden cursor-crosshair shadow-inner" />
-
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <label className="text-[10px] font-mono uppercase tracking-wider text-neutral-400">
-          Latitud
-          <input type="number" step="0.000001" value={selectedCoords.lat} onChange={(event) => updateCoordinate('lat', event.target.value)} className="mt-1 w-full rounded-xl border border-white/15 bg-neutral-900 p-3 text-sm font-mono font-semibold text-white focus:border-[#D4AF37] outline-none" />
-        </label>
-        <label className="text-[10px] font-mono uppercase tracking-wider text-neutral-400">
-          Longitud
-          <input type="number" step="0.000001" value={selectedCoords.lng} onChange={(event) => updateCoordinate('lng', event.target.value)} className="mt-1 w-full rounded-xl border border-white/15 bg-neutral-900 p-3 text-sm font-mono font-semibold text-white focus:border-[#D4AF37] outline-none" />
-        </label>
-        <button type="button" onClick={useBrowserLocation} className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl border border-[#D4AF37]/30 bg-[#D4AF37]/10 px-3 py-3 text-xs font-mono font-bold text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition-colors">
-          <LocateFixed className="h-4 w-4" /> Usar mi ubicación
+        <button
+          type="button"
+          onClick={useBrowserLocation}
+          className="inline-flex items-center gap-2 rounded-xl border border-gray-300 bg-gray-50 px-3.5 py-2.5 text-xs font-mono font-bold text-black hover:bg-black hover:text-white transition-all cursor-pointer shadow-xs shrink-0"
+        >
+          <LocateFixed className="h-4 w-4" />
+          <span>Mi ubicación actual</span>
         </button>
       </div>
 
-      {/* DESCRIPCIÓN DE LA ZONA / REFERENCIA */}
-      <div>
-        <label className="block text-[10px] font-mono uppercase text-neutral-400 mb-1">
-          Zona o punto de entrega concierge visible para clientes
-        </label>
-        <input
-          type="text"
-          value={addressApprox}
-          onChange={(e) => {
-            setAddressApprox(e.target.value);
-            onChange({ latitude: selectedCoords.lat, longitude: selectedCoords.lng, addressApprox: e.target.value });
-          }}
-          placeholder="Ej: Terminal VIP Aeropuerto de Gran Canaria / Hotel Resort Costa Adeje"
-          className="w-full p-3 rounded-xl border border-white/15 bg-neutral-900 text-xs font-mono text-white focus:border-[#D4AF37] outline-none"
+      {/* MAPA INTERACTIVO */}
+      <div className="relative w-full rounded-2xl border border-gray-200 overflow-hidden shadow-xs bg-gray-100 h-[340px]">
+        <div
+          ref={mapContainerRef}
+          className="w-full h-full cursor-crosshair"
+          style={{ width: '100%', height: '340px', minHeight: '340px' }}
         />
       </div>
 
+      {/* CAMPOS DE COORDENADAS Y REFERENCIA */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-[10px] font-mono uppercase tracking-wider text-gray-600 font-bold mb-1">
+            Latitud
+          </label>
+          <input
+            type="number"
+            step="0.000001"
+            value={selectedCoords.lat}
+            onChange={(e) => updateCoordinate('lat', e.target.value)}
+            className="w-full p-3 rounded-xl border border-gray-300 bg-white text-sm font-mono text-black font-bold focus:outline-none focus:border-black"
+          />
+        </div>
+
+        <div>
+          <label className="block text-[10px] font-mono uppercase tracking-wider text-gray-600 font-bold mb-1">
+            Longitud
+          </label>
+          <input
+            type="number"
+            step="0.000001"
+            value={selectedCoords.lng}
+            onChange={(e) => updateCoordinate('lng', e.target.value)}
+            className="w-full p-3 rounded-xl border border-gray-300 bg-white text-sm font-mono text-black font-bold focus:outline-none focus:border-black"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label className="block text-[10px] font-mono uppercase tracking-wider text-gray-600 font-bold mb-1">
+          Zona o Punto de Entrega Concierge visible para clientes
+        </label>
+        <div className="relative">
+          <input
+            type="text"
+            value={addressApprox}
+            onChange={(e) => {
+              setAddressApprox(e.target.value);
+              onChange({ ...selectedCoords, latitude: selectedCoords.lat, longitude: selectedCoords.lng, addressApprox: e.target.value });
+            }}
+            placeholder="Ej. Aeropuerto Adolfo Suárez Madrid-Barajas (Terminal Ejecutiva T4)"
+            className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 bg-white text-sm font-mono text-black focus:outline-none focus:border-black"
+          />
+          <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+        </div>
+      </div>
+
       {/* AVISO DE PRIVACIDAD */}
-      <div className="p-3.5 rounded-xl bg-neutral-900/90 border border-white/10 text-[11px] font-mono text-neutral-300 flex items-start space-x-2">
-        <ShieldCheck className="w-4 h-4 text-[#D4AF37] shrink-0 mt-0.5" />
-        <p>
-          <strong>Protocolo de Privacidad y Discreción:</strong> La dirección exacta del garaje o hangar nunca se revela públicamente. Los clientes únicamente verán el radio de recogida hasta formalizar la fianza y verificación de identidad.
+      <div className="p-3.5 rounded-xl bg-gray-50 border border-gray-200 text-xs font-mono text-gray-600 flex items-start gap-3">
+        <span className="font-bold text-black mt-0.5 shrink-0">🛡</span>
+        <p className="text-[11px] leading-relaxed">
+          <strong className="text-black">Protocolo de Privacidad y Discreción:</strong> La dirección exacta del hangar o garaje privado nunca se publica. Los clientes verificados solo ven el radio de proximidad general hasta confirmar la reserva y fianza.
         </p>
       </div>
     </div>

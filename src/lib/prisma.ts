@@ -37,8 +37,8 @@ const adapter = new PrismaMariaDb({
   password: creds.password,
   database: creds.database,
   connectionLimit: 10,
-  connectTimeout: 6_000,
-  acquireTimeout: 6_000,
+  connectTimeout: 15_000,
+  acquireTimeout: 15_000,
   idleTimeout: 60_000,
 });
 

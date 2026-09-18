@@ -6,8 +6,45 @@ import { ensureDbSchema } from '@/lib/prisma-ensure-schema';
 
 export const dynamic = 'force-dynamic';
 
-const VEHICLE_TYPES = new Set(['CAMPER', 'CAMPER_GRAN_VOLUMEN', 'TURISMO_CAMPERIZADO', 'CARAVANA', 'AUTOCARAVANA', '4X4_CAMPERIZADO', 'BARCO']);
-const ISLANDS = new Set(['Gran Canaria', 'Tenerife', 'Lanzarote', 'Fuerteventura', 'La Palma', 'La Gomera', 'El Hierro', 'La Graciosa']);
+const VEHICLE_TYPES = new Set([
+  'COUPE',
+  'CABRIO',
+  'SEDAN_DEPORTIVO',
+  'SUV_DEPORTIVO',
+  'HYPERCAR',
+  'SUPERCAR_V8_V10',
+  'TRACK_TOY',
+  'GRAN_TURISMO',
+  'SPYDER_CABRIO',
+  'SUV_LUXURY',
+  'CAMPER',
+  'CAMPER_GRAN_VOLUMEN',
+  'TURISMO_CAMPERIZADO',
+  'CARAVANA',
+  'AUTOCARAVANA',
+  '4X4_CAMPERIZADO',
+  'BARCO',
+]);
+import { getAllCityNames } from '@/lib/supercar-locations';
+
+const ISLANDS = new Set([
+  'Gran Canaria',
+  'Tenerife',
+  'Lanzarote',
+  'Fuerteventura',
+  'La Palma',
+  'La Gomera',
+  'El Hierro',
+  'La Graciosa',
+  'Madrid',
+  'Barcelona',
+  'Marbella',
+  'Baleares',
+  'Londres',
+  'Dubái',
+  'Miami',
+  ...getAllCityNames(),
+]);
 
 /**
  * GET: Obtener los detalles completos de una camper para visualizarla o editarla

@@ -4,6 +4,10 @@ import { getCurrentUser } from '@/lib/auth';
 import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 
 const VEHICLE_TYPES = new Set([
+  'COUPE',
+  'CABRIO',
+  'SEDAN_DEPORTIVO',
+  'SUV_DEPORTIVO',
   'HYPERCAR',
   'SUPERCAR_V8_V10',
   'TRACK_TOY',
@@ -18,6 +22,8 @@ const VEHICLE_TYPES = new Set([
   '4X4_CAMPERIZADO',
   'BARCO',
 ]);
+import { getAllCityNames } from '@/lib/supercar-locations';
+
 const ISLANDS = new Set([
   'Gran Canaria',
   'Tenerife',
@@ -34,6 +40,7 @@ const ISLANDS = new Set([
   'Londres',
   'Dubái',
   'Miami',
+  ...getAllCityNames(),
 ]);
 
 import { ensureDbSchema } from '@/lib/prisma-ensure-schema';
@@ -203,9 +210,26 @@ export async function POST(request: Request) {
       },
     });
 
-    // CREACIÓN DE EQUIPAMIENTOS SECUNDARIOS SI EXISTEN
-    if (Array.isArray(features) && features.length > 0) {
-      const validFeatures = features
+    // CREACIÓN DE EQUIPAMIENTOS Y ESPECIFICACIONES TÉCNICAS
+    const allFeatures: string[] = Array.isArray(features) ? [...features] : [];
+
+    // Guardar especificaciones técnicas destacadas como features del vehículo
+    if (body.powerCv && Number(body.powerCv) > 0) {
+      allFeatures.push(`Potencia: ${Number(body.powerCv)} CV`);
+    }
+    if (body.drivetrain) {
+      const driveLabel = body.drivetrain === 'AWD' ? 'Tracción Total (AWD / 4x4)' : body.drivetrain === 'RWD' ? 'Tracción Trasera (RWD)' : 'Tracción Delantera (FWD)';
+      allFeatures.push(`Tracción: ${driveLabel}`);
+    }
+    if (!body.accelerationUnknown && body.acceleration0100 && Number(body.acceleration0100) > 0) {
+      allFeatures.push(`0-100 km/h: ${Number(body.acceleration0100)}s`);
+    }
+    if (body.topSpeed && Number(body.topSpeed) > 0) {
+      allFeatures.push(`Velocidad Máx: ${Number(body.topSpeed)} km/h`);
+    }
+
+    if (allFeatures.length > 0) {
+      const validFeatures = Array.from(new Set(allFeatures))
         .filter((name): name is string => typeof name === 'string' && name.trim().length > 0)
         .map((name) => ({ vehicleId: vehicle.id, name: name.trim() }));
 

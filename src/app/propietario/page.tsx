@@ -250,7 +250,7 @@ export default function OwnerDashboardPage() {
             className="inline-flex items-center space-x-2 bg-black text-white px-6 py-3.5 rounded-xl font-mono font-black text-xs uppercase tracking-widest hover:bg-neutral-800 transition-all shadow-sm shrink-0"
           >
             <Plus className="w-4 h-4" />
-            <span>+ Publicar Superdeportivo</span>
+            <span>+ Publicar Anuncio</span>
           </Link>
         </div>
 
