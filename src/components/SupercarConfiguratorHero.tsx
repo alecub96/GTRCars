@@ -489,12 +489,12 @@ export default function SupercarConfiguratorHero() {
   };
 
   return (
-    <section className="relative min-h-[70vh] sm:min-h-[82vh] w-full bg-white text-black overflow-hidden flex flex-col justify-between selection:bg-black selection:text-white pt-6 sm:pt-8 pb-6 sm:pb-8">
+    <section className="relative min-h-[50vh] sm:min-h-[75vh] md:min-h-[80vh] w-full bg-white text-black overflow-hidden flex flex-col justify-between selection:bg-black selection:text-white pt-2 sm:pt-6 pb-3 sm:pb-6">
       
-      {/* 1. MARCA EN EL FONDO (Tipografía oscura, visible y adaptada a móvil) */}
+      {/* 1. MARCA EN EL FONDO (Tipografía sutil y ajustada a móvil) */}
       <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden z-0 px-2 sm:px-8">
         <span 
-          className={`font-black uppercase tracking-tight text-gray-400/80 sm:text-gray-400/85 select-none leading-none font-sans transition-all duration-700 text-center whitespace-nowrap -translate-y-12 sm:-translate-y-20 ${getFontSize(currentCar.watermarkText)}`}
+          className={`font-black uppercase tracking-tight text-gray-400/70 sm:text-gray-400/85 select-none leading-none font-sans transition-all duration-700 text-center whitespace-nowrap -translate-y-8 sm:-translate-y-16 ${getFontSize(currentCar.watermarkText)}`}
         >
           {currentCar.watermarkText}
         </span>
@@ -505,12 +505,12 @@ export default function SupercarConfiguratorHero() {
         GT Cars Premium & GTR Cars — Alquiler de Superdeportivos en Canarias, Madrid, Barcelona y Londres
       </h1>
 
-      {/* 2. ESPACIADOR SUPERIOR LIMPIO */}
-      <div className="pt-2 sm:pt-4" />
+      {/* 2. ESPACIADOR SUPERIOR MÍNIMO */}
+      <div className="pt-1 sm:pt-2" />
 
       {/* 3. CENTRO: CARRUSEL TIPO RUEDA DE APPLE / LIBRO 3D CON SOPORTE SWIPE */}
       <div 
-        className="relative z-10 w-full max-w-7xl mx-auto px-2 sm:px-4 my-auto flex items-center justify-center overflow-visible touch-pan-y"
+        className="relative z-10 w-full max-w-7xl mx-auto px-2 sm:px-4 my-auto flex items-center justify-center overflow-hidden sm:overflow-visible touch-pan-y"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
@@ -519,14 +519,14 @@ export default function SupercarConfiguratorHero() {
         <button
           onClick={prevCar}
           aria-label="Coche anterior"
-          className="absolute left-1 sm:left-6 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/90 hover:bg-black hover:text-white border border-gray-200 shadow-md flex items-center justify-center transition-all duration-300 cursor-pointer backdrop-blur-sm group"
+          className="absolute left-1 sm:left-6 z-30 w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-white/95 hover:bg-black hover:text-white border border-gray-200 shadow-md flex items-center justify-center transition-all duration-300 cursor-pointer backdrop-blur-sm group"
         >
           <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700 group-hover:text-white transition-colors" />
         </button>
 
-        {/* Contenedor 3D de coches (centro nítido, laterales borrosos/escalados) */}
+        {/* Contenedor 3D de coches (centro nítido, laterales con desplazamiento optimizado para móvil) */}
         <div 
-          className="relative w-full max-w-4xl h-[220px] sm:h-[360px] md:h-[430px] flex items-center justify-center"
+          className="relative w-full max-w-4xl h-[175px] sm:h-[320px] md:h-[400px] flex items-center justify-center"
           style={{ perspective: '1000px' }}
         >
           {FEATURED_FLEET.map((car, idx) => {
@@ -563,14 +563,14 @@ export default function SupercarConfiguratorHero() {
                   transformStyle: 'preserve-3d',
                 }}
               >
-                <div className="relative w-full h-full max-w-[85%] sm:max-w-3xl flex items-center justify-center">
+                <div className="relative w-full h-full max-w-[82%] sm:max-w-3xl flex items-center justify-center">
                   <Image
                     src={car.image}
                     alt={car.brand}
                     fill
-                    sizes="(max-width: 768px) 90vw, 850px"
+                    sizes="(max-width: 768px) 85vw, 850px"
                     priority={isCenter}
-                    className="object-contain filter drop-shadow-[0_20px_25px_rgba(0,0,0,0.14)] transition-transform duration-700"
+                    className="object-contain filter drop-shadow-[0_16px_20px_rgba(0,0,0,0.12)] transition-transform duration-700"
                   />
                 </div>
               </div>
@@ -582,17 +582,17 @@ export default function SupercarConfiguratorHero() {
         <button
           onClick={nextCar}
           aria-label="Siguiente coche"
-          className="absolute right-1 sm:right-6 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/90 hover:bg-black hover:text-white border border-gray-200 shadow-md flex items-center justify-center transition-all duration-300 cursor-pointer backdrop-blur-sm group"
+          className="absolute right-1 sm:right-6 z-30 w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-white/95 hover:bg-black hover:text-white border border-gray-200 shadow-md flex items-center justify-center transition-all duration-300 cursor-pointer backdrop-blur-sm group"
         >
           <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700 group-hover:text-white transition-colors" />
         </button>
 
       </div>
 
-      {/* 4. SELECTOR ESTILO PORSCHE (PILLS CON SCROLL HORIZONTAL FLUIDO EN MÓVIL) */}
-      <div className="relative z-20 max-w-7xl mx-auto w-full px-2 sm:px-8">
-        <div className="flex items-center justify-start sm:justify-center overflow-x-auto no-scrollbar py-2 px-1">
-          <div className="inline-flex items-center gap-1 sm:gap-1.5 bg-gray-100/95 backdrop-blur-md p-1.5 rounded-full border border-gray-200 shadow-sm mx-auto flex-nowrap sm:flex-wrap">
+      {/* 4. SELECTOR ESTILO PORSCHE (PILLS EN CÁPSULA CONTENIDA Y SCROLLABLE EN MÓVIL) */}
+      <div className="relative z-20 w-full max-w-7xl mx-auto px-3 sm:px-8 mt-1">
+        <div className="w-full overflow-x-auto no-scrollbar py-1">
+          <div className="flex items-center gap-1 sm:gap-1.5 bg-gray-100/95 backdrop-blur-md p-1 sm:p-1.5 rounded-full border border-gray-200 shadow-sm w-max mx-auto max-w-full">
             {FEATURED_FLEET.map((fCar, idx) => {
               const isSelected = selectedIndex === idx;
               return (
@@ -602,9 +602,9 @@ export default function SupercarConfiguratorHero() {
                     playSoftTickSound();
                     setSelectedIndex(idx);
                   }}
-                  className={`px-3 sm:px-5 py-1.5 sm:py-2 text-[10px] sm:text-xs font-mono uppercase tracking-wider transition-all rounded-full cursor-pointer whitespace-nowrap shrink-0 ${
+                  className={`px-3 sm:px-5 py-1 sm:py-1.5 text-[9px] sm:text-xs font-mono uppercase tracking-wider transition-all rounded-full cursor-pointer whitespace-nowrap shrink-0 ${
                     isSelected
-                      ? 'bg-black text-white font-bold shadow-md scale-105'
+                      ? 'bg-black text-white font-bold shadow-md scale-102'
                       : 'text-gray-600 hover:text-black hover:bg-gray-200'
                   }`}
                 >

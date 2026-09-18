@@ -222,3 +222,13 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     scroll-behavior: auto !important;
   }
 }
+
+/* Ocultar barra de scroll en contenedores horizontales */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+

@@ -90,15 +90,15 @@ export default function Navbar() {
   return (
     <header className="w-full relative z-40 bg-white border-b border-gray-100">
       {/* NAVEGACIÓN PRINCIPAL LIMPIA ESTILO PORSCHE (FONDO BLANCO) */}
-      <nav className="bg-white px-6 sm:px-10 py-4 flex items-center justify-between">
+      <nav className="bg-white px-4 sm:px-10 py-3 sm:py-4 flex items-center justify-between max-w-7xl mx-auto">
         {/* LOGO OFICIAL GTR CARS */}
-        <Link href="/" className="group flex items-center py-1">
+        <Link href="/" className="group flex items-center py-0.5">
           <Image
             src="/brand/logo-primary.png"
             alt="GTR Cars"
             width={240}
             height={60}
-            className="h-10 sm:h-12 w-auto object-contain transition-transform group-hover:scale-[1.02]"
+            className="h-8 sm:h-12 w-auto object-contain transition-transform group-hover:scale-[1.02]"
             priority
             unoptimized
           />
