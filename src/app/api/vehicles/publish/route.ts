@@ -3,8 +3,38 @@ import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
 import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
 
-const VEHICLE_TYPES = new Set(['CAMPER', 'CAMPER_GRAN_VOLUMEN', 'TURISMO_CAMPERIZADO', 'CARAVANA', 'AUTOCARAVANA', '4X4_CAMPERIZADO', 'BARCO']);
-const ISLANDS = new Set(['Gran Canaria', 'Tenerife', 'Lanzarote', 'Fuerteventura', 'La Palma', 'La Gomera', 'El Hierro', 'La Graciosa']);
+const VEHICLE_TYPES = new Set([
+  'HYPERCAR',
+  'SUPERCAR_V8_V10',
+  'TRACK_TOY',
+  'GRAN_TURISMO',
+  'SPYDER_CABRIO',
+  'SUV_LUXURY',
+  'CAMPER',
+  'CAMPER_GRAN_VOLUMEN',
+  'TURISMO_CAMPERIZADO',
+  'CARAVANA',
+  'AUTOCARAVANA',
+  '4X4_CAMPERIZADO',
+  'BARCO',
+]);
+const ISLANDS = new Set([
+  'Gran Canaria',
+  'Tenerife',
+  'Lanzarote',
+  'Fuerteventura',
+  'La Palma',
+  'La Gomera',
+  'El Hierro',
+  'La Graciosa',
+  'Madrid',
+  'Barcelona',
+  'Marbella',
+  'Baleares',
+  'Londres',
+  'Dubái',
+  'Miami',
+]);
 
 import { ensureDbSchema } from '@/lib/prisma-ensure-schema';
 
@@ -16,7 +46,7 @@ export async function POST(request: Request) {
     await ensureDbSchema();
 
     const user = await getCurrentUser();
-    if (!user) return NextResponse.json({ error: 'Debes iniciar sesión para publicar una camper' }, { status: 401 });
+    if (!user) return NextResponse.json({ error: 'Debes iniciar sesión para publicar un vehículo' }, { status: 401 });
 
     let updatedToken: string | null = null;
     // Si el usuario publica un anuncio pero su rol en la BD sigue en TRAVELER, se actualiza automaticamente a OWNER
@@ -102,32 +132,32 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'El título del anuncio debe tener al menos 5 caracteres.' }, { status: 400 });
     }
     if (!clean.brand || clean.brand.length < 2) {
-      return NextResponse.json({ error: 'Introduce la marca del vehículo (ejemplo: Volkswagen, Fiat, Mercedes).' }, { status: 400 });
+      return NextResponse.json({ error: 'Introduce la marca del vehículo (ejemplo: Porsche, Ferrari, Lamborghini).' }, { status: 400 });
     }
     if (!clean.model || clean.model.length < 1) {
-      return NextResponse.json({ error: 'Introduce el modelo de la furgoneta (ejemplo: California, Ducato).' }, { status: 400 });
+      return NextResponse.json({ error: 'Introduce el modelo del vehículo (ejemplo: 911 GT3 RS, Huracán, 296 GTB).' }, { status: 400 });
     }
     if (!VEHICLE_TYPES.has(vehicleType)) {
-      return NextResponse.json({ error: 'Selecciona un tipo de vehículo válido.' }, { status: 400 });
+      return NextResponse.json({ error: 'Selecciona una categoría de vehículo válida.' }, { status: 400 });
     }
     if (!ISLANDS.has(island)) {
-      return NextResponse.json({ error: 'Selecciona una isla de Canarias válida.' }, { status: 400 });
+      return NextResponse.json({ error: 'Selecciona una ubicación base válida.' }, { status: 400 });
     }
     if (!clean.municipality || clean.municipality.length < 2) {
-      return NextResponse.json({ error: 'Introduce el municipio donde se encuentra el vehículo.' }, { status: 400 });
+      return NextResponse.json({ error: 'Introduce la ciudad o zona donde se encuentra el vehículo.' }, { status: 400 });
     }
-    if (!clean.description || clean.description.length < 40) {
+    if (!clean.description || clean.description.length < 20) {
       return NextResponse.json({
-        error: `La descripción de la camper es demasiado corta (mínimo 40 caracteres, actualmente tienes ${clean.description.length}).`,
+        error: `La descripción del vehículo debe tener al menos 20 caracteres (actualmente tienes ${clean.description.length}).`,
       }, { status: 400 });
     }
     if (!clean.rules || clean.rules.length < 10) {
       return NextResponse.json({
-        error: `Las normas de uso son demasiado cortas (mínimo 10 caracteres, actualmente tienes ${clean.rules.length}).`,
+        error: `Las normas y requisitos deben tener al menos 10 caracteres (actualmente tienes ${clean.rules.length}).`,
       }, { status: 400 });
     }
-    if (numeric.basePricePerDay < 10 || numeric.basePricePerDay > 2000) {
-      return NextResponse.json({ error: 'El precio por día debe estar entre 10€ y 2000€.' }, { status: 400 });
+    if (numeric.basePricePerDay < 10 || numeric.basePricePerDay > 15000) {
+      return NextResponse.json({ error: 'El precio por día debe estar entre 10€ y 15.000€.' }, { status: 400 });
     }
     if (numeric.securityDeposit < 0 || numeric.securityDeposit > 20000) {
       return NextResponse.json({ error: 'La fianza introducida no es válida.' }, { status: 400 });

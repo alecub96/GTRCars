@@ -132,9 +132,8 @@ export default async function BuscarPage() {
               <label className="text-gray-700 uppercase tracking-widest block text-[10px] font-bold">CAJA DE CAMBIOS</label>
               <select className="w-full p-3 bg-white border border-gray-300 rounded-xl text-black font-mono focus:border-black outline-none cursor-pointer">
                 <option value="">Cualquier Transmisión</option>
-                <option value="automatica-dct">Automática / Doble Embrague (DCT / PDK / F1)</option>
-                <option value="manual">Manual GT (Con embrague y punta-tacón)</option>
-                <option value="secuencial">Secuencial de Carreras</option>
+                <option value="AUTOMATIC">Automático</option>
+                <option value="MANUAL">Manual</option>
               </select>
             </div>
 
