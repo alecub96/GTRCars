@@ -263,12 +263,21 @@ export default function Navbar() {
                   <p className="text-xs text-gray-600 font-normal">
                     Accede a tu cuenta o prueba los paneles con un solo clic:
                   </p>
-                  <button
-                    onClick={() => openAuth('login')}
-                    className="w-full py-3 rounded-full bg-black text-white font-black text-xs uppercase tracking-widest hover:bg-gray-800 transition-all shadow-md cursor-pointer"
-                  >
-                    ACCEDER // IDENTIFICARME
-                  </button>
+                  <div className="flex flex-col gap-2">
+                    <button
+                      onClick={() => openAuth('login')}
+                      className="w-full py-3 rounded-full bg-black text-white font-black text-xs uppercase tracking-widest hover:bg-gray-800 transition-all shadow-md cursor-pointer"
+                    >
+                      ACCEDER // IDENTIFICARME
+                    </button>
+                    <Link
+                      onClick={() => setMobileOpen(false)}
+                      href="/registro"
+                      className="w-full py-2.5 rounded-full border border-gray-300 text-black font-black text-xs uppercase tracking-widest text-center hover:bg-gray-100 transition-all"
+                    >
+                      CREAR CUENTA (PILOTO O PROPIETARIO)
+                    </Link>
+                  </div>
                 </div>
               )}
 

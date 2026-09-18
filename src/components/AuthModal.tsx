@@ -83,6 +83,21 @@ export default function AuthModal() {
       if (mode === 'register') analytics.conversion('conversion', { conversion_type: 'registration' });
       setIsOpen(false);
 
+      // Si se acaba de registrar como propietario, redirigir a su panel
+      if (mode === 'register' && role === 'OWNER') {
+        window.location.href = '/propietario?bienvenido=true';
+        return;
+      }
+
+      // Si se acaba de registrar como piloto y no tiene reserva previa, redirigir a su garaje
+      if (mode === 'register' && role === 'TRAVELER') {
+        const pendingStr = typeof window !== 'undefined' ? sessionStorage.getItem('pending_booking') : null;
+        if (!pendingStr) {
+          window.location.href = '/cuenta?bienvenido=true';
+          return;
+        }
+      }
+
       // Comprobar si el usuario tenía una reserva en curso antes de identificarse
       if (typeof window !== 'undefined') {
         const pendingStr = sessionStorage.getItem('pending_booking');
@@ -163,6 +178,7 @@ export default function AuthModal() {
   useEffect(() => {
     const handleOpenModal = (e: any) => {
       if (e.detail?.mode) setMode(e.detail.mode);
+      if (e.detail?.role) setRole(e.detail.role === 'OWNER' ? 'OWNER' : 'TRAVELER');
       if (e.detail?.subtitle) setCustomSubtitle(e.detail.subtitle);
       else setCustomSubtitle(null);
       setIsOpen(true);
@@ -229,7 +245,7 @@ export default function AuthModal() {
             onClick={() => setIsOpen(!isOpen)}
             className="inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-wider px-3.5 py-2 rounded-full bg-white text-black border border-gray-200 hover:border-black hover:bg-gray-50 transition-all shadow-xs shrink-0 cursor-pointer"
           >
-            <div className="w-6 h-6 rounded-full bg-black text-black flex items-center justify-center text-[10px] font-black uppercase shrink-0">
+            <div className="w-6 h-6 rounded-full bg-black text-white flex items-center justify-center text-[10px] font-black uppercase shrink-0">
               {user.firstName ? user.firstName[0] : 'U'}
             </div>
             <span className="hidden sm:inline font-sans text-xs font-bold text-black">{user.firstName}</span>
@@ -269,25 +285,35 @@ export default function AuthModal() {
                   <span>Mi Perfil</span>
                 </Link>
 
+                {user.role === 'OWNER' && (
+                  <>
+                    <Link
+                      href="/propietario"
+                      onClick={() => setIsOpen(false)}
+                      className="flex items-center space-x-2.5 p-2.5 rounded-xl bg-gray-50 text-black border border-gray-200 hover:bg-gray-100 transition-colors font-bold"
+                    >
+                      <Truck className="w-4 h-4 text-black" />
+                      <span>Panel de Propietario</span>
+                    </Link>
+                    <Link
+                      href="/publicar-coche"
+                      onClick={() => setIsOpen(false)}
+                      className="flex items-center space-x-2.5 p-2.5 rounded-xl hover:bg-gray-100 transition-colors text-gray-800 hover:text-black font-medium"
+                    >
+                      <Sparkles className="w-4 h-4 text-black" />
+                      <span>+ Publicar Superdeportivo</span>
+                    </Link>
+                  </>
+                )}
+
                 {user.role === 'TRAVELER' && (
                   <Link
                     href="/cuenta"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center space-x-2.5 p-2.5 rounded-xl hover:bg-gray-100 transition-colors text-gray-800 hover:text-black font-medium"
+                    className="flex items-center space-x-2.5 p-2.5 rounded-xl bg-gray-50 text-black border border-gray-200 hover:bg-gray-100 transition-colors font-bold"
                   >
                     <Compass className="w-4 h-4 text-black" />
                     <span>Mis Reservas Supercars</span>
-                  </Link>
-                )}
-
-                {user.role === 'OWNER' && (
-                  <Link
-                    href="/propietario"
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center space-x-2.5 p-2.5 rounded-xl hover:bg-gray-100 transition-colors text-gray-800 hover:text-black font-medium"
-                  >
-                    <Truck className="w-4 h-4 text-black" />
-                    <span>Panel de Propietario</span>
                   </Link>
                 )}
 
@@ -295,7 +321,7 @@ export default function AuthModal() {
                   <Link
                     href="/admin"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center space-x-2.5 p-2.5 rounded-xl hover:bg-gray-100 transition-colors text-gray-800 hover:text-black font-medium"
+                    className="flex items-center space-x-2.5 p-2.5 rounded-xl bg-gray-50 text-black border border-gray-200 hover:bg-gray-100 transition-colors font-bold"
                   >
                     <KeyRound className="w-4 h-4 text-black" />
                     <span>Panel de Administración</span>
@@ -313,9 +339,11 @@ export default function AuthModal() {
                   </Link>
                 )}
 
+                <div className="pt-2 border-t border-gray-100 my-2" />
+
                 <button
                   onClick={handleLogout}
-                  className="w-full flex items-center space-x-2.5 p-2.5 rounded-xl hover:bg-red-50 text-red-600 hover:text-red-700 transition-colors text-left font-mono font-bold border-t border-gray-100 mt-2 pt-3 cursor-pointer"
+                  className="flex items-center space-x-2.5 p-2.5 rounded-xl hover:bg-red-50 text-red-600 hover:text-red-700 transition-colors w-full text-left font-medium cursor-pointer"
                 >
                   <LogOut className="w-4 h-4" />
                   <span>Cerrar Sesión</span>
@@ -329,9 +357,9 @@ export default function AuthModal() {
         <>
           <button
             onClick={() => { setMode('login'); setIsOpen(true); }}
-            className="hidden md:inline-flex items-center space-x-2 text-xs font-mono font-bold uppercase tracking-wider px-5 py-2.5 rounded-full bg-black text-black hover:bg-gray-800 transition-all shadow-md cursor-pointer"
+            className="hidden md:inline-flex items-center space-x-2 text-xs font-mono font-bold uppercase tracking-wider px-5 py-2.5 rounded-full bg-black text-white hover:bg-neutral-800 transition-all shadow-sm cursor-pointer"
           >
-            <User className="w-4 h-4" />
+            <User className="w-4 h-4 text-white" />
             <span>ACCESO // GARAJE</span>
           </button>
 
@@ -381,7 +409,7 @@ export default function AuthModal() {
                     <span className="text-[9px] font-mono text-gray-400 uppercase">Sin contraseña</span>
                   </div>
                   <p className="text-xs text-gray-600 mb-3">
-                    Prueba la experiencia completa con cuentas preconfiguradas de rol único:
+                    Prueba la experiencia completa con cuentas preconfiguradas:
                   </p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     <button
@@ -462,29 +490,42 @@ export default function AuthModal() {
                 <form onSubmit={handleSubmit} className="space-y-4 font-mono">
                   {mode === 'register' && (
                     <>
-                      <div className="grid grid-cols-2 gap-2 mb-2">
-                        <button
-                          type="button"
-                          onClick={() => setRole('TRAVELER')}
-                          className={`py-2.5 rounded-full text-xs font-bold uppercase tracking-widest border transition-all cursor-pointer ${
-                            role === 'TRAVELER'
-                              ? 'bg-black text-black border-black font-black'
-                              : 'bg-white text-gray-600 border-gray-200 hover:border-black'
-                          }`}
-                        >
-                          Piloto VIP
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setRole('OWNER')}
-                          className={`py-2.5 rounded-full text-xs font-bold uppercase tracking-widest border transition-all cursor-pointer ${
-                            role === 'OWNER'
-                              ? 'bg-black text-black border-black font-black'
-                              : 'bg-white text-gray-600 border-gray-200 hover:border-black'
-                          }`}
-                        >
-                          Propietario
-                        </button>
+                      {/* SELECTOR DE TIPO DE CUENTA */}
+                      <div className="space-y-1.5 mb-2">
+                        <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500">
+                          Tipo de Cuenta
+                        </label>
+                        <div className="grid grid-cols-2 gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setRole('TRAVELER')}
+                            className={`py-2.5 px-3 rounded-xl text-xs font-bold uppercase tracking-wider border transition-all cursor-pointer text-center flex items-center justify-center gap-1.5 ${
+                              role === 'TRAVELER'
+                                ? 'bg-black text-white border-black font-black shadow-xs'
+                                : 'bg-white text-gray-700 border-gray-200 hover:border-black hover:text-black'
+                            }`}
+                          >
+                            <Compass className="w-3.5 h-3.5 shrink-0" />
+                            <span>Piloto VIP</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setRole('OWNER')}
+                            className={`py-2.5 px-3 rounded-xl text-xs font-bold uppercase tracking-wider border transition-all cursor-pointer text-center flex items-center justify-center gap-1.5 ${
+                              role === 'OWNER'
+                                ? 'bg-black text-white border-black font-black shadow-xs'
+                                : 'bg-white text-gray-700 border-gray-200 hover:border-black hover:text-black'
+                            }`}
+                          >
+                            <Truck className="w-3.5 h-3.5 shrink-0" />
+                            <span>Propietario</span>
+                          </button>
+                        </div>
+                        <p className="text-[10px] text-gray-500 font-sans mt-1">
+                          {role === 'OWNER'
+                            ? 'Publica tus superdeportivos, gestiona reservas y recibe cobros directos.'
+                            : 'Alquila vehículos exclusivos, firma contratos digitales y conduce.'}
+                        </p>
                       </div>
 
                       <div className="grid grid-cols-2 gap-3">
@@ -519,7 +560,7 @@ export default function AuthModal() {
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="piloto@gtrcars.es"
+                      placeholder="tu.email@ejemplo.com"
                       className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white text-black text-sm font-sans placeholder:text-gray-400 focus:outline-none focus:border-black focus:ring-1 focus:ring-black"
                     />
                   </div>
@@ -540,10 +581,18 @@ export default function AuthModal() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-4 rounded-full bg-black text-black font-mono font-black text-xs uppercase tracking-widest hover:bg-gray-800 transition-all shadow-md mt-3 flex items-center justify-center space-x-2 cursor-pointer disabled:opacity-50"
+                    className="w-full py-3.5 rounded-xl bg-black text-white font-mono font-bold text-xs uppercase tracking-widest hover:bg-neutral-800 transition-all shadow-sm mt-3 flex items-center justify-center space-x-2 cursor-pointer disabled:opacity-50"
                   >
-                    {mode === 'login' ? <LogIn className="w-4 h-4" /> : <UserPlus className="w-4 h-4" />}
-                    <span>{loading ? 'AUTENTICANDO...' : mode === 'login' ? 'INICIAR SESIÓN' : mode === 'register' ? 'REGISTRARME EN GARAJE' : 'ENVIAR ENLACE'}</span>
+                    {mode === 'login' ? <LogIn className="w-4 h-4 text-white" /> : <UserPlus className="w-4 h-4 text-white" />}
+                    <span>
+                      {loading
+                        ? 'AUTENTICANDO...'
+                        : mode === 'login'
+                        ? 'INICIAR SESIÓN'
+                        : mode === 'register'
+                        ? (role === 'OWNER' ? 'REGISTRARME COMO PROPIETARIO' : 'REGISTRARME COMO PILOTO VIP')
+                        : 'ENVIAR ENLACE'}
+                    </span>
                   </button>
                 </form>
 
