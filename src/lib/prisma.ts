@@ -4,7 +4,11 @@ import { PrismaClient } from '@/generated/prisma/client';
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
 function getMariaDbCredentials() {
-  const envUrl = process.env.VANEANDO_DATABASE_URL?.trim() || process.env.DATABASE_URL?.trim() || '';
+  const envUrl =
+    process.env.GTRCARS_DATABASE_URL?.trim() ||
+    process.env.VANEANDO_DATABASE_URL?.trim() ||
+    process.env.DATABASE_URL?.trim() ||
+    '';
   const match = envUrl.match(/^(?:mysql|mariadb):\/\/(?:([^:@]+)(?::([^@]*))?@)?([^:\/]+)(?::(\d+))?\/(.+)$/i);
   if (match) {
     const rawHost = match[3] || '127.0.0.1';

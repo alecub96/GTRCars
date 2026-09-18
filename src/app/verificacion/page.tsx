@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { ShieldCheck, UserCheck, CheckCircle2, AlertCircle, Upload, Lock, Sparkles } from 'lucide-react';
+import { ShieldCheck, UserCheck, CheckCircle2, AlertCircle, Upload, Lock, Sparkles, Award } from 'lucide-react';
 
 export default function IdentityVerificationPage() {
   const [documentType, setDocumentType] = useState('DNI_NIE');
@@ -12,6 +12,7 @@ export default function IdentityVerificationPage() {
   const [fileBack, setFileBack] = useState<File | null>(null);
   const [fileLicense, setFileLicense] = useState<File | null>(null);
   const [licenseExpDate, setLicenseExpDate] = useState('');
+  const [yearsExperience, setYearsExperience] = useState('5+');
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -29,7 +30,7 @@ export default function IdentityVerificationPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!fileFront || !fileBack || !fileLicense) {
-      setError('Por favor adjunta los 3 archivos requeridos (Anverso DNI/Pasaporte, Reverso y Permiso de Conducir)');
+      setError('Por favor adjunta los 3 archivos requeridos (Anverso DNI/Pasaporte, Reverso y Permiso de Conducir Clase B)');
       return;
     }
     setLoading(true);
@@ -39,6 +40,7 @@ export default function IdentityVerificationPage() {
     data.set('documentType', documentType);
     data.set('documentNumber', documentNumber);
     data.set('licenseExpDate', licenseExpDate);
+    data.set('yearsExperience', yearsExperience);
     data.set('fileFront', fileFront);
     data.set('fileBack', fileBack);
     data.set('fileLicense', fileLicense);
@@ -57,57 +59,70 @@ export default function IdentityVerificationPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-black selection:bg-black selection:text-white flex flex-col">
+    <div className="min-h-screen bg-[#FBFBFB] text-black selection:bg-black selection:text-white flex flex-col font-sans">
       <Navbar />
 
-      <main className="flex-1 max-w-3xl mx-auto px-4 py-12 w-full">
-        <div className="bg-gray-50 rounded-3xl p-8 sm:p-10 border border-gray-200 shadow-2xl space-y-8">
-          <div className="text-center border-b border-gray-200 pb-6">
-            <div className="w-12 h-12 rounded-2xl bg-gray-100 text-black border border-gray-200 flex items-center justify-center mx-auto mb-3">
+      <main className="flex-1 max-w-3xl mx-auto px-4 sm:px-6 py-12 w-full">
+        <div className="bg-white rounded-3xl p-8 sm:p-12 border border-gray-200 shadow-xs space-y-8">
+          {/* CABECERA */}
+          <div className="text-center border-b border-gray-100 pb-8">
+            <div className="w-12 h-12 rounded-2xl bg-black text-white flex items-center justify-center mx-auto mb-3">
               <UserCheck className="w-6 h-6" />
             </div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 text-black text-[10px] font-mono tracking-widest uppercase mb-2 border border-gray-200">
-              <Sparkles className="w-3 h-3" />
-              PROTOCOLO DE HOMOLOGACIÓN CONDUCTOR VIP
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 text-black text-[10px] font-mono tracking-widest uppercase mb-2 border border-gray-200 font-bold">
+              <Sparkles className="w-3 h-3 text-black" />
+              PROTOCOLO DE HOMOLOGACIÓN // PILOTO VIP GTRCARS
             </div>
-            <h1 className="font-serif text-3xl font-bold text-black mt-1">
-              Verificación de Identidad y Carné de Conducir
+            <h1 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-black mt-1 font-sans">
+              Verificación de Carné &amp; Identidad
             </h1>
-            <p className="text-xs text-gray-500 font-mono mt-2">
-              Validamos la vigencia del permiso de conducción para el seguro de flota de superdeportivos.
+            <p className="text-xs text-gray-500 font-sans mt-2 max-w-lg mx-auto">
+              Validación oficial del permiso de conducir para la póliza de cobertura y entrega directa sin fianza adicional.
             </p>
           </div>
 
           {verificationStatus === 'VERIFIED' ? (
-            <div className="text-center py-8 space-y-4 font-mono">
-              <CheckCircle2 className="w-16 h-16 text-emerald-400 mx-auto" />
-              <h3 className="font-serif text-2xl font-bold text-black">Identidad y Permiso Homologados</h3>
-              <p className="text-xs text-gray-500">Tu documentación fue revisada y autorizada por la dirección de GTR Cars.</p>
+            <div className="text-center py-10 space-y-4 font-mono">
+              <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto text-emerald-600">
+                <ShieldCheck className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-black uppercase text-black font-sans">
+                Carné Homologado &amp; Verificado
+              </h3>
+              <p className="text-xs text-gray-500 font-sans max-w-md mx-auto">
+                Tu documentación ha sido revisada y certificada para pilotaje de cualquier superdeportivo del catálogo.
+              </p>
             </div>
           ) : verificationStatus === 'PENDING' || submitted ? (
-            <div className="text-center py-8 space-y-4 font-mono">
-              <CheckCircle2 className="w-16 h-16 text-black mx-auto" />
-              <h3 className="font-serif text-2xl font-bold text-black">Documentación enviada a revisión</h3>
-              <p className="text-xs text-gray-500 max-w-md mx-auto">Tus archivos están custodiados con cifrado AES-256. El equipo de Concierge validará la documentación en menos de 15 minutos.</p>
+            <div className="text-center py-10 space-y-4 font-mono">
+              <div className="w-16 h-16 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center mx-auto text-black">
+                <CheckCircle2 className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-black uppercase text-black font-sans">
+                Documentación en Proceso de Homologación
+              </h3>
+              <p className="text-xs text-gray-500 font-sans max-w-md mx-auto">
+                Tus archivos están custodiados con cifrado seguro. El equipo de Concierge validará tu permiso en menos de 15 minutos.
+              </p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6 font-mono">
-              <div className="p-4 bg-neutral-900 rounded-2xl border border-gray-200 text-xs text-gray-600 flex items-start space-x-3">
-                <Lock className="w-5 h-5 text-black shrink-0 mt-0.5" />
-                <p className="leading-relaxed">
-                  Tus documentos son encriptados y almacenados bajo estrictos acuerdos de no divulgación. Nunca son compartidos públicamente.
+              <div className="p-4 bg-gray-50 rounded-2xl border border-gray-200 text-xs text-gray-600 flex items-start space-x-3">
+                <Lock className="w-4 h-4 text-black shrink-0 mt-0.5" />
+                <p className="font-sans leading-relaxed text-xs">
+                  Tus documentos se transmiten con encriptación SSL y se destinan exclusivamente a la validación con la aseguradora de la flota.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs uppercase tracking-wider text-gray-500 mb-2">
-                    Tipo de Documento
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-600 mb-1.5">
+                    Tipo de Documento Oficial
                   </label>
                   <select
                     value={documentType}
                     onChange={(e) => setDocumentType(e.target.value)}
-                    className="w-full p-3 rounded-xl border border-white/15 text-sm font-bold bg-neutral-900 text-white focus:border-black outline-none cursor-pointer"
+                    className="w-full p-3 rounded-xl border border-gray-200 text-xs font-bold bg-white text-black focus:border-black outline-none cursor-pointer"
                   >
                     <option value="DNI_NIE">DNI / NIE (España)</option>
                     <option value="PASSPORT">Pasaporte Internacional</option>
@@ -116,7 +131,7 @@ export default function IdentityVerificationPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs uppercase tracking-wider text-gray-500 mb-2">
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-600 mb-1.5">
                     Número de Documento
                   </label>
                   <input
@@ -125,31 +140,48 @@ export default function IdentityVerificationPage() {
                     placeholder="Ej. 12345678Z"
                     value={documentNumber}
                     onChange={(e) => setDocumentNumber(e.target.value)}
-                    className="w-full p-3 rounded-xl border border-white/15 bg-neutral-900 text-white text-sm focus:border-black outline-none"
+                    className="w-full p-3 rounded-xl border border-gray-200 bg-white text-black text-xs font-sans focus:border-black outline-none"
                   />
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs uppercase tracking-wider text-gray-500 mb-1">
-                  Fecha Expiración Permiso de Conducir
-                </label>
-                <input
-                  type="date"
-                  required
-                  value={licenseExpDate}
-                  onChange={(e) => setLicenseExpDate(e.target.value)}
-                  className="w-full p-3 rounded-xl border border-white/15 bg-neutral-900 text-white text-sm focus:border-black outline-none"
-                />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-600 mb-1.5">
+                    Caducidad del Carné de Conducir
+                  </label>
+                  <input
+                    type="date"
+                    required
+                    value={licenseExpDate}
+                    onChange={(e) => setLicenseExpDate(e.target.value)}
+                    className="w-full p-3 rounded-xl border border-gray-200 bg-white text-black text-xs font-sans focus:border-black outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-600 mb-1.5">
+                    Antigüedad Carné de Conducir
+                  </label>
+                  <select
+                    value={yearsExperience}
+                    onChange={(e) => setYearsExperience(e.target.value)}
+                    className="w-full p-3 rounded-xl border border-gray-200 text-xs font-bold bg-white text-black focus:border-black outline-none cursor-pointer"
+                  >
+                    <option value="2-3">+2 años (Requisito mínimo)</option>
+                    <option value="3-5">+3 a 5 años</option>
+                    <option value="5+">+5 años (Conductor experimentado)</option>
+                  </select>
+                </div>
               </div>
 
               <div className="space-y-3">
-                <label className="block text-xs uppercase tracking-wider text-gray-500">
-                  Fotografías de Documentos (JPG, PNG o PDF)
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-600">
+                  Archivos de Documentación (JPG, PNG o PDF)
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   {/* ANVERSO DNI */}
-                  <label className={`relative p-5 rounded-2xl border-2 border-dashed cursor-pointer transition-all text-center flex flex-col items-center justify-center ${fileFront ? 'border-black bg-gray-100' : 'border-white/15 bg-neutral-900/60 hover:border-white/30'}`}>
+                  <label className={`relative p-5 rounded-2xl border-2 border-dashed cursor-pointer transition-all text-center flex flex-col items-center justify-center ${fileFront ? 'border-black bg-gray-50' : 'border-gray-200 bg-white hover:border-black'}`}>
                     <input
                       type="file"
                       accept="image/jpeg,image/png,application/pdf"
@@ -158,21 +190,21 @@ export default function IdentityVerificationPage() {
                     />
                     {fileFront ? (
                       <>
-                        <CheckCircle2 className="w-7 h-7 text-black mb-1.5" />
-                        <span className="text-xs font-bold text-white truncate max-w-[150px]">{fileFront.name}</span>
-                        <span className="text-[10px] text-gray-500 mt-0.5">{(fileFront.size / 1024 / 1024).toFixed(2)} MB</span>
+                        <CheckCircle2 className="w-6 h-6 text-black mb-1.5" />
+                        <span className="text-xs font-bold text-black truncate max-w-[150px] font-sans">{fileFront.name}</span>
+                        <span className="text-[10px] text-gray-400 mt-0.5">{(fileFront.size / 1024 / 1024).toFixed(2)} MB</span>
                       </>
                     ) : (
                       <>
-                        <Upload className="w-7 h-7 text-black mb-1.5" />
-                        <span className="block text-xs font-bold text-white">Anverso DNI / Pasaporte</span>
-                        <span className="block text-[10px] text-gray-500 mt-0.5">Foto Anverso</span>
+                        <Upload className="w-6 h-6 text-gray-400 mb-1.5" />
+                        <span className="block text-xs font-bold text-black font-sans">Anverso DNI / Pasaporte</span>
+                        <span className="block text-[10px] text-gray-400 mt-0.5">Fotografía frontal</span>
                       </>
                     )}
                   </label>
 
                   {/* REVERSO DNI */}
-                  <label className={`relative p-5 rounded-2xl border-2 border-dashed cursor-pointer transition-all text-center flex flex-col items-center justify-center ${fileBack ? 'border-black bg-gray-100' : 'border-white/15 bg-neutral-900/60 hover:border-white/30'}`}>
+                  <label className={`relative p-5 rounded-2xl border-2 border-dashed cursor-pointer transition-all text-center flex flex-col items-center justify-center ${fileBack ? 'border-black bg-gray-50' : 'border-gray-200 bg-white hover:border-black'}`}>
                     <input
                       type="file"
                       accept="image/jpeg,image/png,application/pdf"
@@ -181,21 +213,21 @@ export default function IdentityVerificationPage() {
                     />
                     {fileBack ? (
                       <>
-                        <CheckCircle2 className="w-7 h-7 text-black mb-1.5" />
-                        <span className="text-xs font-bold text-white truncate max-w-[150px]">{fileBack.name}</span>
-                        <span className="text-[10px] text-gray-500 mt-0.5">{(fileBack.size / 1024 / 1024).toFixed(2)} MB</span>
+                        <CheckCircle2 className="w-6 h-6 text-black mb-1.5" />
+                        <span className="text-xs font-bold text-black truncate max-w-[150px] font-sans">{fileBack.name}</span>
+                        <span className="text-[10px] text-gray-400 mt-0.5">{(fileBack.size / 1024 / 1024).toFixed(2)} MB</span>
                       </>
                     ) : (
                       <>
-                        <Upload className="w-7 h-7 text-black mb-1.5" />
-                        <span className="block text-xs font-bold text-white">Reverso Documento</span>
-                        <span className="block text-[10px] text-gray-500 mt-0.5">Foto Reverso</span>
+                        <Upload className="w-6 h-6 text-gray-400 mb-1.5" />
+                        <span className="block text-xs font-bold text-black font-sans">Reverso DNI</span>
+                        <span className="block text-[10px] text-gray-400 mt-0.5">Fotografía dorsal</span>
                       </>
                     )}
                   </label>
 
-                  {/* CARNÉ DE CONDUCIR */}
-                  <label className={`relative p-5 rounded-2xl border-2 border-dashed cursor-pointer transition-all text-center flex flex-col items-center justify-center ${fileLicense ? 'border-black bg-gray-100' : 'border-white/15 bg-neutral-900/60 hover:border-white/30'}`}>
+                  {/* PERMISO DE CONDUCIR */}
+                  <label className={`relative p-5 rounded-2xl border-2 border-dashed cursor-pointer transition-all text-center flex flex-col items-center justify-center ${fileLicense ? 'border-black bg-gray-50' : 'border-gray-200 bg-white hover:border-black'}`}>
                     <input
                       type="file"
                       accept="image/jpeg,image/png,application/pdf"
@@ -204,15 +236,15 @@ export default function IdentityVerificationPage() {
                     />
                     {fileLicense ? (
                       <>
-                        <CheckCircle2 className="w-7 h-7 text-black mb-1.5" />
-                        <span className="text-xs font-bold text-white truncate max-w-[150px]">{fileLicense.name}</span>
-                        <span className="text-[10px] text-gray-500 mt-0.5">{(fileLicense.size / 1024 / 1024).toFixed(2)} MB</span>
+                        <CheckCircle2 className="w-6 h-6 text-black mb-1.5" />
+                        <span className="text-xs font-bold text-black truncate max-w-[150px] font-sans">{fileLicense.name}</span>
+                        <span className="text-[10px] text-gray-400 mt-0.5">{(fileLicense.size / 1024 / 1024).toFixed(2)} MB</span>
                       </>
                     ) : (
                       <>
-                        <Upload className="w-7 h-7 text-black mb-1.5" />
-                        <span className="block text-xs font-bold text-white">Permiso de Conducir</span>
-                        <span className="block text-[10px] text-gray-500 mt-0.5">Foto Permiso</span>
+                        <Award className="w-6 h-6 text-gray-400 mb-1.5" />
+                        <span className="block text-xs font-bold text-black font-sans">Permiso de Conducir</span>
+                        <span className="block text-[10px] text-gray-400 mt-0.5">Carné Clase B</span>
                       </>
                     )}
                   </label>
@@ -220,7 +252,7 @@ export default function IdentityVerificationPage() {
               </div>
 
               {error && (
-                <div className="p-3 rounded-xl bg-red-950/40 border border-red-500/30 text-xs font-bold text-red-400 flex items-center gap-2">
+                <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-xs font-bold text-red-700 flex items-center gap-2">
                   <AlertCircle className="w-4 h-4 shrink-0" />
                   <span>{error}</span>
                 </div>
@@ -229,9 +261,9 @@ export default function IdentityVerificationPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 rounded-xl bg-black text-white hover:bg-neutral-800 font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all shadow-lg disabled:opacity-40 cursor-pointer"
+                className="w-full py-4 rounded-full bg-black text-white hover:bg-neutral-800 font-mono font-black text-xs uppercase tracking-widest transition-all shadow-md disabled:opacity-40 cursor-pointer"
               >
-                {loading ? 'ENVIANDO A VALIDACIÓN...' : 'HOMOLOGAR DOCUMENTACIÓN EN EL VAULT'}
+                {loading ? 'ENVIANDO A HOMOLOGACIÓN...' : 'HOMOLOGAR CONDUCTOR EN EL VAULT'}
               </button>
             </form>
           )}

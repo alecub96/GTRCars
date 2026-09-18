@@ -38,7 +38,7 @@ export async function POST() {
     const message = typeof error?.message === 'string' ? error.message : '';
     if (message.includes('complete your platform profile')) {
       return NextResponse.json({
-        error: 'Stripe requiere completar el perfil de la plataforma Vaneando antes de conectar cuentas reales de propietarios.',
+        error: 'Stripe requiere completar el perfil de la plataforma GTRCars antes de conectar cuentas reales de propietarios.',
         setupRequired: true,
         dashboardUrl: 'https://dashboard.stripe.com/connect/accounts/overview',
       }, { status: 409 });

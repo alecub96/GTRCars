@@ -58,21 +58,147 @@ export default function BookingCheckoutClient() {
   const payable = ['OWNER_ACCEPTED', 'CONFIRMED', 'PAYMENT_PENDING'].includes(booking.status);
   const date = (value: string) => new Date(value).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
 
-  return <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]"><Navbar />{paymentClientSecret && <StripePaymentElement clientSecret={paymentClientSecret} bookingId={id} onClose={() => setPaymentClientSecret('')} />}<main className="mx-auto max-w-6xl px-4 py-10">
-    <header className="mb-7"><span className="text-[11px] font-black uppercase tracking-[.25em] text-[#16B8AA]">Reserva {booking.code}</span><h1 className="font-serif text-4xl font-bold">Revisa, firma y paga con seguridad</h1><p className="mt-2 text-sm text-[#6B726E]">El pago se completa aquí mediante componentes seguros de Stripe integrados en Vaneando.</p></header>
-    {error && <div className="mb-5 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-bold text-red-700">{error}</div>}
-    <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
-      <section className="space-y-6">
-        <article className="rounded-3xl border border-[#E9E1D2] bg-white p-6 shadow-sm"><div className="mb-5 flex items-center gap-3"><CalendarDays className="h-6 w-6 text-[#16B8AA]" /><div><h2 className="font-serif text-2xl font-bold">Datos de la reserva</h2><p className="text-xs text-[#6B726E]">Información vinculada al contrato</p></div></div><dl className="grid gap-4 text-sm sm:grid-cols-2"><div><dt className="text-xs text-[#6B726E]">Vehículo</dt><dd className="font-bold">{booking.vehicle?.title || 'Camper'}</dd><dd>{booking.vehicle?.brand || ''} {booking.vehicle?.model || ''} · {booking.vehicle?.year || ''}</dd></div><div><dt className="text-xs text-[#6B726E]">Recogida</dt><dd className="font-bold">{booking.vehicle?.municipality || ''}, {booking.vehicle?.island || ''}</dd></div><div><dt className="text-xs text-[#6B726E]">Entrega</dt><dd className="font-bold">{date(booking.pickupDate)} · {booking.pickupTime}</dd></div><div><dt className="text-xs text-[#6B726E]">Devolución</dt><dd className="font-bold">{date(booking.returnDate)} · {booking.returnTime}</dd></div><div><dt className="text-xs text-[#6B726E]">Viajero</dt><dd className="font-bold">{booking.traveler?.firstName || 'Viajero'} {booking.traveler?.lastName || ''}</dd></div><div><dt className="text-xs text-[#6B726E]">Propietario</dt><dd className="font-bold">{booking.owner?.firstName || 'Propietario'} {booking.owner?.lastName || ''}</dd></div></dl></article>
-        {/* CONTRATO DIGITAL Y SUITE DE FIRMA ELECTRÓNICA */}
-        <DigitalContractViewer
-          booking={booking}
-          viewerRole={viewerRole}
-          onSigned={load}
+  return (
+    <div className="min-h-screen bg-white text-black selection:bg-black selection:text-white font-sans">
+      <Navbar />
+      {paymentClientSecret && (
+        <StripePaymentElement
+          clientSecret={paymentClientSecret}
+          bookingId={id}
+          onClose={() => setPaymentClientSecret('')}
         />
-      </section>
-      <aside className="h-fit rounded-3xl border border-[#E9E1D2] bg-white p-6 shadow-xl lg:sticky lg:top-28"><h2 className="font-serif text-2xl font-bold">Resumen de pago</h2><div className="my-5 space-y-3 border-y border-[#E9E1D2] py-5 text-sm"><div className="flex justify-between"><span>Alquiler</span><span>{booking.basePrice} €</span></div><div className="flex justify-between"><span>Limpieza</span><span>{booking.cleaningFee} €</span></div><div className="flex justify-between"><span>Extras</span><span>{booking.extrasTotal} €</span></div><div className="flex justify-between"><span>Gestión de plataforma (9,7%)</span><span>{booking.travelerFee} €</span></div><div className="flex justify-between text-lg font-bold"><span>Total</span><span>{booking.totalAmount} €</span></div></div><div className="mb-5 rounded-2xl bg-[#F0FDFA] p-4 text-xs"><ShieldCheck className="mb-2 h-6 w-6 text-[#16B8AA]" /><strong className="block">Pago protegido por Stripe</strong>En el siguiente paso podrás elegir tarjeta o Klarna si Stripe lo ofrece para tu compra.</div>{booking.status === 'REQUESTED' && <p className="mb-4 rounded-xl bg-amber-50 p-3 text-xs font-bold text-amber-800">Solicitud enviada. Podrás pagar cuando el propietario la acepte.</p>}{viewerRole === 'TRAVELER' && <button onClick={pay} disabled={!fullySigned || !payable || loading} className="flex w-full items-center justify-center gap-2 rounded-full bg-[#16B8AA] py-4 text-sm font-bold text-white disabled:cursor-not-allowed disabled:bg-slate-300"><Lock className="h-4 w-4" />Continuar a pago seguro</button>}<div className="mt-4 flex items-center justify-center gap-4 text-xs font-bold text-[#6B726E]"><span className="flex items-center gap-1"><CreditCard className="h-4 w-4" />Tarjeta</span><span>Klarna.</span></div></aside>
+      )}
+      <main className="mx-auto max-w-6xl px-4 sm:px-6 py-10">
+        <header className="mb-8 font-mono border-b border-gray-100 pb-6">
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[.25em] text-gray-500 mb-1">
+            <span>EXPEDIENTE // BÓVEDA STRIPE CONNECT</span>
+          </div>
+          <h1 className="font-sans text-3xl sm:text-4xl font-black uppercase text-black">
+            Revisión, Contrato & Pago Seguro
+          </h1>
+          <p className="mt-1 text-xs sm:text-sm text-gray-500 font-sans">
+            Pago custodiado mediante protocolo encriptado de Stripe integrado directamente en GTRCars.
+          </p>
+        </header>
+
+        {error && (
+          <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-xs font-mono font-bold text-red-700">
+            {error}
+          </div>
+        )}
+
+        <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
+          <section className="space-y-6">
+            <article className="rounded-3xl border border-gray-200 bg-white p-6 shadow-xs font-mono">
+              <div className="mb-5 flex items-center gap-3">
+                <CalendarDays className="h-5 w-5 text-black" />
+                <div>
+                  <h2 className="font-sans text-xl font-bold uppercase tracking-tight text-black">
+                    Ficha Técnica del Servicio
+                  </h2>
+                  <p className="text-xs text-gray-500 font-sans">Datos vinculados a la póliza y contrato digital</p>
+                </div>
+              </div>
+              <dl className="grid gap-4 text-xs sm:grid-cols-2">
+                <div>
+                  <dt className="text-gray-400 uppercase font-bold text-[10px]">Vehículo Supercar</dt>
+                  <dd className="font-bold text-black font-sans text-sm">{booking.vehicle?.title || 'Superdeportivo'}</dd>
+                  <dd className="text-gray-500">{booking.vehicle?.brand || ''} {booking.vehicle?.model || ''} · {booking.vehicle?.year || ''}</dd>
+                </div>
+                <div>
+                  <dt className="text-gray-400 uppercase font-bold text-[10px]">Lugar de Recogida</dt>
+                  <dd className="font-bold text-black font-sans text-sm">{booking.vehicle?.municipality || ''}, {booking.vehicle?.island || ''}</dd>
+                </div>
+                <div>
+                  <dt className="text-gray-400 uppercase font-bold text-[10px]">Entrega de Llaves</dt>
+                  <dd className="font-bold text-black font-sans text-sm">{date(booking.pickupDate)} · {booking.pickupTime}</dd>
+                </div>
+                <div>
+                  <dt className="text-gray-400 uppercase font-bold text-[10px]">Retorno</dt>
+                  <dd className="font-bold text-black font-sans text-sm">{date(booking.returnDate)} · {booking.returnTime}</dd>
+                </div>
+                <div>
+                  <dt className="text-gray-400 uppercase font-bold text-[10px]">Piloto Arrendatario</dt>
+                  <dd className="font-bold text-black font-sans text-sm">{booking.traveler?.firstName || 'Piloto'} {booking.traveler?.lastName || ''}</dd>
+                </div>
+                <div>
+                  <dt className="text-gray-400 uppercase font-bold text-[10px]">Propietario Vault</dt>
+                  <dd className="font-bold text-black font-sans text-sm">{booking.owner?.firstName || 'Propietario'} {booking.owner?.lastName || ''}</dd>
+                </div>
+              </dl>
+            </article>
+
+            {/* CONTRATO DIGITAL Y SUITE DE FIRMA ELECTRÓNICA */}
+            <DigitalContractViewer
+              booking={booking}
+              viewerRole={viewerRole}
+              onSigned={load}
+            />
+          </section>
+
+          <aside className="h-fit rounded-3xl border border-gray-200 bg-white p-6 shadow-md lg:sticky lg:top-28 font-mono">
+            <h2 className="font-sans text-xl font-bold uppercase tracking-tight text-black">
+              Liquidación del Pago
+            </h2>
+            <div className="my-5 space-y-2.5 border-y border-gray-100 py-4 text-xs">
+              <div className="flex justify-between text-gray-600">
+                <span>Jornadas de pilotaje</span>
+                <span className="font-bold text-black">{booking.basePrice} €</span>
+              </div>
+              <div className="flex justify-between text-gray-600">
+                <span>Preparación & Detailing</span>
+                <span className="font-bold text-black">{booking.cleaningFee} €</span>
+              </div>
+              {booking.extrasTotal > 0 && (
+                <div className="flex justify-between text-gray-600">
+                  <span>Opciones complementarias</span>
+                  <span className="font-bold text-black">{booking.extrasTotal} €</span>
+                </div>
+              )}
+              <div className="flex justify-between text-gray-600">
+                <span>Garantía & Bóveda GTRCars</span>
+                <span className="font-bold text-black">{booking.travelerFee} €</span>
+              </div>
+              <div className="flex justify-between text-base font-black text-black pt-2 border-t border-gray-100">
+                <span>Total a Transferir</span>
+                <span>{booking.totalAmount} €</span>
+              </div>
+            </div>
+
+            <div className="mb-5 rounded-2xl bg-gray-50 border border-gray-200 p-4 text-xs">
+              <ShieldCheck className="mb-2 h-5 w-5 text-black" />
+              <strong className="block font-sans text-black">Custodia Segura Stripe Connect</strong>
+              <span className="text-gray-500 font-sans block mt-0.5">
+                Los fondos quedan retenidos en depósito seguro hasta la entrega del superdeportivo.
+              </span>
+            </div>
+
+            {booking.status === 'REQUESTED' && (
+              <p className="mb-4 rounded-xl bg-amber-50 border border-amber-200 p-3 text-xs font-bold text-amber-800">
+                Solicitud enviada al propietario. Podrás formalizar el pago cuando la acepte.
+              </p>
+            )}
+
+            {viewerRole === 'TRAVELER' && (
+              <button
+                onClick={pay}
+                disabled={!fullySigned || !payable || loading}
+                className="flex w-full items-center justify-center gap-2 rounded-full bg-black py-3.5 text-xs font-black uppercase tracking-widest text-white hover:bg-neutral-800 transition-all shadow-md disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
+              >
+                <Lock className="h-3.5 w-3.5" />
+                <span>Continuar a Pago Seguro</span>
+              </button>
+            )}
+
+            <div className="mt-4 flex items-center justify-center gap-4 text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+              <span className="flex items-center gap-1"><CreditCard className="h-3.5 w-3.5 text-black" /> Tarjeta</span>
+              <span>Klarna</span>
+              <span>Apple Pay</span>
+            </div>
+          </aside>
+        </div>
+        <BookingIncidentPanel bookingId={id} bookingStatus={booking.status} canReport={viewerRole !== 'ADMIN'} />
+      </main>
     </div>
-    <BookingIncidentPanel bookingId={id} bookingStatus={booking.status} canReport={viewerRole !== 'ADMIN'} />
-  </main></div>;
+  );
 }

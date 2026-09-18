@@ -39,14 +39,14 @@ interface InspectionPhoto {
 }
 
 const DEFAULT_PHOTO_SLOTS = [
-  { tag: 'FRONT', label: 'Frontal y Parabrisas' },
-  { tag: 'REAR', label: 'Parte Trasera y Matrícula' },
-  { tag: 'LEFT_LOW', label: 'Lateral Izquierdo Bajo' },
-  { tag: 'LEFT_HIGH', label: 'Lateral Izquierdo Alto' },
-  { tag: 'RIGHT_LOW', label: 'Lateral Derecho Bajo' },
-  { tag: 'RIGHT_HIGH', label: 'Lateral Derecho Alto' },
-  { tag: 'INTERIOR_CAMPER', label: 'Interior y Camperización (Cocina/Cama)' },
-  { tag: 'DASHBOARD', label: 'Cuadro de Mandos / Cuentakilómetros' },
+  { tag: 'FRONT', label: 'Frontal, Splitter y Ópticas' },
+  { tag: 'REAR', label: 'Difusor Trasero, Alerón y Escape' },
+  { tag: 'LEFT_WHEELS', label: 'Llantas y Neumáticos Lado Izquierdo' },
+  { tag: 'RIGHT_WHEELS', label: 'Llantas y Neumáticos Lado Derecho' },
+  { tag: 'LEFT_BODY', label: 'Carrocería / Puertas Lado Izquierdo' },
+  { tag: 'RIGHT_BODY', label: 'Carrocería / Puertas Lado Derecho' },
+  { tag: 'INTERIOR_COCKPIT', label: 'Cockpit, Asientos y Consola Central' },
+  { tag: 'DASHBOARD', label: 'Cuadro de Mandos / Cuentakilómetros y Modos' },
 ];
 
 export default function DigitalContractViewer({
@@ -674,20 +674,20 @@ export default function DigitalContractViewer({
               </div>
             </div>
 
-            {/* CHECKLIST DE COMPONENTES */}
-            <div className="bg-white p-4 rounded-xl border border-[#E9E1D2] space-y-3">
-              <span className="text-[10px] font-black uppercase text-[#16B8AA] tracking-wider block">
-                Comprobación de Elementos y Camperización
+            {/* CHECKLIST DE COMPONENTES DE SUPERDEPORTIVO */}
+            <div className="bg-white p-4 rounded-xl border border-gray-200 space-y-3 font-mono">
+              <span className="text-[10px] font-black uppercase text-black tracking-wider block">
+                Comprobación de Elementos y Telemetría del Superdeportivo
               </span>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-semibold text-[#13322E]">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-semibold text-black">
                 <label className="flex items-center space-x-2 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={inspectionChecks.exteriorBody}
                     onChange={(e) => setInspectionChecks({ ...inspectionChecks, exteriorBody: e.target.checked })}
-                    className="rounded text-[#16B8AA] focus:ring-0"
+                    className="rounded text-black focus:ring-0"
                   />
-                  <span>Chapa / Pintura</span>
+                  <span>Carrocería / Fibra Carbono</span>
                 </label>
 
                 <label className="flex items-center space-x-2 cursor-pointer">
@@ -695,9 +695,9 @@ export default function DigitalContractViewer({
                     type="checkbox"
                     checked={inspectionChecks.lights}
                     onChange={(e) => setInspectionChecks({ ...inspectionChecks, lights: e.target.checked })}
-                    className="rounded text-[#16B8AA] focus:ring-0"
+                    className="rounded text-black focus:ring-0"
                   />
-                  <span>Luces y Faros</span>
+                  <span>Splitter &amp; Difusor Activo</span>
                 </label>
 
                 <label className="flex items-center space-x-2 cursor-pointer">
@@ -705,9 +705,9 @@ export default function DigitalContractViewer({
                     type="checkbox"
                     checked={inspectionChecks.tires}
                     onChange={(e) => setInspectionChecks({ ...inspectionChecks, tires: e.target.checked })}
-                    className="rounded text-[#16B8AA] focus:ring-0"
+                    className="rounded text-black focus:ring-0"
                   />
-                  <span>Neumáticos</span>
+                  <span>Llantas &amp; Neumáticos Cup 2</span>
                 </label>
 
                 <label className="flex items-center space-x-2 cursor-pointer">
@@ -715,9 +715,9 @@ export default function DigitalContractViewer({
                     type="checkbox"
                     checked={inspectionChecks.interiorFurniture}
                     onChange={(e) => setInspectionChecks({ ...inspectionChecks, interiorFurniture: e.target.checked })}
-                    className="rounded text-[#16B8AA] focus:ring-0"
+                    className="rounded text-black focus:ring-0"
                   />
-                  <span>Mobiliario y Cama</span>
+                  <span>Frenos Carbono-Cerámicos</span>
                 </label>
 
                 <label className="flex items-center space-x-2 cursor-pointer">
@@ -725,9 +725,9 @@ export default function DigitalContractViewer({
                     type="checkbox"
                     checked={inspectionChecks.kitchenGas}
                     onChange={(e) => setInspectionChecks({ ...inspectionChecks, kitchenGas: e.target.checked })}
-                    className="rounded text-[#16B8AA] focus:ring-0"
+                    className="rounded text-black focus:ring-0"
                   />
-                  <span>Cocina y Gas</span>
+                  <span>Cockpit &amp; Alcántara</span>
                 </label>
 
                 <label className="flex items-center space-x-2 cursor-pointer">
@@ -735,32 +735,13 @@ export default function DigitalContractViewer({
                     type="checkbox"
                     checked={inspectionChecks.fridge}
                     onChange={(e) => setInspectionChecks({ ...inspectionChecks, fridge: e.target.checked })}
-                    className="rounded text-[#16B8AA] focus:ring-0"
+                    className="rounded text-black focus:ring-0"
                   />
-                  <span>Nevera</span>
-                </label>
-
-                <label className="flex items-center space-x-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={inspectionChecks.waterPump}
-                    onChange={(e) => setInspectionChecks({ ...inspectionChecks, waterPump: e.target.checked })}
-                    className="rounded text-[#16B8AA] focus:ring-0"
-                  />
-                  <span>Bomba de Agua / Grifo</span>
-                </label>
-
-                <label className="flex items-center space-x-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={inspectionChecks.auxBattery}
-                    onChange={(e) => setInspectionChecks({ ...inspectionChecks, auxBattery: e.target.checked })}
-                    className="rounded text-[#16B8AA] focus:ring-0"
-                  />
-                  <span>Batería Auxiliar / 12V</span>
+                  <span>Launch Control &amp; Modos Race</span>
                 </label>
               </div>
             </div>
+
 
             {/* SUBIDA DE FOTOGRAFÍAS */}
             <div className="space-y-3">
