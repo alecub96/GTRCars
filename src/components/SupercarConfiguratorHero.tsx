@@ -447,19 +447,33 @@ const FEATURED_FLEET: Supercar[] = [
   }
 ];
 
-export default function SupercarConfiguratorHero() {
+interface SupercarConfiguratorHeroProps {
+  onSelectBrand?: (brand: string) => void;
+}
+
+export default function SupercarConfiguratorHero({ onSelectBrand }: SupercarConfiguratorHeroProps = {}) {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const total = FEATURED_FLEET.length;
   const currentCar = FEATURED_FLEET[selectedIndex];
 
+  const handleSelectCar = (index: number) => {
+    setSelectedIndex(index);
+    if (onSelectBrand) {
+      onSelectBrand(FEATURED_FLEET[index].brand);
+    }
+  };
+
   const prevCar = () => {
     playPaddleShiftSound('prev');
-    setSelectedIndex((prev) => (prev === 0 ? total - 1 : prev - 1));
+    const newIdx = selectedIndex === 0 ? total - 1 : selectedIndex - 1;
+    handleSelectCar(newIdx);
   };
+
   const nextCar = () => {
     playPaddleShiftSound('next');
-    setSelectedIndex((prev) => (prev === total - 1 ? 0 : prev + 1));
+    const newIdx = selectedIndex === total - 1 ? 0 : selectedIndex + 1;
+    handleSelectCar(newIdx);
   };
 
   // Soporte para gestos táctiles (Swipe en móvil)
@@ -489,12 +503,12 @@ export default function SupercarConfiguratorHero() {
   };
 
   return (
-    <section className="relative min-h-[50vh] sm:min-h-[75vh] md:min-h-[80vh] w-full bg-white text-black overflow-hidden flex flex-col justify-between selection:bg-black selection:text-white pt-2 sm:pt-6 pb-3 sm:pb-6">
+    <section className="relative w-full bg-white text-black overflow-hidden flex flex-col items-center justify-center selection:bg-black selection:text-white pt-1 sm:pt-6 pb-2 sm:pb-6 min-h-[42vh] sm:min-h-[70vh] md:min-h-[75vh]">
       
       {/* 1. MARCA EN EL FONDO (Tipografía sutil y ajustada a móvil) */}
       <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden z-0 px-2 sm:px-8">
         <span 
-          className={`font-black uppercase tracking-tight text-gray-400/70 sm:text-gray-400/85 select-none leading-none font-sans transition-all duration-700 text-center whitespace-nowrap -translate-y-8 sm:-translate-y-16 ${getFontSize(currentCar.watermarkText)}`}
+          className={`font-black uppercase tracking-tight text-gray-400/70 sm:text-gray-400/85 select-none leading-none font-sans transition-all duration-700 text-center whitespace-nowrap -translate-y-4 sm:-translate-y-16 ${getFontSize(currentCar.watermarkText)}`}
         >
           {currentCar.watermarkText}
         </span>
@@ -505,12 +519,9 @@ export default function SupercarConfiguratorHero() {
         GT Cars Premium & GTR Cars — Alquiler de Superdeportivos en Canarias, Madrid, Barcelona y Londres
       </h1>
 
-      {/* 2. ESPACIADOR SUPERIOR MÍNIMO */}
-      <div className="pt-1 sm:pt-2" />
-
-      {/* 3. CENTRO: CARRUSEL TIPO RUEDA DE APPLE / LIBRO 3D CON SOPORTE SWIPE */}
+      {/* 2. CENTRO: CARRUSEL TIPO RUEDA DE APPLE / LIBRO 3D CON SOPORTE SWIPE */}
       <div 
-        className="relative z-10 w-full max-w-7xl mx-auto px-2 sm:px-4 my-auto flex items-center justify-center overflow-hidden sm:overflow-visible touch-pan-y"
+        className="relative z-10 w-full max-w-7xl mx-auto px-2 sm:px-4 flex items-center justify-center overflow-hidden sm:overflow-visible touch-pan-y my-0"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
@@ -526,7 +537,7 @@ export default function SupercarConfiguratorHero() {
 
         {/* Contenedor 3D de coches (centro nítido, laterales con desplazamiento optimizado para móvil) */}
         <div 
-          className="relative w-full max-w-4xl h-[175px] sm:h-[320px] md:h-[400px] flex items-center justify-center"
+          className="relative w-full max-w-4xl h-[160px] sm:h-[320px] md:h-[400px] flex items-center justify-center"
           style={{ perspective: '1000px' }}
         >
           {FEATURED_FLEET.map((car, idx) => {
@@ -551,7 +562,7 @@ export default function SupercarConfiguratorHero() {
             return (
               <div
                 key={car.id}
-                onClick={() => setSelectedIndex(idx)}
+                onClick={() => handleSelectCar(idx)}
                 className={`absolute inset-0 flex items-center justify-center transition-all duration-700 ease-out select-none ${
                   isCenter ? 'cursor-default' : 'cursor-pointer'
                 }`}
@@ -570,7 +581,7 @@ export default function SupercarConfiguratorHero() {
                     fill
                     sizes="(max-width: 768px) 85vw, 850px"
                     priority={isCenter}
-                    className="object-contain filter drop-shadow-[0_16px_20px_rgba(0,0,0,0.12)] transition-transform duration-700"
+                    className="object-contain filter drop-shadow-[0_14px_18px_rgba(0,0,0,0.12)] transition-transform duration-700"
                   />
                 </div>
               </div>
@@ -589,30 +600,49 @@ export default function SupercarConfiguratorHero() {
 
       </div>
 
-      {/* 4. SELECTOR ESTILO PORSCHE (PILLS EN CÁPSULA CONTENIDA Y SCROLLABLE EN MÓVIL) */}
-      <div className="relative z-20 w-full max-w-7xl mx-auto px-3 sm:px-8 mt-1">
-        <div className="w-full overflow-x-auto no-scrollbar py-1">
-          <div className="flex items-center gap-1 sm:gap-1.5 bg-gray-100/95 backdrop-blur-md p-1 sm:p-1.5 rounded-full border border-gray-200 shadow-sm w-max mx-auto max-w-full">
-            {FEATURED_FLEET.map((fCar, idx) => {
-              const isSelected = selectedIndex === idx;
-              return (
-                <button
-                  key={fCar.id}
-                  onClick={() => {
-                    playSoftTickSound();
-                    setSelectedIndex(idx);
-                  }}
-                  className={`px-3 sm:px-5 py-1 sm:py-1.5 text-[9px] sm:text-xs font-mono uppercase tracking-wider transition-all rounded-full cursor-pointer whitespace-nowrap shrink-0 ${
-                    isSelected
-                      ? 'bg-black text-white font-bold shadow-md scale-102'
-                      : 'text-gray-600 hover:text-black hover:bg-gray-200'
-                  }`}
-                >
-                  {fCar.brand}
-                </button>
-              );
-            })}
-          </div>
+      {/* 3. SELECTOR ESTILO PORSCHE // CARRUSEL 3D SINCRONIZADO CON LOS COCHES */}
+      <div className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-8 mt-0 sm:mt-2 flex items-center justify-center">
+        {/* Cápsula de navegación Porsche */}
+        <div className="relative w-full max-w-sm sm:max-w-md h-9 sm:h-12 bg-gray-100/95 backdrop-blur-md rounded-full border border-gray-200 shadow-sm overflow-hidden flex items-center justify-center">
+          
+          {FEATURED_FLEET.map((fCar, idx) => {
+            let diff = idx - selectedIndex;
+            if (diff > total / 2) diff -= total;
+            if (diff < -total / 2) diff += total;
+
+            const isCenter = diff === 0;
+            const isVisible = Math.abs(diff) <= 2;
+
+            if (!isVisible) return null;
+
+            // En móvil cada paso desplaza 100px, en desktop 115px
+            const translateX = diff * 102;
+            const scale = isCenter ? 1 : Math.max(0.72, 1 - Math.abs(diff) * 0.18);
+            const opacity = isCenter ? 1 : Math.max(0.3, 0.7 - Math.abs(diff) * 0.25);
+            const zIndex = isCenter ? 20 : 10 - Math.abs(diff);
+
+            return (
+              <button
+                key={fCar.id}
+                onClick={() => {
+                  playSoftTickSound();
+                  handleSelectCar(idx);
+                }}
+                className={`absolute px-3.5 sm:px-5 py-1 sm:py-2 text-[9px] sm:text-xs font-mono uppercase tracking-wider transition-all duration-700 ease-out rounded-full whitespace-nowrap cursor-pointer select-none ${
+                  isCenter
+                    ? 'bg-black text-white font-bold shadow-md'
+                    : 'text-gray-600 hover:text-black hover:bg-gray-200/60 font-semibold'
+                }`}
+                style={{
+                  transform: `translateX(${translateX}px) scale(${scale})`,
+                  opacity,
+                  zIndex,
+                }}
+              >
+                {fCar.brand}
+              </button>
+            );
+          })}
         </div>
       </div>
 

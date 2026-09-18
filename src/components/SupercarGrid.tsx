@@ -92,7 +92,23 @@ const COMMUNITY_SUPERCARS = [
   }
 ];
 
-export default function SupercarGrid() {
+interface SupercarGridProps {
+  selectedBrand?: string | null;
+}
+
+export default function SupercarGrid({ selectedBrand }: SupercarGridProps = {}) {
+  // Filtrar coches si hay una marca seleccionada
+  const filteredCars = selectedBrand
+    ? COMMUNITY_SUPERCARS.filter(
+        (car) =>
+          car.brand.toLowerCase().includes(selectedBrand.toLowerCase()) ||
+          selectedBrand.toLowerCase().includes(car.brand.toLowerCase())
+      )
+    : COMMUNITY_SUPERCARS;
+
+  // Si para esa marca específica no hay en el mock inicial, mostramos el garaje completo o los coincidentes
+  const displayCars = filteredCars.length > 0 ? filteredCars : COMMUNITY_SUPERCARS;
+
   return (
     <section className="py-24 bg-white border-t border-gray-100 text-black relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -100,9 +116,16 @@ export default function SupercarGrid() {
         {/* SECTION HEADER */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-6 border-b border-gray-200">
           <div>
-            <span className="text-[10px] font-mono font-bold uppercase tracking-[0.25em] text-gray-500 block mb-1">
-              SELECCIÓN GT CARS & GTR CARS PREMIUM
-            </span>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-[0.25em] text-gray-500 block">
+                SELECCIÓN GT CARS & GTR CARS PREMIUM
+              </span>
+              {selectedBrand && (
+                <span className="px-2.5 py-0.5 rounded-full bg-black text-white text-[9px] font-mono font-bold uppercase">
+                  FILTRO: {selectedBrand}
+                </span>
+              )}
+            </div>
             <h2 className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-black font-sans">
               COLECCIÓN DE SUPERDEPORTIVOS
             </h2>
@@ -124,7 +147,7 @@ export default function SupercarGrid() {
 
         {/* CARDS GRID */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {COMMUNITY_SUPERCARS.map((car) => (
+          {displayCars.map((car) => (
             <Link
               key={car.id}
               href={`/coche/${car.slug}`}
