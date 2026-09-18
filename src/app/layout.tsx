@@ -80,15 +80,17 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon.ico?v=2', sizes: 'any' },
-      { url: '/favicon.png?v=2', type: 'image/png' },
-      { url: '/icon-192.png?v=2', sizes: '192x192', type: 'image/png' },
-      { url: '/brand/app-icon.png?v=2', sizes: '512x512', type: 'image/png' },
+      { url: '/gtr-icon.svg?v=gtr3', type: 'image/svg+xml' },
+      { url: '/favicon.ico?v=gtr3', sizes: 'any' },
+      { url: '/favicon.png?v=gtr3', type: 'image/png' },
+      { url: '/favicon-32x32.png?v=gtr3', sizes: '32x32', type: 'image/png' },
+      { url: '/icon-192.png?v=gtr3', sizes: '192x192', type: 'image/png' },
+      { url: '/brand/app-icon.png?v=gtr3', sizes: '512x512', type: 'image/png' },
     ],
     apple: [
-      { url: '/apple-touch-icon.png?v=2', sizes: '180x180', type: 'image/png' },
+      { url: '/apple-touch-icon.png?v=gtr3', sizes: '180x180', type: 'image/png' },
     ],
-    shortcut: ['/favicon.ico?v=2'],
+    shortcut: ['/gtr-icon.svg?v=gtr3'],
   },
   manifest: '/site.webmanifest',
 };
@@ -157,11 +159,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             })(window, document, "clarity", "script", "ybr6qavm58");`,
           }}
         />
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
-        <link rel="icon" type="image/svg+xml" href="/vaneando-icon.svg" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="icon" href="/favicon.ico?v=gtr3" sizes="any" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=gtr3" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png?v=gtr3" />
+        <link rel="icon" type="image/svg+xml" href="/gtr-icon.svg?v=gtr3" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=gtr3" />
+        <link rel="manifest" href="/site.webmanifest?v=gtr3" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" />
