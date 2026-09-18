@@ -68,8 +68,8 @@ const FEATURED_FLEET: Supercar[] = [
       trips: 28,
       location: 'Mallorca / Ibiza'
     },
-    colorName: 'Signal Yellow',
-    colorHex: '#EAB308',
+    colorName: 'Jet Black Metallic',
+    colorHex: '#111111',
     image: '/supercars/brands/porsche.png',
     badgeText: '6-SPEED MANUAL'
   },
