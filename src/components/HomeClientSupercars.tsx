@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar';
 import SupercarConfiguratorHero from '@/components/SupercarConfiguratorHero';
 import SupercarGrid from '@/components/SupercarGrid';
 import OwnerBanner from '@/components/OwnerBanner';
+import HomeSeoSection from '@/components/HomeSeoSection';
 import Footer from '@/components/Footer';
 
 export default function HomeClientSupercars() {
@@ -24,7 +25,10 @@ export default function HomeClientSupercars() {
       {/* 4. BANNER PROPIETARIOS */}
       <OwnerBanner />
 
-      {/* 5. FOOTER OFICIAL GTR CARS */}
+      {/* 5. DIRECTORIO SEO SEMÁNTICO E INTERLINKING POR CIUDAD Y MARCA */}
+      <HomeSeoSection />
+
+      {/* 6. FOOTER OFICIAL GTR CARS */}
       <Footer />
     </div>
   );

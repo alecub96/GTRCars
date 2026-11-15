@@ -41,6 +41,7 @@ export async function GET(request: Request) {
         where: whereClause,
         include: {
           photos: { orderBy: { orderIndex: 'asc' } },
+          features: true,
           reviews: { select: { rating: true } },
           owner: { select: { id: true, firstName: true, lastName: true, email: true, avatarUrl: true } },
         },

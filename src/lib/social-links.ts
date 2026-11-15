@@ -1,6 +1,6 @@
 export const socialLinks = {
-  instagram: 'https://www.instagram.com/vaneando_canarias',
-  facebook: 'https://www.facebook.com/vaneando',
+  instagram: 'https://www.instagram.com/gtrcars',
+  facebook: null,
   tiktok: null,
   youtube: null,
   pinterest: null,

@@ -38,28 +38,28 @@ export default function BlogListPage() {
             {lang === 'es' ? 'GTR CARS // BLOG & RUTAS VIP' : 'GTR CARS // VIP BLOG & DRIVING ROUTES'}
           </div>
 
-          <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white">
+          <h1 className="font-sans text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-black">
             {lang === 'es'
-              ? 'Guía de Superdeportivos y Rutas en Canarias'
-              : 'Supercar Journal & Canary Island Driving Routes'}
+              ? 'Guía de Superdeportivos y Rutas VIP'
+              : 'Supercar Journal & VIP Driving Routes'}
           </h1>
 
-          <p className="text-sm sm:text-base text-gray-500 font-mono">
+          <p className="text-sm sm:text-base text-gray-600 font-mono">
             {lang === 'es'
-              ? 'Descubre las mejores rutas de montaña, consejos de pilotaje, guías de alquiler de Ferrari, Lamborghini y Porsche, y novedades del Vault en Gran Canaria y Tenerife.'
-              : 'Explore the finest mountain passes, driving guides, Ferrari, Lamborghini, and Porsche rental insights across Gran Canaria and Tenerife.'}
+              ? 'Descubre las mejores rutas de montaña, consejos de pilotaje, guías de alquiler de Ferrari, Lamborghini y Porsche, y novedades del Vault en Madrid, Marbella, Barcelona y Canarias.'
+              : 'Explore the finest mountain passes, driving guides, Ferrari, Lamborghini, and Porsche rental insights across Spain and the Canary Islands.'}
           </p>
 
           {/* SELECTOR DE IDIOMA */}
           <div className="pt-2 flex items-center justify-center gap-2">
-            <div className="inline-flex items-center rounded-2xl bg-gray-50 p-1 border border-gray-200 shadow-lg">
+            <div className="inline-flex items-center rounded-2xl bg-gray-100 p-1 border border-gray-200 shadow-xs">
               <button
                 type="button"
                 onClick={() => setLang('es')}
                 className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
                   lang === 'es'
-                    ? 'bg-black text-white hover:bg-neutral-800 shadow-md'
-                    : 'text-gray-500 hover:text-white'
+                    ? 'bg-black text-white shadow-sm'
+                    : 'text-gray-600 hover:text-black'
                 }`}
               >
                 <Globe className="w-3.5 h-3.5" />
@@ -70,8 +70,8 @@ export default function BlogListPage() {
                 onClick={() => setLang('en')}
                 className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
                   lang === 'en'
-                    ? 'bg-black text-white hover:bg-neutral-800 shadow-md'
-                    : 'text-gray-500 hover:text-white'
+                    ? 'bg-black text-white shadow-sm'
+                    : 'text-gray-600 hover:text-black'
                 }`}
               >
                 <Globe className="w-3.5 h-3.5" />
@@ -91,8 +91,8 @@ export default function BlogListPage() {
                 onClick={() => setSelectedCategory(cat)}
                 className={`px-4 py-2 rounded-full text-xs font-mono font-bold transition-all border cursor-pointer ${
                   selectedCategory === cat
-                    ? 'bg-[#D4AF37] text-black border-black shadow-sm font-black'
-                    : 'bg-gray-50 text-gray-500 border-gray-200 hover:border-white/30 hover:text-white'
+                    ? 'bg-black text-white border-black shadow-sm'
+                    : 'bg-gray-50 text-gray-600 border-gray-200 hover:border-black hover:text-black'
                 }`}
               >
                 {cat === 'ALL' ? (lang === 'es' ? 'Todos los Artículos' : 'All Articles') : cat}
@@ -107,7 +107,7 @@ export default function BlogListPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={lang === 'es' ? 'Buscar rutas, Ferrari, Porsche...' : 'Search routes, Ferrari, Porsche...'}
-              className="w-full pl-10 pr-4 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs font-mono text-white placeholder:text-neutral-500 focus:border-black outline-none"
+              className="w-full pl-10 pr-4 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs font-mono text-black placeholder:text-neutral-500 focus:border-black outline-none"
             />
           </div>
         </div>
@@ -119,17 +119,16 @@ export default function BlogListPage() {
             return (
               <article
                 key={article.slug}
-                className="group flex flex-col bg-gray-50 rounded-3xl border border-gray-200 overflow-hidden hover:border-black/50 transition-all duration-300 shadow-xl hover:shadow-[0_0_30px_rgba(212,175,55,0.15)]"
+                className="group flex flex-col bg-gray-50 rounded-3xl border border-gray-200 overflow-hidden hover:border-black transition-all duration-300 shadow-sm hover:shadow-xl"
               >
                 <Link href={`/blog/${article.slug}`} className="relative h-56 w-full overflow-hidden block">
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f12] via-transparent to-transparent z-10" />
                   <img
                     src={article.image}
                     alt={data.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute top-4 left-4 z-20 flex gap-2">
-                    <span className="px-3 py-1 rounded-full bg-black/70 backdrop-blur-md border border-gray-200 text-black text-[10px] font-mono uppercase font-bold tracking-wider">
+                    <span className="px-3 py-1 rounded-full bg-black text-white text-[10px] font-mono uppercase font-bold tracking-wider">
                       {article.category}
                     </span>
                   </div>
@@ -146,7 +145,7 @@ export default function BlogListPage() {
                       </span>
                     </div>
 
-                    <h2 className="font-serif text-lg sm:text-xl font-bold text-white group-hover:text-black transition-colors leading-snug line-clamp-2">
+                    <h2 className="font-sans text-lg sm:text-xl font-black text-black group-hover:text-neutral-600 transition-colors leading-snug line-clamp-2">
                       <Link href={`/blog/${article.slug}`}>{data.title}</Link>
                     </h2>
 

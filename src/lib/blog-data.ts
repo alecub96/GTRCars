@@ -27,7 +27,7 @@ export const BLOG_ARTICLES: BlogArticleData[] = [
   {
     slug: 'alquiler-deportivos-gran-canaria-rutas-guia-completa',
     category: 'Supercars',
-    image: '/images/fleet/gt3rs.png',
+    image: '/supercars/brands/porsche.png',
     publishedAt: '2026-09-15',
     readingTime: '6 min',
     keywords: [
@@ -101,7 +101,7 @@ export const BLOG_ARTICLES: BlogArticleData[] = [
   {
     slug: 'alquiler-superdeportivos-tenerife-teide-lujo',
     category: 'Supercars',
-    image: '/images/fleet/huracan.png',
+    image: '/supercars/huracan-sto.jpg',
     publishedAt: '2026-09-14',
     readingTime: '7 min',
     keywords: [
@@ -175,7 +175,7 @@ export const BLOG_ARTICLES: BlogArticleData[] = [
   {
     slug: 'alquiler-ferrari-gran-canaria-tenerife-v8-v12',
     category: 'Supercars',
-    image: '/images/fleet/sf90.png',
+    image: '/supercars/ferrari-sf90.jpg',
     publishedAt: '2026-09-13',
     readingTime: '6 min',
     keywords: [
@@ -249,7 +249,7 @@ export const BLOG_ARTICLES: BlogArticleData[] = [
   {
     slug: 'alquiler-lamborghini-tenerife-gran-canaria-revuelto-huracan',
     category: 'Supercars',
-    image: '/images/fleet/revuelto.png',
+    image: '/supercars/lambo-revuelto.jpg',
     publishedAt: '2026-09-12',
     readingTime: '6 min',
     keywords: [
@@ -323,7 +323,7 @@ export const BLOG_ARTICLES: BlogArticleData[] = [
   {
     slug: 'alquiler-porsche-911-gt3-rs-canarias-circuito-carretera',
     category: 'Supercars',
-    image: '/images/fleet/gt3rs.png',
+    image: '/supercars/brands/porsche.png',
     publishedAt: '2026-09-11',
     readingTime: '6 min',
     keywords: [
@@ -397,7 +397,7 @@ export const BLOG_ARTICLES: BlogArticleData[] = [
   {
     slug: 'mejores-rutas-conduccion-superdeportivos-gran-canaria',
     category: 'Rutas',
-    image: '/images/fleet/ferrari296.png',
+    image: '/supercars/ferrari-296.jpg',
     publishedAt: '2026-09-10',
     readingTime: '7 min',
     keywords: [
@@ -479,7 +479,7 @@ export const BLOG_ARTICLES: BlogArticleData[] = [
   {
     slug: 'rutas-volcanicas-tenerife-superdeportivos-teide-masca',
     category: 'Rutas',
-    image: '/images/fleet/aston.png',
+    image: '/supercars/aston-dbs.jpg',
     publishedAt: '2026-09-09',
     readingTime: '7 min',
     keywords: [
@@ -553,7 +553,7 @@ export const BLOG_ARTICLES: BlogArticleData[] = [
   {
     slug: 'requisitos-fianza-seguro-alquiler-superdeportivos-canarias',
     category: 'Guías',
-    image: '/images/fleet/mclaren.png',
+    image: '/supercars/mclaren-765lt.jpg',
     publishedAt: '2026-09-08',
     readingTime: '6 min',
     keywords: [
@@ -626,7 +626,7 @@ export const BLOG_ARTICLES: BlogArticleData[] = [
   {
     slug: 'alquiler-superdeportivos-aeropuerto-gran-canaria-lpa-tenerife-sur-tfs',
     category: 'Experiencias',
-    image: '/images/fleet/amg.png',
+    image: '/supercars/amg-black-series.jpg',
     publishedAt: '2026-09-07',
     readingTime: '6 min',
     keywords: [
@@ -699,7 +699,7 @@ export const BLOG_ARTICLES: BlogArticleData[] = [
   {
     slug: 'gtr-cars-club-vault-propietarios-superdeportivos-canarias',
     category: 'Propietarios',
-    image: '/images/fleet/gt3rs.png',
+    image: '/supercars/brands/porsche.png',
     publishedAt: '2026-09-06',
     readingTime: '7 min',
     keywords: [
@@ -772,7 +772,7 @@ export const BLOG_ARTICLES: BlogArticleData[] = [
   {
     slug: 'alquiler-superdeportivos-madrid-guia-rutas-sierra-jarama',
     category: 'Supercars',
-    image: '/images/fleet/gt3rs.png',
+    image: '/supercars/brands/porsche.png',
     publishedAt: '2026-09-17',
     readingTime: '8 min',
     keywords: [
@@ -843,7 +843,7 @@ export const BLOG_ARTICLES: BlogArticleData[] = [
   {
     slug: 'alquiler-superdeportivos-barcelona-costa-brava-montmelo',
     category: 'Supercars',
-    image: '/images/fleet/sf90.png',
+    image: '/supercars/ferrari-sf90.jpg',
     publishedAt: '2026-09-17',
     readingTime: '8 min',
     keywords: [
@@ -906,7 +906,7 @@ export const BLOG_ARTICLES: BlogArticleData[] = [
   {
     slug: 'supercar-rental-london-mayfair-knightsbridge-uk',
     category: 'Supercars',
-    image: '/images/fleet/huracan.png',
+    image: '/supercars/huracan-sto.jpg',
     publishedAt: '2026-09-17',
     readingTime: '8 min',
     keywords: [
@@ -970,6 +970,130 @@ export const BLOG_ARTICLES: BlogArticleData[] = [
         {
           question: 'Are London ULEZ and Congestion Charges handled?',
           answer: 'Yes, all vehicles comply with environmental standards and urban access charges are fully coordinated.',
+        },
+      ],
+    },
+  },
+  {
+    slug: 'alquiler-superdeportivos-marbella-puerto-banus-ronda',
+    category: 'Supercars',
+    image: '/supercars/lambo-revuelto.jpg',
+    publishedAt: '2026-09-18',
+    readingTime: '7 min',
+    keywords: [
+      'alquiler superdeportivos marbella',
+      'alquilar ferrari puerto banus',
+      'alquiler lamborghini marbella',
+      'alquiler coches de lujo costa del sol',
+      'supercar rental marbella puerto banus',
+    ],
+    es: {
+      title: 'Alquiler de Superdeportivos en Marbella y Puerto Banús: Guía VIP y Carretera de Ronda',
+      excerpt: 'Conduce un Ferrari SF90, Lamborghini Revuelto o Porsche 911 GT3 en Marbella con entrega en Puerto Banús, Milla de Oro y Aeropuerto de Málaga (AGP).',
+      metaDescription: 'Alquiler de superdeportivos en Marbella y Puerto Banús: Ferrari, Lamborghini, McLaren y Porsche con entrega VIP 24h en hoteles 5* GL, La Zagaleta y Aeropuerto AGP.',
+      content: `Marbella y Puerto Banús representan el epicentro mediterráneo del lujo automovilístico. Desde el muelle de superyates de Puerto Banús y los resorts de la Milla de Oro (Marbella Club, Puente Romano) hasta la legendaria subida a Ronda por la A-397 y el circuito privado Ascari, la Costa del Sol exige estar al volante de una pieza de ingeniería extraordinaria. Con GTR Cars puedes reservar la unidad exacta con contrato digital eIDAS y entrega inmediata.`,
+      sections: [
+        {
+          heading: 'La Subida a Ronda (A-397): El Tramo Favorito de los Probadores Europeos',
+          body: 'En apenas 45 kilómetros desde San Pedro de Alcántara hasta Ronda, la carretera A-397 asciende más de 1.000 metros con asfalto de gran agarre, curvas de radio amplio y vistas panorámicas a la Serranía y al Estrecho. Es el escenario perfecto para un Porsche 911 GT3 Touring o un Ferrari 296 GTB.',
+        },
+        {
+          heading: 'Entrega VIP en Puerto Banús, La Zagaleta y Aeropuerto de Málaga (AGP)',
+          body: 'Nuestro servicio Concierge coordina la entrega personalizada del vehículo en la terminal de aviación ejecutiva del Aeropuerto de Málaga-Costa del Sol (AGP), directamente en tu amarre de Puerto Banús o en villas privadas de Sierra Blanca y La Zagaleta.',
+        },
+        {
+          heading: 'Unidades Disponibles en Marbella: V12, V10 y Descapotables Spider',
+          body: 'Disfruta del clima de la Costa del Sol a cielo abierto con nuestros McLaren 750S Spider y Porsche 911 Cabriolet, o siente los 1.015 CV del nuevo Lamborghini Revuelto V12 Hybrid.',
+        },
+      ],
+      faqs: [
+        {
+          question: '¿Realizáis entregas en el Aeropuerto de Málaga (AGP) y en villas de Marbella?',
+          answer: 'Sí, entregamos y recogemos el superdeportivo tanto en la terminal general o ejecutiva del Aeropuerto de Málaga como en cualquier hotel o villa privada de Marbella, Estepona y Benahavís.',
+        },
+        {
+          question: '¿Cuál es el depósito de garantía en Marbella?',
+          answer: 'La fianza depende del modelo seleccionado (entre 2.500 € y 6.000 €) y queda reflejada de forma transparente en el Contrato Digital eIDAS antes de confirmar la reserva.',
+        },
+      ],
+    },
+    en: {
+      title: 'Supercar Rental in Marbella & Puerto Banús: The Ultimate Costa del Sol Guide',
+      excerpt: 'Rent a Ferrari SF90, Lamborghini Revuelto, or Porsche 911 GT3 in Marbella with VIP concierge delivery to Puerto Banús, Golden Mile, and Malaga Airport (AGP).',
+      metaDescription: 'Luxury supercar hire in Marbella and Puerto Banús. Rent Ferrari, Lamborghini, McLaren, and Porsche with 24/7 delivery to Puente Romano, La Zagaleta, and AGP Airport.',
+      content: `Marbella and Puerto Banús stand as the Mediterranean capital of supercars and luxury yachts. Combining the glamour of the Golden Mile with the world-famous A-397 mountain pass to Ronda, Southern Spain offers an unmatched driving experience. Book your exact chassis with GTR Cars and enjoy white-glove delivery.`,
+      sections: [
+        {
+          heading: 'The Ronda Mountain Road (A-397): Pure Driving Nirvana',
+          body: 'Climbing from sea level at San Pedro de Alcántara to over 1,000 meters into the Serranía de Ronda, the A-397 offers sweeping corners and impeccable tarmac ideal for a mid-engine V8 or flat-six.',
+        },
+        {
+          heading: 'Concierge Handover at Malaga Airport (AGP), Puerto Banús & La Zagaleta',
+          body: 'Meet our team right outside the private aviation terminal at AGP Airport, by your yacht berth in Puerto Banús, or at your villa in La Zagaleta or Sierra Blanca.',
+        },
+      ],
+      faqs: [
+        {
+          question: 'Can you deliver directly to Malaga Airport (AGP)?',
+          answer: 'Yes, our concierge team provides 24/7 meet-and-greet delivery at both commercial and private FBO terminals at Malaga Airport.',
+        },
+      ],
+    },
+  },
+  {
+    slug: 'alquiler-superdeportivos-mallorca-ibiza-rutas-baleares',
+    category: 'Rutas',
+    image: '/supercars/mclaren-765lt.jpg',
+    publishedAt: '2026-09-18',
+    readingTime: '6 min',
+    keywords: [
+      'alquiler superdeportivos mallorca',
+      'alquiler coches de lujo ibiza',
+      'alquilar porsche mallorca',
+      'alquilar ferrari ibiza',
+      'supercar rental mallorca ibiza',
+    ],
+    es: {
+      title: 'Alquiler de Superdeportivos en Mallorca e Ibiza: Serra de Tramuntana y Marinas VIP',
+      excerpt: 'Recorre la Serra de Tramuntana, Formentor y las calas de Ibiza al volante de un Porsche 911, Ferrari Spider o McLaren con entrega en Puerto Portals y Marina Botafoch.',
+      metaDescription: 'Alquiler de superdeportivos en Mallorca e Ibiza con GTR Cars. Entrega VIP en Aeropuerto Son Sant Joan (PMI), Puerto Portals, Port Adriano y Marina Botafoch.',
+      content: `Las Islas Baleares combinan puertos deportivos de primer nivel mundial con algunas de las carreteras escénicas más espectaculares del Mediterráneo. En Mallorca, la carretera MA-10 que atraviesa la Serra de Tramuntana (Patrimonio de la Humanidad) desde Andratx hasta el Cap de Formentor es un trazado de culto para cualquier entusiasta del motor. En Ibiza, nuestras unidades Spider y Gran Turismo te esperan al pie de tu embarcación en Marina Botafoch o en la terminal privada del aeropuerto.`,
+      sections: [
+        {
+          heading: 'Ruta MA-10 por la Serra de Tramuntana y Sa Calobra',
+          body: 'Más de 110 kilómetros de curvas enlazadas entre acantilados mediterráneos, embalses y pinares, culminando en el mítico descenso de Sa Calobra (Nus de sa Corbata) y el faro de Formentor.',
+        },
+        {
+          heading: 'Entrega en Puerto Portals, Port Adriano, Marina Botafoch y Aeropuertos PMI / IBZ',
+          body: 'Recibe las llaves de tu deportivo directamente en tu amarre náutico, hotel boutique (Belmond La Residencia, Cap Rocat, Six Senses Ibiza) o a pie de pista en Palma e Ibiza.',
+        },
+      ],
+      faqs: [
+        {
+          question: '¿Entregáis vehículos directamente en puertos deportivos de Mallorca e Ibiza?',
+          answer: 'Sí, realizamos entregas personalizadas en Puerto Portals, Port Adriano, Real Club Náutico de Palma, Marina Botafoch y Marina Ibiza.',
+        },
+      ],
+    },
+    en: {
+      title: 'Supercar Rental in Mallorca & Ibiza: Serra de Tramuntana & VIP Marinas',
+      excerpt: 'Drive the legendary MA-10 Tramuntana pass and Cap de Formentor in a Porsche 911, Ferrari Spider, or McLaren with delivery to Puerto Portals and Marina Botafoch.',
+      metaDescription: 'Rent a supercar in Mallorca and Ibiza with GTR Cars. VIP delivery to Palma Airport (PMI), Ibiza Airport (IBZ), Puerto Portals, Port Adriano, and luxury villas.',
+      content: `The Balearic Islands blend world-renowned superyacht marinas with breathtaking coastal mountain roads. In Mallorca, the MA-10 route across the UNESCO-listed Serra de Tramuntana from Andratx to Cap de Formentor is one of Europe's greatest driving ribbons.`,
+      sections: [
+        {
+          heading: 'Conquering the MA-10 Tramuntana & Sa Calobra',
+          body: 'Experience 110 kilometers of sculpted mountain tarmac overlooking the Balearic Sea, including the iconic 270-degree spiral bridge of Sa Calobra.',
+        },
+        {
+          heading: 'Yacht-Side Delivery in Puerto Portals, Port Adriano & Marina Botafoch',
+          body: 'Our concierge delivers your supercar directly to your yacht berth or private FBO terminal in Palma (PMI) and Ibiza (IBZ).',
+        },
+      ],
+      faqs: [
+        {
+          question: 'Can you deliver a supercar directly to our yacht marina in Mallorca or Ibiza?',
+          answer: 'Yes, we offer direct dockside delivery at Puerto Portals, Port Adriano, Club de Mar, and Marina Botafoch.',
         },
       ],
     },

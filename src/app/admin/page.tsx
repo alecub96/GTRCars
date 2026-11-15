@@ -57,7 +57,7 @@ export default function AdminPage() {
           return;
         }
 
-        const adminEmails = ['admin@vaneando.com', 'vaneando@vaneando.com'];
+        const adminEmails = ['admin@gtrcars.es', 'contacto@gtrcars.es', 'admin@vaneando.com', 'vaneando@vaneando.com'];
         const isAdmin = auth.user.role === 'ADMIN' || adminEmails.includes(auth.user.email?.toLowerCase());
         setAuthorized(isAdmin);
 
@@ -94,9 +94,9 @@ export default function AdminPage() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 pb-6 border-b border-[#E9E1D2]">
           <div>
             <span className="text-[11px] font-black uppercase tracking-[0.25em] text-[#16B8AA]">
-              Administración Central Vaneando
+              Administración Central GTR Cars
             </span>
-            <h1 className="text-3xl sm:text-4xl font-serif font-bold tracking-tight mt-1 text-[#13322E]">
+            <h1 className="text-3xl sm:text-4xl font-sans font-bold tracking-tight mt-1 text-[#13322E]">
               Centro de Operaciones & Control
             </h1>
           </div>
@@ -174,7 +174,7 @@ export default function AdminPage() {
             <div className="text-2xl font-black text-[#13322E]">
               {metrics.pendingVehiclesCount || 0}
             </div>
-            <p className="text-[11px] text-[#6B726E] mt-0.5">Campers por revisar</p>
+            <p className="text-[11px] text-[#6B726E] mt-0.5">Vehículos por revisar</p>
           </button>
 
           <button
@@ -300,7 +300,7 @@ export default function AdminPage() {
                 : 'bg-white border border-[#E9E1D2] text-[#13322E] hover:bg-[#FAF7F0]'
             }`}
           >
-            <><Car className="inline h-4 w-4" /> Moderación de Campers ({metrics.pendingVehiclesCount || 0})</>
+            <><Car className="inline h-4 w-4" /> Moderación de Vehículos ({metrics.pendingVehiclesCount || 0})</>
           </button>
 
           <button
@@ -433,7 +433,7 @@ export default function AdminPage() {
                   {metrics.totalVolume ? `${metrics.totalVolume.toFixed(2)}€` : '0.00€'}
                 </h3>
                 <p className="text-xs text-[#6B726E] mt-2">
-                  Pagos confirmados por Stripe a través de Vaneando.
+                  Pagos confirmados por Stripe a través de GTR Cars.
                 </p>
               </div>
 
@@ -475,13 +475,13 @@ export default function AdminPage() {
             <div>
               <span className="text-[11px] font-black uppercase tracking-[0.2em] text-[#16B8AA]">Visión de adquisición y producto</span>
               <h2 className="mt-1 font-serif text-3xl font-bold">Herramientas de analítica</h2>
-              <p className="mt-2 max-w-3xl text-sm text-[#6B726E]">Consulta cada plataforma en su panel oficial y cruza sus datos con las métricas operativas de Vaneando. No mostramos cifras inventadas cuando una integración no está configurada.</p>
+              <p className="mt-2 max-w-3xl text-sm text-[#6B726E]">Consulta cada plataforma en su panel oficial y cruza sus datos con las métricas operativas de GTR Cars. No mostramos cifras inventadas cuando una integración no está configurada.</p>
             </div>
             <div className="grid gap-5 md:grid-cols-3">
               {[
                 { name: 'Google Analytics 4', detail: 'Tráfico, adquisición, eventos y conversiones', configured: Boolean(process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID), href: 'https://analytics.google.com/' },
                 { name: 'Microsoft Clarity', detail: 'Grabaciones, mapas de calor y experiencia de usuario', configured: Boolean(process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID), href: 'https://clarity.microsoft.com/' },
-                { name: 'Métricas Vaneando', detail: 'Usuarios, reservas, conversaciones, vehículos y volumen', configured: true, href: '/admin?tab=finances' },
+                { name: 'Métricas GTR Cars', detail: 'Usuarios, reservas, conversaciones, vehículos y volumen', configured: true, href: '/admin?tab=finances' },
               ].map((tool) => (
                 <article key={tool.name} className="rounded-3xl border border-[#E9E1D2] bg-white p-6 shadow-sm">
                   <div className="flex items-start justify-between gap-3">

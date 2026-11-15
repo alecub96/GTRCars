@@ -435,7 +435,7 @@ export default function ChatPage() {
                   {/* ACCESO DIRECTO A LA FICHA DEL VEHÍCULO */}
                   {activeConversation.vehicle && (
                     <Link
-                      href={`/camper/${activeConversation.vehicle.slug || activeConversation.vehicle.id}`}
+                      href={`/coche/${activeConversation.vehicle.slug || activeConversation.vehicle.id}`}
                       target="_blank"
                       className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl border border-gray-200 bg-gray-100 hover:bg-[#D4AF37] hover:text-black text-black text-[11px] font-bold uppercase tracking-wider transition-all shadow-xs shrink-0"
                     >

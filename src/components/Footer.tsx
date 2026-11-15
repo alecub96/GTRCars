@@ -90,28 +90,33 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2 text-gray-600 font-medium text-xs">
               <li>
-                <Link href="/#flota" className="hover:text-black transition-colors">
-                  Porsche 911 GT3 RS
+                <Link href="/coche/porsche-911-gt3-rs-weissach-992" className="hover:text-black transition-colors">
+                  Porsche 911 GT3 RS (992)
                 </Link>
               </li>
               <li>
-                <Link href="/#flota" className="hover:text-black transition-colors">
-                  Ferrari 296 GTB &amp; SF90
+                <Link href="/coche/porsche-911-gt3-touring" className="hover:text-black transition-colors">
+                  Porsche 911 GT3 Touring
                 </Link>
               </li>
               <li>
-                <Link href="/#flota" className="hover:text-black transition-colors">
+                <Link href="/coche/ferrari-sf90-stradale-assetto-fiorano" className="hover:text-black transition-colors">
+                  Ferrari SF90 &amp; 296 GTB
+                </Link>
+              </li>
+              <li>
+                <Link href="/coche/lamborghini-revuelto-v12-hybrid" className="hover:text-black transition-colors">
                   Lamborghini Revuelto &amp; STO
                 </Link>
               </li>
               <li>
-                <Link href="/#flota" className="hover:text-black transition-colors">
-                  McLaren 765LT
+                <Link href="/coche/mclaren-765lt-spider-carbon" className="hover:text-black transition-colors">
+                  McLaren 765LT Spider
                 </Link>
               </li>
               <li>
-                <Link href="/#flota" className="hover:text-black transition-colors">
-                  Aston Martin DBS
+                <Link href="/coche/aston-martin-dbs-superleggera" className="hover:text-black transition-colors">
+                  Aston Martin DBS V12
                 </Link>
               </li>
             </ul>
@@ -206,15 +211,21 @@ export default function Footer() {
         <div className="mt-12 pt-8 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-gray-500 font-medium text-[11px]">
           <p>© 2026 GTR Cars // International Supercar Club. Todos los derechos reservados.</p>
           <div className="flex flex-wrap items-center gap-3">
-            <span>Gran Canaria (LPA)</span>
+            <Link href="/alquiler-superdeportivos/gran-canaria" className="hover:text-black transition-colors">Gran Canaria (LPA)</Link>
             <span>•</span>
-            <span>Tenerife (TFS/TFN)</span>
+            <Link href="/alquiler-superdeportivos/tenerife" className="hover:text-black transition-colors">Tenerife (TFS/TFN)</Link>
             <span>•</span>
-            <span>Madrid (MAD)</span>
+            <Link href="/alquiler-superdeportivos/madrid" className="hover:text-black transition-colors">Madrid (MAD)</Link>
             <span>•</span>
-            <span>Barcelona (BCN)</span>
+            <Link href="/alquiler-superdeportivos/marbella" className="hover:text-black transition-colors">Marbella (AGP)</Link>
             <span>•</span>
-            <span>London (LHR)</span>
+            <Link href="/alquiler-superdeportivos/barcelona" className="hover:text-black transition-colors">Barcelona (BCN)</Link>
+            <span>•</span>
+            <Link href="/alquiler-superdeportivos/mallorca" className="hover:text-black transition-colors">Mallorca (PMI)</Link>
+            <span>•</span>
+            <Link href="/alquiler-superdeportivos/ibiza" className="hover:text-black transition-colors">Ibiza (IBZ)</Link>
+            <span>•</span>
+            <Link href="/alquiler-superdeportivos/londres" className="hover:text-black transition-colors">London (LHR)</Link>
           </div>
         </div>
       </div>

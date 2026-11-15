@@ -32,7 +32,7 @@ export async function POST(request: Request) {
         data: { resetTokenHash, resetTokenExpiresAt },
       });
 
-      const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://vaneando.com';
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://gtrcars.es';
       const resetUrl = `${appUrl}/restablecer-contrasena?token=${token}`;
       try {
         await sendPasswordResetEmail(user.email, user.firstName, resetUrl);

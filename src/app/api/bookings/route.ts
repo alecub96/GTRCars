@@ -144,7 +144,7 @@ export async function POST(request: Request) {
           });
           if (confirmedBookingConflict) throw new Error('BOOKING_DATES_CONFLICT');
 
-          const bookingCode = `NC-${crypto.randomUUID().replaceAll('-', '').slice(0, 8).toUpperCase()}`;
+          const bookingCode = `GTR-${crypto.randomUUID().replaceAll('-', '').slice(0, 8).toUpperCase()}`;
           const newBooking = await tx.booking.create({
             data: {
               code: bookingCode,
@@ -181,7 +181,7 @@ export async function POST(request: Request) {
           await tx.conversation.create({
         data: {
           travelerId: user.id, ownerId: vehicle.ownerId, vehicleId: vehicle.id, bookingId: newBooking.id,
-          messages: { create: { senderId: user.id, content: `Solicitud ${newBooking.code}: quiero alquilar esta camper del ${start.toLocaleDateString('es-ES')} al ${end.toLocaleDateString('es-ES')}.` } },
+          messages: { create: { senderId: user.id, content: `Solicitud ${newBooking.code}: quiero reservar este vehículo del ${start.toLocaleDateString('es-ES')} al ${end.toLocaleDateString('es-ES')}.` } },
         },
           });
 
@@ -207,7 +207,7 @@ export async function POST(request: Request) {
       instant: booking.status === 'OWNER_ACCEPTED',
       reservationId: booking.id,
     }).catch((error) => console.error('Booking owner notification email error:', error));
-    sendPushToUser(vehicle.ownerId, 'Nueva reserva en Vaneando', `${vehicle.title} · ${booking.code}`, `/reserva/${booking.id}`).catch((error) => console.error('Booking owner push error:', error));
+    sendPushToUser(vehicle.ownerId, 'Nueva reserva en GTR Cars', `${vehicle.title} · ${booking.code}`, `/reserva/${booking.id}`).catch((error) => console.error('Booking owner push error:', error));
 
     return NextResponse.json({
       success: true,

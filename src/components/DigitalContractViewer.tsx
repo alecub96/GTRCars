@@ -813,7 +813,7 @@ export default function DigitalContractViewer({
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 rows={2}
-                placeholder="Ejemplo: Pequeño arañazo en aleta trasera derecha de 2cm. Todo el menaje de cocina completo y revisado."
+                placeholder="Ejemplo: Pequeña marca superficial en llanta trasera derecha de 1cm. Neumáticos y frenos en perfecto estado."
                 className="w-full p-3 text-xs rounded-xl border border-[#E9E1D2] bg-white focus:ring-1 focus:ring-[#16B8AA] outline-none font-medium"
               />
             </div>
@@ -866,7 +866,7 @@ export default function DigitalContractViewer({
                 </strong>
                 <p className="font-bold text-[#13322E]">{booking.owner?.firstName} {booking.owner?.lastName}</p>
                 <p className="text-[#6B726E] text-[11px]">Email: {booking.owner?.email}</p>
-                <p className="text-[#6B726E] text-[11px]">Verificación Vaneando: {booking.owner?.verification === 'VERIFIED' ? 'Identidad Oficial Confirmada' : 'Registrado'}</p>
+                <p className="text-[#6B726E] text-[11px]">Verificación GTR Cars: {booking.owner?.verification === 'VERIFIED' ? 'Identidad Oficial Confirmada' : 'Registrado'}</p>
               </div>
 
               <div>
@@ -887,7 +887,7 @@ export default function DigitalContractViewer({
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-[11px]">
                 <div>
                   <span className="text-[#6B726E] block">Vehículo:</span>
-                  <strong className="text-[#13322E]">{booking.vehicle?.title || 'Camper'}</strong>
+                  <strong className="text-[#13322E]">{booking.vehicle?.title || 'Superdeportivo'}</strong>
                 </div>
                 <div>
                   <span className="text-[#6B726E] block">Ubicación:</span>
@@ -937,7 +937,7 @@ export default function DigitalContractViewer({
               <div>
                 <strong className="block text-[#13322E] mb-1">QUINTA. Naturaleza del contrato e intermediación.</strong>
                 <p className="text-[#52605B]">
-                  Las partes reconocen expresamente que el presente contrato se celebra única y exclusivamente entre el Arrendador particular y el Arrendatario particular. La plataforma Vaneando actúa como mero intermediario tecnológico de comunicación y gestión sin ostentar la condición de parte arrendadora, propietaria o aseguradora.
+                  Las partes reconocen expresamente que el presente contrato se celebra única y exclusivamente entre el Arrendador particular y el Arrendatario particular. La plataforma GTR Cars actúa como mero intermediario tecnológico de comunicación y gestión sin ostentar la condición de parte arrendadora, propietaria o aseguradora.
                 </p>
               </div>
 

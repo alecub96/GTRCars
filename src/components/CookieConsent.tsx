@@ -55,7 +55,7 @@ export default function CookieConsent() {
       <div className="flex items-center space-x-2 font-mono text-[10px] text-[#D4AF37] uppercase tracking-widest mb-1">
         <span>// PRIVACIDAD & PROTOCOLO TELEMETRÍA</span>
       </div>
-      <h2 className="text-lg font-bold text-black tracking-tight">Privacidad y Telemetría en GT Cars</h2>
+      <h2 className="text-lg font-bold text-black tracking-tight">Privacidad y Telemetría en GTR Cars</h2>
       <p className="mt-2 text-xs sm:text-sm text-black/60 leading-relaxed font-light">
         Utilizamos cookies técnicas necesarias para la navegación, autenticación en el Vault y gestión de reservas, así como analítica agregada para optimizar la experiencia de conducción. Consulta nuestra{' '}
         <Link href="/cookies" className="font-bold text-[#D4AF37] underline hover:text-black transition-colors">

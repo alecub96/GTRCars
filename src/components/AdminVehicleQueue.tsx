@@ -84,7 +84,7 @@ export default function AdminVehicleQueue() {
           </span>
           <h2 className="text-2xl font-bold tracking-tight text-[#13322E]">Moderación de Anuncios</h2>
           <p className="text-xs text-[#6B726E] mt-0.5 font-medium">
-            Aprueba o rechaza publicaciones de campers para que aparezcan públicamente en Canarias.
+            Aprueba o rechaza publicaciones de vehículos para que aparezcan públicamente en GTR Cars.
           </p>
         </div>
 
@@ -172,7 +172,7 @@ export default function AdminVehicleQueue() {
           <p className="text-sm font-bold text-[#13322E]">No hay anuncios en esta sección.</p>
           <p className="text-xs text-[#6B726E] mt-1 font-medium">
             {activeTab === 'PENDING_REVIEW'
-              ? 'Todas las campers publicadas han sido moderadas.'
+              ? 'Todos los vehículos publicados han sido moderados.'
               : 'Selecciona otra pestaña para revisar el histórico.'}
           </p>
         </div>
@@ -234,7 +234,7 @@ export default function AdminVehicleQueue() {
 
                 <div className="flex flex-wrap items-center gap-2 pt-3 md:pt-0 border-t md:border-t-0 border-[#E9E1D2]">
                   <a
-                    href={`/camper/${encodeURIComponent(v.slug || v.id)}`}
+                    href={`/coche/${encodeURIComponent(v.slug || v.id)}`}
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-full border border-[#E9E1D2] bg-white text-xs font-bold text-[#13322E] hover:bg-[#13322E] hover:text-white hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm"

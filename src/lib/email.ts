@@ -108,42 +108,42 @@ export async function sendWelcomeEmail(to: string, firstName: string) {
     return;
   }
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://vaneando.com';
-  const title = `¡Bienvenido a vaneando.com, ${firstName}!`;
-  const previewText = `Tu cuenta ha sido creada con éxito. Empieza a descubrir las Islas Canarias sobre ruedas.`;
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://gtrcars.es';
+  const title = `¡Bienvenido a GTR Cars, ${firstName}!`;
+  const previewText = `Tu cuenta en GTR Cars ha sido creada con éxito. Explora la colección de superdeportivos.`;
 
   const contentHtml = `
-    <h2 style="font-family: Georgia, serif; color: #13322E; margin-top: 0;">¡Hola ${escapeHtml(firstName)}! </h2>
-    <p>Te damos la bienvenida a <strong>vaneando.com</strong>, la comunidad de viajeros y propietarios locales de furgonetas camperizadas y autocaravanas de las Islas Canarias.</p>
+    <h2 style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #111827; margin-top: 0;">¡Hola ${escapeHtml(firstName)}!</h2>
+    <p>Te damos la bienvenida a <strong>GTR Cars</strong>, la plataforma exclusiva de alquiler de superdeportivos, GT Cars e hypercars con custodia garantizada y contrato digital.</p>
     
     <div class="card">
-      <h3 style="margin-top: 0; color: #13322E; font-size: 16px;">Datos de tu Cuenta de Acceso</h3>
+      <h3 style="margin-top: 0; color: #111827; font-size: 16px;">Datos de tu Cuenta de Acceso</h3>
       <p style="margin: 6px 0;"><strong>Correo Electrónico:</strong> ${escapeHtml(to)}</p>
-      <p style="margin: 6px 0;"><strong>Plataforma:</strong> <a href="${appUrl}" style="color:#D4AF37;font-weight:bold;">gtrcars.es</a></p>
+      <p style="margin: 6px 0;"><strong>Plataforma:</strong> <a href="${appUrl}" style="color:#111827;font-weight:bold;">gtrcars.es</a></p>
       <p style="margin: 6px 0; font-size: 13px; color: #6B726E;">Ya puedes iniciar sesión en cualquier momento con tu correo y contraseña.</p>
     </div>
 
-    <h3 style="color: #13322E; font-size: 16px; margin-top: 24px;">Lo que puedes hacer ahora:</h3>
+    <h3 style="color: #111827; font-size: 16px; margin-top: 24px;">Lo que puedes hacer ahora:</h3>
     <ul style="padding-left: 20px; color: #4A5568;">
-      <li><strong>Explorar la flota VIP:</strong> Encuentra superdeportivos e hypercars en Gran Canaria y Tenerife.</li>
-      <li><strong>Custodia y seguridad garantizada:</strong> Protocolos de verificación y fianza retenida.</li>
+      <li><strong>Explorar la flota VIP:</strong> Encuentra superdeportivos e hypercars en Madrid, Marbella, Barcelona, Baleares y Canarias.</li>
+      <li><strong>Custodia y seguridad garantizada:</strong> Protocolos de verificación KYC y fianza protegida.</li>
       <li><strong>Publicar tu superdeportivo:</strong> Rentabiliza tu vehículo de alta gama con control total.</li>
     </ul>
 
     <p style="margin-top: 24px;">Atentamente,</p>
-    <p><strong>Equipo GTR Cars Canarias</strong></p>
+    <p><strong>Equipo GTR Cars</strong></p>
   `;
 
   await transporter.sendMail({
     from,
     to,
-    subject: `¡Bienvenido a vaneando.com, ${firstName}! `,
-    text: `Hola ${firstName},\n\n¡Bienvenido a vaneando.com! Tu cuenta con el correo ${to} se ha creado correctamente.\n\nEntra ahora y descubre Canarias sobre ruedas: ${appUrl}\n\nContacto: hola@vaneando.com`,
+    subject: `¡Bienvenido a GTR Cars, ${firstName}!`,
+    text: `Hola ${firstName},\n\n¡Bienvenido a GTR Cars! Tu cuenta con el correo ${to} se ha creado correctamente.\n\nEntra ahora a tu garaje: ${appUrl}\n\nContacto: contacto@gtrcars.es`,
     html: renderEmailLayout({
       title,
       previewText,
       contentHtml,
-      ctaText: 'Entrar a mi Cuenta',
+      ctaText: 'Entrar a mi Garaje',
       ctaUrl: `${appUrl}/cuenta`,
     }),
   });
@@ -174,12 +174,12 @@ export async function sendPaymentInvoiceEmail(
     return;
   }
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://vaneando.com';
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://gtrcars.es';
   const title = `Factura y Confirmación de Pago · ${invoice.invoiceNumber}`;
   const previewText = `Hemos recibido tu pago de ${invoice.totalAmount.toFixed(2)}€ para la reserva ${invoice.bookingCode}.`;
 
   const contentHtml = `
-    <h2 style="font-family: Georgia, serif; color: #13322E; margin-top: 0;">¡Pago Confirmado y Factura Emitida! </h2>
+    <h2 style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #111827; margin-top: 0;">¡Pago Confirmado y Factura Emitida!</h2>
     <p>Hola ${escapeHtml(firstName)}, gracias por tu pago. Tu reserva para disfrutar de <strong>${escapeHtml(invoice.vehicleTitle)}</strong> está 100% confirmada.</p>
     
     <div class="card">
@@ -190,12 +190,12 @@ export async function sendPaymentInvoiceEmail(
         </tr>
         <tr>
           <td><strong>Fecha de Emisión:</strong> ${new Date().toLocaleDateString('es-ES')}</td>
-          <td style="text-align:right;"><strong>Estado:</strong> <span style="color:#16B8AA;font-weight:bold;">PAGADO (Stripe SSL)</span></td>
+          <td style="text-align:right;"><strong>Estado:</strong> <span style="color:#059669;font-weight:bold;">PAGADO (Stripe SSL)</span></td>
         </tr>
       </table>
     </div>
 
-    <h3 style="color: #13322E; font-size: 16px; margin-top: 24px;"> Detalle de la Reserva y Alquiler</h3>
+    <h3 style="color: #111827; font-size: 16px; margin-top: 24px;">Detalle de la Reserva y Alquiler</h3>
     <p style="margin: 4px 0; font-size: 14px;"><strong>Vehículo:</strong> ${escapeHtml(invoice.vehicleTitle)}</p>
     <p style="margin: 4px 0; font-size: 14px;"><strong>Fechas:</strong> Del ${escapeHtml(invoice.startDate)} al ${escapeHtml(invoice.endDate)} (${invoice.totalDays} ${invoice.totalDays === 1 ? 'día' : 'días'})</p>
 
@@ -208,22 +208,22 @@ export async function sendPaymentInvoiceEmail(
       </thead>
       <tbody>
         <tr>
-          <td>Alquiler de camper (${invoice.totalDays} días)</td>
+          <td>Alquiler de superdeportivo (${invoice.totalDays} días)</td>
           <td style="text-align:right;">${invoice.baseAmount.toFixed(2)} €</td>
         </tr>
         <tr>
-          <td>Gastos de Gestión y Cobertura Vaneando</td>
+          <td>Gastos de Gestión y Cobertura GTR Cars</td>
           <td style="text-align:right;">${invoice.serviceFee.toFixed(2)} €</td>
         </tr>
         <tr>
-          <td style="color:#6B726E; font-size:12px;">Impuestos e IGIC (7% incl.)</td>
+          <td style="color:#6B726E; font-size:12px;">Impuestos incluidos</td>
           <td style="text-align:right; color:#6B726E; font-size:12px;">${invoice.taxAmount.toFixed(2)} €</td>
         </tr>
       </tbody>
     </table>
 
     <div class="invoice-total">
-      Total Pagado: <span style="color:#16B8AA;">${invoice.totalAmount.toFixed(2)} €</span>
+      Total Pagado: <span style="color:#111827;">${invoice.totalAmount.toFixed(2)} €</span>
     </div>
 
     <p style="margin-top: 28px; font-size: 13px; color: #6B726E;">
@@ -234,7 +234,7 @@ export async function sendPaymentInvoiceEmail(
   await transporter.sendMail({
     from,
     to,
-    subject: `Factura ${invoice.invoiceNumber} · Pago Confirmado de tu Camper `,
+    subject: `Factura ${invoice.invoiceNumber} · Pago Confirmado en GTR Cars`,
     text: `Hola ${firstName},\n\nPago confirmado para ${invoice.vehicleTitle}. Factura: ${invoice.invoiceNumber}. Total: ${invoice.totalAmount.toFixed(2)}€.\n\nVer reserva: ${appUrl}/reserva/${invoice.reservationId}`,
     html: renderEmailLayout({
       title,
@@ -254,12 +254,12 @@ export async function sendPasswordResetEmail(to: string, firstName: string, rese
     throw new Error('Faltan SMTP_USER o SMTP_PASSWORD');
   }
 
-  const title = 'Restablece tu contraseña de vaneando.com';
+  const title = 'Restablece tu contraseña de GTR Cars';
   const previewText = 'Usa este enlace para restablecer la contraseña de tu cuenta. Caduca en una hora.';
 
   const contentHtml = `
-    <h2 style="font-family: Georgia, serif; color: #13322E; margin-top: 0;">Restablecer Contraseña </h2>
-    <p>Hola ${escapeHtml(firstName)}, hemos recibido una solicitud para cambiar la contraseña de tu cuenta en <strong>vaneando.com</strong>.</p>
+    <h2 style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #111827; margin-top: 0;">Restablecer Contraseña</h2>
+    <p>Hola ${escapeHtml(firstName)}, hemos recibido una solicitud para cambiar la contraseña de tu cuenta en <strong>GTR Cars</strong>.</p>
     <p>Haz clic en el siguiente botón para crear una contraseña nueva. Por seguridad, este enlace caducará en 1 hora.</p>
     <p style="font-size: 13px; color: #6B726E; margin-top: 20px;">Si no solicitaste este cambio, puedes ignorar este correo de forma segura.</p>
   `;
@@ -267,7 +267,7 @@ export async function sendPasswordResetEmail(to: string, firstName: string, rese
   await transporter.sendMail({
     from,
     to,
-    subject: 'Restablece tu contraseña de vaneando.com ',
+    subject: 'Restablece tu contraseña de GTR Cars',
     text: `Hola ${firstName},\n\nUsa este enlace para crear una contraseña nueva. Caduca en una hora:\n${resetUrl}\n\nSi no solicitaste el cambio, ignora este correo.`,
     html: renderEmailLayout({
       title,
@@ -298,13 +298,13 @@ export async function sendBookingStatusEmail(
   };
 
   const message = labels[details.status] || 'La reserva se ha actualizado';
-  const url = `${details.appUrl || process.env.NEXT_PUBLIC_APP_URL || 'https://vaneando.com'}/reserva/${details.reservationId}`;
+  const url = `${details.appUrl || process.env.NEXT_PUBLIC_APP_URL || 'https://gtrcars.es'}/reserva/${details.reservationId}`;
 
   const contentHtml = `
-    <h2 style="font-family: Georgia, serif; color: #13322E; margin-top: 0;">Actualización de Reserva </h2>
+    <h2 style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #111827; margin-top: 0;">Actualización de Reserva</h2>
     <p>Hola ${escapeHtml(firstName)},</p>
     <div class="card">
-      <h3 style="margin-top:0; color:#13322E;">${escapeHtml(message)}</h3>
+      <h3 style="margin-top:0; color:#111827;">${escapeHtml(message)}</h3>
       <p style="margin: 4px 0;"><strong>Vehículo:</strong> ${escapeHtml(details.vehicle)}</p>
       <p style="margin: 4px 0;"><strong>Código de Reserva:</strong> ${escapeHtml(details.code)}</p>
     </div>
@@ -335,13 +335,13 @@ export async function sendBookingRequestEmail(
   details: { code: string; vehicle: string; traveler: string; start: Date; end: Date }
 ) {
   if (!transporter) throw new Error('Faltan SMTP_USER o SMTP_PASSWORD');
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://vaneando.com';
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://gtrcars.es';
 
   const contentHtml = `
-    <h2 style="font-family: Georgia, serif; color: #13322E; margin-top: 0;">¡Tienes una nueva solicitud de alquiler! </h2>
-    <p>Hola ${escapeHtml(ownerName)}, un viajero quiere alquilar tu camper.</p>
+    <h2 style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #111827; margin-top: 0;">¡Tienes una nueva solicitud de alquiler!</h2>
+    <p>Hola ${escapeHtml(ownerName)}, un conductor verificado quiere reservar tu superdeportivo.</p>
     <div class="card">
-      <p style="margin: 4px 0;"><strong>Viajero:</strong> ${escapeHtml(details.traveler)}</p>
+      <p style="margin: 4px 0;"><strong>Conductor:</strong> ${escapeHtml(details.traveler)}</p>
       <p style="margin: 4px 0;"><strong>Vehículo:</strong> ${escapeHtml(details.vehicle)}</p>
       <p style="margin: 4px 0;"><strong>Fechas:</strong> Del ${details.start.toLocaleDateString('es-ES')} al ${details.end.toLocaleDateString('es-ES')}</p>
       <p style="margin: 4px 0;"><strong>Código de Solicitud:</strong> ${escapeHtml(details.code)}</p>
@@ -352,7 +352,7 @@ export async function sendBookingRequestEmail(
   await transporter.sendMail({
     from,
     to,
-    subject: `¡Nueva solicitud ${details.code} para ${details.vehicle}! `,
+    subject: `¡Nueva solicitud ${details.code} para ${details.vehicle}!`,
     text: `Hola ${ownerName},\n\n${details.traveler} quiere alquilar ${details.vehicle} del ${details.start.toLocaleDateString('es-ES')} al ${details.end.toLocaleDateString('es-ES')}.\n\nGestiona la solicitud: ${appUrl}/propietario`,
     html: renderEmailLayout({
       title: `Nueva solicitud para ${details.vehicle}`,
@@ -371,18 +371,18 @@ export async function sendBookingCreatedOwnerEmail(
   details: { code: string; vehicle: string; traveler: string; start: Date; end: Date; instant: boolean; reservationId: string }
 ) {
   if (!transporter) throw new Error('Faltan SMTP_USER o SMTP_PASSWORD');
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://vaneando.com';
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://gtrcars.es';
   const title = details.instant ? '¡Reserva instantánea recibida!' : '¡Nueva solicitud de reserva!';
   const contentHtml = `
-    <h2 style="font-family: Georgia, serif; color: #13322E; margin-top: 0;">${title} </h2>
-    <p>Hola ${escapeHtml(ownerName)}, ${details.instant ? 'un viajero ha reservado' : 'un viajero ha enviado una solicitud para'} tu camper.</p>
+    <h2 style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #111827; margin-top: 0;">${title}</h2>
+    <p>Hola ${escapeHtml(ownerName)}, ${details.instant ? 'un cliente ha reservado' : 'un cliente ha enviado una solicitud para'} tu vehículo en GTR Cars.</p>
     <div class="card">
-      <p style="margin: 4px 0;"><strong>Viajero:</strong> ${escapeHtml(details.traveler)}</p>
+      <p style="margin: 4px 0;"><strong>Cliente:</strong> ${escapeHtml(details.traveler)}</p>
       <p style="margin: 4px 0;"><strong>Vehículo:</strong> ${escapeHtml(details.vehicle)}</p>
       <p style="margin: 4px 0;"><strong>Fechas:</strong> Del ${details.start.toLocaleDateString('es-ES')} al ${details.end.toLocaleDateString('es-ES')}</p>
       <p style="margin: 4px 0;"><strong>Código:</strong> ${escapeHtml(details.code)}</p>
     </div>
-    <p>${details.instant ? 'La reserva está pendiente de completar el proceso de pago y contrato.' : 'Revisa la solicitud y responde desde tu panel de propietario.'}</p>
+    <p>${details.instant ? 'La reserva está pendiente de completar el proceso de pago y contrato digital.' : 'Revisa la solicitud y responde desde tu panel de propietario.'}</p>
   `;
   await transporter.sendMail({
     from,
@@ -403,8 +403,8 @@ export async function sendChatSummaryEmail(
   const rows = messages.map((message) => `<p style="margin:6px 0;"><small style="color:#6B726E;">${escapeHtml(message.createdAt.toLocaleString('es-ES'))}</small><br><strong>${escapeHtml(message.author)}:</strong> ${escapeHtml(message.content)}</p>`).join('');
 
   const contentHtml = `
-    <h2 style="font-family: Georgia, serif; color: #13322E; margin-top: 0;">Resumen de Conversación </h2>
-    <p>Hola ${escapeHtml(participantName)}, aquí tienes la copia de tu chat en vaneando.com.</p>
+    <h2 style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #111827; margin-top: 0;">Resumen de Conversación</h2>
+    <p>Hola ${escapeHtml(participantName)}, aquí tienes la copia de tu chat en GTR Cars.</p>
     <div class="card">
       ${rows}
     </div>
@@ -413,14 +413,14 @@ export async function sendChatSummaryEmail(
   await transporter.sendMail({
     from,
     to,
-    subject: 'Resumen de tu chat con vaneando.com ',
+    subject: 'Resumen de tu chat con GTR Cars',
     text: `Hola ${participantName},\n\n${lines.join('\n')}`,
     html: renderEmailLayout({
       title: 'Resumen de tu chat',
-      previewText: 'Resumen de tu conversación en soporte de vaneando.com',
+      previewText: 'Resumen de tu conversación en soporte de GTR Cars',
       contentHtml,
-      ctaText: 'Volver a Vaneando',
-      ctaUrl: process.env.NEXT_PUBLIC_APP_URL || 'https://vaneando.com',
+      ctaText: 'Volver a GTR Cars',
+      ctaUrl: process.env.NEXT_PUBLIC_APP_URL || 'https://gtrcars.es',
     }),
   });
 }
@@ -440,7 +440,7 @@ export async function sendBookingCancelledByOwnerEmail(
 ) {
   if (!transporter) return;
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://vaneando.com';
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://gtrcars.es';
   const reasonText = details.reason ? details.reason : 'El propietario ha tenido un imprevisto con la disponibilidad del vehículo.';
 
   const contentHtml = `
@@ -453,19 +453,19 @@ export async function sendBookingCancelledByOwnerEmail(
     </div>
 
     <p>Si ya se había procesado algún pago o retención por esta reserva, el reembolso íntegro se tramitará automáticamente a tu método de pago original.</p>
-    <p>Puedes explorar otras campers disponibles en Canarias para las mismas fechas desde nuestro buscador.</p>
+    <p>Puedes explorar otros superdeportivos disponibles para las mismas fechas desde nuestro buscador.</p>
   `;
 
   await transporter.sendMail({
     from,
     to,
-    subject: `Reserva cancelada: ${details.code} (${details.vehicle}) `,
+    subject: `Reserva cancelada: ${details.code} (${details.vehicle})`,
     text: `Hola ${travelerName},\n\nEl propietario ha cancelado tu reserva ${details.code} para ${details.vehicle}.\n\nMotivo: ${reasonText}\n\nPuedes buscar otras opciones en: ${appUrl}/buscar`,
     html: renderEmailLayout({
       title: 'Reserva Cancelada por el Propietario',
       previewText: `Tu reserva ${details.code} ha sido cancelada por el propietario`,
       contentHtml,
-      ctaText: 'Buscar Otras Campers',
+      ctaText: 'Buscar Otros Superdeportivos',
       ctaUrl: `${appUrl}/buscar`,
     }),
   }).catch((err: any) => console.error('Error sending booking cancelled by owner email:', err));
@@ -486,7 +486,7 @@ export async function sendContractCancelledEmail(
 ) {
   if (!transporter) return;
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://vaneando.com';
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://gtrcars.es';
   const reasonText = details.reason ? details.reason : 'El propietario necesita actualizar las cláusulas, inspección o datos del contrato.';
 
   const contentHtml = `

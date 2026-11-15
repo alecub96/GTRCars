@@ -39,28 +39,28 @@ export async function POST(request: Request) {
 
     if (!transporter) {
       return NextResponse.json(
-        { error: 'El servicio de contacto no está configurado temporalmente. Escríbenos a contacto@vaneando.com.' },
+        { error: 'El servicio de contacto no está configurado temporalmente. Escríbenos a contacto@gtrcars.es.' },
         { status: 503 }
       );
     }
 
     try {
       await transporter.sendMail({
-        from: `vaneando. <${smtpUser}>`,
+        from: `GTR Cars <${smtpUser}>`,
         to: smtpUser,
         replyTo: email,
-        subject: `[Contacto Web] ${subject || 'Consulta General'} - ${name}`,
-        text: `Nuevo mensaje de contacto desde vaneando.com:\n\nNombre: ${name}\nEmail: ${email}\nTeléfono: ${phone || 'No indicado'}\nIsla: ${island || 'Todas'}\nAsunto: ${subject}\n\nMensaje:\n${message}`,
+        subject: `[Conserjería VIP GTR Cars] ${subject || 'Consulta General'} - ${name}`,
+        text: `Nuevo mensaje de contacto desde gtrcars.es:\n\nNombre: ${name}\nEmail: ${email}\nTeléfono: ${phone || 'No indicado'}\nUbicación: ${island || 'Todas'}\nAsunto: ${subject}\n\nMensaje:\n${message}`,
         html: `
-          <div style="font-family: sans-serif; padding: 20px; background: #F7F6F2; color: #13322E;">
-            <div style="max-width: 550px; margin: 0 auto; background: white; border-radius: 16px; p: 24px; border: 1px solid #E9E1D2; padding: 24px;">
-              <h2 style="color: #16B8AA; margin-top: 0;">Nuevo mensaje de contacto</h2>
+          <div style="font-family: sans-serif; padding: 20px; background: #FAFAFA; color: #111827;">
+            <div style="max-width: 550px; margin: 0 auto; background: white; border-radius: 16px; border: 1px solid #E5E7EB; padding: 24px;">
+              <h2 style="color: #000000; margin-top: 0;">Nuevo mensaje de Conserjería VIP — GTR Cars</h2>
               <p><strong>Nombre:</strong> ${name}</p>
               <p><strong>Email:</strong> ${email}</p>
               <p><strong>Teléfono:</strong> ${phone || 'No especificado'}</p>
-              <p><strong>Isla de interés:</strong> ${island || 'Canarias'}</p>
+              <p><strong>Ubicación / Base:</strong> ${island || 'España / Europa'}</p>
               <p><strong>Asunto:</strong> ${subject || 'Consulta general'}</p>
-              <hr style="border: none; border-top: 1px solid #E9E1D2; margin: 20px 0;" />
+              <hr style="border: none; border-top: 1px solid #E5E7EB; margin: 20px 0;" />
               <p style="white-space: pre-wrap; font-size: 14px; line-height: 1.6;">${message}</p>
             </div>
           </div>

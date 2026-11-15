@@ -106,7 +106,7 @@ export default function Navbar() {
         </Link>
 
         {/* ENLACES CENTRALES ESTILO PORSCHE (NEGRO/GRIS) */}
-        <div className="hidden md:flex items-center space-x-6 text-xs font-mono font-bold tracking-widest text-gray-700">
+        <div className="hidden md:flex items-center space-x-6 text-xs font-mono font-bold tracking-widest text-gray-700 translate-y-1.5">
           <Link href="/buscar" className="hover:text-black transition-colors flex items-center gap-1.5">
             <Search className="w-3.5 h-3.5 text-black" />
             <span>BUSCADOR</span>
@@ -165,7 +165,7 @@ export default function Navbar() {
         </div>
 
         {/* CONTROLES DERECHA (DESKTOP) */}
-        <div className="hidden md:flex items-center space-x-3">
+        <div className="hidden md:flex items-center space-x-3 translate-y-1.5">
           <LanguageSelector />
           {role && role !== 'ANONYMOUS' && role !== 'ADMIN' && (
             <Link
