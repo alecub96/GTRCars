@@ -12,11 +12,17 @@ export default async function HomePage() {
     description:
       'Flota verificada de coches deportivos, superdeportivos e hypercars disponibles para alquiler por días en España (Madrid, Marbella, Barcelona, Mallorca, Ibiza, Gran Canaria, Tenerife) y Londres.',
     itemListOrder: 'https://schema.org/ItemListOrderAscending',
-    numberOfItems: 12,
+    numberOfItems: 13,
     itemListElement: [
       {
         '@type': 'ListItem',
         position: 1,
+        name: 'Ferrari 488 GTB Rosso Corsa — 670 CV (Canarias)',
+        url: 'https://gtrcars.es/coche/ferrari-488-gtb-rosso-corsa',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
         name: 'Porsche 911 GT3 RS (992) — 525 CV',
         url: 'https://gtrcars.es/coche/porsche-911-gt3-rs-weissach-992',
       },

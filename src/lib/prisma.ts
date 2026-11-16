@@ -1,7 +1,10 @@
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import { PrismaClient } from '@/generated/prisma/client';
 
-const globalForPrisma = global as unknown as { prisma: PrismaClient };
+const globalForPrisma = global as unknown as {
+  prisma?: PrismaClient;
+  prismaAdapter?: PrismaMariaDb;
+};
 
 function getMariaDbCredentials() {
   const envUrl =
@@ -30,21 +33,30 @@ function getMariaDbCredentials() {
 }
 
 const creds = getMariaDbCredentials();
-const adapter = new PrismaMariaDb({
-  host: creds.host,
-  port: creds.port,
-  user: creds.user,
-  password: creds.password,
-  database: creds.database,
-  connectionLimit: 3,
-  minimumIdle: 0,
-  connectTimeout: 15_000,
-  acquireTimeout: 20_000,
-  idleTimeout: 10_000,
-});
+
+const adapter =
+  globalForPrisma.prismaAdapter ||
+  new PrismaMariaDb({
+    host: creds.host,
+    port: creds.port,
+    user: creds.user,
+    password: creds.password,
+    database: creds.database,
+    connectionLimit: 15,
+    minimumIdle: 2,
+    connectTimeout: 10_000,
+    acquireTimeout: 10_000,
+    idleTimeout: 30_000,
+  });
+
+if (process.env.NODE_ENV !== 'production') {
+  globalForPrisma.prismaAdapter = adapter;
+}
 
 export const prisma =
   globalForPrisma.prisma ||
   new PrismaClient({ adapter, log: ['error'] });
 
-globalForPrisma.prisma = prisma;
+if (process.env.NODE_ENV !== 'production') {
+  globalForPrisma.prisma = prisma;
+}

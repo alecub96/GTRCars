@@ -859,12 +859,12 @@ export default function PublishSupercarPage() {
                         </span>
                         <div className="flex items-baseline space-x-1.5 mt-0.5">
                           <strong className="text-xl font-bold font-mono text-black">
-                            {(Math.round(formData.basePricePerDay * 1.097 * 100) / 100).toFixed(2)} €
+                            {(Math.round(formData.basePricePerDay * 1.19 * 100) / 100).toFixed(2)} €
                           </strong>
                           <span className="text-xs text-gray-500 font-mono">/ jornada</span>
                         </div>
                         <p className="text-[10px] text-gray-400 font-mono mt-1">
-                          (Tu tarifa + 9.7% tarifa de gestión de plataforma)
+                          (Tu tarifa + 19% tarifa de gestión de plataforma)
                         </p>
                       </div>
 

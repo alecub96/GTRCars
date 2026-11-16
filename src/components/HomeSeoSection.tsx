@@ -43,7 +43,7 @@ const VIP_DESTINATIONS = [
 
 const OFFICIAL_BRANDS = [
   { name: 'Porsche', sub: '911 GT3 RS · Touring · Turbo S', href: '/marca/porsche' },
-  { name: 'Ferrari', sub: 'SF90 Stradale · 296 GTB · F8 Spider', href: '/marca/ferrari' },
+  { name: 'Ferrari', sub: '488 GTB · SF90 Stradale · 296 GTB', href: '/marca/ferrari' },
   { name: 'Lamborghini', sub: 'Revuelto V12 · Huracán STO · Urus S', href: '/marca/lamborghini' },
   { name: 'McLaren', sub: '750S Spider · 765LT · Artura', href: '/marca/mclaren' },
   { name: 'Aston Martin', sub: 'DBS Superleggera · Vantage V8', href: '/marca/aston-martin' },
@@ -59,7 +59,7 @@ const OFFICIAL_BRANDS = [
 export const HOME_SEO_FAQS = [
   {
     q: '¿Cuánto cuesta alquilar un superdeportivo en España con GTR Cars?',
-    a: 'Las tarifas en GTR Cars comienzan desde 520 €/día en deportivos V8 (como Ford Mustang Dark Horse o BMW M4 Competition), entre 850 € y 1.290 €/día para modelos como Porsche 911 GT3 Touring, Audi R8 V10 Performance o Corvette Z06, y desde 1.450 € hasta 2.800 €/día para hypercars y ediciones limitadas como Ferrari SF90 Stradale, McLaren 765LT o Lamborghini Revuelto V12.',
+    a: 'Las tarifas oficiales en GTR Cars comienzan desde 490 €/día en deportivos V8 (como Ford Mustang Dark Horse o BMW M4 Competition), entre 790 € y 1.290 €/día para modelos como Ferrari 488 GTB Rosso Corsa, Porsche 911 GT3 o Audi R8 V10, y desde 1.750 € hasta 2.950 €/día para hypercars de referencia como Ferrari SF90 Stradale o Lamborghini Revuelto V12.',
   },
   {
     q: '¿Qué requisitos se necesitan para alquilar un Ferrari, Lamborghini o Porsche?',

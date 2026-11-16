@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
 import { databaseUnavailableResponse, isDatabaseUnavailable } from '@/lib/api-error';
+import { sendPushNotification } from '@/lib/push-notifications';
 
 // REGEX DE BLINDAJE ANTI-BYPASS Y ANTI-FRAUDE
 // 1. Detección de números de teléfono (españoles o internacionales, con espacios, puntos, guiones o texto disimulado "seis doce...")
@@ -122,6 +123,37 @@ export async function POST(request: Request) {
       where: { id: activeConversationId },
       data: { updatedAt: new Date() },
     }).catch(() => {});
+
+    // Enviar notificación PUSH en segundo plano al destinatario (Firebase Cloud Messaging)
+    try {
+      const conv = await prisma.conversation.findUnique({
+        where: { id: activeConversationId },
+        select: { travelerId: true, ownerId: true },
+      });
+      if (conv) {
+        const recipientUserId = conv.travelerId === user.id ? conv.ownerId : conv.travelerId;
+        const pushSubs = await prisma.pushSubscription.findMany({
+          where: { userId: recipientUserId },
+          select: { endpoint: true },
+        });
+        const tokens = pushSubs.map((s) => s.endpoint).filter(Boolean);
+        if (tokens.length > 0) {
+          const senderName = `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'GTR Cars';
+          await sendPushNotification({
+            tokens,
+            title: `Nuevo mensaje de ${senderName}`,
+            body: cleanContent.length > 120 ? `${cleanContent.slice(0, 117)}...` : cleanContent,
+            url: `/mensajes?conversationId=${activeConversationId}`,
+            data: {
+              conversationId: activeConversationId,
+              senderId: user.id,
+            },
+          });
+        }
+      }
+    } catch (pushErr) {
+      console.warn('Advertencia al despachar push notification:', pushErr);
+    }
 
     return NextResponse.json({ success: true, message, conversationId: activeConversationId });
   } catch (error) {

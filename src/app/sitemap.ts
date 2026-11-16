@@ -51,6 +51,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // 5. Catálogo completo de unidades GTR Cars (/coche/[slug])
   const catalogSlugs = [
+    'ferrari-488-gtb-rosso-corsa',
+    'porsche-taycan-volcano-grey',
     'porsche-911-gt3-touring',
     'porsche-911-gt3-rs-weissach-992',
     'ferrari-sf90-stradale-assetto-fiorano',

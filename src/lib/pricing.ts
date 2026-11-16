@@ -4,11 +4,11 @@ export interface PricingBreakdown {
   basePriceTotal: number;
   cleaningFee: number;
   extrasTotal: number;
-  travelerFee: number;       // Tarifa de gestión de plataforma al cliente (9.7%)
+  travelerFee: number;       // Tarifa de gestión de plataforma al cliente (19%)
   ownerFee: number;          // Comisión al propietario (0%, el propietario no paga nada)
-  ownerPayout: number;       // Pago íntegro al propietario (100% de la tarifa)
+  ownerPayout: number;       // Pago íntegro pactado al propietario
   subtotalBeforeFees: number;
-  totalAmount: number;       // Lo que paga el cliente (subtotal + 9.7% gestión)
+  totalAmount: number;       // Lo que paga el cliente (subtotal + 19% gestión)
   discountPct: number;
 }
 
@@ -56,16 +56,16 @@ export function calculatePricing({
 
   const subtotalBeforeFees = basePriceTotal + extrasTotal + cleaningFee;
 
-  // Viajero: 9.7% de tarifa de gestión de plataforma (no hay cobertura de seguro)
-  const travelerFee = Math.round(subtotalBeforeFees * 0.097 * 100) / 100;
+  // Viajero: 19% de tarifa de gestión de plataforma al cliente
+  const travelerFee = Math.round(subtotalBeforeFees * 0.19 * 100) / 100;
   
   // Propietario: 0% de comisión (el propietario no paga nada, cobra el 100% de su tarifa fijada)
   const ownerFee = 0;
 
-  // Total cobrado al cliente/viajero = Subtotal + tarifa de gestión de plataforma (9.7%)
+  // Total cobrado al cliente/viajero = Subtotal + tarifa de gestión de plataforma (19%)
   const totalAmount = Math.round((subtotalBeforeFees + travelerFee) * 100) / 100;
 
-  // Pago al propietario = 100% del subtotal (sin deducciones)
+  // Pago al propietario = 100% del subtotal pactado (sin deducciones para el propietario)
   const ownerPayout = subtotalBeforeFees;
 
   return {

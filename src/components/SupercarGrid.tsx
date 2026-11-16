@@ -32,225 +32,40 @@ export interface SupercarItem {
 
 export const COMMUNITY_SUPERCARS: SupercarItem[] = [
   {
-    id: 'gt-1',
-    slug: 'porsche-911-gt3-touring',
-    brand: 'PORSCHE',
-    model: '911 GT3 Touring Manual',
-    year: 2024,
-    hp: 510,
-    accel: '3.9s',
-    topSpeed: 320,
-    city: 'Mallorca / Ibiza',
-    countryCode: 'ES',
-    bodyType: 'COUPE',
-    transmission: 'MANUAL',
-    price: 1750,
-    image: '/supercars/brands/porsche.png',
-    owner: { name: 'Raúl E.', avatar: 'https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?w=100&auto=format&fit=crop&q=80', rating: 4.99, verified: true }
-  },
-  {
-    id: 'gt-2',
-    slug: 'ferrari-sf90-stradale-assetto-fiorano',
+    id: '4ead6554-3909-4785-b6a5-ca61b37ae6ec',
+    slug: 'ferrari-488-gtb-rosso-corsa',
     brand: 'FERRARI',
-    model: 'SF90 Assetto Fiorano',
-    year: 2024,
-    hp: 1000,
-    accel: '2.5s',
-    topSpeed: 340,
-    city: 'Barcelona',
-    countryCode: 'ES',
-    bodyType: 'COUPE',
-    transmission: 'AUTOMATIC',
-    price: 2900,
-    image: '/supercars/brands/ferrari.png',
-    owner: { name: 'Javier V.', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80', rating: 4.98, verified: true }
-  },
-  {
-    id: 'gt-3',
-    slug: 'lamborghini-revuelto-v12-hybrid',
-    brand: 'LAMBORGHINI',
-    model: 'Revuelto V12 HPEV Hybrid',
-    year: 2025,
-    hp: 1015,
-    accel: '2.5s',
-    topSpeed: 350,
-    city: 'Marbella',
-    countryCode: 'ES',
-    bodyType: 'COUPE',
-    transmission: 'AUTOMATIC',
-    price: 3300,
-    image: '/supercars/brands/lamborghini.png',
-    owner: { name: 'Carlos M.', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80', rating: 5.0, verified: true }
-  },
-  {
-    id: 'gt-4',
-    slug: 'mclaren-765lt-spider-carbon',
-    brand: 'MCLAREN',
-    model: '750S Spider Carbon',
-    year: 2024,
-    hp: 750,
-    accel: '2.8s',
-    topSpeed: 332,
-    city: 'Tenerife',
-    countryCode: 'ES',
-    bodyType: 'CABRIO',
-    transmission: 'AUTOMATIC',
-    price: 2500,
-    image: '/supercars/brands/mclaren.png',
-    owner: { name: 'Alejandro G.', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&auto=format&fit=crop&q=80', rating: 5.0, verified: true }
-  },
-  {
-    id: 'gt-5',
-    slug: 'mercedes-amg-gt-black-series',
-    brand: 'MERCEDES-BENZ',
-    model: 'AMG GT Black Series',
-    year: 2024,
-    hp: 730,
-    accel: '3.2s',
-    topSpeed: 325,
-    city: 'Gran Canaria',
-    countryCode: 'ES',
-    bodyType: 'COUPE',
-    transmission: 'AUTOMATIC',
-    price: 2350,
-    image: '/supercars/brands/mercedes-benz.png',
-    owner: { name: 'Alberto B.', avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=100&auto=format&fit=crop&q=80', rating: 5.0, verified: true }
-  },
-  {
-    id: 'gt-6',
-    slug: 'aston-martin-dbs-superleggera',
-    brand: 'ASTON MARTIN',
-    model: 'DBS Superleggera V12',
-    year: 2024,
-    hp: 725,
-    accel: '3.4s',
-    topSpeed: 340,
-    city: 'Madrid',
-    countryCode: 'ES',
-    bodyType: 'COUPE',
-    transmission: 'AUTOMATIC',
-    price: 2100,
-    image: '/supercars/brands/aston-martin.png',
-    owner: { name: 'Gonzalo S.', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100&auto=format&fit=crop&q=80', rating: 5.0, verified: true }
-  },
-  {
-    id: 'gt-7',
-    slug: 'audi-r8-v10-performance',
-    brand: 'AUDI',
-    model: 'R8 V10 Performance GT RWD',
-    year: 2024,
-    hp: 620,
-    accel: '3.1s',
-    topSpeed: 331,
-    city: 'Madrid',
-    countryCode: 'ES',
-    bodyType: 'COUPE',
-    transmission: 'AUTOMATIC',
-    price: 1900,
-    image: '/supercars/brands/audi.png',
-    owner: { name: 'Marcos T.', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80', rating: 4.96, verified: true }
-  },
-  {
-    id: 'gt-8',
-    slug: 'bmw-m4-csl',
-    brand: 'BMW',
-    model: 'M4 Competition Sport Lightweight',
-    year: 2024,
-    hp: 550,
-    accel: '3.7s',
-    topSpeed: 307,
-    city: 'Marbella',
-    countryCode: 'ES',
-    bodyType: 'COUPE',
-    transmission: 'AUTOMATIC',
-    price: 1600,
-    image: '/supercars/brands/bmew.png',
-    owner: { name: 'David P.', avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&auto=format&fit=crop&q=80', rating: 4.95, verified: true }
-  },
-  {
-    id: 'gt-9',
-    slug: 'bentley-continental-gt-speed',
-    brand: 'BENTLEY',
-    model: 'Continental GT Speed W12',
-    year: 2024,
-    hp: 659,
-    accel: '3.6s',
-    topSpeed: 335,
-    city: 'Marbella',
-    countryCode: 'ES',
-    bodyType: 'COUPE',
-    transmission: 'AUTOMATIC',
-    price: 2250,
-    image: '/supercars/brands/bentley.png',
-    owner: { name: 'Felipe M.', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&auto=format&fit=crop&q=80', rating: 5.0, verified: true }
-  },
-  {
-    id: 'gt-10',
-    slug: 'rolls-royce-spectre-v12',
-    brand: 'ROLLS-ROYCE',
-    model: 'Spectre Ultra-Luxury Coupé',
-    year: 2024,
-    hp: 585,
-    accel: '4.5s',
-    topSpeed: 250,
-    city: 'Madrid',
-    countryCode: 'ES',
-    bodyType: 'COUPE',
-    transmission: 'AUTOMATIC',
-    price: 3500,
-    image: '/supercars/brands/rolls-royce.png',
-    owner: { name: 'Lucas B.', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100&auto=format&fit=crop&q=80', rating: 5.0, verified: true }
-  },
-  {
-    id: 'gt-11',
-    slug: 'chevrolet-corvette-z06',
-    brand: 'CHEVROLET',
-    model: 'Corvette Z06 5.5L Flat-Plane',
-    year: 2024,
+    model: '488 GTB Rosso Corsa Bi-Colore',
+    year: 2019,
     hp: 670,
-    accel: '2.6s',
-    topSpeed: 314,
-    city: 'Madrid',
-    countryCode: 'ES',
-    bodyType: 'CABRIO',
-    transmission: 'AUTOMATIC',
-    price: 1950,
-    image: '/supercars/brands/chevrolet.png',
-    owner: { name: 'Sergio L.', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80', rating: 4.98, verified: true }
-  },
-  {
-    id: 'gt-12',
-    slug: 'dodge-challenger-srt-demon',
-    brand: 'DODGE',
-    model: 'Challenger SRT Super Stock Hellcat',
-    year: 2024,
-    hp: 807,
-    accel: '3.2s',
-    topSpeed: 326,
-    city: 'Alicante',
+    accel: '3.0s',
+    topSpeed: 330,
+    city: 'Tenerife / Gran Canaria',
     countryCode: 'ES',
     bodyType: 'COUPE',
     transmission: 'AUTOMATIC',
-    price: 1800,
-    image: '/supercars/brands/dodge.png',
-    owner: { name: 'Manuel K.', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80', rating: 4.97, verified: true }
+    price: 1290,
+    image: '/supercars/ferrari-488/ferrari-488-front.jpg',
+    isCustomPhoto: true,
+    owner: { name: 'GTR Cars Official', avatar: '/brand/app-icon.png', rating: 5.0, verified: true }
   },
   {
-    id: 'gt-13',
-    slug: 'ford-gt-carbon-edition',
-    brand: 'FORD',
-    model: 'Ford GT Carbon Series EcoBoost',
-    year: 2024,
-    hp: 660,
-    accel: '2.9s',
-    topSpeed: 348,
-    city: 'Barcelona',
+    id: 'c18a7e4e-7aa4-41cd-8f74-ec1d62f4b535',
+    slug: 'porsche-taycan-volcano-grey',
+    brand: 'PORSCHE',
+    model: 'Taycan Volcano Grey Metallic',
+    year: 2022,
+    hp: 408,
+    accel: '5.4s',
+    topSpeed: 230,
+    city: 'Tenerife / Gran Canaria',
     countryCode: 'ES',
-    bodyType: 'COUPE',
+    bodyType: 'SEDAN',
     transmission: 'AUTOMATIC',
-    price: 2800,
-    image: '/supercars/brands/ford.png',
-    owner: { name: 'Adrián R.', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&auto=format&fit=crop&q=80', rating: 5.0, verified: true }
+    price: 690,
+    image: '/supercars/porsche-taycan/porsche-taycan-front.jpg',
+    isCustomPhoto: true,
+    owner: { name: 'GTR Cars Official', avatar: '/brand/app-icon.png', rating: 5.0, verified: true }
   }
 ];
 
@@ -413,17 +228,14 @@ export default function SupercarGrid({
     });
   }, [allCars, activeBrand, filters]);
 
-  // En la Home (strictFilter = false), ponemos primero los de la marca seleccionada en el carrusel
-  // y después el resto de la colección para que siempre se vea una galería completa e imponente.
-  // En /buscar (strictFilter = true), mostramos exactamente los que cumplen los filtros activos.
+  // Si hay una marca seleccionada (en el carrusel hero o en buscador),
+  // se muestran estrictamente los superdeportivos que coinciden con esa marca.
   const displayCars = React.useMemo(() => {
     if (strictFilter) {
       return filteredCars;
     }
     if (activeBrand) {
-      const matching = allCars.filter((c) => matchesBrand(c.brand, c.model, activeBrand));
-      const others = allCars.filter((c) => !matchesBrand(c.brand, c.model, activeBrand));
-      return [...matching, ...others];
+      return allCars.filter((c) => matchesBrand(c.brand, c.model, activeBrand));
     }
     return allCars;
   }, [strictFilter, filteredCars, allCars, activeBrand]);
@@ -440,9 +252,19 @@ export default function SupercarGrid({
                 SELECCIÓN GT CARS & GTR CARS PREMIUM
               </span>
               {activeBrand && (
-                <span className="px-2.5 py-0.5 rounded-full bg-black text-white text-[9px] font-mono font-bold uppercase">
-                  MARCA: {activeBrand}
-                </span>
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-black text-white text-[9px] font-mono font-bold uppercase">
+                  <span>FILTRO: {activeBrand}</span>
+                  {onResetFilters && (
+                    <button
+                      type="button"
+                      onClick={onResetFilters}
+                      className="ml-1 text-gray-300 hover:text-white cursor-pointer"
+                      title="Quitar filtro"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
               )}
               {strictFilter && (
                 <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[9px] font-mono font-bold uppercase">
@@ -459,7 +281,16 @@ export default function SupercarGrid({
           </div>
 
           {!strictFilter && (
-            <div className="mt-4 md:mt-0">
+            <div className="mt-4 md:mt-0 flex items-center gap-2">
+              {activeBrand && onResetFilters && (
+                <button
+                  type="button"
+                  onClick={onResetFilters}
+                  className="px-4 py-2 border border-gray-300 hover:border-black text-xs font-mono tracking-wider uppercase transition-all rounded-full font-bold cursor-pointer"
+                >
+                  VER TODOS LOS ANUNCIOS
+                </button>
+              )}
               <Link
                 href="/buscar"
                 className="inline-flex items-center gap-2 px-6 py-2.5 bg-gray-100 hover:bg-black hover:text-white border border-gray-200 text-xs font-mono tracking-wider uppercase transition-all rounded-full font-bold"
@@ -471,25 +302,37 @@ export default function SupercarGrid({
           )}
         </div>
 
-        {/* ESTADO SIN RESULTADOS EN BUSCADOR */}
+        {/* ESTADO SIN RESULTADOS EN BUSCADOR O FILTRO */}
         {displayCars.length === 0 ? (
-          <div className="bg-gray-50 border border-gray-200 rounded-3xl p-12 text-center space-y-4 font-mono">
+          <div className="bg-gray-50 border border-gray-200 rounded-3xl p-10 sm:p-12 text-center space-y-4 font-mono max-w-2xl mx-auto my-6">
             <p className="text-sm font-bold text-black uppercase tracking-wider">
-              No hay unidades exactas con esa combinación de filtros
+              {activeBrand ? `No hay anuncios de ${activeBrand} disponibles actualmente` : 'No hay unidades exactas con esa combinación'}
             </p>
-            <p className="text-xs text-gray-500 max-w-md mx-auto">
-              Prueba a limpiar los filtros para ver todas las unidades disponibles en el Garaje o solicita tu configuración a medida en Conserjería VIP.
+            <p className="text-xs text-gray-500 max-w-md mx-auto leading-relaxed">
+              {activeBrand
+                ? `Actualmente el catálogo cuenta con el Ferrari 488 GTB Rosso Corsa para reserva inmediata en Canarias. Puedes publicar tu ${activeBrand} o explorar la flota disponible.`
+                : 'Prueba a limpiar los filtros para ver todas las unidades disponibles en el Garaje o solicita tu configuración a medida en Conserjería VIP.'}
             </p>
-            {onResetFilters && (
-              <button
-                type="button"
-                onClick={onResetFilters}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-black text-white text-xs font-mono font-bold uppercase tracking-widest rounded-full hover:bg-neutral-800 transition-all cursor-pointer"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span>MOSTRAR TODOS LOS SUPERDEPORTIVOS</span>
-              </button>
-            )}
+            <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+              {onResetFilters && (
+                <button
+                  type="button"
+                  onClick={onResetFilters}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-black text-white text-xs font-mono font-bold uppercase tracking-widest rounded-full hover:bg-neutral-800 transition-all cursor-pointer shadow-sm"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>VER ANUNCIOS DISPONIBLES</span>
+                </button>
+              )}
+              {activeBrand && (
+                <Link
+                  href="/publicar-coche"
+                  className="inline-flex items-center gap-2 px-6 py-3 border border-black bg-white hover:bg-gray-100 text-black text-xs font-mono font-bold uppercase tracking-widest rounded-full transition-all"
+                >
+                  <span>PUBLICAR MI {activeBrand}</span>
+                </Link>
+              )}
+            </div>
           </div>
         ) : (
           /* CARDS GRID */

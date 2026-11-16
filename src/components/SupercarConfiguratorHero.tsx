@@ -70,7 +70,7 @@ const FEATURED_FLEET: Supercar[] = [
     },
     colorName: 'Jet Black Metallic',
     colorHex: '#111111',
-    image: '/supercars/brands/porsche.png',
+    image: '/supercars/brands/porsche-black.png',
     badgeText: '6-SPEED MANUAL'
   },
   {

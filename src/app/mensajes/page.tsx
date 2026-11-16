@@ -11,13 +11,23 @@ import {
   ArrowLeft,
   Search,
   ExternalLink,
-  MapPin,
   Car,
-  Clock,
   CheckCheck,
   RefreshCw,
-  Info,
+  Bell,
+  BellRing,
+  Zap,
 } from 'lucide-react';
+import { db, getFirebaseMessaging, isFirebaseConfigured } from '@/lib/firebase';
+import {
+  collection,
+  query,
+  orderBy,
+  onSnapshot,
+  addDoc,
+  serverTimestamp,
+} from 'firebase/firestore';
+import { getToken } from 'firebase/messaging';
 
 interface Participant {
   id: string;
@@ -80,10 +90,81 @@ export default function ChatPage() {
   const [sending, setSending] = useState(false);
   const [mobileView, setMobileView] = useState<'list' | 'chat'>('list');
 
+  // Estado de notificaciones Push Firebase
+  const [pushStatus, setPushStatus] = useState<'idle' | 'enabling' | 'enabled' | 'denied'>('idle');
+  const [pushFeedback, setPushFeedback] = useState<string | null>(null);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // Comprobar estado inicial del permiso de notificaciones del navegador
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'Notification' in window) {
+      if (Notification.permission === 'granted') {
+        setPushStatus('enabled');
+      } else if (Notification.permission === 'denied') {
+        setPushStatus('denied');
+      }
+    }
+  }, []);
+
+  const enablePushNotifications = async () => {
+    if (typeof window === 'undefined' || !('Notification' in window)) {
+      setPushFeedback('Tu navegador actual no admite notificaciones push.');
+      return;
+    }
+
+    try {
+      setPushStatus('enabling');
+      setPushFeedback(null);
+
+      const permission = await Notification.requestPermission();
+      if (permission !== 'granted') {
+        setPushStatus('denied');
+        setPushFeedback('Permiso denegado. Actívalas en los ajustes de tu navegador para recibir alertas en el móvil.');
+        return;
+      }
+
+      // Registrar Service Worker de Firebase Messaging
+      let swRegistration: ServiceWorkerRegistration | undefined;
+      if ('serviceWorker' in navigator) {
+        swRegistration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+        await navigator.serviceWorker.ready;
+      }
+
+      const messaging = await getFirebaseMessaging();
+      if (!messaging) {
+        setPushStatus('enabled');
+        setPushFeedback('Notificaciones activadas en el navegador.');
+        return;
+      }
+
+      const vapidKey = process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY;
+      const currentToken = await getToken(messaging, {
+        vapidKey: vapidKey || undefined,
+        serviceWorkerRegistration: swRegistration,
+      });
+
+      if (currentToken) {
+        await fetch('/api/notifications/fcm-token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: currentToken, platform: 'web' }),
+        });
+        setPushStatus('enabled');
+        setPushFeedback('¡Notificaciones Push activadas! Recibirás avisos directos en este dispositivo.');
+      } else {
+        setPushStatus('enabled');
+        setPushFeedback('Notificaciones web activadas con éxito.');
+      }
+    } catch (err: any) {
+      console.warn('Error al activar Firebase push:', err);
+      setPushStatus('idle');
+      setPushFeedback('Notificaciones locales listas para avisarte cuando haya un nuevo mensaje.');
+    }
   };
 
   const fetchConversations = useCallback(
@@ -148,16 +229,69 @@ export default function ChatPage() {
     void fetchConversations(convId, vehicleId, recipientId, bookingId);
   }, [fetchConversations]);
 
-  // Carga de mensajes de la conversación activa y polling silencioso cada 4 segundos
+  // Sincronización en tiempo real vía Firebase Firestore (si está configurado) o polling activo vía REST
   useEffect(() => {
     if (!activeConvId) return;
 
     void fetchMessages(activeConvId);
-    const interval = setInterval(() => {
-      void fetchMessages(activeConvId, true);
-    }, 4000);
 
-    return () => clearInterval(interval);
+    let unsubscribeFirestore: (() => void) | null = null;
+    let syncInterval: NodeJS.Timeout | null = null;
+
+    if (isFirebaseConfigured && db) {
+      try {
+        const messagesRef = collection(db, 'conversations', activeConvId, 'messages');
+        const q = query(messagesRef, orderBy('createdAt', 'asc'));
+
+        unsubscribeFirestore = onSnapshot(
+          q,
+          (snapshot) => {
+            if (!snapshot.empty) {
+              const realtimeMessages: MessageItem[] = snapshot.docs.map((doc) => {
+                const data = doc.data();
+                const dateIso = data.createdAt?.toDate
+                  ? data.createdAt.toDate().toISOString()
+                  : data.createdAtIso || new Date().toISOString();
+                return {
+                  id: doc.id,
+                  content: data.content,
+                  createdAt: dateIso,
+                  senderId: data.senderId,
+                  sender: {
+                    id: data.senderId,
+                    firstName: data.senderFirstName || 'Usuario',
+                    lastName: data.senderLastName || '',
+                    avatarUrl: data.senderAvatar || null,
+                  },
+                };
+              });
+              setMessages(realtimeMessages);
+            }
+          },
+          () => {
+            if (!syncInterval) {
+              syncInterval = setInterval(() => {
+                void fetchMessages(activeConvId, true);
+              }, 3000);
+            }
+          }
+        );
+      } catch {
+        syncInterval = setInterval(() => {
+          void fetchMessages(activeConvId, true);
+        }, 3000);
+      }
+    } else {
+      // Sincronización fluida cada 3s cuando Firebase no tiene claves en .env (evita errores de conexión en consola)
+      syncInterval = setInterval(() => {
+        void fetchMessages(activeConvId, true);
+      }, 3000);
+    }
+
+    return () => {
+      if (unsubscribeFirestore) unsubscribeFirestore();
+      if (syncInterval) clearInterval(syncInterval);
+    };
   }, [activeConvId, fetchMessages]);
 
   // Auto-scroll al recibir mensajes
@@ -198,6 +332,7 @@ export default function ChatPage() {
     setInputContent('');
 
     try {
+      // 1. Enviar a la API REST (valida seguridad, persiste en MySQL y dispara Push FCM al móvil)
       const res = await fetch('/api/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -210,10 +345,26 @@ export default function ChatPage() {
       const data = await res.json();
       if (!res.ok) {
         setWarningMsg(data.error || 'No se pudo enviar el mensaje');
-        // Revertir optimismo
         setMessages((prev) => prev.filter((m) => m.id !== tempId));
         setInputContent(contentToSend);
         return;
+      }
+
+      // 2. Transmisión instantánea a Firebase Firestore sólo si está activo
+      if (isFirebaseConfigured && db) {
+        try {
+          await addDoc(collection(db, 'conversations', activeConvId, 'messages'), {
+            content: contentToSend,
+            senderId: currentUser?.id || 'me',
+            senderFirstName: currentUser?.firstName || 'Yo',
+            senderLastName: currentUser?.lastName || '',
+            senderAvatar: currentUser?.avatarUrl || null,
+            createdAt: serverTimestamp(),
+            createdAtIso: new Date().toISOString(),
+          });
+        } catch (firestoreErr) {
+          console.warn('Registro en Firestore omitido:', firestoreErr);
+        }
       }
 
       await fetchMessages(activeConvId, true);
@@ -253,20 +404,52 @@ export default function ChatPage() {
 
       <main className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-2 sm:py-8 font-mono">
         
-        {/* AVISO DE MENSAJERÍA PROTEGIDA VAULT */}
+        {/* BANNER DE NOTIFICACIONES PUSH FIREBASE & VAULT */}
         <div className={`bg-gray-100 text-black p-3.5 sm:p-4 rounded-2xl mb-3 sm:mb-6 items-center justify-between gap-3 text-xs font-mono border border-gray-200 shadow-sm ${
           mobileView === 'chat' ? 'hidden md:flex' : 'flex'
         }`}>
           <div className="flex items-center space-x-3">
             <Lock className="w-5 h-5 text-black shrink-0" />
             <span className="text-gray-700 font-sans text-xs font-medium">
-              <strong className="text-black font-mono font-black uppercase tracking-wider">Canal Oficial GTR Cars // Custodia:</strong> Mantén las conversaciones dentro de la plataforma para proteger tu reserva, telemetría y fianza en custodia.
+              <strong className="text-black font-mono font-black uppercase tracking-wider">Canal GTR Cars // Tiempo Real & Push:</strong> Mensajería instantánea conectada con Firebase. Mantén las conversaciones dentro de la plataforma para proteger tu reserva.
             </span>
           </div>
-          <span className="bg-gray-200 text-black border border-gray-300 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest shrink-0 self-start sm:self-auto">
-            SSL 256-BIT ENCRIPTADO
-          </span>
+
+          <div className="flex items-center gap-2 shrink-0 self-start sm:self-auto">
+            {pushStatus === 'enabled' ? (
+              <span className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-300 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                <BellRing className="w-3.5 h-3.5 text-emerald-600" />
+                Push Activas
+              </span>
+            ) : (
+              <button
+                type="button"
+                onClick={enablePushNotifications}
+                disabled={pushStatus === 'enabling'}
+                className="inline-flex items-center gap-1.5 bg-black hover:bg-neutral-800 text-white px-3.5 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer shadow-xs active:scale-95 disabled:opacity-50"
+              >
+                <Bell className="w-3.5 h-3.5 text-yellow-400" />
+                {pushStatus === 'enabling' ? 'Activando...' : 'Activar Push en Móvil'}
+              </button>
+            )}
+            <span className="bg-gray-200 text-black border border-gray-300 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest shrink-0 hidden lg:inline-block">
+              {isFirebaseConfigured ? 'FIREBASE LIVE' : 'GTR LIVE // MYSQL'}
+            </span>
+          </div>
         </div>
+
+        {pushFeedback && (
+          <div className="mb-4 px-4 py-2.5 rounded-xl bg-blue-50 border border-blue-200 text-blue-800 text-xs font-sans flex items-center justify-between">
+            <span>{pushFeedback}</span>
+            <button
+              type="button"
+              onClick={() => setPushFeedback(null)}
+              className="text-xs text-blue-600 font-bold ml-2 cursor-pointer"
+            >
+              Cerrar
+            </button>
+          </div>
+        )}
 
         {/* CONTENEDOR PRINCIPAL DEL CHAT */}
         <div className="bg-gray-50 rounded-3xl border border-gray-200 shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-12 h-[calc(100dvh-80px)] sm:h-[750px]">
@@ -319,7 +502,7 @@ export default function ChatPage() {
                   const isActive = c.id === activeConvId;
                   const other = getOtherParticipant(c);
                   const lastMsg = c.messages[0];
-                  const photoUrl = c.vehicle?.photos?.[0]?.url || '/supercars/lambo-revuelto.jpg';
+                  const photoUrl = c.vehicle?.photos?.[0]?.url || '/supercars/ferrari-488/ferrari-488-front.jpg';
 
                   return (
                     <button
@@ -377,13 +560,13 @@ export default function ChatPage() {
                   </div>
                   <p className="text-xs font-bold text-black uppercase tracking-wider">Sin conversaciones activas</p>
                   <p className="text-[11px] text-gray-500 max-w-xs mx-auto font-sans">
-                    Cuando consultes sobre una unidad en el Vault o un conductor contacte sobre tu superdeportivo, aparecerá aquí.
+                    Cuando consultes sobre una unidad en el catálogo o un conductor contacte sobre tu superdeportivo, aparecerá aquí.
                   </p>
                   <Link
                     href="/buscar"
                     className="inline-block mt-2 px-4 py-2 rounded-xl bg-black text-white hover:bg-neutral-800 text-xs font-bold uppercase tracking-wider"
                   >
-                    Explorar Vault
+                    Explorar Catálogo
                   </Link>
                 </div>
               )}
@@ -422,8 +605,8 @@ export default function ChatPage() {
                           {otherUser?.firstName} {otherUser?.lastName}
                         </h3>
                         <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                          Conectado
+                          <Zap className="w-2.5 h-2.5 text-emerald-500 fill-emerald-500" />
+                          {isFirebaseConfigured ? 'Firebase Live' : 'Conectado Live'}
                         </span>
                       </div>
                       <p className="text-[11px] text-gray-500 truncate font-mono">
@@ -432,17 +615,19 @@ export default function ChatPage() {
                     </div>
                   </div>
 
-                  {/* ACCESO DIRECTO A LA FICHA DEL VEHÍCULO */}
-                  {activeConversation.vehicle && (
-                    <Link
-                      href={`/coche/${activeConversation.vehicle.slug || activeConversation.vehicle.id}`}
-                      target="_blank"
-                      className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl border border-gray-200 bg-gray-100 hover:bg-[#D4AF37] hover:text-black text-black text-[11px] font-bold uppercase tracking-wider transition-all shadow-xs shrink-0"
-                    >
-                      <span>Ver Ficha</span>
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </Link>
-                  )}
+                  {/* ACCESO DIRECTO A LA FICHA DEL VEHÍCULO Y BOTÓN PUSH */}
+                  <div className="flex items-center gap-2 shrink-0">
+                    {activeConversation.vehicle && (
+                      <Link
+                        href={`/coche/${activeConversation.vehicle.slug || activeConversation.vehicle.id}`}
+                        target="_blank"
+                        className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl border border-gray-200 bg-gray-100 hover:bg-[#D4AF37] hover:text-black text-black text-[11px] font-bold uppercase tracking-wider transition-all shadow-xs shrink-0"
+                      >
+                        <span>Ver Ficha</span>
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </Link>
+                    )}
+                  </div>
                 </div>
 
                 {/* 2. TARJETA RESUMEN FLOTANTE */}
@@ -450,7 +635,7 @@ export default function ChatPage() {
                   <div className="bg-white border-b border-gray-200 px-4 py-2.5 flex items-center justify-between text-xs text-white">
                     <div className="flex items-center space-x-2 truncate">
                       <Car className="w-4 h-4 text-black shrink-0" />
-                      <span className="font-bold truncate">{activeConversation.vehicle.title}</span>
+                      <span className="font-bold truncate text-black">{activeConversation.vehicle.title}</span>
                       <span className="text-gray-400">•</span>
                       <span className="text-gray-600 font-mono">{activeConversation.vehicle.island}</span>
                     </div>
@@ -460,7 +645,7 @@ export default function ChatPage() {
                   </div>
                 )}
 
-                {/* 3. HISTORIAL DE MENSAJES (BURBUJAS DARK LUXURY) */}
+                {/* 3. HISTORIAL DE MENSAJES */}
                 <div className="p-4 sm:p-6 overflow-y-auto space-y-4 flex-1 bg-gray-100">
                   {loadingMessages ? (
                     <div className="flex items-center justify-center h-full">
@@ -516,9 +701,9 @@ export default function ChatPage() {
                       <div className="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center mx-auto border border-gray-200 shadow-sm">
                         <MessageSquare className="w-6 h-6" />
                       </div>
-                      <h4 className="text-base font-bold text-black uppercase tracking-wider">Inicia el protocolo de contacto</h4>
+                      <h4 className="text-base font-bold text-black uppercase tracking-wider">Inicia el contacto directo</h4>
                       <p className="text-xs max-w-sm mx-auto font-sans">
-                        Consulta detalles sobre la telemetría, punto de entrega VIP o extras para esta unidad.
+                        Consulta detalles sobre disponibilidad, entrega VIP en aeropuerto u hotel, y extras para esta unidad.
                       </p>
                     </div>
                   )}
@@ -541,7 +726,7 @@ export default function ChatPage() {
                   <input
                     type="text"
                     required
-                    placeholder={`Escribe un mensaje seguro a ${otherUser?.firstName || 'el propietario'}...`}
+                    placeholder={`Escribe un mensaje en tiempo real a ${otherUser?.firstName || 'el propietario'}...`}
                     value={inputContent}
                     onChange={(e) => setInputContent(e.target.value)}
                     disabled={sending}
@@ -566,9 +751,9 @@ export default function ChatPage() {
                 <div className="w-16 h-16 rounded-3xl bg-white border border-gray-200 flex items-center justify-center text-black">
                   <MessageSquare className="w-8 h-8" />
                 </div>
-                <h3 className="text-xl font-bold text-white uppercase tracking-wider">Bandeja Segura GT Cars</h3>
+                <h3 className="text-xl font-bold text-black uppercase tracking-wider">Bandeja Segura GTR Cars</h3>
                 <p className="text-xs text-gray-500 max-w-sm leading-relaxed font-sans">
-                  Selecciona una conversación del listado izquierdo para chatear en directo con el piloto o propietario.
+                  Selecciona una conversación del listado izquierdo para chatear en tiempo real con el piloto o propietario con notificaciones push.
                 </p>
               </div>
             )}

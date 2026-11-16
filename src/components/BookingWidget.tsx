@@ -199,7 +199,7 @@ export default function BookingWidget({ vehicle }: BookingWidgetProps) {
             <span className="text-black font-semibold">+{pricing.cleaningFee}€</span>
           </div>
           <div className="flex justify-between">
-            <span>Gestión de plataforma (9,7%)</span>
+            <span>Gestión de plataforma (19%)</span>
             <span className="text-black font-semibold">+{pricing.travelerFee}€</span>
           </div>
 

@@ -9,7 +9,7 @@ import HomeSeoSection from '@/components/HomeSeoSection';
 import Footer from '@/components/Footer';
 
 export default function HomeClientSupercars() {
-  const [selectedBrand, setSelectedBrand] = React.useState<string | null>('PORSCHE');
+  const [selectedBrand, setSelectedBrand] = React.useState<string | null>(null);
 
   return (
     <div className="min-h-screen bg-white text-black font-sans antialiased selection:bg-black selection:text-white overflow-x-hidden">
@@ -20,7 +20,10 @@ export default function HomeClientSupercars() {
       <SupercarConfiguratorHero onSelectBrand={(brand) => setSelectedBrand(brand)} />
 
       {/* 2. COLECCIÓN DE SUPERDEPORTIVOS FILTRADA POR LA MARCA SELECCIONADA */}
-      <SupercarGrid selectedBrand={selectedBrand} />
+      <SupercarGrid
+        selectedBrand={selectedBrand}
+        onResetFilters={() => setSelectedBrand(null)}
+      />
 
       {/* 4. BANNER PROPIETARIOS */}
       <OwnerBanner />

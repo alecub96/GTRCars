@@ -78,7 +78,7 @@ export default function Footer() {
               <span>•</span>
               <span className="flex items-center gap-1">
                 <Mail className="w-3.5 h-3.5 text-black" />
-                concierge@gtrcars.es
+                contacto@gtrcars.es
               </span>
             </div>
           </div>
@@ -97,6 +97,16 @@ export default function Footer() {
               <li>
                 <Link href="/coche/porsche-911-gt3-touring" className="hover:text-black transition-colors">
                   Porsche 911 GT3 Touring
+                </Link>
+              </li>
+              <li>
+                <Link href="/coche/ferrari-488-gtb-rosso-corsa" className="hover:text-black transition-colors font-bold text-black">
+                  Ferrari 488 GTB (Canarias)
+                </Link>
+              </li>
+              <li>
+                <Link href="/coche/porsche-taycan-volcano-grey" className="hover:text-black transition-colors font-bold text-black">
+                  Porsche Taycan (Canarias)
                 </Link>
               </li>
               <li>
