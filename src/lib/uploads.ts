@@ -6,7 +6,7 @@ export type UploadKind = 'vehicles' | 'documents' | 'avatars' | 'inspections';
 
 export class UploadConfigurationError extends Error {}
 
-const ENCRYPTED_FILE_MAGIC = 'VANEANDO-DOCUMENT-V1';
+const ENCRYPTED_FILE_MAGIC = 'GTRCARS-DOCUMENT-V1';
 
 const extensions: Record<string, string> = {
   'image/jpeg': '.jpg',
@@ -65,8 +65,8 @@ function documentKey() {
   if (!configuredSecret && process.env.NODE_ENV === 'production') {
     throw new UploadConfigurationError('DOCUMENT_ENCRYPTION_KEY o JWT_SECRET es obligatorio en producción');
   }
-  const secret = configuredSecret || 'vaneando-local-document-encryption-key-32chars';
-  const validSecret = secret.length >= 32 ? secret : `${secret}-vaneando-secure-fallback-encryption-key-extended`;
+  const secret = configuredSecret || 'gtrcars-local-document-encryption-key-32chars';
+  const validSecret = secret.length >= 32 ? secret : `${secret}-gtrcars-secure-fallback-encryption-key-extended`;
   return createHash('sha256').update(validSecret).digest();
 }
 

@@ -107,42 +107,42 @@ export default function AdminIncidentQueue() {
   }
 
   return (
-    <section className="mb-8 overflow-hidden rounded-3xl border border-[#E9E1D2] bg-white shadow-sm">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#E9E1D2] p-6">
+    <section className="mb-8 overflow-hidden rounded-3xl border border-[#CBD5E1] bg-white shadow-sm">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#CBD5E1] p-6">
         <div className="flex items-start gap-3">
           <div className="rounded-2xl bg-amber-50 p-3 text-amber-700"><Scale className="h-5 w-5" /></div>
           <div>
             <h2 className="text-2xl font-bold tracking-tight">Incidencias y disputas</h2>
-            <p className="text-sm text-[#6B726E]">Revisa pruebas, pide información y deja una resolución trazable.</p>
+            <p className="text-sm text-[#334155]">Revisa pruebas, pide información y deja una resolución trazable.</p>
           </div>
         </div>
-        <button type="button" onClick={() => void load()} className="flex items-center gap-2 rounded-full border border-[#E9E1D2] px-4 py-2 text-xs font-bold">
+        <button type="button" onClick={() => void load()} className="flex items-center gap-2 rounded-full border border-[#CBD5E1] px-4 py-2 text-xs font-bold">
           <RefreshCw className="h-4 w-4" /> Actualizar
         </button>
       </div>
 
       {error && <p className="m-5 rounded-xl bg-red-50 p-3 text-xs font-bold text-red-700">{error}</p>}
       {loading ? (
-        <p className="p-8 text-center text-sm text-[#6B726E]">Cargando incidencias…</p>
+        <p className="p-8 text-center text-sm text-[#334155]">Cargando incidencias…</p>
       ) : incidents.length === 0 ? (
         <div className="p-8 text-center">
-          <AlertTriangle className="mx-auto h-7 w-7 text-[#16B8AA]" />
+          <AlertTriangle className="mx-auto h-7 w-7 text-[#E11D48]" />
           <p className="mt-2 text-sm font-bold">No hay incidencias abiertas ni históricas.</p>
         </div>
       ) : (
-        <div className="divide-y divide-[#E9E1D2]">
+        <div className="divide-y divide-[#E5E7EB]">
           {incidents.map((incident) => {
             const draft = drafts[incident.id] || { status: incident.status, resolution: incident.resolution || '' };
             return (
               <article key={incident.id} className="grid gap-5 p-6 lg:grid-cols-[1fr_320px]">
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-[#16B8AA]">{incident.booking.code}</span>
+                    <span className="text-[10px] font-black uppercase tracking-wider text-[#E11D48]">{incident.booking.code}</span>
                     <span className="rounded-full bg-amber-50 px-2.5 py-1 text-[10px] font-black uppercase text-amber-800">{statusLabels[incident.status] || incident.status}</span>
-                    <span className="rounded-full bg-[#F7F6F2] px-2.5 py-1 text-[10px] font-black uppercase text-[#6B726E]">{incident.type}</span>
+                    <span className="rounded-full bg-[#F8F9FA] px-2.5 py-1 text-[10px] font-black uppercase text-[#334155]">{incident.type}</span>
                   </div>
                   <h3 className="mt-2 text-xl font-bold tracking-tight">{incident.booking.vehicle.title}</h3>
-                  <p className="mt-1 text-xs text-[#6B726E]">
+                  <p className="mt-1 text-xs text-[#334155]">
                     Viajero: {incident.booking.traveler.firstName} {incident.booking.traveler.lastName} · Propietario: {incident.booking.owner.firstName} {incident.booking.owner.lastName}
                   </p>
                   <p className="mt-4 text-sm font-bold">{incident.title}</p>
@@ -152,16 +152,16 @@ export default function AdminIncidentQueue() {
                     <span>Reserva: <strong>{incident.booking.totalAmount.toFixed(2)} €</strong></span>
                     <span>{new Date(incident.createdAt).toLocaleString('es-ES')}</span>
                   </div>
-                  <Link href={`/reserva/${incident.booking.id}`} className="mt-4 inline-block text-xs font-bold text-[#0F766E] underline">Abrir reserva y evidencias</Link>
+                  <Link href={`/reserva/${incident.booking.id}`} className="mt-4 inline-block text-xs font-bold text-[#BE123C] underline">Abrir reserva y evidencias</Link>
                 </div>
 
-                <div className="space-y-3 rounded-2xl bg-[#F7F6F2] p-4">
-                  <label className="block text-[10px] font-black uppercase tracking-wider text-[#6B726E]">
+                <div className="space-y-3 rounded-2xl bg-[#F8F9FA] p-4">
+                  <label className="block text-[10px] font-black uppercase tracking-wider text-[#334155]">
                     Estado
                     <select
                       value={draft.status}
                       onChange={(event) => setDrafts((current) => ({ ...current, [incident.id]: { ...draft, status: event.target.value } }))}
-                      className="mt-1 w-full rounded-xl border border-[#E9E1D2] bg-white p-3 text-sm normal-case tracking-normal"
+                      className="mt-1 w-full rounded-xl border border-[#CBD5E1] bg-white p-3 text-sm normal-case tracking-normal"
                     >
                       <option value="OPEN">Abierta</option>
                       <option value="UNDER_REVIEW">En revisión</option>
@@ -171,16 +171,16 @@ export default function AdminIncidentQueue() {
                       <option value="REJECTED">Rechazada</option>
                     </select>
                   </label>
-                  <label className="block text-[10px] font-black uppercase tracking-wider text-[#6B726E]">
+                  <label className="block text-[10px] font-black uppercase tracking-wider text-[#334155]">
                     Resolución o siguiente paso
                     <textarea
                       value={draft.resolution}
                       onChange={(event) => setDrafts((current) => ({ ...current, [incident.id]: { ...draft, resolution: event.target.value } }))}
                       placeholder="Describe la decisión o qué información falta…"
-                      className="mt-1 min-h-24 w-full rounded-xl border border-[#E9E1D2] bg-white p-3 text-sm font-normal normal-case tracking-normal"
+                      className="mt-1 min-h-24 w-full rounded-xl border border-[#CBD5E1] bg-white p-3 text-sm font-normal normal-case tracking-normal"
                     />
                   </label>
-                  <button type="button" disabled={savingId === incident.id} onClick={() => void save(incident.id)} className="w-full rounded-full bg-[#13322E] px-4 py-3 text-xs font-bold text-white disabled:opacity-50">
+                  <button type="button" disabled={savingId === incident.id} onClick={() => void save(incident.id)} className="w-full rounded-full bg-[#0A0A0A] px-4 py-3 text-xs font-bold text-white disabled:opacity-50">
                     {savingId === incident.id ? 'Guardando…' : 'Guardar seguimiento'}
                   </button>
                 </div>

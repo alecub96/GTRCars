@@ -224,15 +224,15 @@ export default function AdminUserManagement() {
   };
 
   return (
-    <section className="rounded-3xl border border-[#E9E1D2] bg-white p-6 shadow-sm mb-10">
+    <section className="rounded-3xl border border-[#CBD5E1] bg-white p-6 shadow-sm mb-10">
       {/* CABECERA */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#E9E1D2] pb-5 mb-6 gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#CBD5E1] pb-5 mb-6 gap-4">
         <div>
-          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#16B8AA]">
+          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#E11D48]">
             Base de Usuarios & Clientes
           </span>
-          <h2 className="text-2xl font-bold tracking-tight text-[#13322E]">Gestión de Perfiles y Clientes</h2>
-          <p className="text-xs text-[#6B726E] mt-0.5 font-medium">
+          <h2 className="text-2xl font-bold tracking-tight text-[#0A0A0A]">Gestión de Perfiles y Clientes</h2>
+          <p className="text-xs text-[#334155] mt-0.5 font-medium">
             Edita datos personales, sube fotos de perfil, corrige emails, cambia contraseñas o actualiza estados de verificación directamente.
           </p>
         </div>
@@ -241,18 +241,18 @@ export default function AdminUserManagement() {
           type="button"
           onClick={loadUsers}
           disabled={loading}
-          className="inline-flex items-center space-x-2 rounded-full border border-[#E9E1D2] px-4 py-2 text-xs font-bold text-[#13322E] hover:bg-[#FAF7F0] transition-colors cursor-pointer self-start sm:self-auto"
+          className="inline-flex items-center space-x-2 rounded-full border border-[#CBD5E1] px-4 py-2 text-xs font-bold text-[#0A0A0A] hover:bg-[#F1F3F5] transition-colors cursor-pointer self-start sm:self-auto"
         >
-          <RefreshCw className={`h-3.5 w-3.5 text-[#16B8AA] ${loading ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`h-3.5 w-3.5 text-[#E11D48] ${loading ? 'animate-spin' : ''}`} />
           <span>Actualizar</span>
         </button>
       </div>
 
       {/* METRICAS DE USUARIOS */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-        <div className="bg-[#FAF7F0] p-4 rounded-2xl border border-[#E9E1D2]">
-          <span className="text-[10px] font-black uppercase text-[#6B726E] block">Total Clientes</span>
-          <span className="text-2xl font-black text-[#13322E]">{metrics.totalUsers}</span>
+        <div className="bg-[#F1F3F5] p-4 rounded-2xl border border-[#CBD5E1]">
+          <span className="text-[10px] font-black uppercase text-[#334155] block">Total Clientes</span>
+          <span className="text-2xl font-black text-[#0A0A0A]">{metrics.totalUsers}</span>
         </div>
         <div className="bg-sky-50/60 p-4 rounded-2xl border border-sky-200">
           <span className="text-[10px] font-black uppercase text-sky-800 block">Viajeros</span>
@@ -289,19 +289,19 @@ export default function AdminUserManagement() {
       {/* BUSCADOR Y FILTROS */}
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
         <div className="relative flex-1">
-          <Search className="absolute left-3.5 top-3 h-4 w-4 text-[#6B726E]" />
+          <Search className="absolute left-3.5 top-3 h-4 w-4 text-[#334155]" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Buscar por nombre, email, teléfono o ID..."
-            className="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-[#E9E1D2] text-xs font-medium text-[#13322E] bg-white placeholder-[#6B726E]/60 focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+            className="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-[#CBD5E1] text-xs font-medium text-[#0A0A0A] bg-white placeholder-[#334155]/60 focus:outline-none focus:ring-2 focus:ring-[#E11D48]"
           />
           {searchTerm && (
             <button
               type="button"
               onClick={() => setSearchTerm('')}
-              className="absolute right-3 top-3 text-slate-400 hover:text-slate-600"
+              className="absolute right-3 top-3 text-slate-600 hover:text-slate-600"
             >
               <X className="w-4 h-4" />
             </button>
@@ -313,7 +313,7 @@ export default function AdminUserManagement() {
             value={selectedRole}
             onChange={(e) => setSelectedRole(e.target.value)}
             aria-label="Filtrar por rol de usuario"
-            className="px-3 py-2.5 rounded-2xl border border-[#E9E1D2] text-xs font-bold text-[#13322E] bg-white focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+            className="px-3 py-2.5 rounded-2xl border border-[#CBD5E1] text-xs font-bold text-[#0A0A0A] bg-white focus:outline-none focus:ring-2 focus:ring-[#E11D48]"
           >
             <option value="ALL">Todos los roles</option>
             <option value="TRAVELER">Viajeros</option>
@@ -325,7 +325,7 @@ export default function AdminUserManagement() {
             value={selectedVerification}
             onChange={(e) => setSelectedVerification(e.target.value)}
             aria-label="Filtrar por estado de verificación"
-            className="px-3 py-2.5 rounded-2xl border border-[#E9E1D2] text-xs font-bold text-[#13322E] bg-white focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+            className="px-3 py-2.5 rounded-2xl border border-[#CBD5E1] text-xs font-bold text-[#0A0A0A] bg-white focus:outline-none focus:ring-2 focus:ring-[#E11D48]"
           >
             <option value="ALL">Cualquier verificación</option>
             <option value="VERIFIED">Verificados</option>
@@ -338,15 +338,15 @@ export default function AdminUserManagement() {
 
       {/* LISTA DE USUARIOS */}
       {loading ? (
-        <div className="py-12 text-center text-xs font-bold text-[#6B726E]">
-          <RefreshCw className="w-6 h-6 mx-auto mb-2 text-[#16B8AA] animate-spin" />
+        <div className="py-12 text-center text-xs font-bold text-[#334155]">
+          <RefreshCw className="w-6 h-6 mx-auto mb-2 text-[#E11D48] animate-spin" />
           Cargando clientes...
         </div>
       ) : users.length === 0 ? (
-        <div className="py-10 text-center rounded-2xl bg-[#FAF7F0] border border-[#E9E1D2]">
-          <Users className="w-8 h-8 text-[#16B8AA] mx-auto mb-2" />
-          <p className="text-sm font-bold text-[#13322E]">No se encontraron clientes con esos filtros.</p>
-          <p className="text-xs text-[#6B726E] mt-1 font-medium">Prueba a cambiar el término de búsqueda.</p>
+        <div className="py-10 text-center rounded-2xl bg-[#F1F3F5] border border-[#CBD5E1]">
+          <Users className="w-8 h-8 text-[#E11D48] mx-auto mb-2" />
+          <p className="text-sm font-bold text-[#0A0A0A]">No se encontraron clientes con esos filtros.</p>
+          <p className="text-xs text-[#334155] mt-1 font-medium">Prueba a cambiar el término de búsqueda.</p>
         </div>
       ) : (
         <div className="overflow-x-auto">
@@ -358,13 +358,13 @@ export default function AdminUserManagement() {
               return (
                 <div
                   key={u.id}
-                  className="flex flex-col md:flex-row md:items-center justify-between p-4 rounded-2xl border border-[#E9E1D2] bg-[#FAF7F0]/40 hover:bg-white hover:shadow-md transition-all gap-4"
+                  className="flex flex-col md:flex-row md:items-center justify-between p-4 rounded-2xl border border-[#CBD5E1] bg-[#F1F3F5]/40 hover:bg-white hover:shadow-md transition-all gap-4"
                 >
                   <div className="flex items-center space-x-3.5">
                     <img
                       src={u.avatarUrl || '/default-avatar.svg'}
                       alt={`${u.firstName} ${u.lastName}`}
-                      className="w-12 h-12 rounded-full object-cover border border-[#E9E1D2] bg-white shrink-0 shadow-xs"
+                      className="w-12 h-12 rounded-full object-cover border border-[#CBD5E1] bg-white shrink-0 shadow-xs"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = '/default-avatar.svg';
                       }}
@@ -372,7 +372,7 @@ export default function AdminUserManagement() {
 
                     <div>
                       <div className="flex items-center space-x-2 flex-wrap gap-y-1">
-                        <h4 className="font-bold text-sm text-[#13322E]">
+                        <h4 className="font-bold text-sm text-[#0A0A0A]">
                           {u.firstName} {u.lastName}
                         </h4>
 
@@ -409,26 +409,26 @@ export default function AdminUserManagement() {
                         </span>
                       </div>
 
-                      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-[#6B726E] mt-1 font-medium">
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-[#334155] mt-1 font-medium">
                         <span className="flex items-center space-x-1">
-                          <Mail className="w-3 h-3 text-[#16B8AA]" />
+                          <Mail className="w-3 h-3 text-[#E11D48]" />
                           <span>{u.email}</span>
                         </span>
                         {u.phone && (
                           <span className="flex items-center space-x-1">
-                            <Phone className="w-3 h-3 text-[#16B8AA]" />
+                            <Phone className="w-3 h-3 text-[#E11D48]" />
                             <span>{u.phone}</span>
                           </span>
                         )}
-                        <span className="text-[10px] text-slate-400">
+                        <span className="text-[10px] text-slate-600">
                           ID: {u.id.slice(0, 8)}... • Reg: {new Date(u.createdAt).toLocaleDateString('es-ES')}
                         </span>
                       </div>
 
                       {u._count && (
-                        <div className="flex items-center space-x-3 text-[11px] text-[#13322E] font-bold mt-1.5">
+                        <div className="flex items-center space-x-3 text-[11px] text-[#0A0A0A] font-bold mt-1.5">
                           {u._count.vehicles > 0 && (
-                            <span className="text-[#16B8AA]">{u._count.vehicles} campers publicadas</span>
+                            <span className="text-[#E11D48]">{u._count.vehicles} superdeportivos publicados</span>
                           )}
                           {u._count.bookingsAsTraveler > 0 && (
                             <span>{u._count.bookingsAsTraveler} reservas hechas</span>
@@ -445,9 +445,9 @@ export default function AdminUserManagement() {
                     <button
                       type="button"
                       onClick={() => openEditModal(u)}
-                      className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full border border-[#E9E1D2] bg-white text-xs font-bold text-[#13322E] hover:bg-[#13322E] hover:text-white transition-all shadow-xs cursor-pointer"
+                      className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full border border-[#CBD5E1] bg-white text-xs font-bold text-[#0A0A0A] hover:bg-[#0A0A0A] hover:text-white transition-all shadow-xs cursor-pointer"
                     >
-                      <Edit className="w-3.5 h-3.5 text-[#16B8AA]" />
+                      <Edit className="w-3.5 h-3.5 text-[#E11D48]" />
                       <span>Editar Perfil</span>
                     </button>
 
@@ -456,7 +456,7 @@ export default function AdminUserManagement() {
                       disabled={processingId === u.id}
                       onClick={() => handleDeleteUser(u)}
                       title="Eliminar usuario"
-                      className="p-1.5 rounded-full text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer disabled:opacity-50"
+                      className="p-1.5 rounded-full text-slate-600 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer disabled:opacity-50"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -471,22 +471,22 @@ export default function AdminUserManagement() {
       {/* MODAL DE EDICIÓN DE PERFIL */}
       {editingUser && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
-          <div className="relative w-full max-w-xl rounded-3xl bg-white p-6 sm:p-8 shadow-2xl border border-[#E9E1D2] max-h-[90vh] overflow-y-auto">
+          <div className="relative w-full max-w-xl rounded-3xl bg-white p-6 sm:p-8 shadow-2xl border border-[#CBD5E1] max-h-[90vh] overflow-y-auto">
             <button
               type="button"
               onClick={closeEditModal}
-              className="absolute top-5 right-5 p-2 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer"
+              className="absolute top-5 right-5 p-2 rounded-full text-slate-600 hover:text-slate-700 hover:bg-slate-100 cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
 
             {/* CABECERA MODAL */}
-            <div className="flex items-center space-x-4 mb-6 pb-4 border-b border-[#E9E1D2]">
+            <div className="flex items-center space-x-4 mb-6 pb-4 border-b border-[#CBD5E1]">
               <div className="relative group">
                 <img
                   src={editForm.avatarUrl || '/default-avatar.svg'}
                   alt="Avatar"
-                  className="w-16 h-16 rounded-full object-cover border-2 border-[#16B8AA] shadow-md bg-white"
+                  className="w-16 h-16 rounded-full object-cover border-2 border-[#E11D48] shadow-md bg-white"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = '/default-avatar.svg';
                   }}
@@ -499,13 +499,13 @@ export default function AdminUserManagement() {
               </div>
 
               <div>
-                <span className="text-[10px] font-black uppercase tracking-wider text-[#16B8AA]">
+                <span className="text-[10px] font-black uppercase tracking-wider text-[#E11D48]">
                   Editor Administrador
                 </span>
-                <h3 className="text-xl font-bold text-[#13322E]">
+                <h3 className="text-xl font-bold text-[#0A0A0A]">
                   Modificar Perfil de {editingUser.firstName} {editingUser.lastName}
                 </h3>
-                <p className="text-xs text-[#6B726E]">ID: {editingUser.id}</p>
+                <p className="text-xs text-[#334155]">ID: {editingUser.id}</p>
               </div>
             </div>
 
@@ -529,8 +529,8 @@ export default function AdminUserManagement() {
 
             <form onSubmit={handleSaveProfile} className="space-y-4">
               {/* CAMBIO DE FOTO DE PERFIL */}
-              <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-[#E9E1D2] space-y-2.5">
-                <label className="block text-xs font-bold text-[#13322E]">
+              <div className="p-4 rounded-2xl bg-[#F1F3F5] border border-[#CBD5E1] space-y-2.5">
+                <label className="block text-xs font-bold text-[#0A0A0A]">
                   Foto de Perfil del Usuario
                 </label>
                 
@@ -547,7 +547,7 @@ export default function AdminUserManagement() {
                     type="button"
                     disabled={isUploadingAvatar}
                     onClick={() => fileInputRef.current?.click()}
-                    className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-[#13322E] hover:bg-[#16B8AA] text-white text-xs font-bold transition-all shadow-xs cursor-pointer disabled:opacity-50"
+                    className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-[#0A0A0A] hover:bg-[#E11D48] text-white text-xs font-bold transition-all shadow-xs cursor-pointer disabled:opacity-50"
                   >
                     <Upload className="w-3.5 h-3.5" />
                     <span>{isUploadingAvatar ? 'Subiendo foto...' : 'Subir foto desde este dispositivo'}</span>
@@ -559,9 +559,9 @@ export default function AdminUserManagement() {
                       setEditForm((prev) => ({ ...prev, avatarUrl: '/default-avatar.svg' }));
                       setModalFeedback({ type: 'success', message: 'Restablecido al avatar genérico. Pulsa «Guardar Cambios».' });
                     }}
-                    className="inline-flex items-center space-x-1 px-3 py-2 text-xs font-bold text-[#6B726E] hover:text-[#13322E] border border-[#E9E1D2] bg-white rounded-xl hover:bg-slate-50 transition-colors cursor-pointer"
+                    className="inline-flex items-center space-x-1 px-3 py-2 text-xs font-bold text-[#334155] hover:text-[#0A0A0A] border border-[#CBD5E1] bg-white rounded-xl hover:bg-slate-50 transition-colors cursor-pointer"
                   >
-                    <RotateCcw className="w-3 h-3 text-[#16B8AA]" />
+                    <RotateCcw className="w-3 h-3 text-[#E11D48]" />
                     <span>Avatar Genérico</span>
                   </button>
                 </div>
@@ -572,64 +572,64 @@ export default function AdminUserManagement() {
                     value={editForm.avatarUrl}
                     onChange={(e) => setEditForm({ ...editForm, avatarUrl: e.target.value })}
                     placeholder="O pega una URL de imagen: https://..."
-                    className="w-full px-3 py-1.5 rounded-xl border border-[#E9E1D2] text-[11px] font-medium text-[#13322E] bg-white focus:outline-none focus:ring-1 focus:ring-[#16B8AA]"
+                    className="w-full px-3 py-1.5 rounded-xl border border-[#CBD5E1] text-[11px] font-medium text-[#0A0A0A] bg-white focus:outline-none focus:ring-1 focus:ring-[#E11D48]"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-[#13322E] mb-1">Nombre</label>
+                  <label className="block text-xs font-bold text-[#0A0A0A] mb-1">Nombre</label>
                   <input
                     type="text"
                     required
                     value={editForm.firstName}
                     onChange={(e) => setEditForm({ ...editForm, firstName: e.target.value })}
-                    className="w-full px-3.5 py-2 rounded-xl border border-[#E9E1D2] text-xs font-medium text-[#13322E] focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+                    className="w-full px-3.5 py-2 rounded-xl border border-[#CBD5E1] text-xs font-medium text-[#0A0A0A] focus:outline-none focus:ring-2 focus:ring-[#E11D48]"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-[#13322E] mb-1">Apellidos</label>
+                  <label className="block text-xs font-bold text-[#0A0A0A] mb-1">Apellidos</label>
                   <input
                     type="text"
                     required
                     value={editForm.lastName}
                     onChange={(e) => setEditForm({ ...editForm, lastName: e.target.value })}
-                    className="w-full px-3.5 py-2 rounded-xl border border-[#E9E1D2] text-xs font-medium text-[#13322E] focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+                    className="w-full px-3.5 py-2 rounded-xl border border-[#CBD5E1] text-xs font-medium text-[#0A0A0A] focus:outline-none focus:ring-2 focus:ring-[#E11D48]"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-[#13322E] mb-1">Correo Electrónico</label>
+                  <label className="block text-xs font-bold text-[#0A0A0A] mb-1">Correo Electrónico</label>
                   <input
                     type="email"
                     required
                     value={editForm.email}
                     onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                    className="w-full px-3.5 py-2 rounded-xl border border-[#E9E1D2] text-xs font-medium text-[#13322E] focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+                    className="w-full px-3.5 py-2 rounded-xl border border-[#CBD5E1] text-xs font-medium text-[#0A0A0A] focus:outline-none focus:ring-2 focus:ring-[#E11D48]"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-[#13322E] mb-1">Teléfono</label>
+                  <label className="block text-xs font-bold text-[#0A0A0A] mb-1">Teléfono</label>
                   <input
                     type="tel"
                     value={editForm.phone}
                     onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
                     placeholder="+34 600 000 000"
-                    className="w-full px-3.5 py-2 rounded-xl border border-[#E9E1D2] text-xs font-medium text-[#13322E] focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+                    className="w-full px-3.5 py-2 rounded-xl border border-[#CBD5E1] text-xs font-medium text-[#0A0A0A] focus:outline-none focus:ring-2 focus:ring-[#E11D48]"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-[#13322E] mb-1">Rol de Usuario</label>
+                  <label className="block text-xs font-bold text-[#0A0A0A] mb-1">Rol de Usuario</label>
                   <select
                     value={editForm.role}
                     onChange={(e) => setEditForm({ ...editForm, role: e.target.value as any })}
-                    className="w-full px-3.5 py-2 rounded-xl border border-[#E9E1D2] text-xs font-bold text-[#13322E] focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+                    className="w-full px-3.5 py-2 rounded-xl border border-[#CBD5E1] text-xs font-bold text-[#0A0A0A] focus:outline-none focus:ring-2 focus:ring-[#E11D48]"
                   >
                     <option value="TRAVELER">Viajero</option>
                     <option value="OWNER">Propietario</option>
@@ -637,11 +637,11 @@ export default function AdminUserManagement() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-[#13322E] mb-1">Estado de Verificación DNI</label>
+                  <label className="block text-xs font-bold text-[#0A0A0A] mb-1">Estado de Verificación DNI</label>
                   <select
                     value={editForm.verification}
                     onChange={(e) => setEditForm({ ...editForm, verification: e.target.value as any })}
-                    className="w-full px-3.5 py-2 rounded-xl border border-[#E9E1D2] text-xs font-bold text-[#13322E] focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+                    className="w-full px-3.5 py-2 rounded-xl border border-[#CBD5E1] text-xs font-bold text-[#0A0A0A] focus:outline-none focus:ring-2 focus:ring-[#E11D48]"
                   >
                     <option value="UNVERIFIED">Sin verificar</option>
                     <option value="PENDING">Pendiente de revisión</option>
@@ -652,8 +652,8 @@ export default function AdminUserManagement() {
               </div>
 
               {/* CAMBIAR CONTRASEÑA */}
-              <div className="pt-3 border-t border-[#E9E1D2]">
-                <label className="block text-xs font-bold text-[#13322E] mb-1 flex items-center gap-1.5">
+              <div className="pt-3 border-t border-[#CBD5E1]">
+                <label className="block text-xs font-bold text-[#0A0A0A] mb-1 flex items-center gap-1.5">
                   <KeyRound className="w-3.5 h-3.5 text-[#D97706]" />
                   <span>Asignar Nueva Contraseña (Opcional)</span>
                 </label>
@@ -663,26 +663,26 @@ export default function AdminUserManagement() {
                   onChange={(e) => setEditForm({ ...editForm, newPassword: e.target.value })}
                   placeholder="Dejar en blanco para mantener la contraseña actual"
                   minLength={8}
-                  className="w-full px-3.5 py-2 rounded-xl border border-[#E9E1D2] text-xs font-medium text-[#13322E] focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+                  className="w-full px-3.5 py-2 rounded-xl border border-[#CBD5E1] text-xs font-medium text-[#0A0A0A] focus:outline-none focus:ring-2 focus:ring-[#E11D48]"
                 />
-                <p className="text-[10px] text-[#6B726E] mt-1">
+                <p className="text-[10px] text-[#334155] mt-1">
                   Si el cliente no puede acceder, escribe aquí una nueva clave provisional de al menos 8 caracteres.
                 </p>
               </div>
 
               {/* BOTONES ACCION */}
-              <div className="flex items-center justify-end space-x-3 pt-5 border-t border-[#E9E1D2]">
+              <div className="flex items-center justify-end space-x-3 pt-5 border-t border-[#CBD5E1]">
                 <button
                   type="button"
                   onClick={closeEditModal}
-                  className="px-5 py-2.5 rounded-full border border-[#E9E1D2] text-xs font-bold text-[#13322E] hover:bg-slate-50 cursor-pointer"
+                  className="px-5 py-2.5 rounded-full border border-[#CBD5E1] text-xs font-bold text-[#0A0A0A] hover:bg-slate-50 cursor-pointer"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={processingId !== null || isUploadingAvatar}
-                  className="px-6 py-2.5 rounded-full bg-[#16B8AA] hover:bg-[#0F766E] text-white text-xs font-bold uppercase tracking-wider shadow-md transition-all cursor-pointer disabled:opacity-50 flex items-center space-x-1.5"
+                  className="px-6 py-2.5 rounded-full bg-[#E11D48] hover:bg-[#BE123C] text-white text-xs font-bold uppercase tracking-wider shadow-md transition-all cursor-pointer disabled:opacity-50 flex items-center space-x-1.5"
                 >
                   {processingId !== null ? (
                     <>

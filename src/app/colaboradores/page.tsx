@@ -4,9 +4,9 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 import { ArrowUpRight, MapPin, Sparkles } from 'lucide-react';
 
 export const metadata = {
-  title: 'Colaboradores locales | Vaneando',
+  title: 'Colaboradores locales | GTR Cars',
   description: 'Descubre colaboradores locales que mejoran tu experiencia viajando por Canarias en camper.',
-  alternates: { canonical: 'https://vaneando.com/colaboradores' },
+  alternates: { canonical: 'https://gtrcars.es/colaboradores' },
 };
 
 export default function ColaboradoresPage() {

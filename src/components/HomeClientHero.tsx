@@ -127,9 +127,9 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-6 text-center sm:text-left">
           <div className="flex items-center justify-center space-x-3 mx-auto sm:mx-0">
             <div className="flex -space-x-2">
-              <img className="w-10 h-10 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Viajero Vaneando" width={40} height={40} loading="lazy" />
-              <img className="w-10 h-10 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80" alt="Viajero Vaneando" width={40} height={40} loading="lazy" />
-              <img className="w-10 h-10 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80" alt="Viajero Vaneando" width={40} height={40} loading="lazy" />
+              <img className="w-10 h-10 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Viajero GTR Cars" width={40} height={40} loading="lazy" />
+              <img className="w-10 h-10 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80" alt="Viajero GTR Cars" width={40} height={40} loading="lazy" />
+              <img className="w-10 h-10 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80" alt="Viajero GTR Cars" width={40} height={40} loading="lazy" />
             </div>
             <div>
               <div className="flex items-center space-x-1 justify-center sm:justify-start">
@@ -350,7 +350,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
                 <span className="text-xs font-black uppercase tracking-widest text-[#13322E]">Experiencia Náutica</span>
                 <h3 className="font-serif text-2xl font-bold text-[#13322E] mt-2 mb-3">Velero o Barco Habitable</h3>
                 <p className="text-xs text-[#6B726E] font-medium leading-relaxed mb-6">
-                  Despierta mecido por el mar en las marinos y calas de Gran Canaria, Tenerife o La Graciosa. La opción náutica exclusiva de Vaneando.
+                  Despierta mecido por el mar en las marinos y calas de Gran Canaria, Tenerife o La Graciosa. La opción náutica exclusiva de GTR Cars.
                 </p>
               </div>
               <Link href="/buscar?vehicleType=BARCO" className="inline-flex items-center text-xs font-black uppercase tracking-wider text-[#13322E] hover:underline">
@@ -447,9 +447,9 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
       <section className="border-t border-[#E9E1D2] bg-[#13322E] py-16 text-white">
         <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[1.2fr_2fr] lg:items-center lg:px-8">
           <div>
-            <span className="text-xs font-black uppercase tracking-[0.25em] text-[#F2CC8F]">Canarias sobre ruedas</span>
+            <span className="text-xs font-black uppercase tracking-[0.25em] text-[#F2CC8F]">SUPERDEPORTIVOS EN CANARIAS</span>
             <h2 className="mt-3 font-serif text-3xl font-bold sm:text-4xl">Una forma local de descubrir las islas</h2>
-            <p className="mt-4 max-w-xl text-sm leading-6 text-white/70">Del basalto volcánico al Atlántico, cada ruta tiene un paisaje y un ritmo propio. Vaneando nace aquí para conectar viajeros con propietarios de las islas.</p>
+            <p className="mt-4 max-w-xl text-sm leading-6 text-white/70">Del basalto volcánico al Atlántico, cada ruta tiene un paisaje y un ritmo propio. GTR Cars nace aquí para conectar viajeros con propietarios de las islas.</p>
           </div>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             {[
@@ -475,7 +475,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
               Vuestras opiniones: una historia sobre ruedas
             </h2>
             <p className="text-sm text-[#6B726E] font-medium leading-relaxed">
-              Experiencias reales de viajeros que han disfrutado de Canarias sobre ruedas.
+              Experiencias reales de viajeros que han disfrutado de SUPERDEPORTIVOS EN CANARIAS.
             </p>
           </div>
 
@@ -560,13 +560,13 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-5 gap-10">
           <div className="md:col-span-2 space-y-4">
             <div>
-              <span className="font-serif text-3xl font-medium tracking-tight text-white block">vaneando<span className="text-[#b88a55]">.</span></span>
+              <span className="font-serif text-3xl font-medium tracking-tight text-white block">GTR CARS</span>
               <span className="text-[9px] font-sans tracking-[0.25em] uppercase text-[#16B8AA] block font-black mt-0.5">
-                Canarias sobre ruedas
+                SUPERDEPORTIVOS EN CANARIAS
               </span>
             </div>
             <p className="text-xs text-white/70 font-medium leading-relaxed max-w-sm">
-              Vehículos recreativos publicados para alquilar en las Islas Canarias.
+              Plataforma exclusiva de alquiler de superdeportivos y coches de alta gama en Canarias.
             </p>
             <div className="flex flex-wrap items-center gap-2 text-xs text-white/80">
               <span className="bg-white/10 px-3 py-1 rounded-full border border-white/10">Pagos seguros SSL</span>
@@ -578,9 +578,9 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
               <SocialShareButtons className="text-white/80" />
             </div>
             {activeSocialLinks.length > 0 && (
-              <nav aria-label="Perfiles sociales de Vaneando" className="flex flex-wrap gap-x-4 gap-y-2 text-xs font-bold text-white/75">
+              <nav aria-label="Perfiles sociales de GTR Cars" className="flex flex-wrap gap-x-4 gap-y-2 text-xs font-bold text-white/75">
                 {activeSocialLinks.map(([network, url]) => (
-                  <a key={network} href={url} target="_blank" rel="noopener noreferrer" aria-label={`Vaneando en ${network}`} onClick={() => trackEvent('social_profile_click', { network })} className="capitalize hover:text-white">
+                  <a key={network} href={url} target="_blank" rel="noopener noreferrer" aria-label={`GTR Cars en ${network}`} onClick={() => trackEvent('social_profile_click', { network })} className="capitalize hover:text-white">
                     {network}
                   </a>
                 ))}
@@ -615,7 +615,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
             <h4 className="text-xs font-black uppercase tracking-widest text-[#16B8AA] mb-4">Blog & Guías</h4>
             <ul className="space-y-2 text-xs text-white/70 font-medium">
               <li><Link href="/guias/hotel-vs-camper-gran-canaria-ahorro-experiencia" className="hover:text-white">Hotel vs Camper Gran Canaria</Link></li>
-              <li><Link href="/guias/vaneando-vs-yescapa-indie-campers-roadsurfer-canarias" className="hover:text-white">Vaneando vs Empresas del sector</Link></li>
+              <li><Link href="/guias/gtrcars-vs-empresas-del-sector" className="hover:text-white">GTR Cars vs Empresas del sector</Link></li>
               <li><Link href="/guias/pernocta-legal-zonas-acampada-gran-canaria-tenerife" className="hover:text-white">Mapa de Pernocta Legal</Link></li>
               <li><Link href="/guias" className="hover:text-white">Ver todas las guías</Link></li>
             </ul>
@@ -623,7 +623,7 @@ export default function HomeClientHero({ initialVehicles }: HeroSectionProps) {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-xs text-white/50 font-medium gap-4">
-          <p>© 2026 Vaneando.com — Marketplace de vehículos recreativos en Canarias.</p>
+          <p>© 2026 GTR Cars (gtrcars.es) — Alquiler de superdeportivos y vehículos de lujo en Canarias.</p>
           <div className="flex space-x-4">
             <Link href="/terminos" className="hover:text-white">Términos</Link>
             <Link href="/privacidad" className="hover:text-white">Privacidad</Link>

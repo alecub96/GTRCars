@@ -149,9 +149,9 @@ export default function AdminConversationsAudit() {
   return (
     <div className="space-y-6">
       {/* BANNER OFICIAL DE PRIVACIDAD RGPD */}
-      <div className="p-4 sm:p-5 rounded-3xl bg-[#13322E] text-white border border-[#16B8AA]/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
+      <div className="p-4 sm:p-5 rounded-3xl bg-[#0A0A0A] text-white border border-[#E11D48]/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
         <div className="flex items-start sm:items-center space-x-3.5">
-          <div className="w-10 h-10 rounded-2xl bg-[#16B8AA]/20 text-[#16B8AA] flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-2xl bg-[#E11D48]/20 text-[#E11D48] flex items-center justify-center shrink-0">
             <Lock className="w-5 h-5" />
           </div>
           <div>
@@ -159,7 +159,7 @@ export default function AdminConversationsAudit() {
               <span className="font-bold text-sm text-white">
                 Auditoría Protegida de Mensajes
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-[#16B8AA] text-[10px] font-black uppercase tracking-wider">
+              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-[#E11D48] text-[10px] font-black uppercase tracking-wider">
                 RGPD Art. 5.1.c Activo
               </span>
             </div>
@@ -172,52 +172,52 @@ export default function AdminConversationsAudit() {
 
       {/* MÉTRICAS GLOBALES */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-5 rounded-3xl bg-white border border-[#E9E1D2] shadow-xs">
+        <div className="p-5 rounded-3xl bg-white border border-[#CBD5E1] shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-[#6B726E] uppercase tracking-wider">Total Conversaciones</span>
-            <MessageSquare className="w-5 h-5 text-[#16B8AA]" />
+            <span className="text-xs font-bold text-[#334155] uppercase tracking-wider">Total Conversaciones</span>
+            <MessageSquare className="w-5 h-5 text-[#E11D48]" />
           </div>
-          <h3 className="text-2xl font-black text-[#13322E] mt-2">{metrics.totalConversations}</h3>
-          <p className="text-[11px] text-[#6B726E] mt-1">Hilos protegidos en la plataforma</p>
+          <h3 className="text-2xl font-black text-[#0A0A0A] mt-2">{metrics.totalConversations}</h3>
+          <p className="text-[11px] text-[#334155] mt-1">Hilos protegidos en la plataforma</p>
         </div>
 
-        <div className="p-5 rounded-3xl bg-white border border-[#E9E1D2] shadow-xs">
+        <div className="p-5 rounded-3xl bg-white border border-[#CBD5E1] shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-[#6B726E] uppercase tracking-wider">Mensajes Registrados</span>
+            <span className="text-xs font-bold text-[#334155] uppercase tracking-wider">Mensajes Registrados</span>
             <FileCheck2 className="w-5 h-5 text-emerald-600" />
           </div>
-          <h3 className="text-2xl font-black text-[#13322E] mt-2">{metrics.totalMessages}</h3>
-          <p className="text-[11px] text-[#6B726E] mt-1">Comunicaciones almacenadas con seguridad</p>
+          <h3 className="text-2xl font-black text-[#0A0A0A] mt-2">{metrics.totalMessages}</h3>
+          <p className="text-[11px] text-[#334155] mt-1">Comunicaciones almacenadas con seguridad</p>
         </div>
 
-        <div className="p-5 rounded-3xl bg-[#FAF7F0] border border-[#E9E1D2] shadow-xs flex flex-col justify-between">
+        <div className="p-5 rounded-3xl bg-[#F1F3F5] border border-[#CBD5E1] shadow-xs flex flex-col justify-between">
           <div className="flex items-center space-x-2">
-            <ShieldCheck className="w-4 h-4 text-[#16B8AA]" />
-            <span className="text-xs font-bold text-[#13322E]">Finalidad Legal Exclusiva</span>
+            <ShieldCheck className="w-4 h-4 text-[#E11D48]" />
+            <span className="text-xs font-bold text-[#0A0A0A]">Finalidad Legal Exclusiva</span>
           </div>
-          <p className="text-[11px] text-[#6B726E] leading-relaxed">
+          <p className="text-[11px] text-[#334155] leading-relaxed">
             Resolución de incidencias, prevención de pagos externos y soporte técnico en acuerdos de alquiler.
           </p>
         </div>
       </div>
 
       {/* BARRA DE BÚSQUEDA Y FILTRADO */}
-      <div className="p-4 bg-white rounded-3xl border border-[#E9E1D2] shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div className="p-4 bg-white rounded-3xl border border-[#CBD5E1] shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3">
         <div className="relative flex-1 w-full">
-          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600" />
           <input
             type="text"
-            placeholder="Buscar por camper, alias anónimo o palabras del mensaje..."
+            placeholder="Buscar por superdeportivo, alias anónimo o palabras del mensaje..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-4 py-2.5 bg-[#FAF7F0] rounded-2xl border border-[#E9E1D2] text-xs font-medium text-[#13322E] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#16B8AA]"
+            className="w-full pl-9 pr-4 py-2.5 bg-[#F1F3F5] rounded-2xl border border-[#CBD5E1] text-xs font-medium text-[#0A0A0A] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#E11D48]"
           />
         </div>
 
         <button
           type="button"
           onClick={loadConversations}
-          className="px-4 py-2.5 rounded-2xl bg-white border border-[#E9E1D2] hover:bg-[#FAF7F0] text-xs font-bold text-[#13322E] flex items-center space-x-2 transition-all cursor-pointer shrink-0"
+          className="px-4 py-2.5 rounded-2xl bg-white border border-[#CBD5E1] hover:bg-[#F1F3F5] text-xs font-bold text-[#0A0A0A] flex items-center space-x-2 transition-all cursor-pointer shrink-0"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
           <span>Actualizar</span>
@@ -233,10 +233,10 @@ export default function AdminConversationsAudit() {
       )}
 
       {/* TABLA DE CONVERSACIONES ANONIMIZADAS */}
-      <div className="bg-white rounded-3xl border border-[#E9E1D2] shadow-xs overflow-hidden">
+      <div className="bg-white rounded-3xl border border-[#CBD5E1] shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-[#FAF7F0] border-b border-[#E9E1D2] text-[#6B726E] uppercase font-bold text-[10px] tracking-wider">
+            <thead className="bg-[#F1F3F5] border-b border-[#CBD5E1] text-[#334155] uppercase font-bold text-[10px] tracking-wider">
               <tr>
                 <th className="py-3.5 px-4">Vehículo Anunciado</th>
                 <th className="py-3.5 px-4">Viajero (Anonimizado)</th>
@@ -246,11 +246,11 @@ export default function AdminConversationsAudit() {
                 <th className="py-3.5 px-4 text-right">Auditoría</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E9E1D2]/60">
+            <tbody className="divide-y divide-[#E5E7EB]/60">
               {loading ? (
                 <tr>
-                  <td colSpan={6} className="py-12 text-center text-[#6B726E]">
-                    <RefreshCw className="w-6 h-6 text-[#16B8AA] animate-spin mx-auto mb-2" />
+                  <td colSpan={6} className="py-12 text-center text-[#334155]">
+                    <RefreshCw className="w-6 h-6 text-[#E11D48] animate-spin mx-auto mb-2" />
                     Cargando conversaciones anonimizadas...
                   </td>
                 </tr>
@@ -261,20 +261,20 @@ export default function AdminConversationsAudit() {
                   const msgCount = c._count?.messages ?? (c.messages?.length || 0);
 
                   return (
-                    <tr key={c.id} className="hover:bg-[#FAF7F0]/50 transition-colors">
+                    <tr key={c.id} className="hover:bg-[#F1F3F5]/50 transition-colors">
                       {/* VEHÍCULO */}
                       <td className="py-3.5 px-4">
                         <div className="flex items-center space-x-3">
                           <img
                             src={photoUrl}
-                            alt={c.vehicle?.title || 'Camper'}
-                            className="w-10 h-10 rounded-xl object-cover border border-[#E9E1D2] shrink-0"
+                            alt={c.vehicle?.title || 'Superdeportivo'}
+                            className="w-10 h-10 rounded-xl object-cover border border-[#CBD5E1] shrink-0"
                           />
                           <div className="min-w-0">
-                            <h4 className="font-bold text-[#13322E] truncate max-w-[180px]">
-                              {c.vehicle?.title || 'Camper'}
+                            <h4 className="font-bold text-[#0A0A0A] truncate max-w-[180px]">
+                              {c.vehicle?.title || 'Superdeportivo'}
                             </h4>
-                            <span className="text-[10px] text-[#6B726E] block font-medium">
+                            <span className="text-[10px] text-[#334155] block font-medium">
                               {c.vehicle?.island || 'Canarias'}
                             </span>
                           </div>
@@ -284,11 +284,11 @@ export default function AdminConversationsAudit() {
                       {/* VIAJERO ANONIMIZADO */}
                       <td className="py-3.5 px-4">
                         <div className="min-w-0">
-                          <span className="inline-flex items-center gap-1 font-bold text-[#13322E] truncate max-w-[160px]">
-                            <Lock className="w-3 h-3 text-[#16B8AA] shrink-0" />
+                          <span className="inline-flex items-center gap-1 font-bold text-[#0A0A0A] truncate max-w-[160px]">
+                            <Lock className="w-3 h-3 text-[#E11D48] shrink-0" />
                             {c.traveler?.firstName}
                           </span>
-                          <p className="text-[10px] text-[#6B726E] font-mono truncate max-w-[160px]">
+                          <p className="text-[10px] text-[#334155] font-mono truncate max-w-[160px]">
                             {c.traveler?.email}
                           </p>
                         </div>
@@ -297,11 +297,11 @@ export default function AdminConversationsAudit() {
                       {/* PROPIETARIO ANONIMIZADO */}
                       <td className="py-3.5 px-4">
                         <div className="min-w-0">
-                          <span className="inline-flex items-center gap-1 font-bold text-[#13322E] truncate max-w-[160px]">
-                            <Lock className="w-3 h-3 text-[#16B8AA] shrink-0" />
+                          <span className="inline-flex items-center gap-1 font-bold text-[#0A0A0A] truncate max-w-[160px]">
+                            <Lock className="w-3 h-3 text-[#E11D48] shrink-0" />
                             {c.owner?.firstName}
                           </span>
-                          <p className="text-[10px] text-[#6B726E] font-mono truncate max-w-[160px]">
+                          <p className="text-[10px] text-[#334155] font-mono truncate max-w-[160px]">
                             {c.owner?.email}
                           </p>
                         </div>
@@ -311,10 +311,10 @@ export default function AdminConversationsAudit() {
                       <td className="py-3.5 px-4 max-w-xs">
                         {lastMsg ? (
                           <div>
-                            <p className="text-xs text-[#13322E] truncate font-medium">
+                            <p className="text-xs text-[#0A0A0A] truncate font-medium">
                               {lastMsg.content}
                             </p>
-                            <span className="text-[10px] text-[#6B726E]">
+                            <span className="text-[10px] text-[#334155]">
                               {new Date(lastMsg.createdAt).toLocaleString('es-ES', {
                                 day: '2-digit',
                                 month: '2-digit',
@@ -324,13 +324,13 @@ export default function AdminConversationsAudit() {
                             </span>
                           </div>
                         ) : (
-                          <span className="text-[11px] text-[#6B726E] italic">Sin mensajes</span>
+                          <span className="text-[11px] text-[#334155] italic">Sin mensajes</span>
                         )}
                       </td>
 
                       {/* CANTIDAD DE MENSAJES */}
                       <td className="py-3.5 px-4 text-center">
-                        <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-full bg-[#FAF7F0] border border-[#E9E1D2] text-[11px] font-bold text-[#13322E]">
+                        <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-full bg-[#F1F3F5] border border-[#CBD5E1] text-[11px] font-bold text-[#0A0A0A]">
                           {msgCount}
                         </span>
                       </td>
@@ -340,7 +340,7 @@ export default function AdminConversationsAudit() {
                         <button
                           type="button"
                           onClick={() => openInspector(c.id)}
-                          className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-[#16B8AA] hover:bg-[#0F766E] text-white font-bold text-xs transition-all shadow-xs cursor-pointer"
+                          className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-[#E11D48] hover:bg-[#BE123C] text-white font-bold text-xs transition-all shadow-xs cursor-pointer"
                         >
                           <Eye className="w-3.5 h-3.5" />
                           <span>Inspeccionar</span>
@@ -351,7 +351,7 @@ export default function AdminConversationsAudit() {
                 })
               ) : (
                 <tr>
-                  <td colSpan={6} className="py-12 text-center text-[#6B726E]">
+                  <td colSpan={6} className="py-12 text-center text-[#334155]">
                     No se encontraron conversaciones con los filtros aplicados.
                   </td>
                 </tr>
@@ -364,24 +364,24 @@ export default function AdminConversationsAudit() {
       {/* MODAL DE INSPECCIÓN ANONIMIZADA */}
       {inspectingConvId && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl border border-[#E9E1D2] shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col overflow-hidden animate-fade-in-up">
+          <div className="bg-white rounded-3xl border border-[#CBD5E1] shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col overflow-hidden animate-fade-in-up">
             {/* CABECERA MODAL */}
-            <div className="p-5 border-b border-[#E9E1D2] bg-[#FAF7F0] flex items-center justify-between">
+            <div className="p-5 border-b border-[#CBD5E1] bg-[#F1F3F5] flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 rounded-2xl bg-[#16B8AA] text-white flex items-center justify-center font-bold shadow-xs">
+                <div className="w-10 h-10 rounded-2xl bg-[#E11D48] text-white flex items-center justify-center font-bold shadow-xs">
                   <Lock className="w-5 h-5" />
                 </div>
                 <div>
                   <div className="flex items-center space-x-2">
-                    <h3 className="font-serif text-lg font-bold text-[#13322E]">
+                    <h3 className="font-sans text-lg font-bold text-[#0A0A0A]">
                       Inspección Anonimizada de Conversación
                     </h3>
                     <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[9px] font-black uppercase">
                       RGPD Seguro
                     </span>
                   </div>
-                  <p className="text-xs text-[#6B726E]">
-                    Ref: <code className="text-[10px] bg-white px-1.5 py-0.5 rounded border border-[#E9E1D2]">{inspectingConvId}</code>
+                  <p className="text-xs text-[#334155]">
+                    Ref: <code className="text-[10px] bg-white px-1.5 py-0.5 rounded border border-[#CBD5E1]">{inspectingConvId}</code>
                   </p>
                 </div>
               </div>
@@ -389,7 +389,7 @@ export default function AdminConversationsAudit() {
               <button
                 type="button"
                 onClick={closeInspector}
-                className="p-2 text-slate-400 hover:text-[#13322E] rounded-full hover:bg-slate-200 transition-colors cursor-pointer"
+                className="p-2 text-slate-600 hover:text-[#0A0A0A] rounded-full hover:bg-slate-200 transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -398,24 +398,24 @@ export default function AdminConversationsAudit() {
             {/* CONTENIDO MODAL */}
             <div className="flex-1 overflow-y-auto p-6 space-y-6">
               {loadingDetail ? (
-                <div className="py-16 text-center text-[#6B726E]">
-                  <RefreshCw className="w-6 h-6 text-[#16B8AA] animate-spin mx-auto mb-2" />
+                <div className="py-16 text-center text-[#334155]">
+                  <RefreshCw className="w-6 h-6 text-[#E11D48] animate-spin mx-auto mb-2" />
                   Cargando transcripción protegida...
                 </div>
               ) : detailedConv ? (
                 <>
                   {/* RESUMEN DE PARTICIPANTES ANONIMIZADOS */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 rounded-2xl bg-[#FAF7F0] border border-[#E9E1D2] text-xs">
-                    {/* CAMPER */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 rounded-2xl bg-[#F1F3F5] border border-[#CBD5E1] text-xs">
+                    {/* SUPERDEPORTIVO */}
                     <div className="space-y-1">
-                      <span className="font-bold text-[#16B8AA] uppercase text-[10px] tracking-wider block">Camper</span>
-                      <h4 className="font-bold text-[#13322E] truncate">{detailedConv.vehicle?.title || 'Vehículo'}</h4>
-                      <p className="text-[#6B726E] text-[11px]">{detailedConv.vehicle?.island} · {detailedConv.vehicle?.basePricePerDay}€/día</p>
+                      <span className="font-bold text-[#E11D48] uppercase text-[10px] tracking-wider block">Superdeportivo</span>
+                      <h4 className="font-bold text-[#0A0A0A] truncate">{detailedConv.vehicle?.title || 'Vehículo'}</h4>
+                      <p className="text-[#334155] text-[11px]">{detailedConv.vehicle?.island} · {detailedConv.vehicle?.basePricePerDay}€/día</p>
                       {detailedConv.vehicle?.slug && (
                         <Link
-                          href={`/camper/${detailedConv.vehicle.slug}`}
+                          href={`/coche/${detailedConv.vehicle.slug}`}
                           target="_blank"
-                          className="inline-flex items-center gap-1 text-[11px] font-bold text-[#16B8AA] hover:underline mt-1"
+                          className="inline-flex items-center gap-1 text-[11px] font-bold text-[#E11D48] hover:underline mt-1"
                         >
                           <span>Ver anuncio</span>
                           <ExternalLink className="w-3 h-3" />
@@ -425,40 +425,40 @@ export default function AdminConversationsAudit() {
 
                     {/* VIAJERO */}
                     <div className="space-y-1">
-                      <span className="font-bold text-[#16B8AA] uppercase text-[10px] tracking-wider block">Viajero (Protegido)</span>
-                      <p className="font-bold text-[#13322E] flex items-center gap-1">
-                        <Lock className="w-3 h-3 text-[#16B8AA]" />
+                      <span className="font-bold text-[#E11D48] uppercase text-[10px] tracking-wider block">Viajero (Protegido)</span>
+                      <p className="font-bold text-[#0A0A0A] flex items-center gap-1">
+                        <Lock className="w-3 h-3 text-[#E11D48]" />
                         {detailedConv.traveler?.firstName}
                       </p>
-                      <p className="text-[#6B726E] text-[11px] font-mono truncate">{detailedConv.traveler?.email}</p>
-                      <p className="text-[10px] text-slate-400">Identidad protegida</p>
+                      <p className="text-[#334155] text-[11px] font-mono truncate">{detailedConv.traveler?.email}</p>
+                      <p className="text-[10px] text-slate-600">Identidad protegida</p>
                     </div>
 
                     {/* PROPIETARIO */}
                     <div className="space-y-1">
-                      <span className="font-bold text-[#16B8AA] uppercase text-[10px] tracking-wider block">Propietario (Protegido)</span>
-                      <p className="font-bold text-[#13322E] flex items-center gap-1">
-                        <Lock className="w-3 h-3 text-[#16B8AA]" />
+                      <span className="font-bold text-[#E11D48] uppercase text-[10px] tracking-wider block">Propietario (Protegido)</span>
+                      <p className="font-bold text-[#0A0A0A] flex items-center gap-1">
+                        <Lock className="w-3 h-3 text-[#E11D48]" />
                         {detailedConv.owner?.firstName}
                       </p>
-                      <p className="text-[#6B726E] text-[11px] font-mono truncate">{detailedConv.owner?.email}</p>
-                      <p className="text-[10px] text-slate-400">Identidad protegida</p>
+                      <p className="text-[#334155] text-[11px] font-mono truncate">{detailedConv.owner?.email}</p>
+                      <p className="text-[10px] text-slate-600">Identidad protegida</p>
                     </div>
                   </div>
 
                   {/* TRANSCRIPCIÓN CRONOLÓGICA */}
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <h4 className="font-bold text-xs uppercase tracking-wider text-[#6B726E]">
+                      <h4 className="font-bold text-xs uppercase tracking-wider text-[#334155]">
                         Transcripción del Historial ({detailedConv.messages.length} mensajes)
                       </h4>
-                      <span className="text-[10px] text-slate-400 font-mono">
+                      <span className="text-[10px] text-slate-600 font-mono">
                         Cifrado en tránsito & reposo
                       </span>
                     </div>
 
                     {detailedConv.messages.length > 0 ? (
-                      <div className="space-y-3 p-4 bg-slate-50 rounded-2xl border border-[#E9E1D2]">
+                      <div className="space-y-3 p-4 bg-slate-50 rounded-2xl border border-[#CBD5E1]">
                         {detailedConv.messages.map((m) => {
                           const isTraveler = m.sender.role === 'TRAVELER';
                           return (
@@ -466,13 +466,13 @@ export default function AdminConversationsAudit() {
                               key={m.id}
                               className={`p-3.5 rounded-2xl border text-xs space-y-1 ${
                                 isTraveler
-                                  ? 'bg-white border-[#E9E1D2] mr-8'
-                                  : 'bg-[#F4F9F8] border-[#16B8AA]/30 ml-8'
+                                  ? 'bg-white border-[#CBD5E1] mr-8'
+                                  : 'bg-[#F4F9F8] border-[#E11D48]/30 ml-8'
                               }`}
                             >
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-2">
-                                  <span className="font-bold text-[#13322E]">
+                                  <span className="font-bold text-[#0A0A0A]">
                                     {m.sender.firstName}
                                   </span>
                                   <span
@@ -483,11 +483,11 @@ export default function AdminConversationsAudit() {
                                     {isTraveler ? 'Viajero' : 'Propietario'}
                                   </span>
                                 </div>
-                                <span className="text-[10px] text-[#6B726E]">
+                                <span className="text-[10px] text-[#334155]">
                                   {new Date(m.createdAt).toLocaleString('es-ES')}
                                 </span>
                               </div>
-                              <p className="text-[#13322E] whitespace-pre-wrap leading-relaxed">
+                              <p className="text-[#0A0A0A] whitespace-pre-wrap leading-relaxed">
                                 {m.content}
                               </p>
                             </div>
@@ -495,7 +495,7 @@ export default function AdminConversationsAudit() {
                         })}
                       </div>
                     ) : (
-                      <p className="text-center text-xs text-[#6B726E] py-8">
+                      <p className="text-center text-xs text-[#334155] py-8">
                         No hay mensajes registrados en esta conversación.
                       </p>
                     )}
@@ -505,14 +505,14 @@ export default function AdminConversationsAudit() {
             </div>
 
             {/* PIE MODAL */}
-            <div className="p-4 border-t border-[#E9E1D2] bg-[#FAF7F0] flex items-center justify-between">
-              <span className="text-[11px] text-[#6B726E]">
+            <div className="p-4 border-t border-[#CBD5E1] bg-[#F1F3F5] flex items-center justify-between">
+              <span className="text-[11px] text-[#334155]">
                 Registro de auditoría conforme a Términos y Condiciones (Cláusula 9).
               </span>
               <button
                 type="button"
                 onClick={closeInspector}
-                className="px-5 py-2.5 rounded-full bg-[#13322E] hover:bg-[#0F766E] text-white font-bold text-xs transition-all cursor-pointer shadow-sm"
+                className="px-5 py-2.5 rounded-full bg-[#0A0A0A] hover:bg-[#BE123C] text-white font-bold text-xs transition-all cursor-pointer shadow-sm"
               >
                 Cerrar Auditoría
               </button>

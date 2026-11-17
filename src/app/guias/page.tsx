@@ -7,13 +7,13 @@ import { BLOG_ARTICLES } from '@/lib/blog';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Blog Camper Canarias: Guías, Rutas y Comparativas Hotel vs Camper | vaneando.',
+  title: 'Blog Camper Canarias: Guías, Rutas y Comparativas Hotel vs Camper | GTR Cars.',
   description: 'Descubre guías completas para viajar en camper, autocaravana y 4x4 por Gran Canaria y Canarias. Comparativas de precios, mapas de pernocta legal y consejos de locales.',
-  alternates: { canonical: 'https://vaneando.com/guias' },
+  alternates: { canonical: 'https://gtrcars.es/guias' },
   openGraph: {
     title: 'Blog Camper Canarias: Guías de Viaje y Consejos de Pernocta',
     description: 'Aprende cómo ahorrar hasta un 60% en tu viaje por Canarias alquilando una camper entre particulares.',
-    url: 'https://vaneando.com/guias',
+    url: 'https://gtrcars.es/guias',
   },
 };
 
@@ -35,11 +35,11 @@ export default async function GuidesPage() {
     '@type': 'CollectionPage',
     name: 'Blog Camper Canarias: Guías y Consejos',
     description: 'Guías completas para viajar en camper, furgoneta camperizada, autocaravana y 4x4 por las Islas Canarias.',
-    url: 'https://vaneando.com/guias',
+    url: 'https://gtrcars.es/guias',
     hasPart: BLOG_ARTICLES.map((article) => ({
       '@type': 'BlogPosting',
       headline: article.title,
-      url: `https://vaneando.com/guias/${article.slug}`,
+      url: `https://gtrcars.es/guias/${article.slug}`,
       datePublished: article.publishedAt,
     })),
   };
@@ -48,8 +48,8 @@ export default async function GuidesPage() {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Inicio', item: 'https://vaneando.com' },
-      { '@type': 'ListItem', position: 2, name: 'Blog & Guías', item: 'https://vaneando.com/guias' },
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: 'https://gtrcars.es' },
+      { '@type': 'ListItem', position: 2, name: 'Blog & Guías', item: 'https://gtrcars.es/guias' },
     ],
   };
 
@@ -118,7 +118,7 @@ export default async function GuidesPage() {
                 </div>
 
                 <div className="px-6 pb-6 pt-4 border-t border-[#E9E1D2] flex items-center justify-between text-xs text-[#6B726E]">
-                  <span className="font-bold">Por el Equipo Oficial de vaneando.</span>
+                  <span className="font-bold">Por el Equipo Oficial de GTR Cars.</span>
                   <span className="text-[11px] font-black uppercase text-[#16B8AA] group-hover:translate-x-1 transition-transform">Leer artículo →</span>
                 </div>
               </Link>

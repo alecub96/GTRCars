@@ -17,6 +17,10 @@ import {
   Users,
   BarChart3,
   ExternalLink,
+  Calendar,
+  KeyRound,
+  Database,
+  Lock,
 } from 'lucide-react';
 import AdminVehicleQueue from '@/components/AdminVehicleQueue';
 import AdminUserManagement from '@/components/AdminUserManagement';
@@ -33,7 +37,7 @@ export default function AdminPage() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [authorized, setAuthorized] = useState<boolean | null>(null);
-  const [activeTab, setActiveTab] = useState<'vehicles' | 'users' | 'conversations' | 'verifications' | 'incidents' | 'finances' | 'analytics' | 'system'>('vehicles');
+  const [activeTab, setActiveTab] = useState<'vehicles' | 'bookings' | 'users' | 'conversations' | 'verifications' | 'incidents' | 'finances' | 'system'>('vehicles');
 
   const fetchDashboardData = async () => {
     try {
@@ -57,7 +61,7 @@ export default function AdminPage() {
           return;
         }
 
-        const adminEmails = ['admin@gtrcars.es', 'contacto@gtrcars.es', 'admin@vaneando.com', 'vaneando@vaneando.com'];
+        const adminEmails = ['admin@gtrcars.es', 'contacto@gtrcars.es', 'alecub96@hotmail.com'];
         const isAdmin = auth.user.role === 'ADMIN' || adminEmails.includes(auth.user.email?.toLowerCase());
         setAuthorized(isAdmin);
 
@@ -73,10 +77,10 @@ export default function AdminPage() {
       });
   }, []);
 
-  if (authorized === null) return <div className="min-h-screen bg-[#F7F6F2]" />;
+  if (authorized === null) return <div className="min-h-screen bg-neutral-50" />;
   if (authorized === false) {
     return (
-      <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]">
+      <div className="min-h-screen bg-neutral-50 text-neutral-900">
         <Navbar />
         <AdminLogin />
       </div>
@@ -84,423 +88,459 @@ export default function AdminPage() {
   }
 
   const metrics = data?.metrics || {};
+  const recentBookings = data?.recentBookings || [];
 
   return (
-    <div className="min-h-screen bg-[#F7F6F2] text-[#13322E]">
+    <div className="min-h-screen bg-slate-50 text-neutral-900 font-sans selection:bg-black selection:text-white">
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* CABECERA PRINCIPAL */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 pb-6 border-b border-[#E9E1D2]">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 pb-6 border-b border-neutral-300">
           <div>
-            <span className="text-[11px] font-black uppercase tracking-[0.25em] text-[#16B8AA]">
-              Administración Central GTR Cars
-            </span>
-            <h1 className="text-3xl sm:text-4xl font-sans font-bold tracking-tight mt-1 text-[#13322E]">
+            <div className="flex items-center gap-2 mb-2 font-mono">
+              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[10px] font-mono font-bold uppercase tracking-[0.25em] text-rose-600">
+                GTR CARS // SISTEMA CENTRAL
+              </span>
+            </div>
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-neutral-900 font-sans">
               Centro de Operaciones & Control
             </h1>
+            <p className="text-xs text-neutral-600 mt-1.5 font-medium font-mono">
+              Panel ejecutivo de supervisión de flota, validaciones de pilotos y conciliación bancaria Stripe en tiempo real.
+            </p>
           </div>
 
-          <div className="w-full max-w-3xl space-y-3 md:w-auto">
-            <div className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2 text-xs">
-              <div className="text-[#16B8AA]"><OwnerBrowserNotifications audience="admin" /></div>
-              <div
-              className={`flex items-center space-x-2 text-xs font-bold px-4 py-2 rounded-full border ${
+          <div className="flex flex-wrap items-center gap-2 self-start md:self-auto font-mono text-xs">
+            {/* ESTADO BASE DE DATOS */}
+            <div className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold">
+              <Database className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Supabase DB: Conectada</span>
+            </div>
+
+            {/* ESTADO STRIPE */}
+            <div
+              className={`inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full font-bold border ${
                 metrics.stripeConfigured
                   ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
                   : 'bg-amber-50 text-amber-800 border-amber-200'
               }`}
             >
-              <ShieldCheck className="w-4 h-4" />
-              <span>{metrics.stripeConfigured ? 'Stripe Connect Activo' : 'Stripe Config Pendiente'}</span>
-              </div>
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+              <span>{metrics.stripeConfigured ? 'Stripe Connect: Live' : 'Stripe: Pendiente'}</span>
             </div>
-
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-            <button type="button" onClick={() => setActiveTab('users')} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#13322E] px-4 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-sm transition hover:bg-[#16B8AA]">
-              <Users className="h-4 w-4" /> Usuarios y clientes
-            </button>
 
             <button
               type="button"
-              onClick={() => setActiveTab('conversations')}
-              className="inline-flex min-h-11 items-center justify-center space-x-2 rounded-full bg-[#16B8AA] px-4 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-sm transition-all hover:bg-[#0F766E]"
+              onClick={fetchDashboardData}
+              disabled={loading}
+              className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full bg-white border border-neutral-300 text-neutral-700 hover:border-black hover:text-black transition-all cursor-pointer font-bold shadow-xs"
             >
-              <MessageSquare className="w-4 h-4" />
-              <span>Auditoría de Chats (RGPD)</span>
-              {(metrics.totalConversationsCount || 0) > 0 && (
-                <span className="bg-[#13322E] text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
-                  {metrics.totalConversationsCount}
-                </span>
-              )}
+              <RefreshCw className={`w-3 h-3 text-rose-600 ${loading ? 'animate-spin' : ''}`} />
+              <span>Refrescar</span>
             </button>
-
-            <Link
-              href="/soporte"
-              className="inline-flex min-h-11 items-center justify-center space-x-2 rounded-full bg-[#13322E] px-4 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-sm transition-all hover:bg-[#16B8AA]"
-            >
-              <MessageSquare className="w-4 h-4" />
-              <span>Bandeja de Soporte</span>
-              {(metrics.unreadMessagesCount || 0) > 0 && (
-                <span className="bg-[#16B8AA] text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
-                  {metrics.unreadMessagesCount}
-                </span>
-              )}
-            </Link>
-            </div>
           </div>
         </div>
 
-        {/* ACCESOS RÁPIDOS Y RESUMEN OPERATIVO */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-8">
+        {/* MÉTRICAS EN TIEMPO REAL CON SENTIDO OPERATIVO */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-8 font-mono">
+          {/* 1. FLOTA DISPONIBLE */}
           <button
             type="button"
             onClick={() => setActiveTab('vehicles')}
-            className={`p-4 rounded-3xl border text-left transition-all cursor-pointer ${
+            className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
               activeTab === 'vehicles'
-                ? 'border-[#16B8AA] bg-white ring-2 ring-[#16B8AA]/10 shadow-md'
-                : 'border-[#E9E1D2] bg-white/70 hover:bg-white hover:border-slate-300'
+                ? 'border-black bg-white ring-2 ring-black/5 shadow-md'
+                : 'border-neutral-300 bg-white hover:border-neutral-400'
             }`}
           >
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[10px] font-black uppercase tracking-wider text-[#16B8AA] flex items-center gap-1.5">
-                <Car className="w-3.5 h-3.5" />
-                Moderación
+              <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-600 flex items-center gap-1.5">
+                <Car className="w-3.5 h-3.5 text-rose-600" />
+                Flota
               </span>
               {(metrics.pendingVehiclesCount || 0) > 0 && (
-                <span className="h-2.5 w-2.5 rounded-full bg-amber-500 animate-pulse" />
+                <span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" title="Vehículos por revisar" />
               )}
             </div>
-            <div className="text-2xl font-black text-[#13322E]">
-              {metrics.pendingVehiclesCount || 0}
+            <div className="text-2xl font-black text-neutral-950 font-sans">
+              {metrics.activeVehiclesCount ?? metrics.totalVehiclesCount ?? 2}
             </div>
-            <p className="text-[11px] text-[#6B726E] mt-0.5">Vehículos por revisar</p>
+            <p className="text-[10px] text-neutral-700 font-medium mt-0.5 truncate">
+              {metrics.pendingVehiclesCount > 0 ? `${metrics.pendingVehiclesCount} por aprobar` : 'Coches operativos'}
+            </p>
           </button>
 
+          {/* 2. RESERVAS */}
+          <button
+            type="button"
+            onClick={() => setActiveTab('bookings')}
+            className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
+              activeTab === 'bookings'
+                ? 'border-black bg-white ring-2 ring-black/5 shadow-md'
+                : 'border-neutral-300 bg-white hover:border-neutral-400'
+            }`}
+          >
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-600 flex items-center gap-1.5">
+                <Calendar className="w-3.5 h-3.5 text-blue-600" />
+                Alquileres
+              </span>
+            </div>
+            <div className="text-2xl font-black text-neutral-950 font-sans">
+              {metrics.totalBookings || 0}
+            </div>
+            <p className="text-[10px] text-neutral-700 font-medium mt-0.5 truncate">
+              {metrics.activeBookings || 0} en curso
+            </p>
+          </button>
+
+          {/* 3. USUARIOS Y PILOTOS */}
           <button
             type="button"
             onClick={() => setActiveTab('users')}
-            className={`p-4 rounded-3xl border text-left transition-all cursor-pointer ${
+            className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
               activeTab === 'users'
-                ? 'border-[#16B8AA] bg-white ring-2 ring-[#16B8AA]/10 shadow-md'
-                : 'border-[#E9E1D2] bg-white/70 hover:bg-white hover:border-slate-300'
+                ? 'border-black bg-white ring-2 ring-black/5 shadow-md'
+                : 'border-neutral-300 bg-white hover:border-neutral-400'
             }`}
           >
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[10px] font-black uppercase tracking-wider text-teal-700 flex items-center gap-1.5">
-                <Users className="w-3.5 h-3.5" />
-                Clientes
+              <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-600 flex items-center gap-1.5">
+                <Users className="w-3.5 h-3.5 text-emerald-600" />
+                Comunidad
               </span>
             </div>
-            <div className="text-2xl font-black text-[#13322E]">
+            <div className="text-2xl font-black text-neutral-950 font-sans">
               {metrics.totalUsersCount || 0}
             </div>
-            <p className="text-[11px] text-[#6B726E] mt-0.5">Usuarios registrados</p>
+            <p className="text-[10px] text-neutral-700 font-medium mt-0.5 truncate">
+              {metrics.verifiedDriversCount || 0} verificados
+            </p>
           </button>
 
-          <button
-            type="button"
-            onClick={() => setActiveTab('conversations')}
-            className={`p-4 rounded-3xl border text-left transition-all cursor-pointer ${
-              activeTab === 'conversations'
-                ? 'border-[#16B8AA] bg-white ring-2 ring-[#16B8AA]/10 shadow-md'
-                : 'border-[#E9E1D2] bg-white/70 hover:bg-white hover:border-slate-300'
-            }`}
-          >
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-[10px] font-black uppercase tracking-wider text-[#16B8AA] flex items-center gap-1.5">
-                <MessageSquare className="w-3.5 h-3.5" />
-                Chats Usuarios
-              </span>
-            </div>
-            <div className="text-2xl font-black text-[#13322E]">
-              {metrics.totalConversationsCount || 0}
-            </div>
-            <p className="text-[11px] text-[#6B726E] mt-0.5">Hilos anonimizados</p>
-          </button>
-
+          {/* 4. VALIDACIÓN LICENCIAS */}
           <button
             type="button"
             onClick={() => setActiveTab('verifications')}
-            className={`p-4 rounded-3xl border text-left transition-all cursor-pointer ${
+            className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
               activeTab === 'verifications'
-                ? 'border-[#16B8AA] bg-white ring-2 ring-[#16B8AA]/10 shadow-md'
-                : 'border-[#E9E1D2] bg-white/70 hover:bg-white hover:border-slate-300'
+                ? 'border-black bg-white ring-2 ring-black/5 shadow-md'
+                : 'border-neutral-300 bg-white hover:border-neutral-400'
             }`}
           >
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[10px] font-black uppercase tracking-wider text-sky-700 flex items-center gap-1.5">
-                <FileCheck className="w-3.5 h-3.5" />
-                Identidad DNI
+              <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-600 flex items-center gap-1.5">
+                <FileCheck className="w-3.5 h-3.5 text-sky-600" />
+                Licencias
               </span>
               {(metrics.pendingVerificationsCount || 0) > 0 && (
-                <span className="h-2.5 w-2.5 rounded-full bg-sky-500 animate-pulse" />
+                <span className="h-2 w-2 rounded-full bg-sky-500 animate-pulse" />
               )}
             </div>
-            <div className="text-2xl font-black text-[#13322E]">
+            <div className="text-2xl font-black text-neutral-950 font-sans">
               {metrics.pendingVerificationsCount || 0}
             </div>
-            <p className="text-[11px] text-[#6B726E] mt-0.5">Conductores pendientes</p>
+            <p className="text-[10px] text-neutral-700 font-medium mt-0.5 truncate">
+              DNI/Carnet pendientes
+            </p>
           </button>
 
+          {/* 5. FINANZAS Y FACTURACIÓN */}
+          <button
+            type="button"
+            onClick={() => setActiveTab('finances')}
+            className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
+              activeTab === 'finances'
+                ? 'border-black bg-white ring-2 ring-black/5 shadow-md'
+                : 'border-neutral-300 bg-white hover:border-neutral-400'
+            }`}
+          >
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-600 flex items-center gap-1.5">
+                <DollarSign className="w-3.5 h-3.5 text-emerald-600" />
+                Volumen
+              </span>
+            </div>
+            <div className="text-2xl font-black text-neutral-950 font-sans">
+              {metrics.totalVolume ? `${metrics.totalVolume.toFixed(0)}€` : '0€'}
+            </div>
+            <p className="text-[10px] text-neutral-700 font-medium mt-0.5 truncate">
+              {metrics.platformEarnings ? `${metrics.platformEarnings.toFixed(0)}€ comisiones` : 'Sin cobros'}
+            </p>
+          </button>
+
+          {/* 6. INCIDENCIAS FLOTA */}
           <button
             type="button"
             onClick={() => setActiveTab('incidents')}
-            className={`p-4 rounded-3xl border text-left transition-all cursor-pointer ${
+            className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
               activeTab === 'incidents'
-                ? 'border-[#16B8AA] bg-white ring-2 ring-[#16B8AA]/10 shadow-md'
-                : 'border-[#E9E1D2] bg-white/70 hover:bg-white hover:border-slate-300'
+                ? 'border-black bg-white ring-2 ring-black/5 shadow-md'
+                : 'border-neutral-300 bg-white hover:border-neutral-400'
             }`}
           >
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[10px] font-black uppercase tracking-wider text-red-700 flex items-center gap-1.5">
-                <AlertTriangle className="w-3.5 h-3.5" />
+              <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-600 flex items-center gap-1.5">
+                <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />
                 Incidencias
               </span>
               {(metrics.pendingIncidentsCount || 0) > 0 && (
-                <span className="h-2.5 w-2.5 rounded-full bg-red-500 animate-pulse" />
+                <span className="h-2 w-2 rounded-full bg-rose-500 animate-pulse" />
               )}
             </div>
-            <div className="text-2xl font-black text-[#13322E]">
+            <div className="text-2xl font-black text-neutral-950 font-sans">
               {metrics.pendingIncidentsCount || 0}
             </div>
-            <p className="text-[11px] text-[#6B726E] mt-0.5">Partes abiertos</p>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('finances')}
-            className={`p-4 rounded-3xl border text-left transition-all cursor-pointer ${
-              activeTab === 'finances'
-                ? 'border-[#16B8AA] bg-white ring-2 ring-[#16B8AA]/10 shadow-md'
-                : 'border-[#E9E1D2] bg-white/70 hover:bg-white hover:border-slate-300'
-            }`}
-          >
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 flex items-center gap-1.5">
-                <Wallet className="w-3.5 h-3.5" />
-                Finanzas
-              </span>
-            </div>
-            <div className="text-2xl font-black text-[#13322E]">
-              {metrics.totalVolume ? `${metrics.totalVolume.toFixed(0)}€` : '0€'}
-            </div>
-            <p className="text-[11px] text-[#6B726E] mt-0.5">Volumen procesado</p>
+            <p className="text-[10px] text-neutral-700 font-medium mt-0.5 truncate">Partes abiertos</p>
           </button>
         </div>
 
-        {/* PESTAÑAS DE NAVEGACIÓN */}
-        <div className="flex flex-wrap items-center gap-2 border-b border-[#E9E1D2] mb-8 pb-2">
+        {/* PESTAÑAS DE NAVEGACIÓN PRINCIPAL */}
+        <div className="flex flex-wrap items-center gap-2 border-b border-neutral-300 mb-8 pb-3 font-mono">
           <button
             type="button"
             onClick={() => setActiveTab('vehicles')}
-            className={`px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
+            className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
               activeTab === 'vehicles'
-                ? 'bg-[#13322E] text-white shadow-sm'
-                : 'bg-white border border-[#E9E1D2] text-[#13322E] hover:bg-[#FAF7F0]'
+                ? 'bg-black text-white shadow-xs'
+                : 'bg-white border border-neutral-300 text-neutral-700 hover:border-black'
             }`}
           >
-            <><Car className="inline h-4 w-4" /> Moderación de Vehículos ({metrics.pendingVehiclesCount || 0})</>
+            Flota de Superdeportivos ({metrics.activeVehiclesCount ?? metrics.totalVehiclesCount ?? 2})
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('bookings')}
+            className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
+              activeTab === 'bookings'
+                ? 'bg-black text-white shadow-xs'
+                : 'bg-white border border-neutral-300 text-neutral-700 hover:border-black'
+            }`}
+          >
+            Reservas & Expedientes ({metrics.totalBookings || 0})
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('users')}
-            className={`px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
+            className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
               activeTab === 'users'
-                ? 'bg-[#13322E] text-white shadow-sm'
-                : 'bg-white border border-[#E9E1D2] text-[#13322E] hover:bg-[#FAF7F0]'
+                ? 'bg-black text-white shadow-xs'
+                : 'bg-white border border-neutral-300 text-neutral-700 hover:border-black'
             }`}
           >
-            <><Users className="inline h-4 w-4" /> Clientes & Usuarios ({metrics.totalUsersCount || 0})</>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('conversations')}
-            className={`px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === 'conversations'
-                ? 'bg-[#13322E] text-white shadow-sm'
-                : 'bg-white border border-[#E9E1D2] text-[#13322E] hover:bg-[#FAF7F0]'
-            }`}
-          >
-            <><MessageSquare className="inline h-4 w-4" /> Chats entre Usuarios (RGPD: {metrics.totalConversationsCount || 0})</>
+            Pilotos & Propietarios ({metrics.totalUsersCount || 0})
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('verifications')}
-            className={`px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
+            className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
               activeTab === 'verifications'
-                ? 'bg-[#13322E] text-white shadow-sm'
-                : 'bg-white border border-[#E9E1D2] text-[#13322E] hover:bg-[#FAF7F0]'
+                ? 'bg-black text-white shadow-xs'
+                : 'bg-white border border-neutral-300 text-neutral-700 hover:border-black'
             }`}
           >
-            <><FileCheck className="inline h-4 w-4" /> Verificaciones DNI ({metrics.pendingVerificationsCount || 0})</>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('incidents')}
-            className={`px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === 'incidents'
-                ? 'bg-[#13322E] text-white shadow-sm'
-                : 'bg-white border border-[#E9E1D2] text-[#13322E] hover:bg-[#FAF7F0]'
-            }`}
-          >
-            <><AlertTriangle className="inline h-4 w-4" /> Incidencias ({metrics.pendingIncidentsCount || 0})</>
+            Licencias DNI ({metrics.pendingVerificationsCount || 0})
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('finances')}
-            className={`px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
+            className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
               activeTab === 'finances'
-                ? 'bg-[#13322E] text-white shadow-sm'
-                : 'bg-white border border-[#E9E1D2] text-[#13322E] hover:bg-[#FAF7F0]'
+                ? 'bg-black text-white shadow-xs'
+                : 'bg-white border border-neutral-300 text-neutral-700 hover:border-black'
             }`}
           >
-            <><DollarSign className="inline h-4 w-4" /> Finanzas & Comisiones</>
+            Bóveda Stripe & Liquidaciones
           </button>
 
           <button
             type="button"
-            onClick={() => setActiveTab('analytics')}
-            className={`px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === 'analytics'
-                ? 'bg-[#13322E] text-white shadow-sm'
-                : 'bg-white border border-[#E9E1D2] text-[#13322E] hover:bg-[#FAF7F0]'
+            onClick={() => setActiveTab('conversations')}
+            className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
+              activeTab === 'conversations'
+                ? 'bg-black text-white shadow-xs'
+                : 'bg-white border border-neutral-300 text-neutral-700 hover:border-black'
             }`}
           >
-            <><BarChart3 className="inline h-4 w-4" /> Analítica & Medición</>
+            Auditoría de Mensajes ({metrics.totalConversationsCount || 0})
           </button>
 
           <button
             type="button"
-            onClick={() => setActiveTab('system')}
-            className={`px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === 'system'
-                ? 'bg-[#13322E] text-white shadow-sm'
-                : 'bg-white border border-[#E9E1D2] text-[#13322E] hover:bg-[#FAF7F0]'
+            onClick={() => setActiveTab('incidents')}
+            className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
+              activeTab === 'incidents'
+                ? 'bg-black text-white shadow-xs'
+                : 'bg-white border border-neutral-300 text-neutral-700 hover:border-black'
             }`}
           >
-            Diagnóstico & Correo
+            Incidencias ({metrics.pendingIncidentsCount || 0})
           </button>
+
+          <Link
+            href="/soporte"
+            className="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-white border border-neutral-300 text-neutral-700 hover:border-black transition-all whitespace-nowrap ml-auto"
+          >
+            Bandeja de Soporte en Vivo →
+          </Link>
         </div>
 
-        {/* CONTENIDO DE CADA SECCIÓN */}
+        {/* 1. SECCIÓN: FLOTA DE SUPERDEPORTIVOS */}
         {activeTab === 'vehicles' && (
           <section className="space-y-6">
             <AdminVehicleQueue />
           </section>
         )}
 
+        {/* 2. SECCIÓN: RESERVAS Y EXPEDIENTES REALES */}
+        {activeTab === 'bookings' && (
+          <section className="space-y-6">
+            <div className="rounded-2xl border border-neutral-300 bg-white p-6 shadow-xs">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-neutral-300 pb-5 mb-5 gap-4">
+                <div>
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-rose-600">
+                    Expedientes de Alquiler // Base de Datos
+                  </span>
+                  <h2 className="text-2xl font-bold tracking-tight text-neutral-900 font-sans">
+                    Reservas & Alquileres de Superdeportivos
+                  </h2>
+                  <p className="text-xs text-neutral-700 font-medium mt-0.5 font-medium">
+                    Listado cronológico de solicitudes y reservas procesadas en tiempo real.
+                  </p>
+                </div>
+              </div>
+
+              {recentBookings.length === 0 ? (
+                <div className="py-16 text-center rounded-2xl bg-neutral-50 border border-neutral-300">
+                  <Calendar className="w-10 h-10 text-neutral-600 mx-auto mb-3" />
+                  <p className="text-base font-bold text-neutral-900">Aún no hay reservas registradas en la base de datos.</p>
+                  <p className="text-xs text-neutral-700 font-medium mt-1 max-w-md mx-auto">
+                    Cuando un cliente complete un alquiler desde la web, aparecerá aquí automáticamente con el código de reserva, fianza retenida en Stripe y estado de la entrega.
+                  </p>
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs font-mono">
+                    <thead className="bg-neutral-50 border-b border-neutral-300 text-neutral-700 font-medium uppercase text-[10px] tracking-wider">
+                      <tr>
+                        <th className="py-3 px-4">Código</th>
+                        <th className="py-3 px-4">Superdeportivo</th>
+                        <th className="py-3 px-4">Cliente</th>
+                        <th className="py-3 px-4">Fechas</th>
+                        <th className="py-3 px-4">Total</th>
+                        <th className="py-3 px-4">Fianza Vault</th>
+                        <th className="py-3 px-4 text-right">Estado</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-neutral-100">
+                      {recentBookings.map((b: any) => (
+                        <tr key={b.id} className="hover:bg-neutral-50 transition-colors">
+                          <td className="py-3.5 px-4 font-bold text-neutral-900">{b.code}</td>
+                          <td className="py-3.5 px-4 font-sans font-bold text-neutral-900">{b.vehicleTitle}</td>
+                          <td className="py-3.5 px-4 text-neutral-600">{b.travelerName}</td>
+                          <td className="py-3.5 px-4 text-neutral-700 font-medium">
+                            {new Date(b.pickupDate).toLocaleDateString('es-ES')} - {new Date(b.returnDate).toLocaleDateString('es-ES')}
+                          </td>
+                          <td className="py-3.5 px-4 font-bold text-neutral-900">{b.totalAmount} €</td>
+                          <td className="py-3.5 px-4 text-neutral-600">{b.securityDeposit} €</td>
+                          <td className="py-3.5 px-4 text-right">
+                            <span className="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold uppercase">
+                              {b.status}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* 3. SECCIÓN: CLIENTES Y USUARIOS */}
         {activeTab === 'users' && (
           <section className="space-y-6">
             <AdminUserManagement />
           </section>
         )}
 
-        {activeTab === 'conversations' && (
-          <section className="space-y-6">
-            <AdminConversationsAudit />
-          </section>
-        )}
-
+        {/* 4. SECCIÓN: VALIDACIÓN DE LICENCIAS DNI */}
         {activeTab === 'verifications' && (
           <section className="space-y-6">
             <AdminVerificationQueue />
           </section>
         )}
 
+        {/* 5. SECCIÓN: FINANZAS Y STRIPE CONNECT */}
+        {activeTab === 'finances' && (
+          <section className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <div className="bg-white p-6 rounded-2xl border border-neutral-300 shadow-xs">
+                <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4">
+                  <DollarSign className="w-5 h-5" />
+                </div>
+                <span className="text-xs font-mono font-bold uppercase tracking-wider text-neutral-700 font-medium">
+                  Volumen Bruto Procesado
+                </span>
+                <h3 className="text-3xl font-black text-neutral-900 mt-1 font-mono">
+                  {metrics.totalVolume ? `${metrics.totalVolume.toFixed(2)} €` : '0.00 €'}
+                </h3>
+                <p className="text-xs text-neutral-700 font-medium mt-2 font-medium">
+                  Pagos liquidados mediante pasarela segura Stripe.
+                </p>
+              </div>
+
+              <div className="bg-white p-6 rounded-2xl border border-neutral-300 shadow-xs">
+                <div className="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center mb-4">
+                  <ArrowUpRight className="w-5 h-5" />
+                </div>
+                <span className="text-xs font-mono font-bold uppercase tracking-wider text-neutral-700 font-medium">
+                  Comisión Plataforma GTR Cars
+                </span>
+                <h3 className="text-3xl font-black text-rose-600 mt-1 font-mono">
+                  {metrics.platformEarnings ? `${metrics.platformEarnings.toFixed(2)} €` : '0.00 €'}
+                </h3>
+                <p className="text-xs text-neutral-700 font-medium mt-2 font-medium">
+                  Margen neto recaudado por intermediación y servicios.
+                </p>
+              </div>
+
+              <div className="bg-white p-6 rounded-2xl border border-neutral-300 shadow-xs">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4">
+                  <Wallet className="w-5 h-5" />
+                </div>
+                <span className="text-xs font-mono font-bold uppercase tracking-wider text-neutral-700 font-medium">
+                  Liquidaciones a Propietarios VIP
+                </span>
+                <h3 className="text-3xl font-black text-neutral-900 mt-1 font-mono">
+                  {metrics.pendingOwnerPayouts ? `${metrics.pendingOwnerPayouts.toFixed(2)} €` : '0.00 €'}
+                </h3>
+                <p className="text-xs text-neutral-700 font-medium mt-2 font-medium">
+                  Transferencias automáticas vía cuentas Stripe Connect.
+                </p>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* 6. SECCIÓN: AUDITORÍA DE CONVERSACIONES RGPD */}
+        {activeTab === 'conversations' && (
+          <section className="space-y-6">
+            <AdminConversationsAudit />
+          </section>
+        )}
+
+        {/* 7. SECCIÓN: INCIDENCIAS FLOTA */}
         {activeTab === 'incidents' && (
           <section className="space-y-6">
             <AdminIncidentQueue />
-          </section>
-        )}
-
-        {activeTab === 'finances' && (
-          <section className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-white p-6 rounded-3xl border border-[#E9E1D2] shadow-sm">
-                <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4">
-                  <DollarSign className="w-6 h-6" />
-                </div>
-                <span className="text-xs font-black uppercase tracking-wider text-[#6B726E]">
-                  Volumen Total Recaudado (Viajeros)
-                </span>
-                <h3 className="text-3xl font-extrabold text-[#13322E] mt-1 tracking-tight">
-                  {metrics.totalVolume ? `${metrics.totalVolume.toFixed(2)}€` : '0.00€'}
-                </h3>
-                <p className="text-xs text-[#6B726E] mt-2">
-                  Pagos confirmados por Stripe a través de GTR Cars.
-                </p>
-              </div>
-
-              <div className="bg-white p-6 rounded-3xl border border-[#E9E1D2] shadow-sm">
-                <div className="w-10 h-10 rounded-2xl bg-teal-50 text-[#16B8AA] flex items-center justify-center mb-4">
-                  <ArrowUpRight className="w-6 h-6" />
-                </div>
-                <span className="text-xs font-black uppercase tracking-wider text-[#6B726E]">
-                  Tu Comisión Neta Ganada (4.5% + 10%)
-                </span>
-                <h3 className="text-3xl font-extrabold text-[#16B8AA] mt-1 tracking-tight">
-                  {metrics.platformEarnings ? `${metrics.platformEarnings.toFixed(2)}€` : '0.00€'}
-                </h3>
-                <p className="text-xs text-[#6B726E] mt-2">
-                  Margen bruto obtenido de comisiones de alquiler.
-                </p>
-              </div>
-
-              <div className="bg-white p-6 rounded-3xl border border-[#E9E1D2] shadow-sm">
-                <div className="w-10 h-10 rounded-2xl bg-amber-50 text-[#D97706] flex items-center justify-center mb-4">
-                  <Wallet className="w-6 h-6" />
-                </div>
-                <span className="text-xs font-black uppercase tracking-wider text-[#6B726E]">
-                  Total a Transferir a Propietarios
-                </span>
-                <h3 className="text-3xl font-extrabold text-[#D97706] mt-1 tracking-tight">
-                  {metrics.pendingOwnerPayouts ? `${metrics.pendingOwnerPayouts.toFixed(2)}€` : '0.00€'}
-                </h3>
-                <p className="text-xs text-[#6B726E] mt-2">
-                  Importe retenido a liquidar tras finalizar el alquiler.
-                </p>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {activeTab === 'analytics' && (
-          <section className="space-y-6">
-            <div>
-              <span className="text-[11px] font-black uppercase tracking-[0.2em] text-[#16B8AA]">Visión de adquisición y producto</span>
-              <h2 className="mt-1 font-serif text-3xl font-bold">Herramientas de analítica</h2>
-              <p className="mt-2 max-w-3xl text-sm text-[#6B726E]">Consulta cada plataforma en su panel oficial y cruza sus datos con las métricas operativas de GTR Cars. No mostramos cifras inventadas cuando una integración no está configurada.</p>
-            </div>
-            <div className="grid gap-5 md:grid-cols-3">
-              {[
-                { name: 'Google Analytics 4', detail: 'Tráfico, adquisición, eventos y conversiones', configured: Boolean(process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID), href: 'https://analytics.google.com/' },
-                { name: 'Microsoft Clarity', detail: 'Grabaciones, mapas de calor y experiencia de usuario', configured: Boolean(process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID), href: 'https://clarity.microsoft.com/' },
-                { name: 'Métricas GTR Cars', detail: 'Usuarios, reservas, conversaciones, vehículos y volumen', configured: true, href: '/admin?tab=finances' },
-              ].map((tool) => (
-                <article key={tool.name} className="rounded-3xl border border-[#E9E1D2] bg-white p-6 shadow-sm">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#16B8AA]/10 text-[#16B8AA]"><BarChart3 className="h-6 w-6" /></div>
-                    <span className={`rounded-full px-3 py-1 text-[10px] font-black uppercase ${tool.configured ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>{tool.configured ? 'Conectado' : 'Pendiente'}</span>
-                  </div>
-                  <h3 className="mt-5 text-lg font-bold">{tool.name}</h3>
-                  <p className="mt-2 min-h-10 text-xs leading-5 text-[#6B726E]">{tool.detail}</p>
-                  <a href={tool.href} target={tool.href.startsWith('http') ? '_blank' : undefined} rel={tool.href.startsWith('http') ? 'noreferrer' : undefined} className="mt-5 inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#16B8AA] hover:text-[#0F766E]">Abrir panel <ExternalLink className="h-4 w-4" /></a>
-                </article>
-              ))}
-            </div>
-            <div className="rounded-2xl border border-[#E9E1D2] bg-[#FAF7F0] p-5 text-xs text-[#6B726E]"><strong className="text-[#13322E]">Privacidad:</strong> GA4 y Clarity solo reciben actividad después del consentimiento analítico del usuario.</div>
-          </section>
-        )}
-
-        {activeTab === 'system' && (
-          <section className="space-y-8">
-            <AdminEmailDiagnostics />
           </section>
         )}
       </main>

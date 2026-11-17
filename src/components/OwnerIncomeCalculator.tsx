@@ -15,7 +15,7 @@ export default function OwnerIncomeCalculator() {
   }, [dailyRate, availableDays, occupancy]);
 
   const comparison = [
-    { name: 'Vaneando', rate: 9.7, featured: true },
+    { name: 'GTR Cars', rate: 9.7, featured: true },
     { name: 'Plataforma generalista', rate: 20, featured: false },
     { name: 'Marketplace especializado', rate: 25, featured: false },
   ];
@@ -35,7 +35,7 @@ export default function OwnerIncomeCalculator() {
       <div className="mt-8 grid gap-3 rounded-2xl bg-white/10 p-5 sm:grid-cols-4">
         <div><span className="block text-xs text-white/65">Días reservados</span><strong className="text-xl">{result.bookedDays}</strong></div>
         <div><span className="block text-xs text-white/65">Ingresos brutos</span><strong className="text-xl">{result.gross.toFixed(2)} €</strong></div>
-        <div><span className="block text-xs text-white/65">Comisión Vaneando (9,7%)</span><strong className="text-xl">-{result.fee.toFixed(2)} €</strong></div>
+        <div><span className="block text-xs text-white/65">Comisión GTR Cars (9,7%)</span><strong className="text-xl">-{result.fee.toFixed(2)} €</strong></div>
         <div><span className="block text-xs text-[#F2CC8F]">Neto estimado</span><strong className="text-2xl text-[#F2CC8F]">{result.net.toFixed(2)} €</strong></div>
       </div>
       <div className="mt-8 rounded-2xl bg-white p-5 text-[#13322E] sm:p-6">
@@ -58,7 +58,7 @@ export default function OwnerIncomeCalculator() {
                 </div>
                 <p className="mt-3 text-xs text-[#6B726E]">Comisión orientativa: {platform.rate}%</p>
                 <strong className="mt-1 block text-xl">{net.toFixed(2)} € <span className="text-xs font-medium text-[#6B726E]">netos</span></strong>
-                {!platform.featured && <p className="mt-2 text-[11px] font-bold text-[#D97706]">-{(result.net - net).toFixed(2)} € frente a Vaneando</p>}
+                {!platform.featured && <p className="mt-2 text-[11px] font-bold text-[#D97706]">-{(result.net - net).toFixed(2)} € frente a GTR Cars</p>}
               </div>
             );
           })}

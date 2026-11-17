@@ -12,8 +12,8 @@ export interface FAQItem {
 const FAQS: FAQItem[] = [
   {
     category: 'viajeros',
-    question: '¿Cómo funciona el alquiler de campers entre particulares en Vaneando?',
-    answer: 'Vaneando conecta anuncios de vehículos con viajeros en las Islas Canarias. Puedes buscar por isla, filtrar por tipo de vehículo o plazas y revisar las condiciones del anuncio antes de contactar. El contrato y el pago aplicables se muestran según la reserva.',
+    question: '¿Cómo funciona el alquiler de campers entre particulares en GTR Cars?',
+    answer: 'GTR Cars conecta anuncios de vehículos con viajeros en las Islas Canarias. Puedes buscar por isla, filtrar por tipo de vehículo o plazas y revisar las condiciones del anuncio antes de contactar. El contrato y el pago aplicables se muestran según la reserva.',
   },
   {
     category: 'viajeros',
@@ -28,12 +28,12 @@ const FAQS: FAQItem[] = [
   {
     category: 'propietarios',
     question: '¿Cuánto puedo ganar alquilando mi camper en Canarias?',
-    answer: 'Dependiendo del tipo de vehículo y la temporada, los propietarios en Vaneando generan entre 1.200€ y 3.500€ al mes. Las tarifas oscilan entre 60€/día para minicampers y más de 120€/día para autocaravanas y furgonetas gran volumen.',
+    answer: 'Dependiendo del tipo de vehículo y la temporada, los propietarios en GTR Cars generan entre 1.200€ y 3.500€ al mes. Las tarifas oscilan entre 60€/día para minicampers y más de 120€/día para autocaravanas y furgonetas gran volumen.',
   },
   {
     category: 'propietarios',
     question: '¿Cómo se formaliza el contrato y la revisión del vehículo?',
-    answer: 'Vaneando genera automáticamente un contrato de arrendamiento digital con validez legal según el Reglamento Europeo eIDAS 910/2014. Además, dispones de una suite de fotos de inspección digital (check-in / check-out) para registrar el cuentakilómetros, nivel de combustible y estado del vehículo antes y después de cada viaje.',
+    answer: 'GTR Cars genera automáticamente un contrato de arrendamiento digital con validez legal según el Reglamento Europeo eIDAS 910/2014. Además, dispones de una suite de fotos de inspección digital (check-in / check-out) para registrar el cuentakilómetros, nivel de combustible y estado del vehículo antes y después de cada viaje.',
   },
   {
     category: 'seguridad',

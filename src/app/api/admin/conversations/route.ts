@@ -7,7 +7,7 @@ import { ensureDbSchema } from '@/lib/prisma-ensure-schema';
 export const dynamic = 'force-dynamic';
 
 function maskEmail(email?: string | null) {
-  if (!email) return 'anonimo@privacidad.vaneando';
+  if (!email) return 'anonimo@privacidad.gtrcars.es';
   const parts = email.split('@');
   if (parts.length !== 2) return 'u***@***.com';
   const name = parts[0];

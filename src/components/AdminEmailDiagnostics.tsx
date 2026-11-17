@@ -55,15 +55,15 @@ export default function AdminEmailDiagnostics() {
   }
 
   return (
-    <section className="my-10 rounded-3xl border border-[#E9E1D2] bg-white p-6 shadow-sm">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E9E1D2] pb-5 mb-5">
+    <section className="my-10 rounded-3xl border border-[#CBD5E1] bg-white p-6 shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#CBD5E1] pb-5 mb-5">
         <div className="flex items-start space-x-3">
-          <div className="w-10 h-10 rounded-2xl bg-[#16B8AA]/10 text-[#16B8AA] flex items-center justify-center shrink-0 mt-0.5">
+          <div className="w-10 h-10 rounded-2xl bg-[#E11D48]/10 text-[#E11D48] flex items-center justify-center shrink-0 mt-0.5">
             <Mail className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold tracking-tight text-[#13322E]">Correo Transaccional SMTP</h2>
-            <p className="text-xs text-[#6B726E] font-medium mt-0.5">
+            <h2 className="text-2xl font-bold tracking-tight text-[#0A0A0A]">Correo Transaccional SMTP</h2>
+            <p className="text-xs text-[#334155] font-medium mt-0.5">
               {checking
                 ? 'Comprobando servidor de correo Hostinger...'
                 : configuration?.configured
@@ -77,9 +77,9 @@ export default function AdminEmailDiagnostics() {
           type="button"
           onClick={checkConfig}
           disabled={checking}
-          className="inline-flex items-center space-x-2 rounded-full border border-[#E9E1D2] px-4 py-2 text-xs font-bold text-[#13322E] hover:bg-[#FAF7F0] transition-colors cursor-pointer self-start sm:self-auto"
+          className="inline-flex items-center space-x-2 rounded-full border border-[#CBD5E1] px-4 py-2 text-xs font-bold text-[#0A0A0A] hover:bg-[#F1F3F5] transition-colors cursor-pointer self-start sm:self-auto"
         >
-          <RefreshCw className={`h-3.5 w-3.5 text-[#16B8AA] ${checking ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`h-3.5 w-3.5 text-[#E11D48] ${checking ? 'animate-spin' : ''}`} />
           <span>Verificar SMTP</span>
         </button>
       </div>
@@ -107,15 +107,15 @@ export default function AdminEmailDiagnostics() {
           placeholder="Introduce correo para recibir prueba (ej. contacto@gtrcars.es)"
           value={targetEmail}
           onChange={(e) => setTargetEmail(e.target.value)}
-          className="p-3.5 rounded-xl border border-[#E9E1D2] text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#16B8AA] flex-1"
+          className="p-3.5 rounded-xl border border-[#CBD5E1] text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#E11D48] flex-1"
         />
 
         <button
           onClick={testEmail}
           disabled={loading}
-          className="inline-flex items-center justify-center space-x-2 rounded-full bg-[#13322E] px-6 py-3 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#0F766E] transition-all cursor-pointer shadow-md disabled:opacity-50"
+          className="inline-flex items-center justify-center space-x-2 rounded-full bg-[#0A0A0A] px-6 py-3 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#BE123C] transition-all cursor-pointer shadow-md disabled:opacity-50"
         >
-          <Send className="w-4 h-4 text-[#16B8AA]" />
+          <Send className="w-4 h-4 text-[#E11D48]" />
           <span>{loading ? 'Enviando...' : 'Enviar Correo de Prueba'}</span>
         </button>
       </div>

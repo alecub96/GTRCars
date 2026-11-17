@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 
 /**
  * Endpoint oficial de exportación de calendario iCal (.ics)
- * URL de uso: https://vaneando.com/api/calendar/export/[id]
+ * URL de uso: https://gtrcars.es/api/calendar/export/[id]
  */
 export async function GET(request: Request, context: { params: Promise<{ id: string }> }) {
   try {
@@ -56,7 +56,7 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
       status: 200,
       headers: {
         'Content-Type': 'text/calendar; charset=utf-8',
-        'Content-Disposition': `attachment; filename="${vehicle.slug}-vaneando.ics"`,
+        'Content-Disposition': `attachment; filename="${vehicle.slug}-gtrcars.ics"`,
         'Cache-Control': 'no-cache, no-store, max-age=0, must-revalidate',
       },
     });

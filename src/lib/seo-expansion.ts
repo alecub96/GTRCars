@@ -93,7 +93,7 @@ const paragraphs = (seed: ArticleSeed, section: string, index: number) => [
   `En ${seed.island}, ${seed.focus} requiere mirar más allá de una tarifa o de una fotografía. Esta guía está pensada para ${seed.audience === 'Viajeros' ? 'quien quiere viajar con información suficiente' : 'quien estudia ofrecer un vehículo en alquiler'} y convierte la intención de búsqueda “${seed.kind}” en decisiones concretas. El relieve, el viento, la meteorología, los accesos y la temporada cambian de una zona a otra, por lo que una recomendación válida debe explicar también sus límites.`,
   `Empieza por definir fechas, número de personas, presupuesto, experiencia y objetivo principal. Después separa lo que está confirmado de lo que debe preguntarse: plazas homologadas, distribución de camas, dimensiones, equipamiento, entrega, kilometraje, limpieza, fianza, seguro y asistencia. En ${seed.island}, la distancia en el mapa no siempre representa el tiempo real de conducción; deja margen para descansar, hacer compras y cambiar de plan si las condiciones empeoran.`,
   `Un ejemplo práctico para el apartado ${index + 1}, “${section}”, es comparar tres opciones equivalentes y anotar qué incluye cada una. La opción más barata puede exigir más desplazamiento o cobrar equipamiento aparte, mientras que una tarifa superior puede ahorrar tiempo y explicar mejor el servicio. La decisión correcta es la que puedes entender, pagar y utilizar sin depender de suposiciones.`,
-  `Antes de confirmar, formula preguntas concretas en la mensajería de Vaneando y conserva las respuestas. Durante la entrega, fotografía el estado, revisa el inventario y prueba los sistemas que vayas a utilizar. Durante la ruta, respeta las normas de estacionamiento, las zonas protegidas y los lugares autorizados para servicios. A la devolución, comunica cualquier incidencia y cierra la revisión con el mismo cuidado con el que empezó.`,
+  `Antes de confirmar, formula preguntas concretas en la mensajería de GTR Cars y conserva las respuestas. Durante la entrega, fotografía el estado, revisa el inventario y prueba los sistemas que vayas a utilizar. Durante la ruta, respeta las normas de estacionamiento, las zonas protegidas y los lugares autorizados para servicios. A la devolución, comunica cualquier incidencia y cierra la revisión con el mismo cuidado con el que empezó.`,
 ];
 
 function makeArticle(seed: ArticleSeed): BlogArticle {
@@ -132,7 +132,7 @@ function makeArticle(seed: ArticleSeed): BlogArticle {
     faqs: [
       { question: `¿Es buena idea ${seed.kind} en ${seed.island}?`, answer: `Puede serlo si el vehículo, el presupuesto y las condiciones encajan con tu objetivo. Compara anuncios equivalentes y confirma los detalles antes de decidir.` },
       { question: '¿Qué debo revisar antes de confirmar?', answer: 'Fechas, plazas, equipamiento, precio total, limpieza, kilometraje, fianza, seguro, entrega, devolución y cancelación.' },
-      { question: '¿Dónde puedo resolver mis dudas?', answer: 'Utiliza la mensajería de Vaneando y deja por escrito cualquier condición importante antes de enviar o aceptar una solicitud.' },
+      { question: '¿Dónde puedo resolver mis dudas?', answer: 'Utiliza la mensajería de GTR Cars y deja por escrito cualquier condición importante antes de enviar o aceptar una solicitud.' },
     ],
   };
 }

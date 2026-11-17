@@ -44,18 +44,18 @@ export default function AdminLogin() {
 
   return (
     <main className="mx-auto flex min-h-[75vh] max-w-md items-center px-4 py-12">
-      <form onSubmit={login} className="w-full rounded-3xl border border-[#E9E1D2] bg-white p-8 sm:p-10 shadow-2xl">
-        <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#13322E] text-white shadow-md">
-          <ShieldCheck className="h-7 w-7 text-[#16B8AA]" />
+      <form onSubmit={login} className="w-full rounded-3xl border border-[#CBD5E1] bg-white p-8 sm:p-10 shadow-2xl">
+        <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0A0A0A] text-white shadow-md">
+          <ShieldCheck className="h-7 w-7 text-[#E11D48]" />
         </div>
 
-        <span className="text-[10px] font-black uppercase tracking-[.25em] text-[#16B8AA]">
+        <span className="text-[10px] font-black uppercase tracking-[.25em] text-[#E11D48]">
           Acceso Restringido
         </span>
         <h1 className="mt-2 text-3xl font-sans font-bold tracking-tight text-black">
           Administración de GTR Cars
         </h1>
-        <p className="mt-2 text-xs sm:text-sm text-[#6B726E] leading-relaxed">
+        <p className="mt-2 text-xs sm:text-sm text-[#334155] leading-relaxed">
           Introduce tus credenciales autorizadas para acceder al centro de operaciones y control de la plataforma.
         </p>
 
@@ -66,7 +66,7 @@ export default function AdminLogin() {
         )}
 
         <div className="mt-6 space-y-4">
-          <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E]">
+          <label className="block text-xs font-black uppercase tracking-wider text-[#334155]">
             Correo administrativo
             <input
               required
@@ -74,11 +74,11 @@ export default function AdminLogin() {
               placeholder="admin@gtrcars.es"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              className="mt-1.5 w-full rounded-xl border border-[#E9E1D2] bg-[#FAF7F0] p-3 text-xs sm:text-sm font-medium text-[#13322E] normal-case focus:border-[#16B8AA] focus:bg-white focus:outline-none"
+              className="mt-1.5 w-full rounded-xl border border-[#CBD5E1] bg-[#F1F3F5] p-3 text-xs sm:text-sm font-medium text-[#0A0A0A] normal-case focus:border-[#E11D48] focus:bg-white focus:outline-none"
             />
           </label>
 
-          <label className="block text-xs font-black uppercase tracking-wider text-[#6B726E]">
+          <label className="block text-xs font-black uppercase tracking-wider text-[#334155]">
             Contraseña
             <input
               required
@@ -86,7 +86,7 @@ export default function AdminLogin() {
               placeholder="••••••••••••"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              className="mt-1.5 w-full rounded-xl border border-[#E9E1D2] bg-[#FAF7F0] p-3 text-xs sm:text-sm font-medium text-[#13322E] normal-case focus:border-[#16B8AA] focus:bg-white focus:outline-none"
+              className="mt-1.5 w-full rounded-xl border border-[#CBD5E1] bg-[#F1F3F5] p-3 text-xs sm:text-sm font-medium text-[#0A0A0A] normal-case focus:border-[#E11D48] focus:bg-white focus:outline-none"
             />
           </label>
 
@@ -100,7 +100,7 @@ export default function AdminLogin() {
           </button>
         </div>
 
-        <p className="mt-6 flex items-center gap-2 text-[11px] text-[#6B726E] pt-4 border-t border-[#E9E1D2]">
+        <p className="mt-6 flex items-center gap-2 text-[11px] text-[#334155] pt-4 border-t border-[#CBD5E1]">
           <Lock className="h-3.5 w-3.5 text-black" />
           <span>La ruta es siempre gtrcars.es/admin</span>
         </p>

@@ -10,7 +10,7 @@ import { ensureDbSchema } from '@/lib/prisma-ensure-schema';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Buscador de Campers en el Mapa de Canarias | vaneando.',
+  title: 'Buscador de Campers en el Mapa de Canarias | GTR Cars.',
   description: 'Explora campers y autocaravanas directamente sobre el mapa de las Islas Canarias con ubicaciones aproximadas y precios por día.',
 };
 

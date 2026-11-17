@@ -9,11 +9,11 @@ type CapacitorConfig = {
 };
 
 const config: CapacitorConfig = {
-  appId: 'com.vaneando.app',
-  appName: 'Vaneando',
+  appId: 'es.gtrcars.app',
+  appName: 'GTR Cars',
   webDir: 'public',
   server: {
-    url: 'https://vaneando.com',
+    url: 'https://gtrcars.es',
     cleartext: false,
   },
   android: {

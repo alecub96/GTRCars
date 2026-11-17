@@ -40,6 +40,6 @@ app.prepare().then(() => {
       process.exit(1);
     })
     .listen(port, () => {
-      console.log(`> Vaneando Next.js server ready on port ${port}`);
+      console.log(`> GTR Cars Next.js server ready on port ${port}`);
     });
 });

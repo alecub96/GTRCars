@@ -1,8 +1,8 @@
-# vaneando. — Plataforma de alquiler de vehículos recreativos en Canarias
+# GTR Cars — Plataforma de alquiler de superdeportivos en Canarias
 
 Plataforma marketplace en producción especializada en el alquiler de campervans, furgonetas camperizadas y autocaravanas entre particulares y profesionales en **todas las Islas Canarias** (Gran Canaria, Tenerife, Lanzarote, Fuerteventura, La Palma, La Gomera, El Hierro y La Graciosa).
 
-Diseñada con la identidad visual propia de vaneando. (turquesa atlántico, verde profundo, crema y arena).
+Diseñada con la identidad visual propia de GTR Cars. (turquesa atlántico, verde profundo, crema y arena).
 
 ## 🚀 Características Principales
 
@@ -54,11 +54,11 @@ El seed es exclusivamente local. Las cuentas administrativas de producción se c
 
 ## Despliegue en Hostinger
 
-- Usa `VANEANDO_DATABASE_URL` para la conexión MySQL/MariaDB de la aplicación. Tiene prioridad sobre `DATABASE_URL`, que algunas integraciones pueden sobrescribir.
+- Usa `GTRCARS_DATABASE_URL` para la conexión MySQL/MariaDB de la aplicación. Tiene prioridad sobre `DATABASE_URL`, que algunas integraciones pueden sobrescribir.
 - El formato es `mysql://USUARIO:CONTRASEÑA_URL_ENCODED@HOST_MYSQL:3306/BASE_DE_DATOS`.
-- `SMTP_USER` debe ser un buzón real de Hostinger (por ejemplo, `admin@vaneando.com`) y `SMTP_PASSWORD` debe ser la contraseña de ese buzón, no la contraseña del panel hPanel.
-- Tras cambiar variables, vuelve a desplegar y comprueba `https://vaneando.com/api/health`. No publiques si el proveedor de base aparece como `missing` o `incompatible`.
-- El webhook de Stripe debe apuntar a `https://vaneando.com/api/webhooks/stripe` y su secreto de firma debe guardarse en `STRIPE_WEBHOOK_SECRET`.
+- `SMTP_USER` debe ser un buzón real de Hostinger (por ejemplo, `admin@GTR Cars.com`) y `SMTP_PASSWORD` debe ser la contraseña de ese buzón, no la contraseña del panel hPanel.
+- Tras cambiar variables, vuelve a desplegar y comprueba `https://GTR Cars.com/api/health`. No publiques si el proveedor de base aparece como `missing` o `incompatible`.
+- El webhook de Stripe debe apuntar a `https://GTR Cars.com/api/webhooks/stripe` y su secreto de firma debe guardarse en `STRIPE_WEBHOOK_SECRET`.
 
 ---
 

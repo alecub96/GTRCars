@@ -14,7 +14,7 @@ const STORIES: any[] = [
     role: 'Propietario en Tenerife',
     island: 'Tenerife • San Cristóbal de La Laguna',
     image: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=800',
-    quote: 'Tenía mi camper parada entre semana por el trabajo. Alquilarla en Vaneando me ha permitido cubrir el seguro, el mantenimiento anual y obtener ingresos limpios con total tranquilidad gracias a los contratos digitales.',
+    quote: 'Tenía mi camper parada entre semana por el trabajo. Alquilarla en GTR Cars me ha permitido cubrir el seguro, el mantenimiento anual y obtener ingresos limpios con total tranquilidad gracias a los contratos digitales.',
     badge: 'Caso Propietario',
   },
   {
@@ -52,7 +52,7 @@ export default function HistoriasPage() {
         <section className="text-center max-w-2xl mx-auto mb-12 space-y-3">
           <div className="inline-flex items-center space-x-2 bg-[#16B8AA]/10 text-[#0F766E] px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider">
             <Compass className="w-4 h-4" />
-            <span>Comunidad Vaneando</span>
+            <span>Comunidad GTR Cars</span>
           </div>
           <h1 className="font-serif text-3xl sm:text-5xl font-bold tracking-tight">
             Historias de la comunidad en Canarias

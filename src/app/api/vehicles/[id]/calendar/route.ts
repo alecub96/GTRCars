@@ -8,7 +8,7 @@ import { ensureDbSchema } from '@/lib/prisma-ensure-schema';
 export const dynamic = 'force-dynamic';
 
 /**
- * GET: Exporta el calendario oficial de Vaneando en formato iCal (.ics)
+ * GET: Exporta el calendario oficial de GTR Cars en formato iCal (.ics)
  * o devuelve la lista de feeds vinculados si se consulta desde la app.
  */
 export async function GET(request: Request, context: { params: Promise<{ id: string }> }) {
@@ -66,7 +66,7 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
         status: 200,
         headers: {
           'Content-Type': 'text/calendar; charset=utf-8',
-          'Content-Disposition': `attachment; filename="${vehicle.slug}-vaneando.ics"`,
+          'Content-Disposition': `attachment; filename="${vehicle.slug}-gtrcars.ics"`,
           'Cache-Control': 'no-cache, no-store, max-age=0, must-revalidate',
         },
       });
@@ -86,7 +86,7 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
       ).catch(() => [])) || []) as any[];
     } catch {}
 
-    const origin = url.origin || 'https://vaneando.com';
+    const origin = url.origin || 'https://gtrcars.es';
     const exportUrl = `${origin}/api/vehicles/${vehicle.id}/calendar?export=true`;
 
     const allBlocks = vehicle.availabilityBlocks || [];
@@ -169,7 +169,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
       try {
         const fetchRes = await fetch(targetUrl, {
           headers: {
-            'User-Agent': 'VaneandoCalendarSync/1.0 (+https://vaneando.com)',
+            'User-Agent': 'GTRCarsCalendarSync/1.0 (+https://gtrcars.es)',
             Accept: 'text/calendar, application/octet-stream, text/plain, */*',
           },
           signal: AbortSignal.timeout(12000),
@@ -225,7 +225,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
       }
 
       for (const event of validEvents) {
-        // No pisar reservas directas de Vaneando
+        // No pisar reservas directas de GTR Cars
         const conflictBooking = await tx.availabilityBlock.findFirst({
           where: {
             vehicleId,

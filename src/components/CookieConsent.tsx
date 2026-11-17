@@ -19,7 +19,7 @@ export default function CookieConsent() {
   const updateClarityConsent = (granted: boolean) => { if (typeof window !== 'undefined' && (window as any).clarity) (window as any).clarity('consent', granted); };
 
   useEffect(() => {
-    const consent = localStorage.getItem('vaneando-cookie-consent');
+    const consent = localStorage.getItem('gtrcars-cookie-consent');
     if (!consent) {
       setVisible(true);
     } else if (consent === 'all') {
@@ -29,18 +29,18 @@ export default function CookieConsent() {
   }, []);
 
   const handleAcceptAll = () => {
-    localStorage.setItem('vaneando-cookie-consent', 'all');
+    localStorage.setItem('gtrcars-cookie-consent', 'all');
     updateGoogleConsent(true);
     updateClarityConsent(true);
-    window.dispatchEvent(new Event('vaneando-consent-updated'));
+    window.dispatchEvent(new Event('gtrcars-consent-updated'));
     setVisible(false);
   };
 
   const handleAcceptNecessary = () => {
-    localStorage.setItem('vaneando-cookie-consent', 'necessary');
+    localStorage.setItem('gtrcars-cookie-consent', 'necessary');
     updateGoogleConsent(false);
     updateClarityConsent(false);
-    window.dispatchEvent(new Event('vaneando-consent-updated'));
+    window.dispatchEvent(new Event('gtrcars-consent-updated'));
     setVisible(false);
   };
 

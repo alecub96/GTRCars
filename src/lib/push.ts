@@ -2,7 +2,7 @@ import webpush from 'web-push';
 import { prisma } from '@/lib/prisma';
 const publicKey = process.env.VAPID_PUBLIC_KEY;
 const privateKey = process.env.VAPID_PRIVATE_KEY;
-if (publicKey && privateKey) webpush.setVapidDetails(process.env.VAPID_SUBJECT || 'mailto:contacto@vaneando.com', publicKey, privateKey);
+if (publicKey && privateKey) webpush.setVapidDetails(process.env.VAPID_SUBJECT || 'mailto:contacto@gtrcars.es', publicKey, privateKey);
 export async function sendPushToUser(userId: string, title: string, body: string, url: string) {
   if (!publicKey || !privateKey) return;
   const subscriptions = await prisma.pushSubscription.findMany({ where: { userId } });

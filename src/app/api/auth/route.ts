@@ -105,7 +105,7 @@ export async function POST(request: Request) {
             email: normalizedEmail,
             passwordHash,
             firstName: 'Administrador',
-            lastName: 'Vaneando',
+            lastName: 'GTR Cars',
             role: 'ADMIN',
           },
           select: { id: true, email: true, passwordHash: true, firstName: true, lastName: true, role: true },

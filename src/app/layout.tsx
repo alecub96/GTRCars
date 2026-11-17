@@ -104,6 +104,9 @@ export const metadata: Metadata = {
     ],
     shortcut: ['/gtr-icon.svg?v=gtr3'],
   },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
+  },
   manifest: '/site.webmanifest',
 };
 
@@ -194,7 +197,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
               t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
               y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-            })(window, document, "clarity", "script", "ybr6qavm58");`,
+            })(window, document, "clarity", "script", "${process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID || 'zf9zp8dwdj'}");`,
           }}
         />
         <link rel="icon" href="/favicon.ico?v=gtr3" sizes="any" />
@@ -215,7 +218,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 function handleChunkError(msg) {
                   var text = (msg || '').toLowerCase();
                   if (text.indexOf('loading chunk') !== -1 || text.indexOf('chunkloaderror') !== -1 || text.indexOf('loading css chunk') !== -1 || text.indexOf('failed to fetch dynamically imported module') !== -1 || text.indexOf('dynamically imported') !== -1) {
-                    var storageKey = 'vaneando_chunk_reload';
+                    var storageKey = 'gtrcars_chunk_reload';
                     var lastReload = sessionStorage.getItem(storageKey);
                     var now = Date.now();
                     if (!lastReload || (now - parseInt(lastReload, 10)) > 4000) {

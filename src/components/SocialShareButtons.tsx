@@ -11,13 +11,13 @@ interface SocialShareButtonsProps {
 }
 
 export default function SocialShareButtons({
-  title = 'Alquiler de Campers en Canarias | vaneando.com',
+  title = 'Alquiler de Campers en Canarias | gtrcars.es',
   url,
   className = '',
 }: SocialShareButtonsProps) {
   const [copied, setCopied] = useState(false);
 
-  const shareUrl = typeof window !== 'undefined' ? (url || window.location.href) : 'https://vaneando.com';
+  const shareUrl = typeof window !== 'undefined' ? (url || window.location.href) : 'https://gtrcars.es';
   const encodedUrl = encodeURIComponent(shareUrl);
   const encodedTitle = encodeURIComponent(title);
 

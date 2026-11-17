@@ -23,7 +23,7 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
       '@type': 'ListItem',
       position: index + 1,
       name: item.name,
-      item: `https://vaneando.com${item.url}`,
+      item: `https://gtrcars.es${item.url}`,
     })),
   };
 

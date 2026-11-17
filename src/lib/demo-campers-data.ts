@@ -88,7 +88,7 @@ export const REALISTIC_CANARIAN_CAMPERS: DemoCamperItem[] = [
       avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
       verification: 'VERIFIED',
       phone: '+34 628 314 902',
-      email: 'yeray.santana@vaneando.canarias',
+      email: 'yeray.santana@gtrcars.es',
     },
     photos: [
       { id: 'p1-1', url: '/Anuncios/1/foto-1.webp', orderIndex: 0 },
@@ -165,7 +165,7 @@ export const REALISTIC_CANARIAN_CAMPERS: DemoCamperItem[] = [
       avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400',
       verification: 'VERIFIED',
       phone: '+34 619 882 104',
-      email: 'ayoze.tenerife@vaneando.canarias',
+      email: 'ayoze.tenerife@gtrcars.es',
     },
     photos: [
       { id: 'p2-1', url: '/Anuncios/2/foto-1.png', orderIndex: 0 },
@@ -241,7 +241,7 @@ export const REALISTIC_CANARIAN_CAMPERS: DemoCamperItem[] = [
       avatarUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400',
       verification: 'VERIFIED',
       phone: '+34 633 912 770',
-      email: 'guacimara.fuerteventura@vaneando.canarias',
+      email: 'guacimara.fuerteventura@gtrcars.es',
     },
     photos: [
       { id: 'p3-1', url: '/Anuncios/3/foto-1.png', orderIndex: 0 },

@@ -9,8 +9,8 @@ export default function AnalyticsProvider() {
   }, [pathname]);
   useEffect(() => {
     const onConsent = () => { if (hasAnalyticsConsent()) page(pathname); };
-    window.addEventListener('vaneando-consent-updated', onConsent);
-    return () => window.removeEventListener('vaneando-consent-updated', onConsent);
+    window.addEventListener('gtrcars-consent-updated', onConsent);
+    return () => window.removeEventListener('gtrcars-consent-updated', onConsent);
   }, [pathname]);
   useEffect(() => {
     if (!hasAnalyticsConsent()) return;

@@ -16,10 +16,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const article = getBlogArticle(slug);
   if (!article) return {};
   return {
-    title: `${article.title} | vaneando.`,
+    title: `${article.title} | GTR Cars.`,
     description: article.metaDescription,
     keywords: article.keywords,
-    alternates: { canonical: `https://vaneando.com/guias/${article.slug}` },
+    alternates: { canonical: `https://gtrcars.es/guias/${article.slug}` },
     openGraph: { title: article.title, description: article.metaDescription, type: 'article', images: [article.image] },
   };
 }
@@ -36,12 +36,12 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
     '@type': 'BlogPosting',
     headline: article.title,
     description: article.metaDescription,
-    image: `https://vaneando.com${article.image}`,
+    image: `https://gtrcars.es${article.image}`,
     datePublished: article.publishedAt,
     dateModified: article.publishedAt,
-    author: { '@type': 'Organization', name: 'vaneando.', url: 'https://vaneando.com' },
-    publisher: { '@type': 'Organization', name: 'vaneando.', logo: { '@type': 'ImageObject', url: 'https://vaneando.com/vaneando-lockup.svg' } },
-    mainEntityOfPage: `https://vaneando.com/guias/${article.slug}`,
+    author: { '@type': 'Organization', name: 'GTR Cars.', url: 'https://gtrcars.es' },
+    publisher: { '@type': 'Organization', name: 'GTR Cars.', logo: { '@type': 'ImageObject', url: 'https://gtrcars.es/brand/logo-primary-transparent.png' } },
+    mainEntityOfPage: `https://gtrcars.es/guias/${article.slug}`,
     keywords: article.keywords.join(', '),
   };
 
@@ -49,9 +49,9 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Inicio', item: 'https://vaneando.com' },
-      { '@type': 'ListItem', position: 2, name: 'Blog & Guías', item: 'https://vaneando.com/guias' },
-      { '@type': 'ListItem', position: 3, name: article.title, item: `https://vaneando.com/guias/${article.slug}` },
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: 'https://gtrcars.es' },
+      { '@type': 'ListItem', position: 2, name: 'Blog & Guías', item: 'https://gtrcars.es/guias' },
+      { '@type': 'ListItem', position: 3, name: article.title, item: `https://gtrcars.es/guias/${article.slug}` },
     ],
   };
 
@@ -94,7 +94,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
 
           <header className="mt-4 mb-10">
             <div className="flex items-center gap-3 text-xs font-medium text-[#6B726E] mb-3">
-              <span>Escrito por el Equipo Oficial de vaneando.</span>
+              <span>Escrito por el Equipo Oficial de GTR Cars.</span>
               <span>•</span>
               <span>{article.publishedAt}</span>
               <span>•</span>

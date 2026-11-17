@@ -182,10 +182,10 @@ export function generateIcsCalendar(params: {
   const lines = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Vaneando//Alquiler de Campers Canarias//ES',
+    'PRODID:-//GTR Cars//Alquiler de Campers Canarias//ES',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
-    `X-WR-CALNAME:Vaneando - ${params.vehicleTitle.replace(/[\r\n]/g, ' ')}`,
+    `X-WR-CALNAME:GTR Cars - ${params.vehicleTitle.replace(/[\r\n]/g, ' ')}`,
     'X-WR-TIMEZONE:Atlantic/Canary',
   ];
 
@@ -194,12 +194,12 @@ export function generateIcsCalendar(params: {
     if (['CONFIRMED', 'ACTIVE', 'COMPLETED'].includes(booking.status)) {
       lines.push(
         'BEGIN:VEVENT',
-        `UID:vaneando-booking-${booking.code}@vaneando.com`,
+        `UID:gtrcars-booking-${booking.code}@gtrcars.es`,
         `DTSTAMP:${nowUtc}`,
         `DTSTART;VALUE=DATE:${formatIcsDate(booking.startDate)}`,
         `DTEND;VALUE=DATE:${formatIcsDate(booking.endDate)}`,
-        `SUMMARY:Reservado (Vaneando - ${booking.code})`,
-        `DESCRIPTION:Reserva confirmada en Vaneando.com para ${params.vehicleTitle.replace(/[\r\n]/g, ' ')}`,
+        `SUMMARY:Reservado (GTR Cars - ${booking.code})`,
+        `DESCRIPTION:Reserva confirmada en GTR Cars.com para ${params.vehicleTitle.replace(/[\r\n]/g, ' ')}`,
         'STATUS:CONFIRMED',
         'TRANSP:OPAQUE',
         'END:VEVENT'
@@ -212,11 +212,11 @@ export function generateIcsCalendar(params: {
     const isExternalSync = block.reason?.startsWith('SYNC_');
     const summary = isExternalSync
       ? `No disponible (${block.reason?.replace('SYNC_', '').replace(/_/g, ' ') || 'Sincronizado'})`
-      : 'No disponible (Vaneando Bloqueo)';
+      : 'No disponible (GTR Cars Bloqueo)';
 
     lines.push(
       'BEGIN:VEVENT',
-      `UID:vaneando-block-${block.id}@vaneando.com`,
+      `UID:gtrcars-block-${block.id}@gtrcars.es`,
       `DTSTAMP:${nowUtc}`,
       `DTSTART;VALUE=DATE:${formatIcsDate(block.startDate)}`,
       `DTEND;VALUE=DATE:${formatIcsDate(block.endDate)}`,

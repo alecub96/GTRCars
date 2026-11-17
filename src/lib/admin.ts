@@ -4,8 +4,8 @@ import { prisma } from './prisma';
 const DEFAULT_ADMIN_EMAILS = [
   'admin@gtrcars.es',
   'contacto@gtrcars.es',
-  'admin@vaneando.com',
-  'vaneando@vaneando.com',
+  'admin@gtrcars.es',
+  'contacto@gtrcars.es',
 ];
 
 export function getConfiguredAdminEmails() {
