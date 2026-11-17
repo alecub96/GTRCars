@@ -13,7 +13,7 @@ export default async function ProfilePage() {
   const profileRole = isOwner ? 'OWNER' : 'TRAVELER';
 
   let reviews: any[] = [];
-  if (!isAdmin && !user.id?.includes('demo') && !user.email?.includes('gtcars.club')) {
+  if (!isAdmin) {
     try {
       reviews = await prisma.review.findMany({
         where: { subjectId: user.id, subjectRole: profileRole },
@@ -33,7 +33,7 @@ export default async function ProfilePage() {
   }
 
   let vehiclesCount = 0;
-  if (isOwner && !user.id?.includes('demo') && !user.email?.includes('gtcars.club')) {
+  if (isOwner) {
     try {
       vehiclesCount = await prisma.vehicle.count({ where: { ownerId: user.id } });
     } catch (error) {
@@ -43,7 +43,7 @@ export default async function ProfilePage() {
   }
 
   let bookingsCount = 0;
-  if (!isAdmin && !user.id?.includes('demo') && !user.email?.includes('gtcars.club')) {
+  if (!isAdmin) {
     try {
       bookingsCount = await prisma.booking.count({
         where: isOwner ? { ownerId: user.id } : { travelerId: user.id },

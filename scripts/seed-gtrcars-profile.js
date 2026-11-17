@@ -1,16 +1,22 @@
+require('dotenv').config({ path: '.env.local' });
+require('dotenv').config({ path: '.env' });
 const bcrypt = require('bcryptjs');
-const { PrismaMariaDb } = require('@prisma/adapter-mariadb');
-const { PrismaClient } = require('../src/generated/prisma/client');
+const { Pool } = require('pg');
+const { PrismaPg } = require('@prisma/adapter-pg');
+const { PrismaClient } = require('../src/generated/prisma/client.ts');
 
 async function main() {
-  const adapter = new PrismaMariaDb({
-    host: '127.0.0.1',
-    port: 3306,
-    user: 'root',
-    password: '',
-    database: 'gtcars',
-  });
+  const connectionString =
+    process.env.DIRECT_URL?.trim() ||
+    process.env.GTRCARS_DATABASE_URL?.trim() ||
+    process.env.DATABASE_URL?.trim() ||
+    '';
 
+  const pool = new Pool({
+    connectionString,
+    ssl: { rejectUnauthorized: false },
+  });
+  const adapter = new PrismaPg(pool);
   const prisma = new PrismaClient({ adapter });
 
   console.log('--- Creando perfil oficial GTR Cars en base de datos ---');

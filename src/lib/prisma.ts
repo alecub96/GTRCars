@@ -1,57 +1,33 @@
-import { PrismaMariaDb } from '@prisma/adapter-mariadb';
+import { Pool } from 'pg';
+import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '@/generated/prisma/client';
 
 const globalForPrisma = global as unknown as {
   prisma?: PrismaClient;
-  prismaAdapter?: PrismaMariaDb;
+  prismaPool?: Pool;
 };
 
-function getMariaDbCredentials() {
-  const envUrl =
-    process.env.GTRCARS_DATABASE_URL?.trim() ||
-    process.env.VANEANDO_DATABASE_URL?.trim() ||
-    process.env.DATABASE_URL?.trim() ||
-    '';
-  const match = envUrl.match(/^(?:mysql|mariadb):\/\/(?:([^:@]+)(?::([^@]*))?@)?([^:\/]+)(?::(\d+))?\/(.+)$/i);
-  if (match) {
-    const rawHost = match[3] || '127.0.0.1';
-    return {
-      user: decodeURIComponent(match[1] || ''),
-      password: decodeURIComponent(match[2] || ''),
-      host: rawHost.toLowerCase() === 'localhost' ? '127.0.0.1' : rawHost,
-      port: match[4] ? Number(match[4]) : 3306,
-      database: decodeURIComponent((match[5] || '').split('?')[0]),
-    };
-  }
-  return {
-    user: 'root',
-    password: '',
-    host: '127.0.0.1',
-    port: 3306,
-    database: 'gtcars',
-  };
-}
+const connectionString =
+  process.env.GTRCARS_DATABASE_URL?.trim() ||
+  process.env.DATABASE_URL?.trim() ||
+  process.env.DIRECT_URL?.trim() ||
+  '';
 
-const creds = getMariaDbCredentials();
-
-const adapter =
-  globalForPrisma.prismaAdapter ||
-  new PrismaMariaDb({
-    host: creds.host,
-    port: creds.port,
-    user: creds.user,
-    password: creds.password,
-    database: creds.database,
-    connectionLimit: 15,
-    minimumIdle: 2,
-    connectTimeout: 10_000,
-    acquireTimeout: 10_000,
-    idleTimeout: 30_000,
+const pool =
+  globalForPrisma.prismaPool ||
+  new Pool({
+    connectionString,
+    ssl: { rejectUnauthorized: false },
+    max: 15,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 10000,
   });
 
 if (process.env.NODE_ENV !== 'production') {
-  globalForPrisma.prismaAdapter = adapter;
+  globalForPrisma.prismaPool = pool;
 }
+
+const adapter = new PrismaPg(pool);
 
 export const prisma =
   globalForPrisma.prisma ||

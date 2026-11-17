@@ -27,51 +27,6 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { action, email, password, firstName, lastName, role } = body;
 
-    // ACCESOS DEMO DIRECTOS 1-CLICK
-    if (action === 'demo-owner') {
-      const demoOwner = {
-        id: 'demo-owner-gtcars-001',
-        email: 'propietario@gtcars.club',
-        firstName: 'Carlos',
-        lastName: 'M. (Propietario VIP)',
-        role: 'OWNER',
-        avatarUrl: '/supercars/lambo_revuelto.jpg',
-      };
-      const token = signToken({ userId: demoOwner.id, email: demoOwner.email, role: 'OWNER' });
-      const response = authResponse({ success: true, user: demoOwner });
-      response.cookies.set('auth_token', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        priority: 'high',
-        maxAge: 60 * 60 * 24 * 7,
-        path: '/',
-      });
-      return response;
-    }
-
-    if (action === 'demo-client') {
-      const demoClient = {
-        id: 'demo-client-gtcars-002',
-        email: 'cliente@gtcars.club',
-        firstName: 'Alejandro',
-        lastName: 'B. (Piloto VIP)',
-        role: 'TRAVELER',
-        avatarUrl: '/default-avatar.svg',
-      };
-      const token = signToken({ userId: demoClient.id, email: demoClient.email, role: 'TRAVELER' });
-      const response = authResponse({ success: true, user: demoClient });
-      response.cookies.set('auth_token', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        priority: 'high',
-        maxAge: 60 * 60 * 24 * 7,
-        path: '/',
-      });
-      return response;
-    }
-
     const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
 
     if (action === 'register') {
@@ -132,50 +87,6 @@ export async function POST(request: Request) {
     if (action === 'login') {
       if (!EMAIL_PATTERN.test(normalizedEmail) || typeof password !== 'string' || !password || password.length > 128) {
         return authResponse({ error: 'Email y contraseña requeridos' }, 400);
-      }
-
-      if (normalizedEmail === 'propietario@gtcars.club') {
-        const demoOwner = {
-          id: 'demo-owner-gtcars-001',
-          email: 'propietario@gtcars.club',
-          firstName: 'Carlos',
-          lastName: 'M. (Propietario VIP)',
-          role: 'OWNER',
-          avatarUrl: '/supercars/lambo_revuelto.jpg',
-        };
-        const token = signToken({ userId: demoOwner.id, email: demoOwner.email, role: 'OWNER' });
-        const response = authResponse({ success: true, user: demoOwner });
-        response.cookies.set('auth_token', token, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'lax',
-          priority: 'high',
-          maxAge: 60 * 60 * 24 * 7,
-          path: '/',
-        });
-        return response;
-      }
-
-      if (normalizedEmail === 'cliente@gtcars.club') {
-        const demoClient = {
-          id: 'demo-client-gtcars-002',
-          email: 'cliente@gtcars.club',
-          firstName: 'Alejandro',
-          lastName: 'B. (Piloto VIP)',
-          role: 'TRAVELER',
-          avatarUrl: '/default-avatar.svg',
-        };
-        const token = signToken({ userId: demoClient.id, email: demoClient.email, role: 'TRAVELER' });
-        const response = authResponse({ success: true, user: demoClient });
-        response.cookies.set('auth_token', token, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'lax',
-          priority: 'high',
-          maxAge: 60 * 60 * 24 * 7,
-          path: '/',
-        });
-        return response;
       }
 
       let user: any = null;

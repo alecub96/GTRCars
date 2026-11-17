@@ -91,7 +91,7 @@ export async function POST(request: Request) {
         paymentIntentData.application_fee_amount = platformFeeCents;
         paymentIntentData.transfer_data = { destination: booking.owner.stripeAccountId as string };
       }
-      const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://gtrcars.es';
       const checkout = await stripe.checkout.sessions.create({
         mode: 'payment',
         ui_mode: 'elements',

@@ -11,22 +11,20 @@ if (fs.existsSync(envLocalPath)) {
     const trimmed = line.trim();
     if (trimmed && !trimmed.startsWith('#') && trimmed.includes('=')) {
       const [k, ...v] = trimmed.split('=');
-      process.env[k.trim()] = v.join('=').trim();
+      process.env[k.trim()] = v.join('=').trim().replace(/^["']|["']$/g, '');
     }
   }
 }
 
-const rawUrl =
+const connectionUrl =
+  process.env.DIRECT_URL?.trim() ||
   process.env.GTRCARS_DATABASE_URL?.trim() ||
   process.env.DATABASE_URL?.trim() ||
-  process.env.VANEANDO_DATABASE_URL?.trim() ||
-  'mysql://root:@127.0.0.1:3306/gtcars';
-const normalizedUrl = rawUrl.replace(/^mariadb:\/\//i, 'mysql://');
+  '';
 
 export default defineConfig({
   schema: 'prisma/schema.prisma',
   datasource: {
-    url: normalizedUrl,
+    url: connectionUrl,
   },
 });
-

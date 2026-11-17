@@ -55,8 +55,8 @@ export async function POST(request: Request) {
         ],
         mode: 'subscription',
         metadata: { userId: sessionUser.id, vehicleId: vehicle.id, feature: 'featured' },
-        success_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3003'}/propietario?featured=success`,
-        cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3003'}/propietario?featured=cancel`,
+        success_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://gtrcars.es'}/propietario?featured=success`,
+        cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://gtrcars.es'}/propietario?featured=cancel`,
       });
 
       return NextResponse.json({ success: true, url: session.url });

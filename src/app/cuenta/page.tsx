@@ -7,69 +7,6 @@ import Link from 'next/link';
 import { Heart, Search, UserCircle, ShieldCheck, Gauge, KeyRound, Sparkles } from 'lucide-react';
 import UserContractsPanel from '@/components/UserContractsPanel';
 
-const DEMO_CLIENT_BOOKINGS = [
-  {
-    id: 'demo-booking-001',
-    code: 'GT-296-7890',
-    status: 'CONFIRMED',
-    pickupDate: new Date(Date.now() + 86400000 * 2).toISOString(),
-    returnDate: new Date(Date.now() + 86400000 * 5).toISOString(),
-    totalAmount: 4350,
-    vehicle: {
-      title: 'Ferrari 296 GTB Assetto Fiorano',
-      island: 'Tenerife / Las Palmas',
-      photos: [{ url: '/supercars/ferrari_296.jpg' }],
-    },
-    owner: { firstName: 'Carlos M.' },
-    conversations: [{ id: 'demo-conv-001' }],
-  },
-  {
-    id: 'demo-booking-002',
-    code: 'GT-765-1102',
-    status: 'REQUESTED',
-    pickupDate: new Date(Date.now() + 86400000 * 10).toISOString(),
-    returnDate: new Date(Date.now() + 86400000 * 12).toISOString(),
-    totalAmount: 3800,
-    vehicle: {
-      title: 'McLaren 765LT Spider',
-      island: 'Gran Canaria',
-      photos: [{ url: '/supercars/mclaren_765lt.jpg' }],
-    },
-    owner: { firstName: 'Enrique S.' },
-    conversations: [{ id: 'demo-conv-002' }],
-  },
-];
-
-const DEMO_CLIENT_FAVORITES = [
-  {
-    id: 'fav-1',
-    vehicle: {
-      slug: 'lamborghini-revuelto-2024',
-      title: 'Lamborghini Revuelto V12 Híbrido',
-      island: 'Tenerife',
-      photos: [{ url: '/supercars/lambo_revuelto.jpg' }],
-    },
-  },
-  {
-    id: 'fav-2',
-    vehicle: {
-      slug: 'porsche-911-gt3-rs-weissach',
-      title: 'Porsche 911 GT3 RS Weissach',
-      island: 'Gran Canaria',
-      photos: [{ url: '/supercars/porsche_gt3rs.jpg' }],
-    },
-  },
-  {
-    id: 'fav-3',
-    vehicle: {
-      slug: 'aston-martin-dbs-superleggera',
-      title: 'Aston Martin DBS Superleggera V12',
-      island: 'Lanzarote',
-      photos: [{ url: '/supercars/aston_dbs.jpg' }],
-    },
-  },
-];
-
 export default async function TravelerAccountPage() {
   const user = await getCurrentUser().catch(() => null);
   if (!user) redirect('/');
@@ -91,11 +28,7 @@ export default async function TravelerAccountPage() {
     console.error('Cuenta page bookings query error:', error);
   }
 
-  // Fallback para usuario demo o BD vacía
-  if (bookings.length === 0 && (user.id.includes('demo') || user.email.includes('cliente'))) {
-    bookings = DEMO_CLIENT_BOOKINGS;
-  }
-
+  
   let favorites: any[] = [];
   try {
     favorites = await prisma.favorite.findMany({
@@ -108,9 +41,6 @@ export default async function TravelerAccountPage() {
   }
 
   let validFavorites = favorites.filter((f) => Boolean(f && f.vehicle));
-  if (validFavorites.length === 0 && (user.id.includes('demo') || user.email.includes('cliente'))) {
-    validFavorites = DEMO_CLIENT_FAVORITES;
-  }
 
   return (
     <div className="min-h-screen bg-white text-black selection:bg-black selection:text-white font-sans">

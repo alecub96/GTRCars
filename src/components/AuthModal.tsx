@@ -134,35 +134,6 @@ export default function AuthModal() {
     }
   };
 
-  const handleDemoLogin = async (type: 'owner' | 'client') => {
-    setError('');
-    setSuccessMessage('');
-    setLoading(true);
-
-    try {
-      const res = await fetch('/api/auth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: type === 'owner' ? 'demo-owner' : 'demo-client' }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Error al acceder en modo demo');
-
-      setUser(data.user);
-      setIsOpen(false);
-      if (type === 'owner') {
-        window.location.href = '/propietario';
-      } else {
-        window.location.href = '/cuenta';
-      }
-    } catch (err: any) {
-      setError(err.message || 'Error en acceso demo');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleLogout = async () => {
     await fetch('/api/auth', {
       method: 'POST',
@@ -396,49 +367,6 @@ export default function AuthModal() {
                     <span className="text-[8px] font-mono tracking-widest text-gray-400 uppercase">
                       PEER-TO-PEER SPORTS CAR RENTAL
                     </span>
-                  </div>
-                </div>
-
-                {/* ACCESO DEMO DIRECTO 1-CLICK */}
-                <div className="mb-6 rounded-2xl border border-gray-200 bg-gray-50 p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-black flex items-center gap-1.5">
-                      <Sparkles className="w-3.5 h-3.5 text-black" />
-                      Accesos Rápidos Demo
-                    </span>
-                    <span className="text-[9px] font-mono text-gray-400 uppercase">Sin contraseña</span>
-                  </div>
-                  <p className="text-xs text-gray-600 mb-3">
-                    Prueba la experiencia completa con cuentas preconfiguradas:
-                  </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    <button
-                      type="button"
-                      onClick={() => handleDemoLogin('owner')}
-                      disabled={loading}
-                      className="group p-3 rounded-xl bg-white hover:bg-gray-100 border border-gray-200 hover:border-black text-left transition-all cursor-pointer shadow-xs"
-                    >
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-[10px] font-mono font-bold uppercase text-gray-500">Propietario Demo</span>
-                        <Truck className="w-3.5 h-3.5 text-black" />
-                      </div>
-                      <p className="text-xs font-bold text-black transition-colors">Carlos M.</p>
-                      <p className="text-[10px] text-gray-500 truncate">Flota Revuelto, SF90 & GT3 RS</p>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => handleDemoLogin('client')}
-                      disabled={loading}
-                      className="group p-3 rounded-xl bg-white hover:bg-gray-100 border border-gray-200 hover:border-black text-left transition-all cursor-pointer shadow-xs"
-                    >
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-[10px] font-mono font-bold uppercase text-gray-500">Piloto VIP Demo</span>
-                        <Compass className="w-3.5 h-3.5 text-black" />
-                      </div>
-                      <p className="text-xs font-bold text-black transition-colors">Alejandro B.</p>
-                      <p className="text-[10px] text-gray-500 truncate">Reservas activas & Favoritos</p>
-                    </button>
                   </div>
                 </div>
 

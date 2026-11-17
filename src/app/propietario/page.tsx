@@ -11,71 +11,6 @@ import UserContractsPanel from '@/components/UserContractsPanel';
 import { useRouter } from 'next/navigation';
 import StripeConnectOnboarding from '@/components/StripeConnectOnboarding';
 
-const DEMO_OWNER_VEHICLES = [
-  {
-    id: 'demo-vehicle-001',
-    slug: 'lamborghini-revuelto-2024',
-    title: 'Lamborghini Revuelto V12 Híbrido HPEV',
-    island: 'Tenerife / Las Palmas',
-    municipality: 'Adeje / Maspalomas',
-    basePricePerDay: 2200,
-    status: 'ACTIVE',
-    isFeatured: true,
-    photos: [{ url: '/supercars/lambo_revuelto.jpg' }],
-  },
-  {
-    id: 'demo-vehicle-002',
-    slug: 'ferrari-sf90-stradale',
-    title: 'Ferrari SF90 Stradale Assetto Fiorano',
-    island: 'Gran Canaria',
-    municipality: 'Las Palmas',
-    basePricePerDay: 1950,
-    status: 'ACTIVE',
-    isFeatured: true,
-    photos: [{ url: '/supercars/ferrari_sf90.jpg' }],
-  },
-  {
-    id: 'demo-vehicle-003',
-    slug: 'porsche-911-gt3-rs-weissach',
-    title: 'Porsche 911 GT3 RS Weissach Package',
-    island: 'Tenerife',
-    municipality: 'Santa Cruz de Tenerife',
-    basePricePerDay: 1450,
-    status: 'ACTIVE',
-    isFeatured: false,
-    photos: [{ url: '/supercars/porsche_gt3rs.jpg' }],
-  },
-];
-
-const DEMO_OWNER_BOOKINGS = [
-  {
-    id: 'demo-booking-owner-001',
-    code: 'GT-SF90-4491',
-    status: 'REQUESTED',
-    pickupDate: new Date(Date.now() + 86400000 * 3).toISOString(),
-    returnDate: new Date(Date.now() + 86400000 * 6).toISOString(),
-    totalDays: 3,
-    totalAmount: 5850,
-    ownerPayout: 4972,
-    vehicle: { title: 'Ferrari SF90 Stradale Assetto Fiorano' },
-    traveler: { firstName: 'Marc', lastName: 'Gené', email: 'marc.piloto@vip.com' },
-    conversations: [{ id: 'demo-conv-owner-1' }],
-  },
-  {
-    id: 'demo-booking-owner-002',
-    code: 'GT-REV-9012',
-    status: 'CONFIRMED',
-    pickupDate: new Date(Date.now() + 86400000 * 8).toISOString(),
-    returnDate: new Date(Date.now() + 86400000 * 11).toISOString(),
-    totalDays: 3,
-    totalAmount: 6600,
-    ownerPayout: 5610,
-    vehicle: { title: 'Lamborghini Revuelto V12 Híbrido HPEV' },
-    traveler: { firstName: 'Fernando', lastName: 'A.', email: 'fernando.vip@vault.com' },
-    conversations: [{ id: 'demo-conv-owner-2' }],
-  },
-];
-
 export default function OwnerDashboardPage() {
   const router = useRouter();
   const [vehicles, setVehicles] = useState<any[]>([]);
@@ -123,42 +58,32 @@ export default function OwnerDashboardPage() {
 
         setAuthorized(true);
 
-        const isDemo = data.user.id?.includes('demo') || data.user.email?.includes('propietario');
-
         fetch('/api/vehicles?owner=me', { cache: 'no-store' })
           .then((res) => res.json())
           .then((vData) => {
-            if (vData?.vehicles && vData.vehicles.length > 0) {
+            if (vData?.vehicles) {
               setVehicles(vData.vehicles);
-            } else if (isDemo) {
-              setVehicles(DEMO_OWNER_VEHICLES);
             }
           })
           .catch((err) => {
             console.error('Error cargando superdeportivos:', err);
-            if (isDemo) setVehicles(DEMO_OWNER_VEHICLES);
           });
 
         fetch('/api/bookings', { cache: 'no-store' })
           .then((res) => res.json())
           .then((bData) => {
-            if (bData?.bookings && bData.bookings.length > 0) {
+            if (bData?.bookings) {
               setBookings(bData.bookings);
-            } else if (isDemo) {
-              setBookings(DEMO_OWNER_BOOKINGS);
             }
           })
           .catch((err) => {
             console.error('Error cargando reservas:', err);
-            if (isDemo) setBookings(DEMO_OWNER_BOOKINGS);
           })
           .finally(() => setLoading(false));
       })
       .catch((error: Error) => {
         console.error('Propietario load error:', error);
-        setAuthorized(true);
-        setVehicles(DEMO_OWNER_VEHICLES);
-        setBookings(DEMO_OWNER_BOOKINGS);
+        setServiceError(error.message || 'Error al conectar con el servicio.');
         setLoading(false);
       });
   }, [router]);
