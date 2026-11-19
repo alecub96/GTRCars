@@ -160,7 +160,20 @@ export async function POST(request: Request) {
       await prisma.vehicle.update({ where: { id: featureVehicleId }, data: { isVip: true, vipExpiresAt: periodEnd } });
     }
     const bookingId = session.metadata?.bookingId;
-    if (bookingId && session.payment_status !== 'unpaid') {
+    const paymentKind = session.metadata?.paymentKind;
+    if (bookingId && paymentKind === 'SECURITY_DEPOSIT_HOLD') {
+      const paymentIntentId = typeof session.payment_intent === 'string' ? session.payment_intent : session.payment_intent?.id;
+      await prisma.$transaction([
+        prisma.booking.update({
+          where: { id: bookingId },
+          data: { depositStatus: 'HELD' },
+        }),
+        prisma.payment.updateMany({
+          where: { bookingId, stripeId: session.id },
+          data: { status: 'HELD', ...(paymentIntentId ? { stripeId: paymentIntentId } : {}) },
+        }),
+      ]);
+    } else if (bookingId && session.payment_status !== 'unpaid') {
       const paymentIntentId = typeof session.payment_intent === 'string' ? session.payment_intent : session.payment_intent?.id;
       await confirmBookingPayment(bookingId, paymentIntentId || null, session.id);
     }

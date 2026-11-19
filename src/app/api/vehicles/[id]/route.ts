@@ -172,6 +172,7 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
     }
     if (typeof fuelConsumption === 'string') dataToUpdate.fuelConsumption = fuelConsumption.trim();
     if (typeof bookingType === 'string' && ['INSTANT_BOOKING', 'REQUEST_TO_BOOK'].includes(bookingType)) dataToUpdate.bookingType = bookingType;
+    if (typeof body.ownershipType === 'string' && ['PLATFORM', 'THIRD_PARTY'].includes(body.ownershipType)) dataToUpdate.ownershipType = body.ownershipType;
     if (typeof cancellationPolicy === 'string' && ['FLEXIBLE', 'MODERATE', 'STRICT'].includes(cancellationPolicy)) dataToUpdate.cancellationPolicy = cancellationPolicy;
 
     if (latitude !== undefined) dataToUpdate.latitude = Number(latitude) || null;

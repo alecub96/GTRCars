@@ -12,10 +12,11 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
   const booking = await prisma.booking.findUnique({
     where: { id },
     include: {
-      vehicle: { select: { id: true, title: true, brand: true, model: true, year: true, island: true, municipality: true, rules: true, cancellationPolicy: true, includedKmPerDay: true, extraKmPrice: true, photos: { orderBy: { orderIndex: 'asc' } } } },
-      traveler: { select: { id: true, firstName: true, lastName: true, email: true, phone: true } },
+      vehicle: { select: { id: true, title: true, brand: true, model: true, year: true, island: true, municipality: true, rules: true, cancellationPolicy: true, includedKmPerDay: true, extraKmPrice: true, ownershipType: true, photos: { orderBy: { orderIndex: 'asc' } } } },
+      traveler: { select: { id: true, firstName: true, lastName: true, email: true, phone: true, verification: true } },
       owner: { select: { id: true, firstName: true, lastName: true, email: true, phone: true } },
       contract: true,
+      payments: { orderBy: { createdAt: 'desc' } },
       checkIn: { include: { photos: true } },
       checkOut: { include: { photos: true } },
     },

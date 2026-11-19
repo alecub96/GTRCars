@@ -93,6 +93,7 @@ export default function EditSupercarPage({ params }: { params: Promise<{ id: str
     cleaningFee: 50,
     minDays: 1,
     maxDays: 30,
+    ownershipType: 'THIRD_PARTY',
     bookingType: 'REQUEST_TO_BOOK',
     cancellationPolicy: 'MODERATE',
     addressApprox: '',
@@ -145,6 +146,7 @@ export default function EditSupercarPage({ params }: { params: Promise<{ id: str
               cleaningFee: v.cleaningFee || 50,
               minDays: v.minDays || 1,
               maxDays: v.maxDays || 30,
+              ownershipType: v.ownershipType || 'THIRD_PARTY',
               bookingType: v.bookingType || 'REQUEST_TO_BOOK',
               cancellationPolicy: v.cancellationPolicy || 'MODERATE',
               addressApprox: v.addressApprox || '',
@@ -610,6 +612,24 @@ export default function EditSupercarPage({ params }: { params: Promise<{ id: str
                   onChange={(e) => setFormData({ ...formData, minDays: Number(e.target.value) })}
                   className="w-full rounded-xl border border-gray-300 p-3 text-sm font-bold bg-white"
                 />
+              </div>
+
+              <div className="sm:col-span-3">
+                <label className="block font-bold uppercase text-gray-600 mb-1.5">
+                  Modalidad de Gestión de la Fianza
+                </label>
+                <select
+                  value={formData.ownershipType}
+                  onChange={(e) => setFormData({ ...formData, ownershipType: e.target.value })}
+                  className="w-full rounded-xl border border-gray-300 p-3 text-sm font-bold bg-white focus:border-black outline-none cursor-pointer"
+                >
+                  <option value="THIRD_PARTY">
+                    Gestionada directamente por el Propietario (sin retención ni cobro de fianza en la web)
+                  </option>
+                  <option value="PLATFORM">
+                    Gestionada por GTR Cars (con retención/desbloqueo por tarjeta o verificación de transferencia)
+                  </option>
+                </select>
               </div>
             </div>
           </div>

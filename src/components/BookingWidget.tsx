@@ -190,7 +190,7 @@ export default function BookingWidget({ vehicle }: BookingWidgetProps) {
         </div>
         <div className="text-right">
           <span className="text-[10px] uppercase tracking-widest text-gray-500 font-mono block font-bold mb-1">
-            Fianza Reembolsable
+            {vehicle.ownershipType === 'PLATFORM' ? 'Fianza (Custodia GTR Cars)' : 'Fianza (Gestión Propietario)'}
           </span>
           <span className="text-xs font-mono font-bold text-black bg-gray-100 px-2.5 py-1 rounded-full border border-gray-200">
             {vehicle.securityDeposit}€
