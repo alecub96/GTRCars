@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { ShieldCheck } from 'lucide-react';
 
 export default function CookieConsent() {
   const [visible, setVisible] = useState(false);
@@ -16,7 +17,12 @@ export default function CookieConsent() {
       });
     }
   };
-  const updateClarityConsent = (granted: boolean) => { if (typeof window !== 'undefined' && (window as any).clarity) (window as any).clarity('consent', granted); };
+
+  const updateClarityConsent = (granted: boolean) => {
+    if (typeof window !== 'undefined' && (window as any).clarity) {
+      (window as any).clarity('consent', granted);
+    }
+  };
 
   useEffect(() => {
     const consent = localStorage.getItem('gtrcars-cookie-consent');
@@ -49,33 +55,41 @@ export default function CookieConsent() {
   return (
     <aside
       role="dialog"
-      aria-label="Preferencias de privacidad y telemetría"
-      className="fixed inset-x-4 bottom-4 z-[10000] mx-auto max-w-3xl rounded-3xl border border-white/15 bg-gray-50/95 backdrop-blur-xl p-5 text-black shadow-2xl animate-fade-in-up font-sans"
+      aria-modal="false"
+      aria-label="Preferencias de privacidad y cookies"
+      className="fixed inset-x-4 bottom-4 z-[10000] mx-auto max-w-3xl rounded-3xl border border-gray-200 bg-white/98 backdrop-blur-xl p-5 sm:p-6 text-black shadow-2xl animate-fade-in-up font-sans"
     >
-      <div className="flex items-center space-x-2 font-mono text-[10px] text-[#D4AF37] uppercase tracking-widest mb-1">
-        <span>// PRIVACIDAD & PROTOCOLO TELEMETRÍA</span>
+      <div className="flex items-center space-x-2 font-mono text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">
+        <ShieldCheck className="w-3.5 h-3.5 text-black" />
+        <span>PRIVACIDAD RGPD &amp; TELEMETRÍA GTR CARS</span>
       </div>
-      <h2 className="text-lg font-bold text-black tracking-tight">Privacidad y Telemetría en GTR Cars</h2>
-      <p className="mt-2 text-xs sm:text-sm text-black/60 leading-relaxed font-light">
-        Utilizamos cookies técnicas necesarias para la navegación, autenticación en el Vault y gestión de reservas, así como analítica agregada para optimizar la experiencia de conducción. Consulta nuestra{' '}
-        <Link href="/cookies" className="font-bold text-[#D4AF37] underline hover:text-black transition-colors">
-          política de cookies
+      <h2 className="text-base sm:text-lg font-black text-black tracking-tight uppercase">
+        Control de Cookies y Privacidad
+      </h2>
+      <p className="mt-1.5 text-xs sm:text-sm text-gray-600 leading-relaxed font-medium">
+        Utilizamos cookies técnicas indispensables para la autenticación segura, custodia de pagos con Stripe y gestión de reservas, así como analítica (GA4 y Microsoft Clarity) para optimizar tu experiencia. Consulta nuestra{' '}
+        <Link href="/cookies" className="font-bold text-black underline hover:text-gray-700 transition-colors">
+          Política de Cookies
+        </Link>{' '}
+        y{' '}
+        <Link href="/privacidad" className="font-bold text-black underline hover:text-gray-700 transition-colors">
+          Privacidad
         </Link>.
       </p>
       <div className="mt-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-2.5 font-mono">
         <button
           type="button"
           onClick={handleAcceptNecessary}
-          className="rounded-xl border border-white/15 bg-white/[0.04] px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-black/70 hover:text-black hover:bg-white/[0.08] transition-all cursor-pointer"
+          className="rounded-full border border-gray-300 bg-white px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-gray-700 hover:text-black hover:border-black hover:bg-gray-50 transition-all cursor-pointer"
         >
-          Solo Técnicas
+          Solo Necesarias
         </button>
         <button
           type="button"
           onClick={handleAcceptAll}
-          className="rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B38B21] px-5 py-2.5 text-xs font-black uppercase tracking-wider text-black shadow-md hover:brightness-110 transition-all cursor-pointer"
+          className="rounded-full bg-black px-6 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-md hover:bg-neutral-800 transition-all cursor-pointer"
         >
-          Aceptar Todo
+          Aceptar Todas
         </button>
       </div>
     </aside>

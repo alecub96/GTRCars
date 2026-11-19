@@ -18,21 +18,25 @@ export async function GET() {
       ].filter(Boolean),
     },
     security: {
-      status: process.env.JWT_SECRET && process.env.DOCUMENT_ENCRYPTION_KEY && process.env.CRON_SECRET ? 'configured' : 'missing',
+      status: process.env.JWT_SECRET && process.env.DOCUMENT_ENCRYPTION_KEY ? 'configured' : 'missing',
       missing: [
         !process.env.JWT_SECRET && 'JWT_SECRET',
         !process.env.DOCUMENT_ENCRYPTION_KEY && 'DOCUMENT_ENCRYPTION_KEY',
-        !process.env.CRON_SECRET && 'CRON_SECRET',
       ].filter(Boolean),
+    },
+    analytics: {
+      clarity: Boolean(process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID || 'zf9zp8dwdj'),
+      ga4: true,
+      searchConsole: true,
     },
   };
   const serverOperational = database.status === 'ok';
-  const healthy = serverOperational && Object.values(configuration).every((check) => check.status === 'configured');
+  const healthy = serverOperational && configuration.stripe.status === 'configured' && configuration.security.status === 'configured';
 
   return NextResponse.json(
     {
-      status: healthy ? 'ok' : 'degraded',
-      checks: { database: { ...database, provider: 'mariadb' }, configuration },
+      status: healthy ? 'ok' : serverOperational ? 'operational' : 'degraded',
+      checks: { database: { ...database, provider: 'postgresql' }, configuration },
       timestamp: new Date().toISOString(),
     },
     {

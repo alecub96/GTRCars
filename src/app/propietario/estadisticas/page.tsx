@@ -74,7 +74,7 @@ export default function OwnerStatsPage() {
               <ArrowRight className="w-4 h-4 text-black" />
             </Link>
             <Link
-              href="/publicar-camper"
+              href="/publicar-coche"
               className="inline-flex items-center space-x-2 bg-black hover:bg-neutral-800 text-white px-5 py-2.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider shadow-lg hover:brightness-110 transition-all"
             >
               <Gauge className="w-4 h-4" />
@@ -85,9 +85,9 @@ export default function OwnerStatsPage() {
 
         {/* ALERTA DE ERROR/MODO */}
         {errorMsg && (
-          <div className="mb-8 p-4 rounded-2xl bg-amber-950/40 border border-amber-500/30 text-amber-300 text-xs font-mono font-bold flex items-center justify-between">
+          <div className="mb-8 p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-mono font-bold flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <ShieldCheck className="w-5 h-5 text-amber-400 shrink-0" />
+              <ShieldCheck className="w-5 h-5 text-amber-700 shrink-0" />
               <span>{errorMsg}</span>
             </div>
             <Link href="/propietario" className="underline font-bold uppercase text-[10px] text-black">
@@ -217,7 +217,7 @@ export default function OwnerStatsPage() {
                 <p className="font-bold text-black">Todavía no tienes superdeportivos homologados en el Vault.</p>
                 <p className="text-xs text-gray-500">Publica tu primer Ferrari, Porsche o Lamborghini para recibir solicitudes VIP.</p>
                 <Link
-                  href="/publicar-camper"
+                  href="/publicar-coche"
                   className="mt-4 inline-block bg-black hover:bg-neutral-800 text-white px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider hover:brightness-110"
                 >
                   Homologar Superdeportivo

@@ -43,22 +43,23 @@ export default function LanguageSelector() {
   const selected = LANGUAGES.find((l) => l.code === currentLang) || LANGUAGES[0];
 
   return (
-    <div className="relative inline-block text-left" ref={dropdownRef}>
+    <div className="relative inline-block text-left font-mono" ref={dropdownRef}>
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#E9E1D2] bg-white/90 hover:bg-[#FAF7F0] text-xs font-bold text-[#13322E] shadow-2xs transition-all cursor-pointer"
+        aria-label="Seleccionar idioma"
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 bg-white hover:bg-gray-50 hover:border-black text-xs font-bold text-black shadow-2xs transition-all cursor-pointer"
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
-        <Globe className="w-3.5 h-3.5 text-[#16B8AA]" />
+        <Globe className="w-3.5 h-3.5 text-black" />
         <span>{selected.flag}</span>
         <span className="uppercase text-[11px] font-black">{selected.code}</span>
-        <ChevronDown className="w-3 h-3 text-[#6B726E]" />
+        <ChevronDown className="w-3 h-3 text-gray-500" />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-40 origin-top-right rounded-2xl bg-white p-1.5 shadow-xl border border-[#E9E1D2] z-50 animate-soft-appear">
+        <div className="absolute right-0 mt-2 w-40 origin-top-right rounded-2xl bg-white p-1.5 shadow-xl border border-gray-200 z-50 animate-soft-appear">
           {LANGUAGES.map((lang) => {
             const isCurrent = lang.code === currentLang;
             return (
@@ -67,14 +68,14 @@ export default function LanguageSelector() {
                 type="button"
                 onClick={() => handleSelect(lang.code)}
                 className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  isCurrent ? 'bg-[#FAF7F0] text-[#16B8AA]' : 'text-[#13322E] hover:bg-slate-50'
+                  isCurrent ? 'bg-gray-100 text-black' : 'text-gray-700 hover:bg-gray-50 hover:text-black'
                 }`}
               >
                 <div className="flex items-center gap-2">
                   <span>{lang.flag}</span>
                   <span>{lang.label}</span>
                 </div>
-                {isCurrent && <Check className="w-3.5 h-3.5 text-[#16B8AA]" />}
+                {isCurrent && <Check className="w-3.5 h-3.5 text-black" />}
               </button>
             );
           })}

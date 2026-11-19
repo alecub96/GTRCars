@@ -1,25 +1,40 @@
-# GTR Cars (gtrcars.es) — Alquiler de Superdeportivos y Coches de Alta Gama en Canarias
+# GTR Cars (gtrcars.es) — Plataforma de Alquiler de Superdeportivos, GT Cars e Hypercars
 
-> GTR Cars es la plataforma exclusiva de alquiler de superdeportivos (Ferrari, Porsche, Lamborghini, McLaren) entre particulares y propietarios verificados en las Islas Canarias (Gran Canaria, Tenerife, Lanzarote, Fuerteventura, La Palma, La Gomera, El Hierro y La Graciosa).
+> GTR Cars es el club y marketplace peer-to-peer (P2P) líder para el alquiler de superdeportivos, coches de alta gama e hypercars directamente de propietarios verificados en España (Madrid, Marbella, Barcelona, Mallorca, Ibiza, Gran Canaria y Tenerife) y Londres.
 
-## Sobre GTR Cars
-- **Modelo de negocio**: Plataforma peer-to-peer (P2P) entre particulares sin intermediarios abusivos.
-- **Precios medios**: 50€/día - 140€/día según temporada y categoría de vehículo.
-- **Garantías y Legalidad**: Contratos de arrendamiento digitales conformes con el Reglamento Europeo eIDAS (Reglamento UE 910/2014), verificación estricta de conductor y custodia segura de fianzas.
-- **Puntos de recogida**: Aeropuertos principales (LPA, TFN, TFS, ACE, FUE, SPC) y entrega flexible en municipios.
+## Propuesta de Valor y Datos Clave
+- **Modelo de operación**: Alquiler directo de superdeportivos entre propietarios verificados y conductores acreditados, con custodia financiera mediante Stripe Connect y contrato digital vinculante.
+- **Rango de tarifas**: Desde 690 €/día (Porsche Taycan, BMW M4 Competition) hasta 2.950 €/día (Lamborghini Revuelto V12 Hybrid, Ferrari SF90 Stradale Assetto Fiorano).
+- **Seguridad jurídica**: Contratos de arrendamiento digitales con firma electrónica avanzada conformes al Reglamento Europeo eIDAS (Reglamento UE Nº 910/2014) y acta de inspección fotográfica pre-entrega (Anexo I).
+- **Logística y entrega VIP**: Entrega personalizada en terminales ejecutivas de aeropuertos (MAD, AGP, BCN, PMI, IBZ, LPA, TFS, TFN, LHR), hoteles 5* Gran Lujo, villas privadas y puertos deportivos (Puerto Banús, Port Adriano, Marina Botafoch).
 
-## Enlaces Principales
-- [Inicio](https://gtrcars.es/): Explorador y buscador principal de campers por isla y fechas.
-- [Buscar Campers](https://gtrcars.es/buscar): Filtros avanzados por precio, fianza, plazas y tipo de vehículo.
-- [Alquiler Camper Gran Canaria](https://gtrcars.es/alquiler-camper/gran-canaria): Flota y consejos de pernocta en Gran Canaria.
-- [Alquiler Camper Tenerife](https://gtrcars.es/alquiler-camper/tenerife): Flota y consejos de pernocta en Tenerife.
-- [Alquiler Camper Fuerteventura](https://gtrcars.es/alquiler-camper/fuerteventura): Minicampers y spots de surf.
-- [Alquiler Camper Lanzarote](https://gtrcars.es/alquiler-camper/lanzarote): Rutas volcánicas y playas vírgenes.
-- [Publicar mi Camper](https://gtrcars.es/publicar-camper): Registro gratuito para propietarios locales en Canarias.
-- [Guías y Normativa de Pernocta](https://gtrcars.es/guias): Zonas de acampada legal, puntos limpios y consejos insulares.
-- [Historias y Casos de Éxito](https://gtrcars.es/historias): Testimonios reales de viajeros y propietarios canarios.
-- [Contacto y Soporte](https://gtrcars.es/contacto): Asistencia directa local con respuesta en < 15 minutos.
+## Flota Destacada en Catálogo
+- [Ferrari 488 GTB Rosso Corsa Bi-Colore (670 CV)](https://gtrcars.es/coche/ferrari-488-gtb-rosso-corsa): 1.290 €/día · Tenerife / Gran Canaria.
+- [Porsche Taycan Volcano Grey Metallic (408 CV)](https://gtrcars.es/coche/porsche-taycan-volcano-grey): 690 €/día · Tenerife / Gran Canaria.
+- [Porsche 911 GT3 RS Weissach 992 (525 CV)](https://gtrcars.es/coche/porsche-911-gt3-rs-weissach-992): 1.890 €/día · Madrid / Marbella.
+- [Porsche 911 GT3 Touring 992 (510 CV)](https://gtrcars.es/coche/porsche-911-gt3-touring): 1.190 €/día · Gran Canaria / Mallorca.
+- [Ferrari SF90 Stradale Assetto Fiorano (1.000 CV)](https://gtrcars.es/coche/ferrari-sf90-stradale-assetto-fiorano): 2.450 €/día · Barcelona / Madrid.
+- [Ferrari 296 GTB Assetto Fiorano (830 CV)](https://gtrcars.es/coche/ferrari-296-gtb-assetto): 1.690 €/día · Madrid / Marbella.
+- [Lamborghini Revuelto V12 Hybrid (1.015 CV)](https://gtrcars.es/coche/lamborghini-revuelto-v12-hybrid): 2.950 €/día · Marbella / Puerto Banús.
+- [Lamborghini Huracán STO (640 CV)](https://gtrcars.es/coche/lamborghini-huracan-sto-2024): 1.790 €/día · Ibiza / Mallorca.
+- [McLaren 765LT Spider Carbon (765 CV)](https://gtrcars.es/coche/mclaren-765lt-spider-carbon): 1.950 €/día · Tenerife / Marbella.
+- [Aston Martin DBS Superleggera V12 (725 CV)](https://gtrcars.es/coche/aston-martin-dbs-superleggera): 1.490 €/día · Londres / Madrid.
 
-## Normativa y Pernocta en Canarias
-- La pernocta dentro del vehículo (estacionar sin desplegar elementos exteriores) es legal en España y Canarias según la Instrucción 08/V-74 y PROT 2023/14 de la DGT.
-- Para acampada en la naturaleza, se deben utilizar las áreas recreativas y zonas de acampada habilitadas por los Cabildos Insulares (Cabildo de Gran Canaria, Cabildo de Tenerife, etc.).
+## Directorio de Destinos y Marcas Oficiales
+- [Buscador y Catálogo Completo](https://gtrcars.es/buscar): Filtrado en tiempo real por marca, ubicación, potencia y fechas.
+- [Alquiler de Superdeportivos en Madrid](https://gtrcars.es/alquiler-superdeportivos/madrid)
+- [Alquiler de Superdeportivos en Marbella](https://gtrcars.es/alquiler-superdeportivos/marbella)
+- [Alquiler de Superdeportivos en Barcelona](https://gtrcars.es/alquiler-superdeportivos/barcelona)
+- [Alquiler de Superdeportivos en Mallorca](https://gtrcars.es/alquiler-superdeportivos/mallorca)
+- [Alquiler de Superdeportivos en Ibiza](https://gtrcars.es/alquiler-superdeportivos/ibiza)
+- [Alquiler de Superdeportivos en Gran Canaria](https://gtrcars.es/alquiler-superdeportivos/gran-canaria)
+- [Alquiler de Superdeportivos en Tenerife](https://gtrcars.es/alquiler-superdeportivos/tenerife)
+- [Supercar Hire London](https://gtrcars.es/alquiler-superdeportivos/londres)
+- [Catálogo Porsche](https://gtrcars.es/marca/porsche) | [Catálogo Ferrari](https://gtrcars.es/marca/ferrari) | [Catálogo Lamborghini](https://gtrcars.es/marca/lamborghini) | [Catálogo McLaren](https://gtrcars.es/marca/mclaren)
+
+## Servicios para Propietarios y Documentación Legal
+- [Publicar y Rentabilizar Superdeportivo](https://gtrcars.es/publicar-coche): Programa para propietarios particulares y colecciones privadas (ingresos medios de 3.500 € a 12.000 €/mes).
+- [Generador de Contrato Digital eIDAS](https://gtrcars.es/contrato): Formalización jurídica con firma electrónica y check-in fotográfico.
+- [Protocolo de Garantías y Custodia de Pagos](https://gtrcars.es/seguridad): Verificación documental de conductores, pagos encriptados y gestión de fianzas.
+- [Blog y Rutas de Conducción VIP](https://gtrcars.es/blog): Guías de rutas escénicas, puertos de montaña y normativa para superdeportivos.
+- [Conserjería VIP 24/7](https://gtrcars.es/contacto): Atención personalizada en contacto@gtrcars.es y vip@gtrcars.es.

@@ -52,7 +52,7 @@ export default function BookingCheckoutClient() {
     setLoading(false);
   }
 
-  if (!booking) return <div className="min-h-screen bg-[#F7F6F2]"><Navbar /><p className="p-12 text-center">{error || 'Cargando reserva…'}</p></div>;
+  if (!booking) return <div className="min-h-screen bg-white text-black"><Navbar /><p className="p-12 text-center font-mono text-xs font-bold uppercase tracking-widest text-gray-500">{error || 'Sincronizando expediente de reserva…'}</p></div>;
   const signed = viewerRole === 'OWNER' ? booking.contract?.signedByOwner : booking.contract?.signedByTraveler;
   const fullySigned = booking.contract?.signedByTraveler && booking.contract?.signedByOwner;
   const payable = ['OWNER_ACCEPTED', 'CONFIRMED', 'PAYMENT_PENDING'].includes(booking.status);

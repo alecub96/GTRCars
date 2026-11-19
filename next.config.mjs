@@ -1,12 +1,12 @@
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const contentSecurityPolicy = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ''} https://js.stripe.com`,
-  "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' blob: data: https://images.unsplash.com https://*.stripe.com",
-  "font-src 'self' data:",
-  "connect-src 'self' https://api.stripe.com https://*.stripe.com",
-  "frame-src https://js.stripe.com https://hooks.stripe.com https://*.stripe.com",
+  `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ''} https://js.stripe.com https://www.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com https://www.clarity.ms https://*.clarity.ms https://unpkg.com`,
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com",
+  "img-src 'self' blob: data: https://images.unsplash.com https://*.stripe.com https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://www.clarity.ms https://*.clarity.ms https://c.bing.com https://*.basemaps.cartocdn.com https://server.arcgisonline.com https://unpkg.com",
+  "font-src 'self' data: https://fonts.gstatic.com",
+  "connect-src 'self' https://api.stripe.com https://*.stripe.com https://www.googletagmanager.com https://*.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.clarity.ms https://*.clarity.ms https://c.bing.com",
+  "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://*.stripe.com https://www.googletagmanager.com",
   "worker-src 'self' blob:",
   "object-src 'none'",
   "base-uri 'self'",
@@ -20,8 +20,9 @@ const securityHeaders = [
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
   { key: 'X-Content-Type-Options', value: 'nosniff' },
   { key: 'X-Frame-Options', value: 'DENY' },
+  { key: 'X-Permitted-Cross-Domain-Policies', value: 'none' },
   { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
-  ...(isDevelopment ? [] : [{ key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' }]),
+  ...(isDevelopment ? [] : [{ key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains; preload' }]),
 ];
 
 /** @type {import('next').NextConfig} */
@@ -39,6 +40,18 @@ const nextConfig = {
   async headers() {
     return [
       { source: '/(.*)', headers: securityHeaders },
+      {
+        source: '/supercars/:all*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+      {
+        source: '/brand/:all*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
       {
         source: '/Islas/:all*',
         headers: [
@@ -66,7 +79,32 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/alquilar-mi-camper',
+        destination: '/publicar-coche',
+        permanent: true,
+      },
+      {
         source: '/alquiler-camper/:path*',
+        destination: '/buscar',
+        permanent: true,
+      },
+      {
+        source: '/guias/:path*',
+        destination: '/blog',
+        permanent: true,
+      },
+      {
+        source: '/historias',
+        destination: '/blog',
+        permanent: true,
+      },
+      {
+        source: '/colaboradores',
+        destination: '/sobre-nosotros',
+        permanent: true,
+      },
+      {
+        source: '/mapa',
         destination: '/buscar',
         permanent: true,
       },

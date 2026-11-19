@@ -48,7 +48,7 @@ export default function OwnerBanner() {
 
               <div className="pt-4 flex flex-wrap items-center gap-4">
                 <Link
-                  href="/publicar-camper"
+                  href="/publicar-coche"
                   className="px-8 py-4 bg-black hover:bg-gray-800 text-white font-black text-xs font-mono uppercase tracking-[0.2em] transition-all shadow-md rounded-full flex items-center gap-3"
                 >
                   <span>PUBLICAR MI DEPORTIVO</span>

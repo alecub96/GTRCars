@@ -8,12 +8,9 @@ export default function VehicleCardSkeleton({ count = 3 }: { count?: number }) {
       {Array.from({ length: count }).map((_, i) => (
         <div
           key={i}
-          className="rounded-3xl border border-[#E9E1D2] bg-white p-4 space-y-4 shadow-sm"
+          className="rounded-3xl border border-gray-200 bg-white p-4 space-y-4 shadow-sm"
         >
-          {/* Foto Skeleton */}
           <div className="h-48 w-full rounded-2xl skeleton-shimmer" />
-
-          {/* Textos Skeleton */}
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <div className="h-3 w-28 rounded-full skeleton-shimmer" />
@@ -22,9 +19,7 @@ export default function VehicleCardSkeleton({ count = 3 }: { count?: number }) {
             <div className="h-5 w-3/4 rounded-md skeleton-shimmer" />
             <div className="h-3 w-1/2 rounded-md skeleton-shimmer" />
           </div>
-
-          {/* Footer Skeleton */}
-          <div className="pt-3 border-t border-[#E9E1D2] flex justify-between items-center">
+          <div className="pt-3 border-t border-gray-200 flex justify-between items-center">
             <div className="h-6 w-20 rounded-md skeleton-shimmer" />
             <div className="h-8 w-24 rounded-full skeleton-shimmer" />
           </div>

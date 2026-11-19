@@ -9,7 +9,11 @@ export default function OwnerBrowserNotifications({ audience = 'owner' }: { audi
 
   useEffect(() => {
     setEnabled(typeof Notification !== 'undefined' && Notification.permission === 'granted');
-    if (typeof Notification !== 'undefined' && Notification.permission === 'default' && !sessionStorage.getItem('gtrcars-push-prompt')) {
+    if (
+      typeof Notification !== 'undefined' &&
+      Notification.permission === 'default' &&
+      !sessionStorage.getItem('gtrcars-push-prompt')
+    ) {
       const timer = window.setTimeout(() => setShowPrompt(true), 900);
       sessionStorage.setItem('gtrcars-push-prompt', '1');
       return () => window.clearTimeout(timer);
@@ -27,9 +31,16 @@ export default function OwnerBrowserNotifications({ audience = 'owner' }: { audi
         const fresh = pending.filter((booking: { id: string }) => !known.has(booking.id));
         pending.forEach((booking: { id: string }) => known.add(booking.id));
         localStorage.setItem('gtrcars-owner-bookings', JSON.stringify([...known].slice(-100)));
-        if (!firstRun && Notification.permission === 'granted') fresh.forEach((booking: { id: string; code: string; vehicle?: { title?: string } }) => new Notification('Nueva solicitud en GTR Cars', { body: `${booking.vehicle?.title || 'Tu camper'} · ${booking.code}`, icon: '/icon-192.png' }));
+        if (!firstRun && Notification.permission === 'granted') {
+          fresh.forEach((booking: { id: string; code: string; vehicle?: { title?: string } }) =>
+            new Notification('Nueva solicitud en GTR Cars', {
+              body: `${booking.vehicle?.title || 'Tu superdeportivo'} · ${booking.code}`,
+              icon: '/icon-192.png',
+            })
+          );
+        }
         firstRun = false;
-      } catch { /* La notificación no debe interrumpir el panel. */ }
+      } catch {}
     };
     check();
     const timer = window.setInterval(check, 30000);
@@ -45,7 +56,11 @@ export default function OwnerBrowserNotifications({ audience = 'owner' }: { audi
     const raw = atob(publicKey.replace(/-/g, '+').replace(/_/g, '/'));
     const applicationServerKey = Uint8Array.from(raw, (char) => char.charCodeAt(0));
     const subscription = await registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey });
-    await fetch('/api/notifications/subscribe', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(subscription) });
+    await fetch('/api/notifications/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(subscription),
+    });
   }
 
   async function enable() {
@@ -55,11 +70,61 @@ export default function OwnerBrowserNotifications({ audience = 'owner' }: { audi
     if (permission === 'granted') await registerPush();
   }
 
-  if (enabled) return <span className="inline-flex items-center gap-1 text-xs font-bold text-[#16B8AA]"><Bell className="h-3.5 w-3.5" /> Avisos del navegador activos</span>;
+  if (enabled)
+    return (
+      <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-black">
+        <Bell className="h-3.5 w-3.5 text-black" /> Avisos del navegador activos
+      </span>
+    );
   const supported = typeof Notification !== 'undefined' && 'serviceWorker' in navigator && 'PushManager' in window;
-  if (!supported) return <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs font-bold text-amber-900">Para recibir avisos en este móvil, añade GTR Cars a la pantalla de inicio y activa las notificaciones del sistema.</div>;
-  return <>
-    <button type="button" onClick={enable} className="rounded-full bg-[#16B8AA] px-4 py-2.5 text-xs font-black text-white shadow-sm">Activar avisos de reservas</button>
-    {showPrompt && <div className="fixed inset-0 z-[100] flex items-end justify-center bg-[#13322E]/45 p-4 sm:items-center"><div role="dialog" aria-modal="true" className="w-full max-w-md rounded-3xl bg-white p-6 text-[#13322E] shadow-2xl"><div className="mb-3 text-3xl"></div><h2 className="font-serif text-2xl font-bold">Activa tus avisos de GTR Cars</h2><p className="mt-2 text-sm leading-6 text-[#6B726E]">Recibirás avisos importantes de reservas y actividad de la plataforma aunque no tengas GTR Cars abierto.</p><div className="mt-5 flex gap-3"><button type="button" onClick={async () => { await enable(); setShowPrompt(false); }} className="flex-1 rounded-full bg-[#13322E] px-4 py-3 text-xs font-black text-white">Activar avisos</button><button type="button" onClick={() => setShowPrompt(false)} className="rounded-full border border-[#E9E1D2] px-4 py-3 text-xs font-bold">Ahora no</button></div></div></div>}
-  </>;
+  if (!supported)
+    return (
+      <div className="rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 text-xs font-mono font-bold text-gray-700">
+        Añade GTR Cars a tu pantalla de inicio para recibir alertas push en tiempo real.
+      </div>
+    );
+  return (
+    <>
+      <button
+        type="button"
+        onClick={enable}
+        className="rounded-full bg-black hover:bg-neutral-800 px-4 py-2.5 text-xs font-mono font-black text-white shadow-sm cursor-pointer"
+      >
+        Activar avisos de reservas
+      </button>
+      {showPrompt && (
+        <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/50 p-4 sm:items-center font-sans">
+          <div
+            role="dialog"
+            aria-modal="true"
+            className="w-full max-w-md rounded-3xl bg-white border border-gray-200 p-6 text-black shadow-2xl"
+          >
+            <h2 className="text-xl font-black uppercase tracking-tight">Activa tus avisos de GTR Cars</h2>
+            <p className="mt-2 text-xs sm:text-sm leading-relaxed text-gray-600">
+              Recibirás notificaciones instantáneas de nuevas reservas, mensajes y verificaciones en tiempo real.
+            </p>
+            <div className="mt-5 flex gap-3 font-mono">
+              <button
+                type="button"
+                onClick={async () => {
+                  await enable();
+                  setShowPrompt(false);
+                }}
+                className="flex-1 rounded-full bg-black hover:bg-neutral-800 px-4 py-3 text-xs font-black uppercase tracking-wider text-white cursor-pointer"
+              >
+                Activar avisos
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowPrompt(false)}
+                className="rounded-full border border-gray-300 px-4 py-3 text-xs font-bold text-gray-700 hover:text-black cursor-pointer"
+              >
+                Ahora no
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
 }

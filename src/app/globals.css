@@ -1,16 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #070707;
-  --foreground: #F5F5F5;
+  --background: #FFFFFF;
+  --foreground: #0A0A0A;
+  --brand-primary: #0A0A0A;
+  --brand-accent: #E10600;
   --brand-gold: #D4AF37;
-  --brand-gold-glow: #F5C542;
-  --brand-amber: #E58E26;
   --brand-dark: #0A0A0A;
-  --brand-surface: #121212;
-  --brand-surface-light: #1A1A1A;
-  --brand-border: #222222;
-  --line-soft: #262626;
+  --brand-surface: #F9FAFB;
+  --brand-border: #E5E7EB;
   --motion-standard: cubic-bezier(0.16, 1, 0.3, 1);
   --motion-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
@@ -31,13 +29,12 @@ html {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Etiqueta del marcador principal: siempre por encima del icono, sin solaparlo. */
 .gtrcars-location-tooltip {
   transform: translateY(-14px);
   white-space: nowrap;
-  border: 1px solid #e9e1d2;
+  border: 1px solid #E5E7EB;
   border-radius: 14px;
-  box-shadow: 0 8px 20px rgb(19 50 46 / 14%);
+  box-shadow: 0 8px 20px rgba(10, 10, 10, 0.12);
   font-family: inherit;
 }
 
@@ -60,12 +57,12 @@ button, a, [role="button"] {
 }
 
 input, select, textarea {
-  accent-color: var(--brand-teal);
+  accent-color: #0A0A0A;
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--brand-teal) 28%, white);
-  color: var(--brand-deep);
+  background: #0A0A0A;
+  color: #FFFFFF;
 }
 
 *, *::before, *::after {
@@ -97,24 +94,23 @@ button:not(:disabled):hover, a:hover {
   transition-duration: 0.32s;
 }
 
+/* Foco de teclado claramente visible (Accesibilidad WCAG AA - Punto #169) */
 button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--brand-teal) 35%, transparent);
+  outline: 2px solid #0A0A0A;
   outline-offset: 3px;
 }
 
-/* Una geometría algo más generosa y sombras menos duras para la capa de producto. */
+/* Geometría y sombras refinadas GTR Cars */
 .rounded-2xl { border-radius: 1.25rem; }
 .rounded-3xl { border-radius: 1.75rem; }
-.shadow-lg { box-shadow: 0 12px 30px rgba(19, 50, 46, 0.10); }
-.shadow-xl { box-shadow: 0 18px 42px rgba(19, 50, 46, 0.12); }
-.shadow-2xl { box-shadow: 0 24px 60px rgba(19, 50, 46, 0.15); }
+.shadow-lg { box-shadow: 0 12px 30px rgba(10, 10, 10, 0.08); }
+.shadow-xl { box-shadow: 0 18px 42px rgba(10, 10, 10, 0.11); }
+.shadow-2xl { box-shadow: 0 24px 60px rgba(10, 10, 10, 0.15); }
 
-/* Superficies y paneles con una respuesta más suave, manteniendo la paleta de GTR Cars. */
 .bg-white\/95, .bg-white\/90, .bg-white {
   transition: box-shadow 0.32s var(--motion-standard), border-color 0.32s var(--motion-standard);
 }
 
-/* Entrada sutil para paneles desplegables y hojas móviles. */
 @keyframes softAppear {
   from { opacity: 0; transform: translateY(8px) scale(0.985); }
   to { opacity: 1; transform: translateY(0) scale(1); }
@@ -124,7 +120,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   animation: softAppear 0.34s var(--motion-emphasized) both;
 }
 
-/* Animaciones suaves */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -147,10 +142,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 
 @keyframes pulseGlow {
   0%, 100% {
-    box-shadow: 0 0 15px rgba(22, 184, 170, 0.2);
+    box-shadow: 0 0 15px rgba(10, 10, 10, 0.12);
   }
   50% {
-    box-shadow: 0 0 25px rgba(22, 184, 170, 0.45);
+    box-shadow: 0 0 25px rgba(10, 10, 10, 0.25);
   }
 }
 
@@ -189,31 +184,31 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 }
 
 .skeleton-shimmer {
-  background: linear-gradient(90deg, #f0ede6 25%, #e4dfd5 50%, #f0ede6 75%);
+  background: linear-gradient(90deg, #F3F4F6 25%, #E5E7EB 50%, #F3F4F6 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }
 
-/* Scrollbar personalizado estético */
+/* Scrollbar personalizado estético GTR Cars */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #F7F6F2;
+  background: #F4F4F5;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #D5CEBF;
+  background: #A1A1AA;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #16B8AA;
+  background: #0A0A0A;
 }
 
-/* Soporte de accesibilidad para reducción de movimiento */
+/* Soporte de accesibilidad para reducción de movimiento (#176) */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -223,7 +218,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   }
 }
 
-/* Ocultar barra de scroll en contenedores horizontales */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -231,4 +225,3 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-

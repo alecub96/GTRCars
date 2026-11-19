@@ -105,7 +105,7 @@ export const metadata: Metadata = {
     shortcut: ['/gtr-icon.svg?v=gtr3'],
   },
   verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || 'google1beee9250a231337.html',
   },
   manifest: '/site.webmanifest',
 };
@@ -259,7 +259,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         {/* End Google Tag Manager (noscript) */}
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2.5 focus:rounded-full focus:bg-[#13322E] focus:text-white focus:font-bold focus:text-xs focus:shadow-xl focus:outline-none"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2.5 focus:rounded-full focus:bg-black focus:text-white focus:font-bold focus:text-xs focus:shadow-xl focus:outline-none"
         >
           Saltar al contenido principal
         </a>

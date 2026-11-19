@@ -2,15 +2,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  MapPin,
-  Tent,
-  Waves,
-  Droplets,
-  Mountain,
   Layers,
   ZoomIn,
   ZoomOut,
-  ShieldCheck,
   Navigation,
   Info,
 } from 'lucide-react';
@@ -28,199 +22,122 @@ interface CamperLocationMapProps {
 interface POI {
   id: string;
   name: string;
-  category: 'acampada' | 'playa' | 'agua' | 'mirador';
+  category: 'ruta' | 'entrega' | 'mirador';
   island: string;
   lat: number;
   lng: number;
   description: string;
-  facilities?: string[];
 }
 
 const MUNICIPALITY_COORDINATES: Record<string, { lat: number; lng: number }> = {
-  // Gran Canaria
   'San Bartolomé de Tirajana': { lat: 27.7600, lng: -15.5800 },
   'Maspalomas': { lat: 27.7600, lng: -15.5860 },
   'Las Palmas de Gran Canaria': { lat: 28.1235, lng: -15.4363 },
   'Telde': { lat: 27.9940, lng: -15.4180 },
-  'Agüimes': { lat: 27.9040, lng: -15.4460 },
-  'Agaete': { lat: 28.1000, lng: -15.7000 },
-  'Mogán': { lat: 27.8800, lng: -15.7200 },
-  'Arucas': { lat: 28.1180, lng: -15.5220 },
-  'Gáldar': { lat: 28.1440, lng: -15.6540 },
-  'Santa Brígida': { lat: 28.0330, lng: -15.4980 },
-  'Tejeda': { lat: 27.9950, lng: -15.6140 },
-
-  // Tenerife
+  'Mogán': { lat: 27.8170, lng: -15.7640 },
   'Santa Cruz de Tenerife': { lat: 28.4636, lng: -16.2518 },
   'San Cristóbal de La Laguna': { lat: 28.4870, lng: -16.3150 },
   'Arona': { lat: 28.0990, lng: -16.6800 },
   'Adeje': { lat: 28.1220, lng: -16.7260 },
-  'Puerto de la Cruz': { lat: 28.4160, lng: -16.5450 },
-  'Granadilla de Abona': { lat: 28.1250, lng: -16.5760 },
-  'Los Cristianos': { lat: 28.0520, lng: -16.7170 },
-  'La Orotava': { lat: 28.3900, lng: -16.5230 },
-
-  // Fuerteventura
+  'Costa Adeje / Aeropuerto Sur (TFS)': { lat: 28.0890, lng: -16.7290 },
+  'Madrid': { lat: 40.4378, lng: -3.6795 },
+  'Marbella': { lat: 36.4898, lng: -4.9526 },
+  'Barcelona': { lat: 41.3874, lng: 2.1686 },
+  'Mallorca': { lat: 39.5696, lng: 2.6502 },
+  'Ibiza': { lat: 38.9067, lng: 1.4206 },
   'Puerto del Rosario': { lat: 28.5004, lng: -13.8627 },
-  'La Oliva': { lat: 28.6100, lng: -13.9290 },
   'Corralejo': { lat: 28.7300, lng: -13.8680 },
-  'Pájara': { lat: 28.3500, lng: -14.1070 },
-  'Costa Calma': { lat: 28.1600, lng: -14.2270 },
-
-  // Lanzarote
   'Arrecife': { lat: 28.9630, lng: -13.5477 },
-  'Teguise': { lat: 29.0600, lng: -13.5600 },
-  'Tías': { lat: 28.9530, lng: -13.6500 },
-  'Yaiza': { lat: 28.9500, lng: -13.7660 },
-  'Playa Blanca': { lat: 28.8650, lng: -13.8300 },
-
-  // La Palma
-  'Santa Cruz de La Palma': { lat: 28.6835, lng: -17.7646 },
-  'Los Llanos de Aridane': { lat: 28.6580, lng: -17.9180 },
-  'El Paso': { lat: 28.6500, lng: -17.8800 },
-
-  // La Gomera
-  'San Sebastián de La Gomera': { lat: 28.0916, lng: -17.1133 },
-  'Valle Gran Rey': { lat: 28.1240, lng: -17.3330 },
-
-  // El Hierro
-  'Valverde': { lat: 27.8090, lng: -17.9150 },
-  'Frontera': { lat: 27.7540, lng: -18.0100 },
 };
 
-const CANARY_POIS: POI[] = [
-  // Gran Canaria
+const SUPERCAR_POIS: POI[] = [
   {
     id: 'gc-1',
-    name: 'Presa de las Niñas',
-    category: 'acampada',
+    name: 'Cumbre de Tejeda & Pico de las Nieves (GC-600)',
+    category: 'ruta',
     island: 'Gran Canaria',
-    lat: 27.9152,
-    lng: -15.6741,
-    description: 'Área de acampada oficial con barbacoas, agua potable y zona recreativa entre pinares.',
-    facilities: ['Agua potable', 'Mesas y sombras', 'Fuego controlado', 'W.C.'],
+    lat: 27.9715,
+    lng: -15.5718,
+    description: 'Tramo de montaña de asfalto impecable a 1.949 metros de altitud con vistas panorámicas al Roque Nublo.',
   },
   {
     id: 'gc-2',
-    name: 'Pinar de Tamadaba',
-    category: 'acampada',
+    name: 'Marina Puerto de Mogán & Costa Sur (GC-500)',
+    category: 'entrega',
     island: 'Gran Canaria',
-    lat: 28.0315,
-    lng: -15.6881,
-    description: 'Zona de acampada en la cumbre con vistas espectaculares al Teide y atardeceres únicos.',
-    facilities: ['Vistas panorámicas', 'Senderos', 'Mesas de picnic'],
+    lat: 27.8168,
+    lng: -15.7642,
+    description: 'Ruta costera panorámica hacia el puerto deportivo de Mogán y hoteles 5* Gran Lujo de Meloneras.',
   },
   {
     id: 'gc-3',
-    name: 'Playa de Vargas (Agüimes)',
-    category: 'playa',
+    name: 'Terminal Ejecutiva Aeropuerto Gran Canaria (LPA)',
+    category: 'entrega',
     island: 'Gran Canaria',
-    lat: 27.8421,
-    lng: -15.4052,
-    description: 'Playa y zona habitual de estacionamiento camper para windsurf y pernocta tranquila.',
-    facilities: ['Camping cercano', 'Acceso directo a playa', 'Duchas'],
+    lat: 27.9319,
+    lng: -15.3866,
+    description: 'Punto oficial de entrega VIP directa en terminal privada con briefing técnico.',
   },
-  {
-    id: 'gc-4',
-    name: 'Playa de Las Canteras (Aparcamiento)',
-    category: 'playa',
-    island: 'Gran Canaria',
-    lat: 28.1380,
-    lng: -15.4430,
-    description: 'Punto estratégico en Las Palmas para disfrutar del paseo marítimo y surf en la Cícer.',
-    facilities: ['Servicios urbanos', 'Restaurantes', 'Duchas públicas'],
-  },
-  // Tenerife
   {
     id: 'tf-1',
-    name: 'El Médano (Playa Sur)',
-    category: 'playa',
+    name: 'Ascensión Parque Nacional del Teide (TF-21)',
+    category: 'ruta',
     island: 'Tenerife',
-    lat: 28.0450,
-    lng: -16.5360,
-    description: 'Punto de encuentro camper por excelencia en Tenerife sur. Ideal para deportes de viento.',
-    facilities: ['Duchas en paseo', 'Ambiente nómada', 'Supermercados'],
+    lat: 28.2540,
+    lng: -16.6250,
+    description: 'Una de las mejores carreteras de conducción de Europa a 2.356 m con curvas técnicas y rectas volcánicas.',
   },
   {
     id: 'tf-2',
-    name: 'Área Recreativa Las Raíces',
-    category: 'acampada',
+    name: 'Costa Adeje & Bahía del Duque 5* GL',
+    category: 'entrega',
     island: 'Tenerife',
-    lat: 28.4230,
-    lng: -16.3680,
-    description: 'Zona boscosa en la subida al Teide con mesas, agua y permisos del Cabildo.',
-    facilities: ['Agua potable', 'Fogones', 'Baños'],
+    lat: 28.0910,
+    lng: -16.7370,
+    description: 'Zona residencial y hotelera de lujo para entrega personalizada en villa o resort.',
   },
-  // Fuerteventura
   {
-    id: 'fv-1',
-    name: 'Dunas de Corralejo',
-    category: 'playa',
-    island: 'Fuerteventura',
-    lat: 28.6920,
-    lng: -13.8430,
-    description: 'Vistas panorámicas a Isla de Lobos y aguas turquesas.',
-    facilities: ['Acceso fácil', 'Vistas directas a Lobos'],
-  },
-  // Lanzarote
-  {
-    id: 'lz-1',
-    name: 'Caleta de Famara',
-    category: 'playa',
-    island: 'Lanzarote',
-    lat: 29.1150,
-    lng: -13.5620,
-    description: 'Meca del surf en Canarias con el imponente Risco de Famara como telón de fondo.',
-    facilities: ['Escuelas de surf', 'Atardeceres mágicos', 'Pueblo marinero'],
+    id: 'tf-3',
+    name: 'Aeropuerto Tenerife Sur (TFS) — Recepción VIP',
+    category: 'entrega',
+    island: 'Tenerife',
+    lat: 28.0445,
+    lng: -16.5725,
+    description: 'Entrega inmediata a pie de terminal para clientes internacionales.',
   },
 ];
 
 export default function CamperLocationMap({
   island,
   municipality,
-  vehicleTitle = 'Camper',
-  vehicleType = '',
+  vehicleTitle = 'Superdeportivo GTR Cars',
   latitude,
   longitude,
   addressApprox,
 }: CamperLocationMapProps) {
-  const vehicleIllustration = vehicleType.includes('BARCO')
-    ? '/illustrations/vehicle-types/nautica.png'
-    : vehicleType.includes('4X4')
-      ? '/illustrations/vehicle-types/4x4.png'
-      : vehicleType.includes('AUTOCARAVANA')
-        ? '/illustrations/vehicle-types/autocaravana.png'
-        : vehicleType.includes('CARAVANA')
-          ? '/illustrations/vehicle-types/caravan.png'
-          : vehicleType.includes('GRAN_VOLUMEN')
-            ? '/illustrations/vehicle-types/camper-gran-volumen.png'
-            : '/illustrations/vehicle-types/camper-pequena.png';
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
-  const [activeCategory, setActiveCategory] = useState<string>('todos');
   const [selectedPoi, setSelectedPoi] = useState<POI | null>(null);
   const [mapType, setMapType] = useState<'streets' | 'satellite'>('streets');
   const [leafletReady, setLeafletReady] = useState(false);
 
-  // Calcular centro exacto del vehículo / municipio
   const vehicleCoords = React.useMemo(() => {
     if (latitude && longitude) {
       return { lat: latitude, lng: longitude };
     }
-    const fromMap = MUNICIPALITY_COORDINATES[municipality];
+    const fromMap = MUNICIPALITY_COORDINATES[municipality] || MUNICIPALITY_COORDINATES[island];
     if (fromMap) return fromMap;
 
-    // Fallbacks por isla
     if (island === 'Gran Canaria') return { lat: 27.9500, lng: -15.5500 };
-    if (island === 'Tenerife') return { lat: 28.3000, lng: -16.5500 };
-    if (island === 'Fuerteventura') return { lat: 28.4000, lng: -14.0500 };
-    if (island === 'Lanzarote') return { lat: 29.0200, lng: -13.6000 };
-    if (island === 'La Palma') return { lat: 28.6800, lng: -17.8300 };
-    if (island === 'La Gomera') return { lat: 28.1100, lng: -17.2200 };
-    return { lat: 27.7500, lng: -18.0100 };
+    if (island === 'Tenerife') return { lat: 28.1220, lng: -16.7260 };
+    if (island === 'Madrid') return { lat: 40.4378, lng: -3.6795 };
+    if (island === 'Marbella') return { lat: 36.4898, lng: -4.9526 };
+    if (island === 'Barcelona') return { lat: 41.3874, lng: 2.1686 };
+    if (island === 'Mallorca') return { lat: 39.5696, lng: 2.6502 };
+    if (island === 'Ibiza') return { lat: 38.9067, lng: 1.4206 };
+    return { lat: 28.1220, lng: -16.7260 };
   }, [latitude, longitude, municipality, island]);
 
-  // Cargar Leaflet dinámicamente
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
@@ -249,7 +166,6 @@ export default function CamperLocationMap({
     }
   }, []);
 
-  // Inicializar Leaflet Map
   useEffect(() => {
     if (!leafletReady || !mapContainerRef.current || mapInstanceRef.current) return;
 
@@ -270,19 +186,17 @@ export default function CamperLocationMap({
     );
     streetLayer.addTo(map);
 
-    // 1. CÍRCULO DE RADIO APROXIMADO DE RECOGIDA (1.5 km)
     L.circle([vehicleCoords.lat, vehicleCoords.lng], {
       radius: 1800,
-      color: '#16B8AA',
-      fillColor: '#16B8AA',
-      fillOpacity: 0.15,
+      color: '#0A0A0A',
+      fillColor: '#0A0A0A',
+      fillOpacity: 0.1,
       weight: 2,
       dashArray: '6, 6',
     }).addTo(map);
 
-    // 2. PIN PRINCIPAL DE LA CAMPER
-    const camperPinIcon = L.divIcon({
-      className: 'custom-camper-detail-pin',
+    const supercarPinIcon = L.divIcon({
+      className: 'custom-supercar-detail-pin',
       html: `
         <div style="
           position: relative;
@@ -294,64 +208,71 @@ export default function CamperLocationMap({
           <div style="
             position: absolute;
             left: 50%;
-            bottom: 72px;
+            bottom: 48px;
             transform: translateX(-50%);
             white-space: nowrap;
-            background: #ffffff;
-            color: #13322E;
-            padding: 8px 12px;
-            border: 1px solid #E9E1D2;
+            background: #0A0A0A;
+            color: #ffffff;
+            padding: 8px 14px;
+            border: 1px solid #27272A;
             border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(19, 50, 46, 0.14);
-            font-family: inherit;
-            font-size: 13px;
-            line-height: 1.25;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+            font-family: monospace;
+            font-size: 11px;
+            line-height: 1.3;
             text-align: center;
           ">
-            <strong style="display: block; font-weight: 700;">Zona de entrega</strong>
+            <strong style="display: block; font-weight: 800; text-transform: uppercase;">BASE GTR CARS</strong>
             <span>${municipality} (${island})</span>
           </div>
           <div style="
-            position: relative;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #0A0A0A;
+            border: 3px solid #FFFFFF;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.35);
             display: flex;
             align-items: center;
             justify-content: center;
+            color: #FFFFFF;
+            font-weight: 900;
+            font-size: 11px;
           ">
-            <img src="${vehicleIllustration}" alt="${vehicleTitle}" style="width: 66px; height: 66px; object-fit: contain;" />
+            GTR
           </div>
         </div>
       `,
-      iconSize: [66, 66],
-      iconAnchor: [33, 58],
+      iconSize: [36, 36],
+      iconAnchor: [18, 18],
     });
 
-    const camperMarker = L.marker([vehicleCoords.lat, vehicleCoords.lng], { icon: camperPinIcon }).addTo(map);
+    L.marker([vehicleCoords.lat, vehicleCoords.lng], { icon: supercarPinIcon }).addTo(map);
 
-    // 3. POIS CERCANOS EN LA ISLA
-    const islandPois = CANARY_POIS.filter((p) => p.island.toLowerCase() === island.toLowerCase());
+    const islandPois = SUPERCAR_POIS.filter((p) => p.island.toLowerCase() === island.toLowerCase());
     islandPois.forEach((poi) => {
       const poiIcon = L.divIcon({
         className: 'custom-poi-pin',
         html: `
           <div style="
             background: #ffffff;
-            border: 1px solid #E9E1D2;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 15px;
+            color: #0A0A0A;
+            border: 1.5px solid #0A0A0A;
+            border-radius: 9999px;
+            padding: 3px 8px;
+            font-family: monospace;
+            font-weight: 800;
+            font-size: 10px;
+            white-space: nowrap;
             box-shadow: 0 2px 10px rgba(0,0,0,0.18);
             cursor: pointer;
             transform: translate(-50%, -50%);
           ">
-            ${poi.category === 'acampada' ? 'Acampada' : 'Playa'}
+            ${poi.category === 'ruta' ? 'RUTA VIP' : 'ENTREGA VIP'}
           </div>
         `,
-        iconSize: [30, 30],
-        iconAnchor: [15, 15],
+        iconSize: [70, 24],
+        iconAnchor: [35, 12],
       });
 
       const m = L.marker([poi.lat, poi.lng], { icon: poiIcon }).addTo(map);
@@ -367,9 +288,8 @@ export default function CamperLocationMap({
         mapInstanceRef.current = null;
       }
     };
-  }, [leafletReady, vehicleCoords, island, municipality]);
+  }, [leafletReady, vehicleCoords, island, municipality, vehicleTitle]);
 
-  // Cambiar capa Satélite / Calles
   useEffect(() => {
     if (!mapInstanceRef.current) return;
     const L = (window as any).L;
@@ -403,102 +323,97 @@ export default function CamperLocationMap({
     }
   };
 
-  const islandPois = CANARY_POIS.filter((p) => p.island.toLowerCase() === island.toLowerCase());
+  const islandPois = SUPERCAR_POIS.filter((p) => p.island.toLowerCase() === island.toLowerCase());
 
   return (
-    <div className="space-y-4 pt-6 border-t border-white/10 font-mono">
-      {/* CABECERA CON UBICACIÓN */}
+    <div className="space-y-4 pt-6 border-t border-gray-200 font-mono text-black">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h3 className="text-xl font-bold uppercase tracking-wider text-white flex items-center space-x-2">
-            <span className="text-[#D4AF37]">05 //</span>
-            <span>Área de Entrega & Rutas ({island})</span>
+          <h3 className="text-xl font-black uppercase tracking-wider text-black flex items-center space-x-2 font-sans">
+            <span className="text-gray-400 font-mono">05 //</span>
+            <span>Área de Entrega &amp; Rutas ({island})</span>
           </h3>
-          <p className="text-xs text-white/50 mt-1 font-sans">
-            Ubicación aproximada en <strong>{municipality} ({island})</strong> por protocolo de privacidad y custodia.
+          <p className="text-xs text-gray-600 mt-1 font-sans">
+            Base de operaciones en <strong>{municipality} ({island})</strong> con entrega a domicilio o terminal ejecutiva.
           </p>
         </div>
 
-        {/* CONTROLES DE CAPAS */}
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={recenterMap}
-            className="px-3.5 py-2 rounded-xl bg-white/[0.04] border border-white/10 text-xs font-bold uppercase tracking-wider text-white hover:bg-white/[0.08] hover:border-[#D4AF37]/50 flex items-center gap-1.5 cursor-pointer transition-all"
+            className="px-3.5 py-2 rounded-xl bg-gray-100 border border-gray-200 text-xs font-bold uppercase tracking-wider text-black hover:bg-black hover:text-white flex items-center gap-1.5 cursor-pointer transition-all"
           >
-            <Navigation className="w-3.5 h-3.5 text-[#D4AF37]" />
-            <span>Centrar Vehículo</span>
+            <Navigation className="w-3.5 h-3.5" />
+            <span>Centrar Base</span>
           </button>
 
           <button
             type="button"
             onClick={() => setMapType(mapType === 'streets' ? 'satellite' : 'streets')}
-            className="p-2 rounded-xl bg-white/[0.04] border border-white/10 text-white hover:bg-white/[0.08] hover:border-[#D4AF37]/50 cursor-pointer transition-all"
-            title="Cambiar Satélite / Calles"
+            className="p-2 rounded-xl bg-gray-100 border border-gray-200 text-black hover:bg-black hover:text-white cursor-pointer transition-all"
+            title="Cambiar Satélite / Mapa"
           >
-            <Layers className="w-4 h-4 text-[#D4AF37]" />
+            <Layers className="w-4 h-4" />
           </button>
         </div>
       </div>
 
-      {/* AVISO DE PROTOCOLO DE ENTREGA */}
-      <div className="p-4 bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/10 flex items-start space-x-3 text-xs text-white/70 font-sans">
-        <Info className="w-4 h-4 text-[#D4AF37] shrink-0 mt-0.5" />
+      <div className="p-4 bg-gray-50 rounded-2xl border border-gray-200 flex items-start space-x-3 text-xs text-gray-700 font-sans">
+        <Info className="w-4 h-4 text-black shrink-0 mt-0.5" />
         <p className="leading-relaxed">
-          <strong className="text-white font-mono uppercase tracking-wider">Protocolo VIP de Entrega:</strong> El vehículo se entrega habitualmente en <strong>{municipality}</strong> ({addressApprox || 'Terminal Ejecutiva / Aeropuerto previa coordinación'}). La geolocalización exacta y telemetría en vivo se activan al confirmar la reserva.
+          <strong className="text-black font-mono uppercase tracking-wider">Protocolo VIP de Entrega:</strong> El superdeportivo se entrega en <strong>{municipality}</strong> ({addressApprox || 'Terminal Ejecutiva / Hotel 5* GL previa coordinación'}). La ubicación exacta de custodia se facilita al formalizar la reserva.
         </p>
       </div>
 
-      {/* MAPA INTERACTIVO */}
-      <div className="relative rounded-3xl overflow-hidden border border-white/10 bg-[#121216] h-[400px] shadow-2xl">
+      <div className="relative rounded-3xl overflow-hidden border border-gray-200 bg-gray-100 h-[380px] shadow-md">
         <div ref={mapContainerRef} className="absolute inset-0 w-full h-full z-0" />
 
-        {/* CONTROLES DE ZOOM */}
         <div className="absolute right-4 bottom-4 z-20 flex flex-col gap-1.5 font-mono">
           <button
             type="button"
+            aria-label="Acercar mapa"
             onClick={() => handleZoom(1)}
-            className="w-9 h-9 rounded-xl bg-[#0f0f12]/90 backdrop-blur-md border border-white/15 text-white shadow-lg flex items-center justify-center hover:bg-white/20 cursor-pointer transition-all"
+            className="w-9 h-9 rounded-xl bg-white/95 backdrop-blur-md border border-gray-200 text-black shadow-md flex items-center justify-center hover:bg-black hover:text-white cursor-pointer transition-all"
           >
             <ZoomIn className="w-4 h-4" />
           </button>
           <button
             type="button"
+            aria-label="Alejar mapa"
             onClick={() => handleZoom(-1)}
-            className="w-9 h-9 rounded-xl bg-[#0f0f12]/90 backdrop-blur-md border border-white/15 text-white shadow-lg flex items-center justify-center hover:bg-white/20 cursor-pointer transition-all"
+            className="w-9 h-9 rounded-xl bg-white/95 backdrop-blur-md border border-gray-200 text-black shadow-md flex items-center justify-center hover:bg-black hover:text-white cursor-pointer transition-all"
           >
             <ZoomOut className="w-4 h-4" />
           </button>
         </div>
 
-        {/* TARJETA INFORMATIVA */}
         {selectedPoi && (
-          <div className="absolute bottom-4 left-4 right-14 z-30 max-w-sm bg-[#0f0f12]/95 backdrop-blur-xl p-4 rounded-2xl border border-[#D4AF37]/50 shadow-2xl space-y-1.5 animate-in slide-in-from-bottom-2 text-white font-sans">
+          <div className="absolute bottom-4 left-4 right-14 z-30 max-w-sm bg-white/98 backdrop-blur-xl p-4 rounded-2xl border border-gray-300 shadow-2xl space-y-1.5 text-black font-sans">
             <div className="flex items-center justify-between font-mono">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-[#D4AF37]">
-                Punto de Interés & Ruta
+              <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">
+                {selectedPoi.category === 'ruta' ? 'Ruta Escénica GT' : 'Punto de Entrega VIP'}
               </span>
               <button
                 type="button"
                 onClick={() => setSelectedPoi(null)}
-                className="text-xs font-bold text-white/40 hover:text-white cursor-pointer"
+                className="text-xs font-bold text-gray-500 hover:text-black cursor-pointer"
               >
                 Cerrar
               </button>
             </div>
-            <h4 className="font-bold text-sm text-white">{selectedPoi.name}</h4>
-            <p className="text-xs text-white/60 leading-relaxed font-light">{selectedPoi.description}</p>
+            <h4 className="font-bold text-sm text-black">{selectedPoi.name}</h4>
+            <p className="text-xs text-gray-600 leading-relaxed">{selectedPoi.description}</p>
           </div>
         )}
       </div>
 
-      {/* RUTAS Y SPOTS RECOMENDADOS */}
       {islandPois.length > 0 && (
         <div className="space-y-3 pt-2 font-mono">
-          <h4 className="text-xs font-bold uppercase tracking-widest text-white/50">
-            Rutas panorámicas y tramos recomendados en {island}
+          <h4 className="text-xs font-bold uppercase tracking-widest text-gray-500">
+            Rutas panorámicas y puntos de entrega VIP en {island}
           </h4>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {islandPois.map((poi) => (
               <div
                 key={poi.id}
@@ -508,15 +423,15 @@ export default function CamperLocationMap({
                     mapInstanceRef.current.flyTo([poi.lat, poi.lng], 13, { duration: 0.8 });
                   }
                 }}
-                className="p-4 bg-white/[0.02] rounded-2xl border border-white/10 hover:border-[#D4AF37]/50 hover:bg-white/[0.05] transition-all cursor-pointer shadow-sm group"
+                className="p-4 bg-gray-50 rounded-2xl border border-gray-200 hover:border-black transition-all cursor-pointer shadow-xs group"
               >
-                <div className="flex items-center space-x-1.5 text-[10px] font-bold uppercase tracking-widest text-[#D4AF37] mb-1">
-                  <span>Ruta Recomendada</span>
+                <div className="flex items-center space-x-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">
+                  <span>{poi.category === 'ruta' ? 'Tramo Recomendado' : 'Logística VIP'}</span>
                 </div>
-                <h5 className="font-bold text-sm text-white group-hover:text-[#D4AF37] transition-colors line-clamp-1 font-sans">
+                <h5 className="font-bold text-sm text-black line-clamp-1 font-sans">
                   {poi.name}
                 </h5>
-                <p className="text-xs text-white/50 line-clamp-2 mt-1 leading-relaxed font-sans font-light">
+                <p className="text-xs text-gray-600 line-clamp-2 mt-1 leading-relaxed font-sans">
                   {poi.description}
                 </p>
               </div>
